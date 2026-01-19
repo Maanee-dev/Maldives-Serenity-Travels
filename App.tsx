@@ -4,11 +4,11 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-route
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-// Pages - Standardized to PascalCase components
+// Page Components
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed: Changed casing of imports to match existing lowercase files and resolve compilation errors
+// Fixed: Changed imports to lowercase to match the filenames on disk and resolve casing conflict errors.
 import Offers from './pages/offers';
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
@@ -58,7 +58,7 @@ const App: React.FC = () => {
             <Route path="/stories" element={<Stories />} />
             <Route path="/stories/:slug" element={<BlogPostDetail />} />
             <Route path="/plan" element={<PlanMyTrip />} />
-            {/* Fallback to root for any unknown routes */}
+            {/* Catch-all route redirects to home to prevent 404s inside the app */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
