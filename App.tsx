@@ -4,12 +4,13 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-route
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-// Pages - Consistent PascalCase imports matching the primary page files
+// Pages
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Import using lowercase to match root file casing and resolve conflicts
+// Fix: Use lowercase to match existing files 'pages/offers.tsx' and resolve casing conflict
 import Offers from './pages/offers';
+// Fix: Use lowercase to match existing files 'pages/experiences.tsx' and resolve casing conflict
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
@@ -30,7 +31,7 @@ const WhatsAppButton = () => {
       target="_blank" 
       rel="noopener noreferrer"
       className="fixed bottom-8 right-8 z-[100] bg-[#25D366] text-white p-5 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all group flex items-center gap-3"
-      title="Chat on WhatsApp"
+      title="Chat with an Expert"
     >
       <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-bold text-xs uppercase tracking-widest whitespace-nowrap text-white">
         Chat with an Expert
