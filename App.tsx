@@ -8,10 +8,10 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed casing: imports now correctly match the lowercase filenames offers.tsx and experiences.tsx 
-// to resolve the 'Already included file name' conflict with the PascalCase versions.
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Fixed casing: imports now correctly match the PascalCase filenames Offers.tsx and Experiences.tsx 
+// to resolve the 'Already included file name' conflict.
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

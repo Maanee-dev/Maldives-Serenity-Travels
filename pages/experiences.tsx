@@ -3,7 +3,6 @@ import React from 'react';
 import { EXPERIENCES } from '../constants';
 import { Link } from 'react-router-dom';
 
-// Using the more detailed UI from the uppercase file version
 const Experiences: React.FC = () => {
   return (
     <div className="bg-white min-h-screen">
