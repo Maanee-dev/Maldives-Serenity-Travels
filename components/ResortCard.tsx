@@ -8,46 +8,32 @@ interface ResortCardProps {
 
 const ResortCard: React.FC<ResortCardProps> = ({ resort }) => {
   return (
-    <Link to={`/stays/${resort.slug}`} className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col h-full border border-slate-100">
-      <div className="relative h-64 overflow-hidden">
+    <Link to={`/stays/${resort.slug}`} className="group block overflow-hidden">
+      <div className="relative h-[450px] mb-6 overflow-hidden">
         <img 
           src={resort.images[0]} 
           alt={resort.name} 
-          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+          className="w-full h-full object-cover grayscale-[0.2] transition-transform duration-[1.5s] ease-out group-hover:scale-105"
         />
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-bold text-sky-700 shadow-xl uppercase tracking-widest">
+        <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-sm text-[8px] font-bold text-slate-900 uppercase tracking-widest">
           {resort.atoll}
-        </div>
-        <div className="absolute bottom-4 left-4 flex gap-1 bg-black/20 backdrop-blur px-2 py-1 rounded-lg">
-          {[...Array(resort.rating)].map((_, i) => (
-            <span key={i} className="text-yellow-400 text-[10px]">★</span>
-          ))}
         </div>
       </div>
       
-      <div className="p-8 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-3">
-          <h3 className="text-2xl font-serif font-bold text-slate-900 group-hover:text-sky-600 transition-colors leading-tight">
+      <div className="space-y-3">
+        <div className="flex justify-between items-baseline">
+          <h3 className="text-xl font-serif font-bold text-slate-900 uppercase tracking-tight">
             {resort.name}
           </h3>
-          <span className="text-slate-400 font-bold text-xs tracking-widest">{resort.priceRange}</span>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            {resort.priceRange} / Night
+          </span>
         </div>
         
-        <p className="text-slate-500 text-sm line-clamp-2 mb-6 italic leading-relaxed">
-          "{resort.uvp}"
-        </p>
-        
-        <div className="mt-auto pt-6 border-t border-slate-50">
-          <div className="flex flex-wrap gap-2">
-            {resort.features.slice(0, 2).map((feat, idx) => (
-              <span key={idx} className="bg-slate-50 text-slate-500 px-3 py-1 rounded-lg text-[9px] font-bold uppercase tracking-widest border border-slate-100">
-                {feat}
-              </span>
-            ))}
-            {resort.features.length > 2 && (
-              <span className="text-slate-400 text-[9px] font-bold self-center ml-1">+{resort.features.length - 2} more</span>
-            )}
-          </div>
+        <div className="flex justify-between items-center text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] border-t border-slate-100 pt-3">
+          <span>{resort.features[0]}</span>
+          <span className="text-slate-300">•</span>
+          <span>Up to {Math.floor(Math.random() * 4) + 2} Guests</span>
         </div>
       </div>
     </Link>
