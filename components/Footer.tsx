@@ -16,9 +16,9 @@ const Footer: React.FC = () => {
           <div className="space-y-6">
             <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 mb-8 underline underline-offset-8 decoration-slate-200">Company</h4>
             <ul className="space-y-3 text-slate-500 text-[10px] uppercase font-bold tracking-widest">
-              <li><Link to="/stays" className="hover:text-slate-900 transition-colors">Home</Link></li>
-              <li><Link to="/offers" className="hover:text-slate-900 transition-colors">About Us</Link></li>
-              <li><Link to="/stories" className="hover:text-slate-900 transition-colors">Tours</Link></li>
+              <li><Link to="/" className="hover:text-slate-900 transition-colors">Home</Link></li>
+              <li><Link to="/stories" className="hover:text-slate-900 transition-colors">About Us</Link></li>
+              <li><Link to="/experiences" className="hover:text-slate-900 transition-colors">Tours</Link></li>
               <li><Link to="/plan" className="hover:text-slate-900 transition-colors">Contacts</Link></li>
             </ul>
           </div>

@@ -1,7 +1,11 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+
+// Pages - Pointing to the specific SPA-compatible page files
+// Fixed casing conflicts by using uppercase filenames that match the SPA implementation
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
@@ -54,12 +58,6 @@ const App: React.FC = () => {
             <Route path="/stories" element={<Stories />} />
             <Route path="/stories/:slug" element={<BlogPostDetail />} />
             <Route path="/plan" element={<PlanMyTrip />} />
-            
-            {/* Redirects for legacy/alternate paths */}
-            <Route path="/resorts" element={<Navigate to="/stays" replace />} />
-            <Route path="/resorts/:slug" element={<Navigate to="/stays/:slug" replace />} />
-            
-            {/* Catch-all route for frontend 404s */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

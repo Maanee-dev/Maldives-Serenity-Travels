@@ -13,6 +13,7 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort }) => {
         <img 
           src={resort.images[0]} 
           alt={resort.name} 
+          loading="lazy"
           className="w-full h-full object-cover grayscale-[0.2] transition-transform duration-[1.5s] ease-out group-hover:scale-105"
         />
         <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-sm text-[8px] font-bold text-slate-900 uppercase tracking-widest">
