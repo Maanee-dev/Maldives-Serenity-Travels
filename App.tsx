@@ -4,13 +4,12 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-route
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-// Pages
+// Pages - Standardized to PascalCase components
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Use lowercase to match existing files 'pages/offers.tsx' and resolve casing conflict
+// Fixed: Changed casing of imports to match existing lowercase files and resolve compilation errors
 import Offers from './pages/offers';
-// Fix: Use lowercase to match existing files 'pages/experiences.tsx' and resolve casing conflict
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';

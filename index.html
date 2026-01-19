@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,8 @@
     <title>Serenity Maldives | Where Nature Embraces Luxury</title>
     <meta name="description" content="A curated portal for the most tranquil and luxurious stays in the Maldives. Discover your serene escape.">
     
-    <!-- Base href is critical for SPA routing on reloads -->
+    <!-- Base href is critical for SPA routing on reloads. 
+         Ensures assets are always loaded from root. -->
     <base href="/">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -55,7 +57,7 @@
 </head>
 <body class="overflow-x-hidden selection:bg-slate-200 selection:text-slate-900">
     <div id="root"></div>
-    <!-- Absolute path is critical for reloads from subdirectories -->
+    <!-- Using absolute path /index.tsx to ensure it loads correctly on sub-routes -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
