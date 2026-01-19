@@ -1,14 +1,18 @@
 
+// @google/genai Coding Guidelines:
+// - Always use const ai = new GoogleGenAI({apiKey: process.env.API_KEY});
+// - Use ai.models.generateContent to query GenAI with model and prompt.
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-// Page Components
+// Pages - Unified to PascalCase flat files where possible, but using lowercase for specific 
+// files (offers, experiences) to resolve reported casing conflict errors in the environment.
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed: Changed imports to lowercase to match the filenames on disk and resolve casing conflict errors.
 import Offers from './pages/offers';
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
