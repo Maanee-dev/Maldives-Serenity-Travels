@@ -33,14 +33,13 @@ const Navbar: React.FC = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            {/* Using <a> tags with trailing slashes to trigger physical directory index.html */}
-            <a href="/stays/" className={navLinkClass('/stays')}>Stays</a>
-            <a href="/offers/" className={navLinkClass('/offers')}>Offers</a>
-            <a href="/experiences/" className={navLinkClass('/experiences')}>Experiences</a>
-            <a href="/stories/" className={navLinkClass('/stories')}>Stories</a>
-            <a href="/plan/" className="bg-sky-600 text-white px-6 py-2.5 rounded-full text-xs font-bold hover:bg-sky-700 transition-all shadow-md hover:shadow-lg uppercase tracking-wider">
+            <Link to="/stays" className={navLinkClass('/stays')}>Stays</Link>
+            <Link to="/offers" className={navLinkClass('/offers')}>Offers</Link>
+            <Link to="/experiences" className={navLinkClass('/experiences')}>Experiences</Link>
+            <Link to="/stories" className={navLinkClass('/stories')}>Stories</Link>
+            <Link to="/plan" className="bg-sky-600 text-white px-6 py-2.5 rounded-full text-xs font-bold hover:bg-sky-700 transition-all shadow-md hover:shadow-lg uppercase tracking-wider">
               Plan My Trip
-            </a>
+            </Link>
           </div>
 
           <div className="md:hidden">
@@ -63,13 +62,13 @@ const Navbar: React.FC = () => {
 
       <div className={`md:hidden transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
         <div className="px-4 pt-2 pb-6 space-y-4 bg-white border-t border-slate-100 shadow-xl">
-          <a href="/stays/" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Stays</a>
-          <a href="/offers/" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Offers</a>
-          <a href="/experiences/" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Experiences</a>
-          <a href="/stories/" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Stories</a>
-          <a href="/plan/" className="block w-full bg-sky-600 text-white px-6 py-3 rounded-xl text-center font-bold">
+          <Link to="/stays" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Stays</Link>
+          <Link to="/offers" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Offers</Link>
+          <Link to="/experiences" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Experiences</Link>
+          <Link to="/stories" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Stories</Link>
+          <Link to="/plan" className="block w-full bg-sky-600 text-white px-6 py-3 rounded-xl text-center font-bold">
             PLAN MY TRIP
-          </a>
+          </Link>
         </div>
       </div>
     </nav>

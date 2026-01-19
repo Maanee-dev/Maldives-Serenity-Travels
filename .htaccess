@@ -1,6 +1,3 @@
-Options -Indexes
-DirectoryIndex index.html
-
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
@@ -10,17 +7,6 @@ DirectoryIndex index.html
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # Redirect legacy /resorts to new /stays structure
-  RewriteRule ^resorts/(.*) /stays/$1 [R=301,L]
-  RewriteRule ^resorts /stays/ [R=301,L]
-
-  # Section-specific fallbacks for SPA refreshes
-  RewriteRule ^stays/.* stays/index.html [L]
-  RewriteRule ^offers/.* offers/index.html [L]
-  RewriteRule ^experiences/.* experiences/index.html [L]
-  RewriteRule ^stories/.* stories/index.html [L]
-  RewriteRule ^plan/.* plan/index.html [L]
-
-  # Final fallback for root
+  # Otherwise, redirect all other requests to index.html for React Router to handle
   RewriteRule ^ index.html [L]
 </IfModule>
