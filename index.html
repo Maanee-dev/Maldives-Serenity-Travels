@@ -37,7 +37,7 @@
 </head>
 <body class="bg-slate-50 text-slate-900 overflow-x-hidden">
     <div id="root"></div>
-    <!-- Always use an absolute path /index.tsx to support deep routes -->
+    <!-- CRITICAL: Absolute path ensures deep routes can find the source file -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
