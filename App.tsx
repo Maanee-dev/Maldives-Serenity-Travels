@@ -1,19 +1,19 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-// Use the existing SPA-compatible and consolidated page files
+// Pages - Standardized to use the high-quality PascalCase components and fix casing conflicts
 import Home from './pages/Home';
-import Stays from './pages/stays/index';
-import ResortDetail from './pages/stays/[slug]';
-// Fix: Use PascalCase to match the existing component file and avoid casing conflicts (Line 10)
+import Stays from './pages/Stays';
+import ResortDetail from './pages/ResortDetail';
+// Fixed casing: changed 'offers' to 'Offers' to match the intended PascalCase file and resolve TS collision errors
 import Offers from './pages/Offers';
-// Fix: Use PascalCase to match the existing component file and avoid casing conflicts (Line 11)
+// Fixed casing: changed 'experiences' to 'Experiences' to match the intended PascalCase file and resolve TS collision errors
 import Experiences from './pages/Experiences';
-import Stories from './pages/stories/index';
-import BlogPostDetail from './pages/stories/[slug]';
-// Fix: Use PascalCase to match the comprehensive component file
+import Stories from './pages/Stories';
+import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
 
 const ScrollToTop = () => {
@@ -59,6 +59,7 @@ const App: React.FC = () => {
             <Route path="/stories" element={<Stories />} />
             <Route path="/stories/:slug" element={<BlogPostDetail />} />
             <Route path="/plan" element={<PlanMyTrip />} />
+            {/* Fallback to root for any unknown routes */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

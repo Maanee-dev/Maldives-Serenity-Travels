@@ -2,12 +2,11 @@
   RewriteEngine On
   RewriteBase /
   
-  # 1. If the request is for a physical file that exists (like a .jpg or .js), serve it directly
-  RewriteCond %{REQUEST_FILENAME} -f
+  # If the requested resource is a physical file or directory, serve it directly
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # 2. If the request is for a directory, but we want the SPA to handle it (like /stays/),
-  # we override the default directory behavior and send it to the root index.html
-  RewriteCond %{REQUEST_URI} !^/index\.html$
+  # Otherwise, send all requests to index.html so React Router can handle them
   RewriteRule ^ index.html [L]
 </IfModule>

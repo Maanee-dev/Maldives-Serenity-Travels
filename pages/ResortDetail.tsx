@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { RESORTS } from '../constants';
@@ -61,7 +62,8 @@ const ResortDetail: React.FC = () => {
   if (!resort) return (
     <div className="p-20 text-center">
       <h1 className="text-2xl font-bold mb-4">Resort not found.</h1>
-      <Link to="/resorts" className="text-sky-600 font-bold underline">Go back to Stays</Link>
+      {/* Fixed link from /resorts to /stays */}
+      <Link to="/stays" className="text-sky-600 font-bold underline">Go back to Stays</Link>
     </div>
   );
 
@@ -96,7 +98,8 @@ const ResortDetail: React.FC = () => {
               <nav className="flex items-center text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] gap-4 mb-8">
                 <Link to="/" className="hover:text-sky-600 transition-colors">Home</Link>
                 <span className="opacity-30">/</span>
-                <Link to="/resorts" className="hover:text-sky-600 transition-colors">Resorts</Link>
+                {/* Fixed link from /resorts to /stays */}
+                <Link to="/stays" className="hover:text-sky-600 transition-colors">Stays</Link>
                 <span className="opacity-30">/</span>
                 <span className="text-slate-900">{resort.name}</span>
               </nav>
