@@ -1,6 +1,6 @@
 import React from 'react';
 import { OFFERS } from '../constants';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 export default function Offers() {
   return (
@@ -18,7 +18,7 @@ export default function Offers() {
              <div className="p-8">
                <h3 className="text-2xl font-serif font-bold mb-2 italic">{offer.title}</h3>
                <p className="text-slate-500 mb-8">{offer.resortName}</p>
-               <Link href="/plan" className="block w-full bg-slate-900 text-white text-center py-4 rounded-xl font-bold text-xs uppercase tracking-widest">Claim Offer</Link>
+               <Link to="/plan" className="block w-full bg-slate-900 text-white text-center py-4 rounded-xl font-bold text-xs uppercase tracking-widest">Claim Offer</Link>
              </div>
            </div>
          ))}

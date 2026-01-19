@@ -1,6 +1,6 @@
 import React from 'react';
 import { EXPERIENCES } from '../constants';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 export default function Experiences() {
   return (
@@ -15,7 +15,7 @@ export default function Experiences() {
                 <span className="text-sky-500 font-bold uppercase tracking-[0.4em] text-xs mb-4 block">{exp.category}</span>
                 <h2 className="text-5xl font-serif font-bold italic mb-6 leading-tight">{exp.title}</h2>
                 <p className="text-slate-600 text-lg leading-relaxed mb-10">{exp.description}</p>
-                <Link href="/plan" className="bg-slate-900 text-white px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs">Inquire Now</Link>
+                <Link to="/plan" className="bg-slate-900 text-white px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs inline-block">Inquire Now</Link>
              </div>
           </div>
         ))}
