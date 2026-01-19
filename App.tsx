@@ -47,8 +47,8 @@ const App: React.FC = () => {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/resorts" element={<Stays />} />
-            <Route path="/resorts/:slug" element={<ResortDetail />} />
+            <Route path="/stays" element={<Stays />} />
+            <Route path="/stays/:slug" element={<ResortDetail />} />
             <Route path="/offers" element={<Offers />} />
             <Route path="/experiences" element={<Experiences />} />
             <Route path="/stories" element={<Stories />} />
@@ -56,8 +56,8 @@ const App: React.FC = () => {
             <Route path="/plan" element={<PlanMyTrip />} />
             
             {/* Redirects for legacy/alternate paths */}
-            <Route path="/stays" element={<Navigate to="/resorts" replace />} />
-            <Route path="/stays/:slug" element={<Navigate to="/resorts/:slug" replace />} />
+            <Route path="/resorts" element={<Navigate to="/stays" replace />} />
+            <Route path="/resorts/:slug" element={<Navigate to="/stays/:slug" replace />} />
             
             {/* Catch-all route for frontend 404s */}
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -8,7 +8,7 @@ interface ResortCardProps {
 
 const ResortCard: React.FC<ResortCardProps> = ({ resort }) => {
   return (
-    <Link to={`/resorts/${resort.slug}`} className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col h-full border border-slate-100">
+    <Link to={`/stays/${resort.slug}`} className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col h-full border border-slate-100">
       <div className="relative h-64 overflow-hidden">
         <img 
           src={resort.images[0]} 

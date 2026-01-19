@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -20,20 +19,20 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="font-bold text-lg mb-6 text-white uppercase tracking-wider">Quick Links</h4>
             <ul className="space-y-3 text-slate-400 text-sm">
-              <li><Link to="/stays" className="hover:text-sky-400 transition-colors">Maldives Stays</Link></li>
-              <li><Link to="/offers" className="hover:text-sky-400 transition-colors">Special Offers</Link></li>
-              <li><Link to="/stories" className="hover:text-sky-400 transition-colors">Travel Guides</Link></li>
-              <li><Link to="/plan" className="hover:text-sky-400 transition-colors">Plan My Trip</Link></li>
+              <li><a href="/stays/" className="hover:text-sky-400 transition-colors">Maldives Stays</a></li>
+              <li><a href="/offers/" className="hover:text-sky-400 transition-colors">Special Offers</a></li>
+              <li><a href="/stories/" className="hover:text-sky-400 transition-colors">Travel Guides</a></li>
+              <li><a href="/plan/" className="hover:text-sky-400 transition-colors">Plan My Trip</a></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-bold text-lg mb-6 text-white uppercase tracking-wider">Experiences</h4>
             <ul className="space-y-3 text-slate-400 text-sm">
-              <li><Link to="/experiences" className="hover:text-sky-400 transition-colors">Whale Shark Diving</Link></li>
-              <li><Link to="/experiences" className="hover:text-sky-400 transition-colors">Surfing in Maldives</Link></li>
-              <li><Link to="/experiences" className="hover:text-sky-400 transition-colors">Sandbank Picnics</Link></li>
-              <li><Link to="/experiences" className="hover:text-sky-400 transition-colors">Honeymoon Packages</Link></li>
+              <li><a href="/experiences/" className="hover:text-sky-400 transition-colors">Whale Shark Diving</a></li>
+              <li><a href="/experiences/" className="hover:text-sky-400 transition-colors">Surfing in Maldives</a></li>
+              <li><a href="/experiences/" className="hover:text-sky-400 transition-colors">Sandbank Picnics</a></li>
+              <li><a href="/experiences/" className="hover:text-sky-400 transition-colors">Honeymoon Packages</a></li>
             </ul>
           </div>
 
@@ -49,9 +48,9 @@ const Footer: React.FC = () => {
               <p className="flex items-center gap-2 text-sky-400 font-bold">
                 <span>💬</span> WhatsApp Inquiry
               </p>
-              <Link to="/plan" className="inline-block mt-4 text-sky-400 hover:text-sky-300 font-bold border-b-2 border-sky-400 pb-1">
+              <a href="/plan/" className="inline-block mt-4 text-sky-400 hover:text-sky-300 font-bold border-b-2 border-sky-400 pb-1">
                 Request a Custom Quote
-              </Link>
+              </a>
             </div>
           </div>
         </div>

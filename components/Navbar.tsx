@@ -18,6 +18,9 @@ const Navbar: React.FC = () => {
     setIsOpen(false);
   }, [location]);
 
+  // CSS for Nav Links
+  const navLinkClass = (path: string) => `text-xs font-bold transition-colors uppercase tracking-widest ${location.pathname.startsWith(path) ? 'text-sky-600' : 'text-slate-700 hover:text-sky-600'}`;
+
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass py-2 shadow-sm' : 'bg-white/90 py-4'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,13 +33,14 @@ const Navbar: React.FC = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/resorts" className={`text-xs font-bold transition-colors uppercase tracking-widest ${location.pathname.startsWith('/resorts') ? 'text-sky-600' : 'text-slate-700 hover:text-sky-600'}`}>Resorts</Link>
-            <Link to="/offers" className={`text-xs font-bold transition-colors uppercase tracking-widest ${location.pathname === '/offers' ? 'text-sky-600' : 'text-slate-700 hover:text-sky-600'}`}>Offers</Link>
-            <Link to="/experiences" className={`text-xs font-bold transition-colors uppercase tracking-widest ${location.pathname === '/experiences' ? 'text-sky-600' : 'text-slate-700 hover:text-sky-600'}`}>Experiences</Link>
-            <Link to="/stories" className={`text-xs font-bold transition-colors uppercase tracking-widest ${location.pathname.startsWith('/stories') ? 'text-sky-600' : 'text-slate-700 hover:text-sky-600'}`}>Stories</Link>
-            <Link to="/plan" className="bg-sky-600 text-white px-6 py-2.5 rounded-full text-xs font-bold hover:bg-sky-700 transition-all shadow-md hover:shadow-lg uppercase tracking-wider">
+            {/* Using <a> tags with trailing slashes to trigger physical directory index.html */}
+            <a href="/stays/" className={navLinkClass('/stays')}>Stays</a>
+            <a href="/offers/" className={navLinkClass('/offers')}>Offers</a>
+            <a href="/experiences/" className={navLinkClass('/experiences')}>Experiences</a>
+            <a href="/stories/" className={navLinkClass('/stories')}>Stories</a>
+            <a href="/plan/" className="bg-sky-600 text-white px-6 py-2.5 rounded-full text-xs font-bold hover:bg-sky-700 transition-all shadow-md hover:shadow-lg uppercase tracking-wider">
               Plan My Trip
-            </Link>
+            </a>
           </div>
 
           <div className="md:hidden">
@@ -59,13 +63,13 @@ const Navbar: React.FC = () => {
 
       <div className={`md:hidden transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
         <div className="px-4 pt-2 pb-6 space-y-4 bg-white border-t border-slate-100 shadow-xl">
-          <Link to="/resorts" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Resorts</Link>
-          <Link to="/offers" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Offers</Link>
-          <Link to="/experiences" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Experiences</Link>
-          <Link to="/stories" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Stories</Link>
-          <Link to="/plan" className="block w-full bg-sky-600 text-white px-6 py-3 rounded-xl text-center font-bold">
+          <a href="/stays/" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Stays</a>
+          <a href="/offers/" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Offers</a>
+          <a href="/experiences/" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Experiences</a>
+          <a href="/stories/" className="block text-sm font-semibold text-slate-700 hover:text-sky-600 py-2 border-b border-slate-50">Stories</a>
+          <a href="/plan/" className="block w-full bg-sky-600 text-white px-6 py-3 rounded-xl text-center font-bold">
             PLAN MY TRIP
-          </Link>
+          </a>
         </div>
       </div>
     </nav>
