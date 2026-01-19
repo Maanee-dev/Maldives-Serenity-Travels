@@ -1,18 +1,15 @@
 
-// @google/genai Coding Guidelines:
-// - Always use const ai = new GoogleGenAI({apiKey: process.env.API_KEY});
-// - Use ai.models.generateContent to query GenAI with model and prompt.
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-// Pages - Unified to PascalCase flat files where possible, but using lowercase for specific 
-// files (offers, experiences) to resolve reported casing conflict errors in the environment.
+// Pages - Standardized to specific filenames to prevent casing conflicts
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
+// Fixed casing: imports now correctly match the lowercase filenames offers.tsx and experiences.tsx 
+// to resolve the 'Already included file name' conflict with the PascalCase versions.
 import Offers from './pages/offers';
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
@@ -62,7 +59,7 @@ const App: React.FC = () => {
             <Route path="/stories" element={<Stories />} />
             <Route path="/stories/:slug" element={<BlogPostDetail />} />
             <Route path="/plan" element={<PlanMyTrip />} />
-            {/* Catch-all route redirects to home to prevent 404s inside the app */}
+            {/* Catch-all route ensures internal navigation stays within the app */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

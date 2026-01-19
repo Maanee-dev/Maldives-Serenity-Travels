@@ -3,63 +3,59 @@ import React from 'react';
 import { OFFERS } from '../constants';
 import { Link } from 'react-router-dom';
 
-// Using the more detailed UI from the uppercase file version
 const Offers: React.FC = () => {
   return (
-    <div className="bg-slate-50 min-h-screen">
-       <div className="bg-gradient-to-r from-sky-900 to-indigo-900 text-white py-20 px-4 text-center">
-          <div className="max-w-4xl mx-auto">
-            <span className="bg-sky-400 text-sky-900 text-xs font-bold px-4 py-1 rounded-full mb-4 inline-block tracking-widest uppercase">
-              Exclusive Serenity Deals
+    <div className="bg-[#FCFAF7] min-h-screen">
+       <div className="pt-48 pb-32 px-6 text-center">
+          <div className="max-w-4xl mx-auto reveal active">
+            <span className="text-[10px] font-bold text-slate-400 mb-6 block tracking-[0.5em] uppercase">
+              Limited Engagements
             </span>
-            <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6">Unbeatable Maldives Offers</h1>
-            <p className="text-sky-200 text-lg md:text-xl font-medium max-w-2xl mx-auto">
-              Early bird discounts, honeymoon perks, and last-minute escapes. We negotiate the best rates directly with the islands.
+            <h1 className="text-6xl md:text-8xl font-serif font-bold mb-8 text-slate-900 tracking-tight italic">The Collection</h1>
+            <p className="text-slate-500 text-sm md:text-base font-medium max-w-xl mx-auto uppercase tracking-widest leading-loose opacity-70">
+              Exclusive negotiated rates and bespoke honeymoon packages curated for the discerning traveler.
             </p>
           </div>
        </div>
 
-       <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+       <div className="max-w-7xl mx-auto px-6 lg:px-12 pb-32">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {OFFERS.map(offer => (
-              <div key={offer.id} className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 flex flex-col group hover:-translate-y-1 transition-all duration-300">
-                <div className="relative h-64">
-                   <img src={offer.image} alt={offer.title} className="w-full h-full object-cover" />
-                   <div className="absolute top-4 left-4 bg-sky-600 text-white font-bold px-4 py-1 rounded-full text-sm shadow-xl">
+              <div key={offer.id} className="bg-white rounded-[3rem] overflow-hidden shadow-sm border border-slate-100 flex flex-col group hover:shadow-xl transition-all duration-700 reveal active">
+                <div className="relative h-72 overflow-hidden">
+                   <img src={offer.image} alt={offer.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
+                   <div className="absolute top-6 left-6 bg-slate-900 text-white font-bold px-5 py-2 rounded-full text-[9px] uppercase tracking-[0.2em]">
                       {offer.discount}
                    </div>
-                   <div className="absolute bottom-4 right-4 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-md animate-pulse shadow-lg uppercase tracking-wider">
-                      Limited Availability
-                   </div>
                 </div>
-                <div className="p-8 flex-grow flex flex-col">
-                   <span className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em] mb-2">{offer.category}</span>
-                   <h3 className="text-2xl font-serif font-bold text-slate-900 mb-2 leading-tight group-hover:text-sky-600 transition-colors">
+                <div className="p-10 flex-grow flex flex-col">
+                   <span className="text-slate-300 font-bold text-[8px] uppercase tracking-[0.4em] mb-4">{offer.category}</span>
+                   <h3 className="text-2xl font-serif font-bold text-slate-900 mb-4 leading-tight group-hover:italic transition-all">
                       {offer.title}
                    </h3>
-                   <p className="text-slate-500 font-medium mb-6">At {offer.resortName}</p>
+                   <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest mb-10">At {offer.resortName}</p>
                    
-                   <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
+                   <div className="mt-auto pt-8 border-t border-slate-50 flex items-center justify-between">
                       <div className="flex flex-col">
-                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Expires</span>
-                        <span className="text-slate-700 font-bold">{new Date(offer.expiryDate).toLocaleDateString()}</span>
+                        <span className="text-[8px] text-slate-300 font-bold uppercase tracking-widest">Valid Until</span>
+                        <span className="text-slate-600 font-bold text-[10px] uppercase tracking-widest mt-1">{new Date(offer.expiryDate).toLocaleDateString()}</span>
                       </div>
-                      <Link to="/plan" className="bg-slate-900 text-white px-6 py-2 rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors uppercase tracking-widest">
-                        Claim Offer
+                      <Link to="/plan" className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-900 border-b border-slate-900 pb-1 hover:opacity-50 transition-all">
+                        Claim Now
                       </Link>
                    </div>
                 </div>
               </div>
             ))}
             
-            {/* Lead Capture in Grid */}
-            <div className="bg-sky-50 rounded-3xl p-8 border-2 border-dashed border-sky-200 flex flex-col justify-center items-center text-center">
-              <span className="text-4xl mb-4">💎</span>
-              <h3 className="text-2xl font-serif font-bold text-sky-900 mb-2">Want a Secret Deal?</h3>
-              <p className="text-sky-700 mb-8 text-sm leading-relaxed">Join our private list to receive exclusive offers that resorts don't allow us to publish online.</p>
-              <form className="w-full space-y-3">
-                 <input type="email" placeholder="Your email address" className="w-full bg-white border border-sky-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500" />
-                 <button className="w-full bg-sky-600 text-white font-bold py-3 rounded-xl hover:bg-sky-700 transition-all shadow-lg">JOIN SERENITY CIRCLE</button>
+            {/* Membership Invite */}
+            <div className="bg-slate-950 text-white rounded-[3rem] p-12 flex flex-col justify-center items-center text-center reveal active">
+              <span className="text-[9px] font-bold text-sky-400 uppercase tracking-[0.5em] mb-6">Serenity Circle</span>
+              <h3 className="text-3xl font-serif font-bold mb-6 italic">Private Invitations</h3>
+              <p className="text-slate-400 text-xs font-medium uppercase tracking-[0.2em] leading-relaxed mb-12">Join our list to receive unlisted secret deals and seasonal luxury escapes.</p>
+              <form className="w-full space-y-4">
+                 <input type="email" placeholder="EMAIL ADDRESS" className="w-full bg-white/5 border border-white/10 rounded-full px-6 py-4 text-[10px] tracking-widest focus:outline-none focus:bg-white/10 transition-all text-white" />
+                 <button className="w-full bg-white text-slate-950 font-bold py-4 rounded-full text-[10px] uppercase tracking-[0.4em] hover:bg-sky-400 transition-all">Subscribe</button>
               </form>
             </div>
           </div>

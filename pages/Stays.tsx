@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { RESORTS } from '../constants';
@@ -45,143 +46,129 @@ const Stays: React.FC = () => {
     setFilterQuery('');
   };
 
-  const headerContent = stayType === AccommodationType.RESORT 
-    ? { title: "Luxury Resorts", desc: "Curated overwater villas and private island sanctuaries across the archipelago." }
-    : { title: "Authentic Guest Houses", desc: "Local island stays for an immersive and budget-friendly Maldivian experience." };
-
   return (
-    <div className="bg-slate-50 min-h-screen">
-      <div className={`transition-all duration-700 py-24 px-4 text-white text-center relative overflow-hidden ${stayType === AccommodationType.RESORT ? 'bg-sky-950' : 'bg-teal-950'}`}>
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-           <img src="https://images.unsplash.com/photo-1506929662133-570c13349a7c?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover" alt="Background" />
-        </div>
-        <div className="max-w-4xl mx-auto relative z-10">
-          <span className="text-[10px] uppercase tracking-[0.4em] font-bold mb-4 inline-block text-sky-400">Maldives Serenity Stays</span>
-          <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 italic">{headerContent.title}</h1>
-          <p className="text-sky-100/70 text-lg md:text-xl font-medium max-w-2xl mx-auto">{headerContent.desc}</p>
+    <div className="bg-[#FCFAF7] min-h-screen">
+      {/* Editorial Header */}
+      <div className={`transition-all duration-1000 pt-48 pb-32 px-6 text-center relative overflow-hidden`}>
+        <div className="max-w-7xl mx-auto relative z-10 reveal active">
+          <span className="text-[10px] uppercase tracking-[0.5em] font-bold mb-6 block text-slate-400">Curated Collection</span>
+          <h1 className="text-6xl md:text-8xl font-serif font-bold mb-8 text-slate-900 tracking-tight italic">
+            {stayType === AccommodationType.RESORT ? 'Bespoke Resorts' : 'Island Sanctuaries'}
+          </h1>
+          <p className="text-slate-500 text-sm md:text-base font-medium max-w-xl mx-auto uppercase tracking-widest leading-loose opacity-70">
+            {stayType === AccommodationType.RESORT 
+              ? "Discover the most exclusive overwater villas and private island retreats." 
+              : "Authentic local experiences blending heritage with the serenity of the Maldives."}
+          </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        {/* Toggle Switch */}
-        <div className="flex justify-center -mt-24 mb-16 relative z-20">
-          <div className="bg-white/95 backdrop-blur-xl p-2 rounded-3xl shadow-2xl border border-slate-100 flex gap-2">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 pb-32">
+        {/* Boutique Switcher */}
+        <div className="flex justify-center mb-24 reveal active">
+          <div className="inline-flex p-1.5 bg-slate-100 rounded-full border border-slate-200">
             <button 
               onClick={() => { setStayType(AccommodationType.RESORT); resetFilters(); }}
-              className={`px-10 py-4 rounded-2xl text-xs font-bold transition-all uppercase tracking-[0.2em] ${stayType === AccommodationType.RESORT ? 'bg-sky-600 text-white shadow-xl' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`px-12 py-3.5 rounded-full text-[10px] font-bold transition-all uppercase tracking-[0.3em] ${stayType === AccommodationType.RESORT ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
             >
               Private Resorts
             </button>
             <button 
               onClick={() => { setStayType(AccommodationType.GUEST_HOUSE); resetFilters(); }}
-              className={`px-10 py-4 rounded-2xl text-xs font-bold transition-all uppercase tracking-[0.2em] ${stayType === AccommodationType.GUEST_HOUSE ? 'bg-teal-600 text-white shadow-xl' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`px-12 py-3.5 rounded-full text-[10px] font-bold transition-all uppercase tracking-[0.3em] ${stayType === AccommodationType.GUEST_HOUSE ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
             >
               Local Islands
             </button>
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-12">
-          {/* Sidebar Filters */}
-          <aside className="lg:w-80 flex-shrink-0 space-y-6">
-            <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
-              <h3 className="font-bold text-slate-900 mb-6 uppercase tracking-widest text-[10px] text-slate-400">Refine Search</h3>
-              <div className="space-y-6">
+        <div className="flex flex-col lg:flex-row gap-20">
+          {/* Minimalist Sidebar */}
+          <aside className="lg:w-72 flex-shrink-0 reveal active">
+            <div className="sticky top-32 space-y-12">
+              <div className="space-y-8">
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Keyword</label>
-                  <div className="relative">
-                    <input 
-                      type="text" 
-                      placeholder="e.g. Soneva..." 
-                      className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-                      value={filterQuery}
-                      onChange={(e) => setFilterQuery(e.target.value)}
-                    />
+                  <h3 className="text-[9px] font-bold text-slate-900 uppercase tracking-[0.4em] mb-6 flex items-center gap-3">
+                    Search <div className="h-px bg-slate-200 flex-grow"></div>
+                  </h3>
+                  <input 
+                    type="text" 
+                    placeholder="Resort Name..." 
+                    className="w-full bg-transparent border-b border-slate-200 py-3 text-xs focus:outline-none focus:border-slate-900 transition-colors uppercase tracking-widest"
+                    value={filterQuery}
+                    onChange={(e) => setFilterQuery(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <h3 className="text-[9px] font-bold text-slate-900 uppercase tracking-[0.4em] mb-6 flex items-center gap-3">
+                    Atoll Selection <div className="h-px bg-slate-200 flex-grow"></div>
+                  </h3>
+                  <div className="space-y-3">
+                    {atolls.map(a => (
+                      <button 
+                        key={a}
+                        onClick={() => setSelectedAtoll(a)}
+                        className={`block text-[10px] uppercase tracking-widest transition-colors ${selectedAtoll === a ? 'text-sky-600 font-bold' : 'text-slate-400 hover:text-slate-900'}`}
+                      >
+                        {a}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Atoll</label>
-                  <select 
-                    value={selectedAtoll} 
-                    onChange={(e) => setSelectedAtoll(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none"
-                  >
-                    {atolls.map(a => <option key={a} value={a}>{a}</option>)}
-                  </select>
+                  <h3 className="text-[9px] font-bold text-slate-900 uppercase tracking-[0.4em] mb-6 flex items-center gap-3">
+                    Transfers <div className="h-px bg-slate-200 flex-grow"></div>
+                  </h3>
+                  <div className="space-y-3">
+                    {['All', ...Object.values(TransferType)].map(t => (
+                      <button 
+                        key={t}
+                        onClick={() => setSelectedTransfer(t)}
+                        className={`block text-[10px] uppercase tracking-widest transition-colors ${selectedTransfer === t ? 'text-sky-600 font-bold' : 'text-slate-400 hover:text-slate-900'}`}
+                      >
+                        {t === 'All' ? 'Any Method' : t.replace('_', ' ')}
+                      </button>
+                    ))}
+                  </div>
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Transfer</label>
-                  <select 
-                    value={selectedTransfer} 
-                    onChange={(e) => setSelectedTransfer(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none"
-                  >
-                    <option value="All">Any Transfer</option>
-                    {Object.values(TransferType).map(t => <option key={t} value={t}>{t.replace('_', ' ')}</option>)}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Meal Plan</label>
-                  <select 
-                    value={selectedMealPlan} 
-                    onChange={(e) => setSelectedMealPlan(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none"
-                  >
-                    <option value="All">Any Meal Plan</option>
-                    {Object.values(MealPlan).map(m => <option key={m} value={m}>{m.replace('_', ' ')}</option>)}
-                  </select>
-                </div>
-
-                <button 
-                  onClick={resetFilters}
-                  className="w-full text-[10px] font-bold text-slate-400 uppercase tracking-widest pt-4 hover:text-sky-600 transition-colors"
-                >
-                  Reset All Filters
+              <div className="pt-12 border-t border-slate-100">
+                <p className="text-[10px] text-slate-400 uppercase tracking-widest leading-loose mb-6">
+                  Not finding the perfect sanctuary? Our concierge is available 24/7.
+                </p>
+                <button className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-900 border-b border-slate-900 pb-1 hover:opacity-50 transition-all">
+                  Contact Expert
                 </button>
               </div>
             </div>
-
-            <div className="bg-sky-900 text-white p-8 rounded-[2rem] shadow-xl relative overflow-hidden">
-               <div className="relative z-10">
-                 <h4 className="text-xl font-serif font-bold mb-2 italic">Not sure?</h4>
-                 <p className="text-sky-200 text-sm mb-6 leading-relaxed">Our specialists visit these islands every season. Get a custom recommendation.</p>
-                 <button className="w-full bg-sky-500 text-white font-bold py-4 rounded-xl text-xs uppercase tracking-widest hover:bg-sky-400 transition-all">
-                    Plan With An Expert
-                 </button>
-               </div>
-            </div>
           </aside>
 
-          {/* Listing Grid */}
-          <div className="flex-grow">
-            <div className="flex justify-between items-center mb-10">
-              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">
-                Found <span className="text-slate-900">{filteredStays.length}</span> {stayType.toLowerCase()}s
-              </p>
-              <div className="flex gap-4">
-                 {selectedAtoll !== 'All' && <span className="bg-sky-50 text-sky-600 px-3 py-1 rounded-full text-[10px] font-bold border border-sky-100 uppercase">{selectedAtoll}</span>}
-              </div>
+          {/* Grid View */}
+          <div className="flex-grow reveal active">
+            <div className="flex justify-between items-center mb-16">
+              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em]">
+                Discovering {filteredStays.length} Options
+              </span>
+              <div className="w-24 h-px bg-slate-100"></div>
             </div>
 
             {filteredStays.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
                 {filteredStays.map(stay => (
                   <ResortCard key={stay.id} resort={stay} />
                 ))}
               </div>
             ) : (
-              <div className="bg-white rounded-[3rem] p-20 text-center shadow-sm border border-slate-100">
-                <span className="text-5xl mb-6 block">🥥</span>
-                <h3 className="text-2xl font-serif font-bold text-slate-800 mb-2">No matches found</h3>
-                <p className="text-slate-500 max-w-xs mx-auto mb-8">Try broadening your filters or searching for a specific atoll.</p>
+              <div className="py-40 text-center">
+                <h3 className="text-3xl font-serif italic text-slate-900 mb-4">No Sanctuaries Found</h3>
                 <button 
                   onClick={resetFilters}
-                  className="bg-sky-600 text-white px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest"
+                  className="text-[10px] font-bold uppercase tracking-widest text-sky-600"
                 >
-                  Show All {stayType.toLowerCase()}s
+                  Clear all filters
                 </button>
               </div>
             )}
