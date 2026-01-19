@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { BLOG_POSTS } from '../constants';
 
@@ -7,7 +6,67 @@ const BlogPostDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = BLOG_POSTS.find(b => b.slug === slug);
 
-  if (!post) return <div className="p-20 text-center">Article not found. <Link to="/stories" className="text-sky-600 underline">Back to Stories</Link></div>;
+  useEffect(() => {
+    if (post) {
+      // 1. Update Document Metadata for SEO
+      document.title = `${post.title} | Maldives Serenity Journal`;
+      
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (!metaDesc) {
+        metaDesc = document.createElement('meta');
+        (metaDesc as HTMLMetaElement).name = "description";
+        document.head.appendChild(metaDesc);
+      }
+      metaDesc.setAttribute('content', post.excerpt);
+
+      // 2. Inject JSON-LD Structured Data for Articles
+      const scriptId = 'blog-jsonld';
+      let script = document.getElementById(scriptId) as HTMLScriptElement;
+      if (!script) {
+        script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.id = scriptId;
+        document.head.appendChild(script);
+      }
+      
+      script.innerHTML = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "image": post.image,
+        "author": {
+          "@type": "Person",
+          "name": post.author
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Maldives Serenity Travels",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://maldivesserenity.com/logo.png"
+          }
+        },
+        "datePublished": post.date,
+        "description": post.excerpt,
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": window.location.href
+        }
+      });
+
+      return () => { 
+        const oldScript = document.getElementById(scriptId);
+        if (oldScript) document.head.removeChild(oldScript);
+      };
+    }
+  }, [post]);
+
+  if (!post) return (
+    <div className="p-20 text-center">
+      <h1 className="text-2xl font-bold mb-4">Article not found.</h1>
+      <Link to="/stories" className="text-sky-600 underline">Back to Stories</Link>
+    </div>
+  );
 
   return (
     <article className="bg-white min-h-screen">

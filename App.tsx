@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -21,7 +21,7 @@ const ScrollToTop = () => {
 
 const App: React.FC = () => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <div className="min-h-screen flex flex-col">
         <ScrollToTop />
         <Navbar />
@@ -40,13 +40,13 @@ const App: React.FC = () => {
             <Route path="/stays" element={<Navigate to="/resorts" replace />} />
             <Route path="/stays/:slug" element={<Navigate to="/resorts/:slug" replace />} />
             
-            {/* Catch-all route */}
+            {/* Catch-all route for frontend 404s */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
         <Footer />
       </div>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 
