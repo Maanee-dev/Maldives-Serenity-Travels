@@ -5,17 +5,15 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTopButton from './components/ScrollToTopButton';
 
-// Pages - Standardized to specific filenames to prevent casing conflicts
+// Pages - Casing matched to local filenames
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Updated import to lowercase to match the root file and avoid casing conflict
-import Offers from './pages/offers';
-// Updated import to lowercase to match the root file and avoid casing conflict
-import Experiences from './pages/experiences';
+// Fix: Use correct PascalCase for file imports to match file system and resolve casing conflicts
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
-// Updated to import the comprehensive PlanMyTrip component instead of the simplified plan.tsx
 import PlanMyTrip from './pages/PlanMyTrip';
 
 const ScrollToTopOnRoute = () => {
@@ -61,7 +59,6 @@ const App: React.FC = () => {
             <Route path="/stories" element={<Stories />} />
             <Route path="/stories/:slug" element={<BlogPostDetail />} />
             <Route path="/plan" element={<PlanMyTrip />} />
-            {/* Catch-all route ensures internal navigation stays within the app */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
