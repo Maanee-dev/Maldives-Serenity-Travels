@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { RESORTS, BLOG_POSTS } from '../constants';
 import ResortCard from '../components/ResortCard';
@@ -7,7 +7,12 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
   const [heroIndex, setHeroIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [typedPlaceholder, setTypedPlaceholder] = useState("");
   
+  const typingIdx = useRef(0);
+  const charIdx = useRef(0);
+  const isDeleting = useRef(false);
+
   const heroSlides = [
     {
       type: 'video',
@@ -31,6 +36,47 @@ const Home: React.FC = () => {
       subtitle: 'VOL. 03 — INFINITE LUXURY'
     }
   ];
+
+  const searchKeywords = [
+    "Soneva Jani...",
+    "Private Atolls...",
+    "Underwater Dining...",
+    "North Male...",
+    "Bespoke Escapes...",
+    "Velaa Private Island..."
+  ];
+
+  // Typing Effect Logic
+  useEffect(() => {
+    let timer: number;
+    const handleTyping = () => {
+      const currentWord = searchKeywords[typingIdx.current];
+      
+      if (isDeleting.current) {
+        setTypedPlaceholder(currentWord.substring(0, charIdx.current - 1));
+        charIdx.current--;
+      } else {
+        setTypedPlaceholder(currentWord.substring(0, charIdx.current + 1));
+        charIdx.current++;
+      }
+
+      let typingSpeed = isDeleting.current ? 40 : 120;
+
+      if (!isDeleting.current && charIdx.current === currentWord.length) {
+        isDeleting.current = true;
+        typingSpeed = 2000; // Pause at end of word
+      } else if (isDeleting.current && charIdx.current === 0) {
+        isDeleting.current = false;
+        typingIdx.current = (typingIdx.current + 1) % searchKeywords.length;
+        typingSpeed = 500;
+      }
+
+      timer = window.setTimeout(handleTyping, typingSpeed);
+    };
+
+    timer = window.setTimeout(handleTyping, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -66,7 +112,7 @@ const Home: React.FC = () => {
     { name: 'Ari Atoll', image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=600', count: '15 Stays', desc: 'Whale Shark Paths' }
   ];
 
-  const featuredResorts = RESORTS.slice(0, 4);
+  const featuredResorts = RESORTS.slice(0, 6);
 
   return (
     <div className="bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
@@ -96,7 +142,7 @@ const Home: React.FC = () => {
              <span className="text-[8px] md:text-[11px] font-bold uppercase tracking-[1em] text-sky-400 mb-6 md:mb-8 block reveal active transition-all duration-1000">
                {heroSlides[heroIndex].subtitle}
              </span>
-             <h1 className="flex flex-col mb-10 md:mb-16 reveal active">
+             <h1 className="flex flex-col mb-12 md:mb-16 reveal active">
                 <span className="text-4xl sm:text-6xl md:text-8xl lg:text-[7rem] font-serif font-bold text-white leading-none tracking-tighter transition-all duration-1000">
                   {heroSlides[heroIndex].title}
                 </span>
@@ -112,11 +158,11 @@ const Home: React.FC = () => {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="EXPLORE..."
-                      className="w-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-8 md:px-12 py-5 md:py-7 text-white text-[9px] md:text-[10px] font-bold uppercase tracking-[0.4em] outline-none transition-all group-hover:bg-white/20 group-hover:border-white/40 focus:bg-white focus:text-slate-950 focus:border-white placeholder:text-white/40 shadow-2xl"
+                      placeholder={typedPlaceholder}
+                      className="w-full bg-white/5 backdrop-blur-3xl border border-white/20 rounded-full pl-8 md:pl-10 pr-20 md:pr-24 py-5 md:py-6 text-white text-[10px] md:text-[11px] font-bold uppercase tracking-[0.4em] outline-none transition-all group-hover:bg-white/10 group-hover:border-white/40 focus:bg-white focus:text-slate-950 focus:border-white placeholder:text-white/30 shadow-2xl"
                     />
-                    <button type="submit" className="absolute right-2 md:right-4 top-2 md:top-4 bg-sky-500 text-white w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center hover:bg-slate-950 transition-all duration-700">
-                      <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    <button type="submit" className="absolute right-2 top-2 bottom-2 bg-slate-900 text-white w-14 md:w-16 rounded-full flex items-center justify-center hover:bg-sky-500 hover:scale-95 transition-all duration-700 shadow-xl border border-white/10 group-focus-within:bg-slate-900 group-focus-within:hover:bg-sky-500">
+                      <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </button>
                   </div>
                 </form>
@@ -166,7 +212,6 @@ const Home: React.FC = () => {
                   <img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" alt="Local Life" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent"></div>
                </div>
-               {/* Floating Quote - Mobile Zig-Zag */}
                <div className="absolute -bottom-8 md:-bottom-16 -right-4 sm:-left-16 bg-[#FCFAF7] p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] shadow-2xl max-w-[200px] md:max-w-[320px] border border-slate-100 reveal transition-all duration-1000 delay-500">
                   <p className="text-slate-900 font-serif italic text-base md:text-2xl leading-relaxed">"The most profound experiences happen in the gaps between the tides."</p>
                </div>
@@ -175,18 +220,17 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 3. SIGNATURE ATOLLS (ASYMMETRIC MOBILE DISCOVERY) */}
+      {/* 3. SIGNATURE ATOLLS */}
       <section className="py-24 sm:py-32 md:py-48 bg-[#FCFAF7] border-y border-slate-100">
          <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-32 reveal">
                <div className="max-w-xl">
                   <span className="text-[9px] md:text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-4 md:mb-8 block">Regional Mastery</span>
-                  <h3 className="text-4xl md:text-7xl font-serif font-bold text-slate-900 tracking-tighter italic leading-tight">Signature Atolls.</h3>
+                  <h3 className="text-4xl md:text-7xl font-serif font-bold text-slate-900 tracking-tighter italic leading-tight text-slate-900">Signature Atolls.</h3>
                </div>
                <Link to="/stays" className="text-[8px] md:text-[10px] font-bold text-sky-500 uppercase tracking-[0.5em] border-b border-sky-500 pb-1 mt-6 md:mb-4 hover:text-slate-950 hover:border-slate-950 transition-all">Explore Geography</Link>
             </div>
             
-            {/* 2-Column Zig-Zag Grid for Mobile */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 reveal transition-all duration-1000">
                {signatureAtolls.map((atoll, i) => (
                  <Link 
@@ -201,7 +245,6 @@ const Home: React.FC = () => {
                    <div className="absolute bottom-4 sm:bottom-6 md:bottom-10 left-4 sm:left-6 md:left-10 right-4 sm:right-6 md:right-10 flex flex-col items-start">
                       <span className="text-sky-400 text-[6px] md:text-[8px] font-bold uppercase tracking-[0.4em] mb-1 md:mb-2">{atoll.count}</span>
                       <h4 className="text-lg md:text-3xl font-serif font-bold group-hover:italic transition-all duration-500 mb-1 leading-tight text-white">{atoll.name}</h4>
-                      <p className="text-white/40 text-[7px] md:text-[9px] font-bold uppercase tracking-[0.2em] hidden md:block opacity-0 group-hover:opacity-100 transition-all duration-1000 translate-y-4 group-hover:translate-y-0">{atoll.desc}</p>
                    </div>
                  </Link>
                ))}
@@ -209,43 +252,48 @@ const Home: React.FC = () => {
          </div>
       </section>
 
-      {/* 4. THE COLLECTION (STAGGERED MOBILE OFFSET) */}
+      {/* 4. THE COLLECTION (HORIZONTAL SCROLLER) */}
       <section className="py-24 sm:py-32 md:py-56 bg-white overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
-          <div className="mb-12 md:mb-32 reveal">
+          <div className="mb-12 md:mb-24 reveal">
             <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-4 md:mb-8 block">Exclusive Portfolio</span>
             <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 tracking-tighter italic">The Collection.</h3>
           </div>
           
-          {/* Mobile Staggering: 1 Column with alternating horizontal shift and padding */}
-          <div className="flex flex-col md:grid md:grid-cols-2 gap-16 sm:gap-24 lg:gap-32">
+          {/* Horizontal Scroller Container */}
+          <div className="reveal no-scrollbar overflow-x-auto flex gap-8 md:gap-12 pb-12 snap-x snap-mandatory cursor-grab active:cursor-grabbing">
             {featuredResorts.map((resort, idx) => (
               <div 
                 key={resort.id} 
-                className={`reveal transition-all duration-1000 
-                  ${idx % 2 !== 0 ? 'md:mt-40' : ''} 
-                  ${idx % 2 === 0 ? 'pr-4 md:pr-0' : 'pl-4 md:pl-0'}`} 
-                style={{ transitionDelay: `${idx * 150}ms` }}
+                className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[35vw] snap-start transition-all duration-1000"
+                style={{ transitionDelay: `${idx * 100}ms` }}
               >
                 <ResortCard resort={resort} />
               </div>
             ))}
+            {/* Last block for spacing */}
+            <div className="flex-shrink-0 w-12 md:w-20"></div>
           </div>
           
-          <div className="mt-20 md:mt-40 flex justify-center reveal">
-             <Link to="/stays" className="group relative flex items-center gap-6 md:gap-10">
-               <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 group-hover:border-slate-950 transition-all duration-700 shadow-sm">
-                  <svg className="w-5 h-5 md:w-6 md:h-6 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="mt-12 flex justify-between items-center reveal">
+             <div className="flex gap-4">
+                <div className="w-2 h-2 rounded-full bg-slate-950"></div>
+                <div className="w-2 h-2 rounded-full bg-slate-100"></div>
+                <div className="w-2 h-2 rounded-full bg-slate-100"></div>
+             </div>
+             <Link to="/stays" className="group relative flex items-center gap-6 md:gap-8">
+               <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-slate-950 border-b border-slate-200 group-hover:border-sky-500 transition-all pb-1">View Full Portfolio</span>
+               <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 group-hover:border-slate-950 transition-all duration-700 shadow-sm">
+                  <svg className="w-4 h-4 md:w-5 md:h-5 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                </div>
-               <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.6em] text-slate-950 group-hover:text-sky-500 transition-colors">View All Sanctuaries</span>
              </Link>
           </div>
         </div>
       </section>
 
-      {/* 5. THE JOURNAL (EDITORIAL RHYTHM) */}
+      {/* 5. THE JOURNAL */}
       <section className="py-24 sm:py-32 md:py-48 bg-[#FCFAF7] border-t border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-24 items-start mb-16 md:mb-40 reveal">
@@ -258,10 +306,9 @@ const Home: React.FC = () => {
               </div>
            </div>
 
-           {/* Journal Mobile Stacking with varying scales */}
            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-12 lg:gap-16 reveal transition-all duration-1000 delay-300">
               {BLOG_POSTS.slice(0, 3).map((post, i) => (
-                <Link key={post.id} to={`/stories/${post.slug}`} className={`group block ${i === 1 ? 'md:mt-12 scale-105 md:scale-100' : ''}`}>
+                <Link key={post.id} to={`/stories/${post.slug}`} className={`group block ${i === 1 ? 'md:mt-12' : ''}`}>
                    <div className="relative aspect-[4/5] rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] overflow-hidden mb-6 md:mb-10 shadow-sm group-hover:shadow-2xl transition-all duration-700">
                       <img src={post.image} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-110 grayscale-[20%] group-hover:grayscale-0" alt={post.title} />
                       <div className="absolute inset-0 bg-slate-950/10 group-hover:bg-transparent transition-colors duration-700"></div>
