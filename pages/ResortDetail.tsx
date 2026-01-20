@@ -11,6 +11,7 @@ const ResortDetail: React.FC = () => {
     if (resort) {
       document.title = `${resort.name} - Serenity Maldives`;
     }
+    window.scrollTo(0, 0);
   }, [resort]);
 
   if (!resort) return <div className="p-40 text-center font-serif text-2xl italic">Sanctuary not found.</div>;
@@ -37,7 +38,7 @@ const ResortDetail: React.FC = () => {
       </section>
 
       <div className="max-w-7xl mx-auto px-6 py-32 lg:px-12">
-        <div className="flex flex-col lg:flex-row gap-24">
+        <div className="flex flex-col lg:flex-row gap-24 mb-32">
           <div className="flex-grow reveal active">
             <nav className="flex items-center text-slate-400 text-[9px] font-bold uppercase tracking-[0.4em] gap-4 mb-12">
               <Link to="/" className="hover:text-slate-900">Home</Link>
@@ -128,6 +129,62 @@ const ResortDetail: React.FC = () => {
               </div>
             </div>
           </aside>
+        </div>
+
+        {/* Detailed Sections for Dining & Rooms */}
+        <div className="space-y-64">
+          {/* Rooms / Sanctuaries Section */}
+          <section className="reveal">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+              <div className={`order-2 lg:order-1`}>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-6 block">The Sanctuaries</span>
+                <h2 className="text-5xl md:text-7xl font-serif font-bold text-slate-900 mb-10 italic">Overwater & Beachfront Living</h2>
+                <p className="text-slate-500 text-lg leading-relaxed mb-12">
+                  {resort.rooms?.description || "Each villa is designed to create a sense of absolute weightlessness. Using natural materials and locally-inspired architecture, the spaces blend indoor comfort with the infinite blue of the Maldivian horizon."}
+                </p>
+                <div className="space-y-6">
+                  {(resort.rooms?.highlights || ['Spacious outdoor sun decks', 'Private infinity pools', 'Bespoke island-inspired decor']).map((highlight, i) => (
+                    <div key={i} className="flex items-center gap-6">
+                      <div className="w-10 h-px bg-slate-200"></div>
+                      <span className="text-xs font-bold text-slate-900 uppercase tracking-widest">{highlight}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="order-1 lg:order-2 h-[500px] lg:h-[700px] rounded-[4rem] overflow-hidden shadow-2xl">
+                <img src={resort.rooms?.image || resort.images[1] || resort.images[0]} className="w-full h-full object-cover" alt="Room Interior" />
+              </div>
+            </div>
+          </section>
+
+          {/* Dining / Gastronomy Section */}
+          <section className="reveal">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+              <div className="h-[500px] lg:h-[700px] rounded-[4rem] overflow-hidden shadow-2xl">
+                <img src={resort.dining?.image || "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=1200"} className="w-full h-full object-cover" alt="Dining Experience" />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-6 block">Gastronomy</span>
+                <h2 className="text-5xl md:text-7xl font-serif font-bold text-slate-900 mb-10 italic">A Journey of Flavors</h2>
+                <p className="text-slate-500 text-lg leading-relaxed mb-12">
+                  {resort.dining?.description || "Dine under the stars, over the water, or even beneath the waves. Our culinary philosophy focuses on fresh, organic ingredients sourced locally and prepared by world-class chefs to create memories that linger long after the meal."}
+                </p>
+                <div className="space-y-6">
+                  {(resort.dining?.highlights || ['Ocean-to-table seafood focus', 'World-class wine collections', 'Bespoke destination dining']).map((highlight, i) => (
+                    <div key={i} className="flex items-center gap-6">
+                      <div className="w-10 h-px bg-slate-200"></div>
+                      <span className="text-xs font-bold text-slate-900 uppercase tracking-widest">{highlight}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-16 pt-16 border-t border-slate-100">
+                   <Link to="/plan" className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 border-b border-slate-900 pb-1 hover:opacity-50">
+                      Request Menu Details
+                   </Link>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </div>

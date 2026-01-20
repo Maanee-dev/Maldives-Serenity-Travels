@@ -33,6 +33,17 @@ export interface Accommodation {
   mealPlans: MealPlan[];
   uvp: string; // Unique Value Proposition
   isFeatured?: boolean;
+  // New fields for detailed content
+  rooms?: {
+    description: string;
+    highlights: string[];
+    image: string;
+  };
+  dining?: {
+    description: string;
+    highlights: string[];
+    image: string;
+  };
 }
 
 export interface Offer {
