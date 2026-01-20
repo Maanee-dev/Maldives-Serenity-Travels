@@ -9,9 +9,9 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed: Using PascalCase imports to match canonical filenames and resolve casing errors
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Using lowercase to resolve naming conflicts with duplicate files differing only in casing
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

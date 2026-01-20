@@ -184,7 +184,7 @@ const Home: React.FC = () => {
       {/* 2. THE EDITORIAL MANIFESTO */}
       <section className="py-24 sm:py-32 md:py-48 lg:py-64 bg-white relative">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-48 items-start">
             <div className="lg:col-span-7 reveal">
                <div className="flex items-center gap-4 md:gap-6 mb-8 md:mb-12">
                   <div className="w-8 md:w-12 h-[1px] bg-sky-500"></div>
@@ -207,12 +207,12 @@ const Home: React.FC = () => {
                   </div>
                </div>
             </div>
-            <div className="lg:col-span-5 relative mt-16 lg:mt-0 reveal h-full min-h-[500px] lg:min-h-0">
-               <div className="aspect-[4/5] rounded-[2rem] sm:rounded-[4rem] lg:rounded-[5rem] overflow-hidden shadow-2xl group relative w-full h-full">
+            <div className="lg:col-span-5 relative mt-16 lg:mt-0 reveal transition-all duration-1000 delay-300">
+               <div className="aspect-[4/5] rounded-[2rem] sm:rounded-[4rem] lg:rounded-[5rem] overflow-hidden shadow-2xl group relative">
                   <img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" alt="Local Life" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent"></div>
                </div>
-               <div className="absolute -bottom-8 md:-bottom-16 -right-4 sm:-right-12 bg-[#FCFAF7] p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] shadow-2xl max-w-[200px] md:max-w-[320px] border border-slate-100 reveal transition-all duration-1000 delay-500">
+               <div className="absolute -bottom-8 md:-bottom-16 -right-4 sm:-left-16 bg-[#FCFAF7] p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] shadow-2xl max-w-[200px] md:max-w-[320px] border border-slate-100 reveal transition-all duration-1000 delay-500">
                   <p className="text-slate-900 font-serif italic text-base md:text-2xl leading-relaxed">"The most profound experiences happen in the gaps between the tides."</p>
                </div>
             </div>
