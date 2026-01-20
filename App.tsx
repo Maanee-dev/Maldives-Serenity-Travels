@@ -9,10 +9,10 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed casing to match component file naming convention (Offers.tsx)
-import Offers from './pages/Offers';
-// Fixed casing to match component file naming convention (Experiences.tsx)
-import Experiences from './pages/Experiences';
+// Updated casing to match lowercase file naming convention to resolve compiler conflicts
+import Offers from './pages/offers';
+// Updated casing to match lowercase file naming convention to resolve compiler conflicts
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/plan';

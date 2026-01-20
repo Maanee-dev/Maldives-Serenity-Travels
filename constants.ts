@@ -2,7 +2,6 @@
 import { Accommodation, AccommodationType, TransferType, MealPlan, Offer, Experience, BlogPost } from './types';
 
 export const RESORTS: Accommodation[] = [
-  // --- ULTRA LUXURY SIGNATURES ---
   {
     id: 'soneva-jani',
     name: 'Soneva Jani',
@@ -19,16 +18,58 @@ export const RESORTS: Accommodation[] = [
     mealPlans: [MealPlan.HALF_BOARD, MealPlan.ALL_INCLUSIVE],
     uvp: 'The only resort in the Maldives with retractable roofs for stargazing and private slides in every villa.',
     isFeatured: true,
-    rooms: {
-      description: 'The Chapter Two overwater villas are architectural marvels. Crafted from sustainable woods, they feature expansive living areas and the signature retractable roof.',
-      highlights: ['Retractable roof for stargazing', 'Private water slide into the ocean', 'Catamaran nets for lounging'],
-      image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800'
-    },
-    dining: {
-      description: 'A global culinary journey from organic salads grown on-island to high-end Japanese fare at Director’s Cut.',
-      highlights: ['The Gathering: Overwater dining hub', 'So Wild: Plant-based reimagining', 'Cinema Paradiso: Dining with stars'],
-      image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800'
-    }
+    roomTypes: [
+      {
+        name: '1 Bedroom Water Retreat with Slide',
+        description: 'Set over two floors, the villa comes with its own private pool surrounded by ample areas for sunbathing and taking in the ocean views.',
+        highlights: ['Private water slide', 'Retractable roof', 'Overwater study'],
+        image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800',
+        size: '411 sqm',
+        capacity: '2 Adults + 2 Children'
+      },
+      {
+        name: '2 Bedroom Water Retreat with Slide',
+        description: 'An expansive overwater villa perfect for families, featuring a huge living area and two master bedrooms.',
+        highlights: ['Upstairs terrace', 'Pantry and minibar', 'Direct lagoon access'],
+        image: 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800',
+        size: '610 sqm',
+        capacity: '4 Adults + 2 Children'
+      },
+      {
+        name: 'Chapter Two Island Reserve',
+        description: 'Nestled in the lush jungle on the beach, these residences offer total privacy and a connection to the island nature.',
+        highlights: ['Private beach access', 'Sustainable wood design', 'Sunken dining area'],
+        image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800',
+        size: '555 sqm',
+        capacity: '4 Adults'
+      }
+    ],
+    diningVenues: [
+      {
+        name: 'The Gathering',
+        cuisine: 'International & Fusion',
+        description: 'The heart of the resort, this three-story overwater structure houses several dining outlets under one roof.',
+        highlights: ['Freshly caught seafood', 'Organic garden produce', 'Open kitchen concept'],
+        image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800',
+        vibe: 'Signature Social Hub'
+      },
+      {
+        name: 'Director’s Cut',
+        cuisine: 'Modern Japanese',
+        description: 'Enjoy a bespoke menu of sashimi and nigiri while watching classics at the overwater silent cinema.',
+        highlights: ['Cinema Paradiso views', 'Hand-crafted rolls', 'Aged sake selection'],
+        image: 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&q=80&w=800',
+        vibe: 'Exotic & Cinematic'
+      },
+      {
+        name: 'So Wild by Diana Von Cranach',
+        cuisine: 'Plant-based Raw Food',
+        description: 'A fully raw and vegan menu that explores the diverse flavors of the Indonesian archipelago.',
+        highlights: ['Garden-to-table', 'Nutrient-rich preparations', 'Herbal tonics'],
+        image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=800',
+        vibe: 'Eco-Conscious Wellness'
+      }
+    ]
   },
   {
     id: 'one-only-reethi-rah',
@@ -46,16 +87,58 @@ export const RESORTS: Accommodation[] = [
     mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
     uvp: 'Celebrity-favorite private island with twelve distinct beaches and world-class luxury.',
     isFeatured: true,
-    rooms: {
-      description: 'The Beach Villas are secluded by lush foliage, while Water Villas offer direct access to the turquoise lagoon.',
-      highlights: ['Grand Sunset Residences', 'Private beach cabanas', 'Hammocks over the reef'],
-      image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800'
-    },
-    dining: {
-      description: 'Culinary brilliance ranging from contemporary Japanese at Tapasake to organic garden dining at Botanica.',
-      highlights: ['Tapasake: Modern Japanese', 'Botanica: Garden-to-table', 'Reethi: Global fusion pavilion'],
-      image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800'
-    }
+    roomTypes: [
+      {
+        name: 'Beach Villa with Pool',
+        description: 'Positioned on the beach and hidden by lush tropical foliage, these villas offer total seclusion with private access to the white sands.',
+        highlights: ['Private beach access', 'Infinity pool', 'Outdoor stone bathtub'],
+        image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800',
+        size: '165 sqm',
+        capacity: '2 Adults + 1 Child'
+      },
+      {
+        name: 'Water Villa',
+        description: 'Perched over the crystal turquoise lagoon, featuring nets for lounging and direct steps into the water.',
+        highlights: ['Overwater hammocks', 'Sunset views', 'Bespoke smeg mini-bars'],
+        image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800',
+        size: '149 sqm',
+        capacity: '2 Adults'
+      },
+      {
+        name: 'Grand Sunset Residence',
+        description: 'The ultimate in island living. Three separate bedrooms and a 50m private beach strip.',
+        highlights: ['20m swimming pool', 'Personal villa host', 'Outdoor cinema'],
+        image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800',
+        size: '457 sqm',
+        capacity: '6 Adults'
+      }
+    ],
+    diningVenues: [
+      {
+        name: 'Botanica',
+        cuisine: 'Garden-to-table',
+        description: 'Dine in an enchanted garden where fresh organic ingredients are celebrated in their natural form.',
+        highlights: ['Al fresco dining', 'Organic farm focus', 'Signature botanical cocktails'],
+        image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800',
+        vibe: 'Rustic Elegance'
+      },
+      {
+        name: 'Tapasake',
+        cuisine: 'Modern Japanese',
+        description: 'Perched over the water, this venue combines modern Japanese flavors with a sophisticated tapas-style concept.',
+        highlights: ['Sunset views', 'Teppanyaki stations', 'World-class sake cellar'],
+        image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800',
+        vibe: 'Chic & Vibrant'
+      },
+      {
+        name: 'Reethi',
+        cuisine: 'International',
+        description: 'Split into three distinct areas: Earth, Fire, and Aqua, offering a theatrical culinary experience.',
+        highlights: ['Vaulted ceilings', 'Italian, French & Asian flavors', 'Extensive breakfast buffet'],
+        image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=800',
+        vibe: 'Grand Gastronomy'
+      }
+    ]
   },
   {
     id: 'ritz-carlton-maldives',
@@ -72,18 +155,27 @@ export const RESORTS: Accommodation[] = [
     transfers: [TransferType.SPEEDBOAT],
     mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
     uvp: 'Iconic circular architecture and access to the vibrant Fari Marina beach club.',
-    rooms: {
-      description: 'The villas feature a unique circular design that blends indoor and outdoor spaces seamlessly.',
-      highlights: ['100% solar powered villas', 'Private infinity pools', 'Circular glass doors with 270-degree views'],
-      image: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&q=80&w=800'
-    },
-    dining: {
-      description: 'Seven dining venues, including the Michelin-starred Summer Pavilion for exquisite Cantonese cuisine.',
-      highlights: ['Summer Pavilion: Cantonese fine dining', 'Iwau: Chef’s table Teppanyaki', 'Beach Shack: Mediterranean vibes'],
-      image: 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&q=80&w=800'
-    }
+    roomTypes: [
+      {
+        name: 'Ocean Pool Villa',
+        description: 'The signature circular villa design with floor-to-ceiling glass doors and an infinity pool that merges with the horizon.',
+        highlights: ['Curved architectural lines', 'Solar-powered heating', 'Integrated Aris Meeha service'],
+        image: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&q=80&w=800',
+        size: '150 sqm',
+        capacity: '3 Adults'
+      }
+    ],
+    diningVenues: [
+      {
+        name: 'Summer Pavilion',
+        cuisine: 'Modern Cantonese',
+        description: 'Inspired by the Michelin-starred Singapore original, offering a contemporary take on Cantonese classics.',
+        highlights: ['Overwater setting', 'Signature roast duck', 'Bespoke tea pairings'],
+        image: 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&q=80&w=800',
+        vibe: 'Refined Luxury'
+      }
+    ]
   },
-  // --- ANANTARA COLLECTION ---
   {
     id: 'anantara-kihavah',
     name: 'Anantara Kihavah Maldives Villas',
@@ -99,16 +191,26 @@ export const RESORTS: Accommodation[] = [
     transfers: [TransferType.SEAPLANE],
     mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
     uvp: 'Dine five meters below the sea or stargaze from the only overwater observatory in the Maldives.',
-    rooms: {
-      description: 'The beach and water villas are incredibly spacious, each featuring a private infinity pool and glass-bottom bathtubs.',
-      highlights: ['Private villa pools', 'Bespoke pillow menus', 'Indoor and outdoor rain showers'],
-      image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800'
-    },
-    dining: {
-      description: 'The award-winning SEA underwater restaurant offers a truly immersive 360-degree view of marine life.',
-      highlights: ['SEA: Underwater wine cellar & restaurant', 'FIRE: Teppanyaki under the stars', 'SKY: Overwater observatory bar'],
-      image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=800'
-    }
+    roomTypes: [
+      {
+        name: 'Overwater Sunset Pool Villa',
+        description: 'Featuring glass-bottom bathtubs and overwater hammocks, these villas are designed for ultimate relaxation.',
+        highlights: ['Glass floor viewing panels', 'Infinity pool', '24-hour host service'],
+        image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800',
+        size: '259 sqm',
+        capacity: '2 Adults + 2 Children'
+      }
+    ],
+    diningVenues: [
+      {
+        name: 'SEA',
+        cuisine: 'Fine Dining & Wine Cellar',
+        description: 'One of the few underwater restaurants in the world, featuring a mirror-glass interior that reflects the coral life.',
+        highlights: ['Underwater wine cellar', '360-degree marine views', 'Gourmet degustation menu'],
+        image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=800',
+        vibe: 'Surreal & Immersive'
+      }
+    ]
   },
   {
     id: 'anantara-dhigu',
@@ -125,16 +227,26 @@ export const RESORTS: Accommodation[] = [
     transfers: [TransferType.SPEEDBOAT],
     mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
     uvp: 'The ultimate family playground with a dedicated surf school and overwater spa.',
-    rooms: {
-      description: 'Elegantly designed villas with direct beach or lagoon access, perfect for families needing extra space.',
-      highlights: ['Family Beach Villas', 'Overwater Suites', 'Outdoor garden bathrooms'],
-      image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800'
-    },
-    dining: {
-      description: 'Fushi Café serves a bountiful breakfast while Sea.Fire.Salt. offers freshly caught seafood and grilled meats.',
-      highlights: ['Sea.Fire.Salt.: Overwater grill', 'Fushi Café: International buffet', 'Aqua Bar: Poolside cocktails'],
-      image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800'
-    }
+    roomTypes: [
+      {
+        name: 'Sunset Beach Villa',
+        description: 'Step directly onto the sand from your private terrace, located on the best side of the island for sunset views.',
+        highlights: ['Direct beach access', 'Outdoor garden shower', 'Spacious sun deck'],
+        image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800',
+        size: '125 sqm',
+        capacity: '2 Adults + 2 Children'
+      }
+    ],
+    diningVenues: [
+      {
+        name: 'Fushi Café',
+        cuisine: 'International Buffet',
+        description: 'A bountiful spread of international flavors for breakfast and theme nights by the lagoon.',
+        highlights: ['Toes-in-sand dining', 'Live cooking stations', 'Family friendly'],
+        image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800',
+        vibe: 'Casual Beachfront'
+      }
+    ]
   },
   {
     id: 'kaani-grand-maafushi',
@@ -151,16 +263,26 @@ export const RESORTS: Accommodation[] = [
     transfers: [TransferType.SPEEDBOAT],
     mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
     uvp: 'The most popular high-end stay on Maafushi local island with resort-style amenities.',
-    rooms: {
-      description: 'Our Super Deluxe Seaview Rooms offer panoramic views of the turquoise ocean. Designed with a modern aesthetic, each room features a private balcony.',
-      highlights: ['Private sea-view balconies', 'Modern minimalist interiors', 'Complimentary snorkeling gear'],
-      image: 'https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=800'
-    },
-    dining: {
-      description: 'The rooftop restaurant serves a blend of traditional Maldivian flavors and international buffet selections.',
-      highlights: ['Rooftop sunset dining', 'Fresh local fish grill', 'Floating breakfast options'],
-      image: 'https://images.unsplash.com/photo-1506953064870-15873d93f893?auto=format&fit=crop&q=80&w=800'
-    }
+    roomTypes: [
+      {
+        name: 'Super Deluxe Seaview Room',
+        description: 'Modern and minimalist rooms with a private balcony overlooking the turquoise waters of Maafushi.',
+        highlights: ['Sea views', 'Balcony', 'King size bed'],
+        image: 'https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=800',
+        size: '32 sqm',
+        capacity: '2 Adults'
+      }
+    ],
+    diningVenues: [
+      {
+        name: 'Seaview Restaurant',
+        cuisine: 'Maldivian & International',
+        description: 'Dine with a view of the Indian Ocean, featuring fresh local fish and international favorites.',
+        highlights: ['Rooftop setting', 'Fresh fruit juices', 'Buffet dinners'],
+        image: 'https://images.unsplash.com/photo-1506953064870-15873d93f893?auto=format&fit=crop&q=80&w=800',
+        vibe: 'Bustling Local Charm'
+      }
+    ]
   }
 ];
 

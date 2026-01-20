@@ -13,7 +13,6 @@ const ResortDetail: React.FC = () => {
     }
     window.scrollTo(0, 0);
 
-    // Initialize Intersection Observer for reveal animations
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -29,8 +28,8 @@ const ResortDetail: React.FC = () => {
   if (!resort) return <div className="p-40 text-center font-serif text-2xl italic">Sanctuary not found.</div>;
 
   return (
-    <div className="bg-[#FCFAF7] min-h-screen">
-      {/* Immersive Gallery */}
+    <div className="bg-[#FCFAF7] min-h-screen pb-40">
+      {/* Immersive Gallery Header */}
       <section className="grid grid-cols-1 md:grid-cols-4 h-[85vh] gap-4 p-4 pt-28 reveal active">
         <div className="md:col-span-2 h-full overflow-hidden rounded-[4rem]">
           <img src={resort.images[0]} alt={resort.name} className="w-full h-full object-cover grayscale-[0.1] hover:grayscale-0 transition-all duration-[2s]" />
@@ -50,8 +49,8 @@ const ResortDetail: React.FC = () => {
       </section>
 
       <div className="max-w-7xl mx-auto px-6 py-32 lg:px-12">
-        {/* Navigation & Header Section */}
-        <div className="flex flex-col lg:flex-row gap-24 mb-32">
+        {/* Navigation & Introduction */}
+        <div className="flex flex-col lg:flex-row gap-24 mb-48">
           <div className="flex-grow reveal">
             <nav className="flex items-center text-slate-400 text-[9px] font-bold uppercase tracking-[0.4em] gap-4 mb-12">
               <Link to="/" className="hover:text-slate-900">Home</Link>
@@ -74,131 +73,116 @@ const ResortDetail: React.FC = () => {
               <span className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.4em]">{resort.atoll}</span>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-32">
-              <div className="space-y-4">
-                <span className="text-[8px] text-slate-400 uppercase font-bold tracking-[0.4em] block">Arrival</span>
-                <span className="text-xs font-bold text-slate-900 uppercase tracking-widest">{resort.transfers[0]}</span>
-              </div>
-              <div className="space-y-4">
-                <span className="text-[8px] text-slate-400 uppercase font-bold tracking-[0.4em] block">Vibe</span>
-                <span className="text-xs font-bold text-slate-900 uppercase tracking-widest italic">Pure Serenity</span>
-              </div>
-              <div className="space-y-4">
-                <span className="text-[8px] text-slate-400 uppercase font-bold tracking-[0.4em] block">Dining</span>
-                <span className="text-xs font-bold text-slate-900 uppercase tracking-widest leading-relaxed">{resort.mealPlans[0].replace('_', ' ')}</span>
-              </div>
-              <div className="space-y-4">
-                <span className="text-[8px] text-slate-400 uppercase font-bold tracking-[0.4em] block">Pricing</span>
-                <span className="text-lg font-serif font-bold text-slate-900 tracking-tighter italic">{resort.priceRange}</span>
-              </div>
-            </div>
-
             <div className="prose prose-slate max-w-none">
               <p className="text-3xl md:text-5xl font-serif font-bold text-slate-900 leading-[1.3] mb-24 italic border-l-[1px] border-slate-200 pl-16 py-4">
                 "{resort.uvp}"
               </p>
-              
               <div className="text-slate-500 leading-[2] text-lg mb-32 first-letter:text-8xl first-letter:font-serif first-letter:font-bold first-letter:mr-6 first-letter:float-left first-letter:text-slate-900">
                 {resort.description}
-              </div>
-              
-              <div className="bg-white border border-slate-100 rounded-[4rem] p-16 mb-20 shadow-sm">
-                 <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.5em] mb-12">Signature Amenities</h3>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8">
-                    {resort.features.map((feat, idx) => (
-                      <div key={idx} className="flex items-center gap-6 group">
-                        <div className="w-1.5 h-px bg-slate-900 group-hover:w-4 transition-all"></div>
-                        <span className="text-xs font-bold text-slate-900 uppercase tracking-widest">{feat}</span>
-                      </div>
-                    ))}
-                 </div>
               </div>
             </div>
           </div>
 
           <aside className="lg:w-96 reveal">
             <div className="sticky top-32">
-              <div className="bg-slate-950 text-white p-16 rounded-[4rem] shadow-2xl relative overflow-hidden">
+              <div className="bg-slate-950 text-white p-16 rounded-[4rem] shadow-2xl relative overflow-hidden mb-12">
                 <div className="relative z-10">
                   <span className="text-[9px] font-bold uppercase tracking-[0.4em] text-sky-400 mb-6 block">Private Concierge</span>
                   <h3 className="text-4xl font-serif font-bold mb-8 italic leading-tight">Secure Your Stay</h3>
-                  <p className="text-slate-400 mb-12 text-[10px] uppercase tracking-widest leading-loose font-medium">
-                    We curate every detail of your journey—from the moment you land at Velana to your final sunset on the island.
-                  </p>
-                  
                   <Link to="/plan" className="block w-full bg-white text-slate-950 text-center py-6 rounded-full font-bold hover:bg-sky-400 transition-all uppercase tracking-[0.3em] text-[10px]">
                     Inquire For Rates
                   </Link>
-                  <p className="text-center mt-8 text-[8px] text-slate-500 font-bold uppercase tracking-[0.3em]">Exclusivity Guaranteed</p>
                 </div>
               </div>
-
-              <div className="mt-8 bg-white border border-slate-100 p-10 rounded-[3rem] flex items-center gap-8 shadow-sm">
-                 <div className="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-xl grayscale shadow-inner">👨🏽‍💼</div>
-                 <div>
-                    <p className="text-slate-900 font-bold text-[10px] uppercase tracking-widest">Connect with Expert</p>
-                    <p className="text-slate-400 text-[9px] uppercase tracking-widest mt-1">Chat available via WhatsApp</p>
+              
+              <div className="bg-white border border-slate-100 p-12 rounded-[4rem] shadow-sm">
+                 <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.5em] mb-8">Amenities</h3>
+                 <div className="space-y-4">
+                    {resort.features.map((feat, idx) => (
+                      <div key={idx} className="flex items-center gap-4">
+                        <div className="w-1 h-1 rounded-full bg-slate-300"></div>
+                        <span className="text-[10px] font-bold text-slate-900 uppercase tracking-widest">{feat}</span>
+                      </div>
+                    ))}
                  </div>
               </div>
             </div>
           </aside>
         </div>
 
-        {/* Detailed Sections for Dining & Rooms */}
-        <div className="space-y-64 pt-32">
-          {/* Rooms / Sanctuaries Section */}
-          <section id="sanctuaries" className="reveal">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-              <div className={`order-2 lg:order-1`}>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-6 block">The Sanctuaries</span>
-                <h2 className="text-5xl md:text-7xl font-serif font-bold text-slate-900 mb-10 italic">Overwater & Beachfront Living</h2>
-                <p className="text-slate-500 text-lg leading-relaxed mb-12">
-                  {resort.rooms?.description || "Each villa is designed to create a sense of absolute weightlessness. Using natural materials and locally-inspired architecture, the spaces blend indoor comfort with the infinite blue of the Maldivian horizon."}
-                </p>
-                <div className="space-y-6">
-                  {(resort.rooms?.highlights || ['Spacious outdoor sun decks', 'Private infinity pools', 'Bespoke island-inspired decor']).map((highlight, i) => (
-                    <div key={i} className="flex items-center gap-6">
-                      <div className="w-10 h-px bg-slate-200"></div>
-                      <span className="text-xs font-bold text-slate-900 uppercase tracking-widest">{highlight}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="order-1 lg:order-2 h-[500px] lg:h-[700px] rounded-[4rem] overflow-hidden shadow-2xl">
-                <img src={resort.rooms?.image || resort.images[1] || resort.images[0]} className="w-full h-full object-cover" alt="Room Interior" />
-              </div>
+        {/* The Sanctuaries - Room Collection */}
+        <section className="mb-64">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8 reveal">
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-4 block">The Sanctuaries</span>
+              <h2 className="text-5xl md:text-7xl font-serif font-bold text-slate-900 italic">Villas & Residences</h2>
             </div>
-          </section>
+            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest max-w-xs text-right leading-loose">
+              Spaces designed for absolute weightlessness and total immersion in the turquoise blue.
+            </p>
+          </div>
 
-          {/* Dining / Gastronomy Section */}
-          <section id="gastronomy" className="reveal">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-              <div className="h-[500px] lg:h-[700px] rounded-[4rem] overflow-hidden shadow-2xl">
-                <img src={resort.dining?.image || "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=1200"} className="w-full h-full object-cover" alt="Dining Experience" />
-              </div>
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-6 block">Gastronomy</span>
-                <h2 className="text-5xl md:text-7xl font-serif font-bold text-slate-900 mb-10 italic">A Journey of Flavors</h2>
-                <p className="text-slate-500 text-lg leading-relaxed mb-12">
-                  {resort.dining?.description || "Dine under the stars, over the water, or even beneath the waves. Our culinary philosophy focuses on fresh, organic ingredients sourced locally and prepared by world-class chefs to create memories that linger long after the meal."}
-                </p>
-                <div className="space-y-6">
-                  {(resort.dining?.highlights || ['Ocean-to-table seafood focus', 'World-class wine collections', 'Bespoke destination dining']).map((highlight, i) => (
-                    <div key={i} className="flex items-center gap-6">
-                      <div className="w-10 h-px bg-slate-200"></div>
-                      <span className="text-xs font-bold text-slate-900 uppercase tracking-widest">{highlight}</span>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
+            {resort.roomTypes?.map((room, idx) => (
+              <div key={idx} className="reveal group">
+                <div className="h-[500px] lg:h-[600px] rounded-[4rem] overflow-hidden mb-12 shadow-xl relative">
+                  <img src={room.image} alt={room.name} className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" />
+                  <div className="absolute top-8 left-8 flex gap-2">
+                     <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-[8px] font-bold uppercase tracking-[0.2em]">{room.size}</div>
+                     <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-[8px] font-bold uppercase tracking-[0.2em]">{room.capacity}</div>
+                  </div>
+                </div>
+                <h3 className="text-3xl font-serif font-bold text-slate-900 mb-6 group-hover:italic transition-all">{room.name}</h3>
+                <p className="text-slate-500 leading-loose mb-8 text-sm">{room.description}</p>
+                <div className="flex flex-wrap gap-4">
+                  {room.highlights.map((h, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className="w-4 h-px bg-slate-200"></div>
+                      <span className="text-[10px] font-bold text-slate-900 uppercase tracking-widest">{h}</span>
                     </div>
                   ))}
                 </div>
-                <div className="mt-16 pt-16 border-t border-slate-100">
-                   <Link to="/plan" className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 border-b border-slate-900 pb-1 hover:opacity-50">
-                      Request Menu Details
-                   </Link>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Gastronomy - Dining Venues Grid */}
+        <section>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8 reveal">
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-4 block">Gastronomy</span>
+              <h2 className="text-5xl md:text-7xl font-serif font-bold text-slate-900 italic">Culinary Journeys</h2>
+            </div>
+            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest max-w-xs text-right leading-loose">
+              A symphony of global flavors curated by world-class chefs in immersive settings.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {resort.diningVenues?.map((venue, idx) => (
+              <div key={idx} className="bg-white border border-slate-100 rounded-[3rem] p-12 reveal shadow-sm hover:shadow-2xl transition-all duration-700">
+                <div className="h-64 rounded-[2.5rem] overflow-hidden mb-10 shadow-inner">
+                   <img src={venue.image} alt={venue.name} className="w-full h-full object-cover" />
+                </div>
+                <div className="flex items-center justify-between mb-6">
+                   <span className="text-[8px] font-bold text-sky-500 uppercase tracking-[0.3em]">{venue.vibe}</span>
+                   <span className="text-[8px] font-bold text-slate-300 uppercase tracking-[0.3em]">{venue.cuisine}</span>
+                </div>
+                <h3 className="text-2xl font-serif font-bold text-slate-900 mb-6">{venue.name}</h3>
+                <p className="text-slate-500 text-xs leading-relaxed mb-8">{venue.description}</p>
+                <div className="space-y-3">
+                   {venue.highlights.map((h, i) => (
+                     <div key={i} className="flex items-center gap-3">
+                        <div className="w-1 h-1 rounded-full bg-slate-900"></div>
+                        <span className="text-[9px] font-bold text-slate-900 uppercase tracking-widest">{h}</span>
+                     </div>
+                   ))}
                 </div>
               </div>
-            </div>
-          </section>
-        </div>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );

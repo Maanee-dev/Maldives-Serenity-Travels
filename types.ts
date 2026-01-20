@@ -17,6 +17,24 @@ export enum MealPlan {
   BED_BREAKFAST = 'BED_BREAKFAST'
 }
 
+export interface RoomType {
+  name: string;
+  description: string;
+  highlights: string[];
+  image: string;
+  size?: string;
+  capacity?: string;
+}
+
+export interface DiningVenue {
+  name: string;
+  cuisine: string;
+  description: string;
+  highlights: string[];
+  image: string;
+  vibe: string;
+}
+
 export interface Accommodation {
   id: string;
   name: string;
@@ -33,17 +51,8 @@ export interface Accommodation {
   mealPlans: MealPlan[];
   uvp: string; // Unique Value Proposition
   isFeatured?: boolean;
-  // New fields for detailed content
-  rooms?: {
-    description: string;
-    highlights: string[];
-    image: string;
-  };
-  dining?: {
-    description: string;
-    highlights: string[];
-    image: string;
-  };
+  roomTypes?: RoomType[];
+  diningVenues?: DiningVenue[];
 }
 
 export interface Offer {
