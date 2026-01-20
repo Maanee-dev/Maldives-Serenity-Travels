@@ -9,13 +9,14 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Updated casing to match lowercase file naming convention to resolve compiler conflicts
-import Offers from './pages/offers';
-// Updated casing to match lowercase file naming convention to resolve compiler conflicts
-import Experiences from './pages/experiences';
+// Fixed casing to match PascalCase filename 'Offers.tsx' to resolve compiler conflicts
+import Offers from './pages/Offers';
+// Fixed casing to match PascalCase filename 'Experiences.tsx' to resolve compiler conflicts
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
-import PlanMyTrip from './pages/plan';
+// Updated to import the comprehensive PlanMyTrip component instead of the simplified plan.tsx
+import PlanMyTrip from './pages/PlanMyTrip';
 
 const ScrollToTopOnRoute = () => {
   const { pathname } = useLocation();
