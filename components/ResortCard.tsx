@@ -52,6 +52,3 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort }) => {
     </Link>
   );
 };
-
-// Added missing default export to satisfy module imports in pages
-export default ResortCard;
