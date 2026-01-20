@@ -37,27 +37,27 @@ const ResortDetail: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#FCFAF7] min-h-screen">
-      {/* High-End Mosaic Header */}
-      <section className="grid grid-cols-1 md:grid-cols-12 h-[80vh] md:h-[95vh] gap-3 p-3 pt-24 md:pt-32 reveal active">
-        <div className="md:col-span-7 overflow-hidden relative rounded-[2rem] md:rounded-[4rem] group shadow-2xl">
+    <div className="bg-[#FCFAF7] min-h-screen overflow-x-hidden">
+      {/* High-End Mosaic Header - Improved Responsiveness */}
+      <section className="grid grid-cols-1 md:grid-cols-12 min-h-[90vh] md:h-[95vh] gap-3 p-3 pt-24 md:pt-32 reveal active">
+        <div className="md:col-span-7 h-[50vh] md:h-full overflow-hidden relative rounded-[2.5rem] md:rounded-[4rem] group shadow-2xl">
           <img src={getGalleryImage(0)} alt={resort.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[6s] ease-out" />
-          <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-700"></div>
-          <div className="absolute bottom-12 left-12 md:bottom-20 md:left-20">
-             <span className="bg-white/90 backdrop-blur px-6 py-2 rounded-full text-[10px] font-bold text-slate-900 uppercase tracking-[0.4em] shadow-sm mb-6 inline-block">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+          <div className="absolute bottom-8 left-8 md:bottom-20 md:left-20 right-8">
+             <span className="bg-white/90 backdrop-blur px-4 py-1.5 md:px-6 md:py-2 rounded-full text-[9px] md:text-[10px] font-bold text-slate-900 uppercase tracking-[0.4em] shadow-sm mb-4 md:mb-6 inline-block">
                {resort.atoll}
              </span>
-             <h1 className="text-5xl md:text-8xl lg:text-[10rem] font-serif font-bold text-white tracking-tighter italic leading-[0.85] drop-shadow-2xl">
+             <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-9xl font-serif font-bold text-white tracking-tighter italic leading-none drop-shadow-2xl">
                {resort.name}
              </h1>
           </div>
         </div>
-        <div className="md:col-span-5 grid grid-rows-2 gap-3 h-full">
-          <div className="overflow-hidden relative rounded-[2rem] md:rounded-[4rem] group shadow-xl">
+        <div className="md:col-span-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 grid-rows-none md:grid-rows-2 gap-3 h-full">
+          <div className="hidden sm:block overflow-hidden relative rounded-[2.5rem] md:rounded-[4rem] group shadow-xl h-[30vh] md:h-auto">
              <img src={getGalleryImage(1)} alt={resort.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[6s] ease-out" />
              <div className="absolute inset-0 bg-black/10"></div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 h-[25vh] md:h-auto">
             <div className="overflow-hidden relative rounded-[2rem] md:rounded-[3rem] group shadow-lg">
                <img src={getGalleryImage(2)} alt="Detail" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[6s] ease-out" />
                <div className="absolute inset-0 bg-black/10"></div>
@@ -70,28 +70,28 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-6 py-32 md:py-56 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 lg:gap-40 items-start">
+      <div className="max-w-7xl mx-auto px-6 py-20 md:py-40 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
           
           {/* Main Editorial Content */}
           <div className="lg:col-span-8 reveal">
-            <p className="text-3xl md:text-5xl font-serif font-bold text-slate-900 leading-[1.3] mb-24 italic border-l-2 border-sky-500 pl-12 py-4">
+            <blockquote className="text-2xl md:text-4xl font-serif font-bold text-slate-900 leading-snug mb-16 md:mb-24 italic border-l-4 border-sky-400 pl-8 md:pl-12 py-2">
               "{resort.uvp}"
-            </p>
+            </blockquote>
             
-            <div className="text-slate-500 leading-[2.2] text-xl md:text-2xl mb-32 font-medium opacity-90">
+            <div className="text-slate-600 leading-relaxed text-lg md:text-xl mb-24 font-light">
               {resort.description}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-40">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 md:gap-16 mb-32 md:mb-40">
               {resort.features.map((feature, idx) => (
-                <div key={idx} className="flex gap-8 group">
-                   <div className="w-14 h-14 rounded-full border border-slate-200 flex-shrink-0 flex items-center justify-center group-hover:border-sky-500 group-hover:bg-sky-50 transition-all duration-700">
+                <div key={idx} className="flex items-start gap-6 group">
+                   <div className="w-12 h-12 rounded-full border border-slate-200 flex-shrink-0 flex items-center justify-center group-hover:border-sky-500 group-hover:bg-sky-50 transition-all duration-500">
                      <div className="w-1.5 h-1.5 rounded-full bg-sky-500"></div>
                    </div>
                    <div>
-                     <h4 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.3em] mb-3">{feature}</h4>
-                     <p className="text-[11px] text-slate-400 font-medium uppercase tracking-[0.2em]">Maldivian Standard of Excellence</p>
+                     <h4 className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.3em] mb-2">{feature}</h4>
+                     <p className="text-[9px] text-slate-400 font-medium uppercase tracking-[0.2em]">Curated Excellence</p>
                    </div>
                 </div>
               ))}
@@ -99,92 +99,78 @@ const ResortDetail: React.FC = () => {
 
             {/* Room & Dining Switcher */}
             <div className="mb-20">
-              <div className="flex gap-16 border-b border-slate-100 mb-20">
+              <div className="flex flex-wrap gap-8 md:gap-16 border-b border-slate-100 mb-16">
                 <button 
                   onClick={() => setActiveTab('rooms')}
-                  className={`pb-8 text-[11px] font-bold uppercase tracking-[0.5em] transition-all relative ${activeTab === 'rooms' ? 'text-slate-900' : 'text-slate-300'}`}
+                  className={`pb-6 text-[10px] font-bold uppercase tracking-[0.4em] transition-all relative ${activeTab === 'rooms' ? 'text-slate-900' : 'text-slate-300'}`}
                 >
                   Accommodation
-                  {activeTab === 'rooms' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-slate-950"></div>}
+                  {activeTab === 'rooms' && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-sky-500"></div>}
                 </button>
                 <button 
                   onClick={() => setActiveTab('dining')}
-                  className={`pb-8 text-[11px] font-bold uppercase tracking-[0.5em] transition-all relative ${activeTab === 'dining' ? 'text-slate-900' : 'text-slate-300'}`}
+                  className={`pb-6 text-[10px] font-bold uppercase tracking-[0.4em] transition-all relative ${activeTab === 'dining' ? 'text-slate-900' : 'text-slate-300'}`}
                 >
-                  Culinary
-                  {activeTab === 'dining' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-slate-950"></div>}
+                  Dining
+                  {activeTab === 'dining' && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-sky-500"></div>}
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                {activeTab === 'rooms' && resort.roomTypes?.map((room, idx) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
+                {(activeTab === 'rooms' ? resort.roomTypes : resort.diningVenues)?.map((item: any, idx: number) => (
                   <div key={idx} className="group cursor-pointer">
-                    <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden mb-8 shadow-sm group-hover:shadow-2xl transition-all duration-700">
-                      <img src={room.image} alt={room.name} className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" />
-                      <div className="absolute bottom-6 right-6">
-                        <span className="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-[9px] font-bold text-slate-900 uppercase tracking-widest">{room.size}</span>
+                    <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden mb-6 shadow-md group-hover:shadow-xl transition-all duration-700">
+                      <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-105" />
+                      <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6">
+                        <span className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full text-[9px] font-bold text-slate-900 uppercase tracking-widest shadow-sm">
+                          {activeTab === 'rooms' ? item.size : item.vibe}
+                        </span>
                       </div>
                     </div>
-                    <h4 className="text-2xl font-serif font-bold text-slate-900 mb-4 group-hover:italic transition-all">{room.name}</h4>
-                    <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em] mb-4">Up to {room.capacity}</p>
-                    <p className="text-slate-500 text-sm leading-relaxed mb-6 opacity-80">{room.description}</p>
-                  </div>
-                ))}
-
-                {activeTab === 'dining' && resort.diningVenues?.map((venue, idx) => (
-                  <div key={idx} className="group cursor-pointer">
-                    <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden mb-8 shadow-sm group-hover:shadow-2xl transition-all duration-700">
-                      <img src={venue.image} alt={venue.name} className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" />
-                      <div className="absolute bottom-6 right-6">
-                        <span className="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-[9px] font-bold text-slate-900 uppercase tracking-widest">{venue.vibe}</span>
-                      </div>
-                    </div>
-                    <h4 className="text-2xl font-serif font-bold text-slate-900 mb-4 group-hover:italic transition-all">{venue.name}</h4>
-                    <p className="text-sky-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-4">{venue.cuisine}</p>
-                    <p className="text-slate-500 text-sm leading-relaxed mb-6 opacity-80">{venue.description}</p>
+                    <h4 className="text-xl md:text-2xl font-serif font-bold text-slate-900 mb-2 group-hover:text-sky-700 transition-colors">{item.name}</h4>
+                    <p className="text-sky-500 text-[9px] font-bold uppercase tracking-[0.2em] mb-3">
+                      {activeTab === 'rooms' ? `Max Guests: ${item.capacity}` : item.cuisine}
+                    </p>
+                    <p className="text-slate-500 text-sm leading-relaxed opacity-90 line-clamp-3">{item.description}</p>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Luxury Sidebar - Concierge */}
-          <aside className="lg:col-span-4 sticky top-40 reveal transition-all duration-1000 delay-300">
-            <div className="bg-white rounded-[3rem] p-12 shadow-2xl border border-slate-50">
-              <span className="text-[9px] font-bold text-sky-500 uppercase tracking-[0.5em] mb-10 block">Private Concierge</span>
-              <h3 className="text-4xl font-serif font-bold text-slate-950 mb-8 italic">Consult An Expert</h3>
-              <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.4em] leading-relaxed mb-12 border-l border-slate-100 pl-8">
-                Bespoke itineraries, private transfers, and unlisted sanctuary access.
-              </p>
+          {/* Luxury Sidebar - Improved Stickiness */}
+          <aside className="lg:col-span-4 lg:sticky lg:top-32 z-10 reveal">
+            <div className="bg-white rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-12 shadow-2xl border border-slate-50">
+              <span className="text-[9px] font-bold text-sky-500 uppercase tracking-[0.5em] mb-8 block">Private Concierge</span>
+              <h3 className="text-3xl md:text-4xl font-serif font-bold text-slate-950 mb-8 italic">Consult An Expert</h3>
               
-              <div className="space-y-10 mb-16">
-                 <div className="flex items-center justify-between pb-6 border-b border-slate-50">
-                    <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Pricing</span>
-                    <span className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.2em]">{resort.priceRange} Luxury</span>
+              <div className="space-y-8 mb-12">
+                 <div className="flex items-center justify-between pb-4 border-b border-slate-50">
+                    <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Tiers</span>
+                    <span className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em]">{resort.priceRange}</span>
                  </div>
-                 <div className="flex items-center justify-between pb-6 border-b border-slate-50">
-                    <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Transfers</span>
-                    <span className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.2em]">{resort.transfers.join(' / ')}</span>
+                 <div className="flex items-center justify-between pb-4 border-b border-slate-50">
+                    <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Arrival</span>
+                    <span className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em] text-right">{resort.transfers.join(' / ')}</span>
                  </div>
               </div>
 
-              <Link to="/plan" className="block w-full bg-slate-950 text-white text-center py-6 rounded-full text-[10px] font-bold uppercase tracking-[0.5em] hover:bg-sky-500 transition-all duration-700 shadow-xl mb-6">
+              <Link to="/plan" className="block w-full bg-slate-950 text-white text-center py-5 rounded-full text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-sky-600 transition-all duration-500 shadow-lg mb-4">
                 Check Availability
               </Link>
-              <a href="tel:+9607771234" className="block w-full border border-slate-100 text-slate-900 text-center py-6 rounded-full text-[10px] font-bold uppercase tracking-[0.5em] hover:border-slate-950 transition-all duration-700">
-                Call Concierge
+              <a href="tel:+9607771234" className="block w-full border border-slate-200 text-slate-900 text-center py-5 rounded-full text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-slate-50 transition-all duration-500">
+                Call Agent
               </a>
               
-              <p className="text-center mt-12 text-[8px] font-bold text-slate-300 uppercase tracking-[0.4em]">
-                Exclusive Serenity Rates Guaranteed
+              <p className="text-center mt-10 text-[8px] font-bold text-slate-300 uppercase tracking-[0.4em]">
+                Best Rate Guarantee
               </p>
             </div>
             
-            {/* Additional Info Cards */}
-            <div className="mt-10 p-12 bg-sky-50 rounded-[3rem] border border-sky-100">
-               <h4 className="text-[10px] font-bold text-sky-900 uppercase tracking-[0.5em] mb-6">Insider Tip</h4>
-               <p className="text-[11px] text-sky-800 font-medium leading-loose uppercase tracking-[0.1em]">
-                 The best visibility for diving around {resort.atoll} is typically between January and April. Ask our concierge for private dive boat arrangements.
+            <div className="mt-8 p-10 bg-sky-50/50 rounded-[2.5rem] border border-sky-100/50">
+               <h4 className="text-[9px] font-bold text-sky-900 uppercase tracking-[0.4em] mb-4">Island Note</h4>
+               <p className="text-[11px] text-sky-800/80 font-medium leading-loose tracking-wide">
+                 Ideal visibility for diving in {resort.atoll} is typically Jan–April.
                </p>
             </div>
           </aside>
