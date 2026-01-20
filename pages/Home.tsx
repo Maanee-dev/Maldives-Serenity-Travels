@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { RESORTS } from '../constants';
@@ -21,20 +22,20 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7]">
-      {/* Hero Section - Minimalist & Centered (Qelli Style) */}
+      {/* Hero Section */}
       <section className="pt-48 pb-32 px-4">
         <div className="max-w-7xl mx-auto text-center reveal">
-          <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-slate-400 mb-8 block">Discover a Serene Escape</span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-amber-500 mb-8 block">Discover a Serene Escape</span>
           <h1 className="text-5xl md:text-8xl lg:text-[7rem] font-serif font-bold text-slate-900 mb-12 leading-[1.1] tracking-tight">
             Where Nature <br /> Embraces Luxury
           </h1>
           <div className="flex flex-col items-center mt-16">
             <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-slate-900 mb-6">Select Your Stay</span>
-            <div className="w-px h-16 bg-slate-900"></div>
+            <div className="w-px h-16 bg-gradient-to-b from-slate-900 to-amber-400/50"></div>
           </div>
         </div>
 
-        {/* Asymmetric Image Grid - Inspired by the Qelli Design */}
+        {/* Asymmetric Image Grid */}
         <div className="max-w-[1400px] mx-auto mt-32 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 px-6 lg:px-12">
           <div className="md:col-span-4 h-[500px] lg:h-[700px] reveal transition-all duration-1000">
             <img 
@@ -63,22 +64,22 @@ const Home: React.FC = () => {
       {/* Philosophy Section */}
       <section className="py-40 px-6 max-w-4xl mx-auto text-center reveal">
         <p className="text-2xl md:text-4xl font-serif font-bold text-slate-900 leading-[1.5] mb-4">
-          Serenity is a tranquil hotel
+          Serenity is a <span className="text-sky-500">tranquil hotel</span>
         </p>
         <p className="text-2xl md:text-4xl font-serif font-bold text-slate-900 leading-[1.5] mb-4">
-          nestled amidst the Maldives' majestic
+          nestled amidst the Maldives' <span className="text-amber-500/80 italic">majestic</span>
         </p>
         <p className="text-2xl md:text-4xl font-serif font-bold text-slate-900 leading-[1.5]">
           atolls, offering a harmonious blend of minimalist luxury and the pristine beauty of nature's oasis.
         </p>
       </section>
 
-      {/* Immerse Yourself Section - Two Column Editorial */}
+      {/* Immerse Yourself Section */}
       <section className="py-32 px-6 lg:px-12 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
           <div className="reveal">
             <h2 className="text-5xl md:text-6xl font-serif font-bold text-slate-900 mb-16 leading-tight">
-              Immerse Yourself <br /> in the Embrace of Nature
+              Immerse Yourself <br /> in the <span className="text-sky-600/20">Embrace</span> of Nature
             </h2>
             <div className="flex gap-4">
               <div className="flex-1 h-[400px] lg:h-[600px]">
@@ -108,7 +109,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured Stays - Vertical Cards (Armonia Style) */}
+      {/* Featured Stays */}
       <section className="py-40 bg-white border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-12 reveal">
@@ -116,9 +117,9 @@ const Home: React.FC = () => {
               <h2 className="text-5xl md:text-6xl font-serif font-bold text-slate-900 mb-6 leading-tight">Comfort and Space <br /> Combined</h2>
               <p className="text-slate-400 text-sm font-medium tracking-wide">Relish the charm of our spacious rooms and separate houses, blending modern elegance with the tranquility of the surrounding natural oasis.</p>
             </div>
-            <Link to="/stays" className="group flex items-center gap-6 pb-2 border-b border-slate-900">
+            <Link to="/stays" className="group flex items-center gap-6 pb-2 border-b border-slate-900 hover:border-amber-400 transition-colors">
               <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900">Select Accommodation</span>
-              <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center group-hover:bg-amber-500 transition-all">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7-7 7" />
                 </svg>
@@ -134,10 +135,10 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Final Call to Action */}
+      {/* Final CTA */}
       <section className="py-60 px-4 text-center reveal">
          <h2 className="text-5xl md:text-8xl font-serif font-bold text-slate-900 mb-16 italic">Have a question <br /> or need assistance?</h2>
-         <Link to="/plan" className="inline-block bg-slate-950 text-white px-20 py-7 rounded-full font-bold uppercase tracking-[0.4em] text-[10px] hover:bg-slate-800 transition-all shadow-2xl">
+         <Link to="/plan" className="btn-maldive inline-block bg-slate-950 text-white px-20 py-7 rounded-full font-bold uppercase tracking-[0.4em] text-[10px] hover:bg-amber-500 transition-all shadow-2xl">
             Book My Stay
          </Link>
       </section>
