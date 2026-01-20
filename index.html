@@ -9,7 +9,7 @@
     <base href="/">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -40,73 +40,51 @@
         /* Reveal Animation System */
         .reveal { 
             opacity: 0; 
-            transform: translateY(60px); 
-            transition: all 1.4s cubic-bezier(0.16, 1, 0.3, 1); 
+            transform: translateY(40px); 
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); 
         }
         .reveal.active { 
             opacity: 1; 
             transform: translateY(0); 
         }
 
-        .reveal-left {
-            opacity: 0;
-            transform: translateX(-40px);
-            transition: all 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal-left.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Luxury Button Components */
-        .btn-luxury {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.25rem 3.5rem;
-            background: var(--text-charcoal);
-            color: white;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5em;
-            border-radius: 100px;
-            overflow: hidden;
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: pointer;
-        }
-
-        .btn-luxury:hover {
-            transform: translateY(-4px) scale(1.02);
-            background: var(--atoll-blue);
-            box-shadow: 0 30px 60px -12px rgba(14, 165, 233, 0.3);
-        }
-
-        .text-liquid {
-            line-height: 0.85;
-            letter-spacing: -0.05em;
-        }
-
         .glass-nav {
-            background: rgba(252, 250, 247, 0.8);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            background: rgba(252, 250, 247, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
-        .img-zoom-container {
+        .img-editorial {
             overflow: hidden;
+            position: relative;
         }
-        .img-zoom-container img {
-            transition: transform 10s ease;
+        .img-editorial img {
+            transition: transform 2.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .img-zoom-container:hover img {
-            transform: scale(1.15);
+        .img-editorial:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Luxury Inputs */
+        input, select, textarea {
+            font-family: var(--font-main);
         }
 
         ::selection {
             background: rgba(14, 165, 233, 0.15);
             color: var(--atoll-blue);
+        }
+        
+        .letter-spacing-vogue {
+            letter-spacing: 0.4em;
+        }
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 

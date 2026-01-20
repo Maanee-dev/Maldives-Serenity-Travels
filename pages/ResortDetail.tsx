@@ -1,27 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { RESORTS } from '../constants';
 
 const ResortDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const resort = RESORTS.find(r => r.slug === slug);
-  const roomSliderRef = useRef<HTMLDivElement>(null);
-  const diningSliderRef = useRef<HTMLDivElement>(null);
-
-  const [activeTab, setActiveTab] = useState<'rates' | 'experience' | 'celebration'>('rates');
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [activeTab, setActiveTab] = useState<'rooms' | 'dining'>('rooms');
 
   useEffect(() => {
     if (resort) {
-      document.title = `${resort.name} | Maldivian Specialist - Serenity Travels`;
+      document.title = `${resort.name} | Serenity Maldives`;
     }
     window.scrollTo(0, 0);
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('active');
       });
     }, { threshold: 0.1 });
 
@@ -30,11 +24,6 @@ const ResortDetail: React.FC = () => {
   }, [resort]);
 
   if (!resort) return <div className="p-40 text-center font-serif text-2xl italic">Sanctuary not found.</div>;
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitted(true);
-  };
 
   const getGalleryImage = (index: number) => {
     if (resort.images && resort.images[index]) return resort.images[index];
@@ -48,182 +37,160 @@ const ResortDetail: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#FCFAF7] min-h-screen pb-20">
-      <style>{`
-        .snap-slider {
-          display: flex;
-          gap: 2rem;
-          overflow-x: auto;
-          scroll-snap-type: x mandatory;
-          -webkit-overflow-scrolling: touch;
-        }
-        .snap-item {
-          scroll-snap-align: start;
-          flex-shrink: 0;
-        }
-        .hero-mosaic img {
-          transition: transform 3s ease;
-        }
-        .hero-mosaic div:hover img {
-          transform: scale(1.05);
-        }
-      `}</style>
-
-      {/* Sharp Gallery Header - Borders/Rounds Removed */}
-      <section className="hero-mosaic grid grid-cols-1 md:grid-cols-4 h-[75vh] md:h-[90vh] gap-1 p-1 pt-24 md:pt-32 reveal active">
-        <div className="md:col-span-2 h-full overflow-hidden relative">
-          <img src={getGalleryImage(0)} alt={resort.name} className="w-full h-full object-cover" />
-        </div>
-        <div className="hidden md:flex flex-col gap-1 h-full">
-          <div className="h-1/2 overflow-hidden relative">
-             <img src={getGalleryImage(1)} alt={resort.name} className="w-full h-full object-cover" />
-          </div>
-          <div className="h-1/2 overflow-hidden relative">
-             <img src={getGalleryImage(2)} alt="Detail" className="w-full h-full object-cover" />
+    <div className="bg-[#FCFAF7] min-h-screen">
+      {/* High-End Mosaic Header */}
+      <section className="grid grid-cols-1 md:grid-cols-12 h-[80vh] md:h-[95vh] gap-3 p-3 pt-24 md:pt-32 reveal active">
+        <div className="md:col-span-7 overflow-hidden relative rounded-[2rem] md:rounded-[4rem] group shadow-2xl">
+          <img src={getGalleryImage(0)} alt={resort.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[6s] ease-out" />
+          <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-700"></div>
+          <div className="absolute bottom-12 left-12 md:bottom-20 md:left-20">
+             <span className="bg-white/90 backdrop-blur px-6 py-2 rounded-full text-[10px] font-bold text-slate-900 uppercase tracking-[0.4em] shadow-sm mb-6 inline-block">
+               {resort.atoll}
+             </span>
+             <h1 className="text-5xl md:text-8xl lg:text-[10rem] font-serif font-bold text-white tracking-tighter italic leading-[0.85] drop-shadow-2xl">
+               {resort.name}
+             </h1>
           </div>
         </div>
-        <div className="hidden md:block h-full overflow-hidden relative">
-          <img src={getGalleryImage(3)} alt="Aerial" className="w-full h-full object-cover" />
+        <div className="md:col-span-5 grid grid-rows-2 gap-3 h-full">
+          <div className="overflow-hidden relative rounded-[2rem] md:rounded-[4rem] group shadow-xl">
+             <img src={getGalleryImage(1)} alt={resort.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[6s] ease-out" />
+             <div className="absolute inset-0 bg-black/10"></div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="overflow-hidden relative rounded-[2rem] md:rounded-[3rem] group shadow-lg">
+               <img src={getGalleryImage(2)} alt="Detail" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[6s] ease-out" />
+               <div className="absolute inset-0 bg-black/10"></div>
+            </div>
+            <div className="overflow-hidden relative rounded-[2rem] md:rounded-[3rem] group shadow-lg">
+               <img src={getGalleryImage(3)} alt="Aerial" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[6s] ease-out" />
+               <div className="absolute inset-0 bg-black/10"></div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-6 py-12 md:py-32 lg:px-12">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-32 mb-24 md:mb-48">
-          <div className="flex-grow reveal">
-            <nav className="flex items-center text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] gap-4 md:gap-8 mb-12 md:mb-24">
-              <Link to="/" className="hover:text-sky-500 transition-colors">Portfolio</Link>
-              <span className="text-amber-500">/</span>
-              <Link to="/stays" className="hover:text-sky-500 transition-colors">Collection</Link>
-              <span className="text-amber-500">/</span>
-              <span className="text-slate-900 truncate">{resort.name}</span>
-            </nav>
+      <div className="max-w-7xl mx-auto px-6 py-32 md:py-56 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 lg:gap-40 items-start">
+          
+          {/* Main Editorial Content */}
+          <div className="lg:col-span-8 reveal">
+            <p className="text-3xl md:text-5xl font-serif font-bold text-slate-900 leading-[1.3] mb-24 italic border-l-2 border-sky-500 pl-12 py-4">
+              "{resort.uvp}"
+            </p>
+            
+            <div className="text-slate-500 leading-[2.2] text-xl md:text-2xl mb-32 font-medium opacity-90">
+              {resort.description}
+            </div>
 
-            <h1 className="text-4xl md:text-7xl lg:text-[8.5rem] font-serif font-bold text-slate-900 mb-12 tracking-tighter italic leading-[0.9]">
-              {resort.name}
-            </h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-40">
+              {resort.features.map((feature, idx) => (
+                <div key={idx} className="flex gap-8 group">
+                   <div className="w-14 h-14 rounded-full border border-slate-200 flex-shrink-0 flex items-center justify-center group-hover:border-sky-500 group-hover:bg-sky-50 transition-all duration-700">
+                     <div className="w-1.5 h-1.5 rounded-full bg-sky-500"></div>
+                   </div>
+                   <div>
+                     <h4 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.3em] mb-3">{feature}</h4>
+                     <p className="text-[11px] text-slate-400 font-medium uppercase tracking-[0.2em]">Maldivian Standard of Excellence</p>
+                   </div>
+                </div>
+              ))}
+            </div>
 
-            <div className="flex items-center gap-8 md:gap-14 mb-16 md:mb-28 pb-10 md:pb-14 border-b border-slate-100">
-              <div className="flex gap-2">
-                {[...Array(resort.rating)].map((_, i) => (
-                  <div key={i} className="w-2 h-2 rounded-full bg-amber-500"></div>
+            {/* Room & Dining Switcher */}
+            <div className="mb-20">
+              <div className="flex gap-16 border-b border-slate-100 mb-20">
+                <button 
+                  onClick={() => setActiveTab('rooms')}
+                  className={`pb-8 text-[11px] font-bold uppercase tracking-[0.5em] transition-all relative ${activeTab === 'rooms' ? 'text-slate-900' : 'text-slate-300'}`}
+                >
+                  Accommodation
+                  {activeTab === 'rooms' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-slate-950"></div>}
+                </button>
+                <button 
+                  onClick={() => setActiveTab('dining')}
+                  className={`pb-8 text-[11px] font-bold uppercase tracking-[0.5em] transition-all relative ${activeTab === 'dining' ? 'text-slate-900' : 'text-slate-300'}`}
+                >
+                  Culinary
+                  {activeTab === 'dining' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-slate-950"></div>}
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                {activeTab === 'rooms' && resort.roomTypes?.map((room, idx) => (
+                  <div key={idx} className="group cursor-pointer">
+                    <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden mb-8 shadow-sm group-hover:shadow-2xl transition-all duration-700">
+                      <img src={room.image} alt={room.name} className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" />
+                      <div className="absolute bottom-6 right-6">
+                        <span className="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-[9px] font-bold text-slate-900 uppercase tracking-widest">{room.size}</span>
+                      </div>
+                    </div>
+                    <h4 className="text-2xl font-serif font-bold text-slate-900 mb-4 group-hover:italic transition-all">{room.name}</h4>
+                    <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em] mb-4">Up to {room.capacity}</p>
+                    <p className="text-slate-500 text-sm leading-relaxed mb-6 opacity-80">{room.description}</p>
+                  </div>
+                ))}
+
+                {activeTab === 'dining' && resort.diningVenues?.map((venue, idx) => (
+                  <div key={idx} className="group cursor-pointer">
+                    <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden mb-8 shadow-sm group-hover:shadow-2xl transition-all duration-700">
+                      <img src={venue.image} alt={venue.name} className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" />
+                      <div className="absolute bottom-6 right-6">
+                        <span className="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-[9px] font-bold text-slate-900 uppercase tracking-widest">{venue.vibe}</span>
+                      </div>
+                    </div>
+                    <h4 className="text-2xl font-serif font-bold text-slate-900 mb-4 group-hover:italic transition-all">{venue.name}</h4>
+                    <p className="text-sky-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-4">{venue.cuisine}</p>
+                    <p className="text-slate-500 text-sm leading-relaxed mb-6 opacity-80">{venue.description}</p>
+                  </div>
                 ))}
               </div>
-              <span className="text-[9px] md:text-[11px] font-bold text-sky-500 uppercase tracking-[0.4em] bg-sky-50 px-4 md:px-6 py-2 md:py-3 rounded-full">
-                {resort.atoll}
-              </span>
-            </div>
-
-            <div className="prose prose-slate max-w-none">
-              <p className="text-2xl md:text-5xl font-serif font-bold text-slate-900 leading-[1.3] mb-16 md:mb-32 italic border-l border-amber-500/20 pl-8 md:pl-24 py-4 md:py-6">
-                "{resort.uvp}"
-              </p>
-              <div className="text-slate-600 leading-[2] md:leading-[2.6] text-lg md:text-xl mb-24 md:mb-32 font-medium opacity-90">
-                {resort.description}
-              </div>
             </div>
           </div>
 
-          <aside className="lg:w-[400px] flex-shrink-0 reveal">
-            <div className="sticky top-40">
-              <div className="bg-slate-950 text-white p-10 md:p-16 rounded-[3rem] shadow-2xl relative overflow-hidden mb-12">
-                <div className="relative z-10">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-amber-500 mb-8 block">Concierge Priority</span>
-                  <h3 className="text-4xl md:text-5xl font-serif font-bold mb-10 italic leading-[1.1]">Expert Consultation</h3>
-                  <a href="#consultation" className="block w-full bg-sky-500 text-white text-center py-6 rounded-full font-bold hover:bg-white hover:text-slate-950 transition-all uppercase tracking-[0.4em] text-[10px]">
-                    Inquire availability
-                  </a>
-                </div>
-              </div>
+          {/* Luxury Sidebar - Concierge */}
+          <aside className="lg:col-span-4 sticky top-40 reveal transition-all duration-1000 delay-300">
+            <div className="bg-white rounded-[3rem] p-12 shadow-2xl border border-slate-50">
+              <span className="text-[9px] font-bold text-sky-500 uppercase tracking-[0.5em] mb-10 block">Private Concierge</span>
+              <h3 className="text-4xl font-serif font-bold text-slate-950 mb-8 italic">Consult An Expert</h3>
+              <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.4em] leading-relaxed mb-12 border-l border-slate-100 pl-8">
+                Bespoke itineraries, private transfers, and unlisted sanctuary access.
+              </p>
               
-              <div className="bg-white border border-slate-100 p-10 rounded-[3rem] shadow-sm hidden md:block">
-                 <h3 className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.6em] mb-10 text-center">Island Highlights</h3>
-                 <div className="space-y-8">
-                    {resort.features.map((feat, idx) => (
-                      <div key={idx} className="flex items-center gap-6 group">
-                        <div className="w-1.5 h-1.5 rounded-full bg-sky-500"></div>
-                        <span className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">{feat}</span>
-                      </div>
-                    ))}
+              <div className="space-y-10 mb-16">
+                 <div className="flex items-center justify-between pb-6 border-b border-slate-50">
+                    <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Pricing</span>
+                    <span className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.2em]">{resort.priceRange} Luxury</span>
+                 </div>
+                 <div className="flex items-center justify-between pb-6 border-b border-slate-50">
+                    <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Transfers</span>
+                    <span className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.2em]">{resort.transfers.join(' / ')}</span>
                  </div>
               </div>
+
+              <Link to="/plan" className="block w-full bg-slate-950 text-white text-center py-6 rounded-full text-[10px] font-bold uppercase tracking-[0.5em] hover:bg-sky-500 transition-all duration-700 shadow-xl mb-6">
+                Check Availability
+              </Link>
+              <a href="tel:+9607771234" className="block w-full border border-slate-100 text-slate-900 text-center py-6 rounded-full text-[10px] font-bold uppercase tracking-[0.5em] hover:border-slate-950 transition-all duration-700">
+                Call Concierge
+              </a>
+              
+              <p className="text-center mt-12 text-[8px] font-bold text-slate-300 uppercase tracking-[0.4em]">
+                Exclusive Serenity Rates Guaranteed
+              </p>
+            </div>
+            
+            {/* Additional Info Cards */}
+            <div className="mt-10 p-12 bg-sky-50 rounded-[3rem] border border-sky-100">
+               <h4 className="text-[10px] font-bold text-sky-900 uppercase tracking-[0.5em] mb-6">Insider Tip</h4>
+               <p className="text-[11px] text-sky-800 font-medium leading-loose uppercase tracking-[0.1em]">
+                 The best visibility for diving around {resort.atoll} is typically between January and April. Ask our concierge for private dive boat arrangements.
+               </p>
             </div>
           </aside>
+
         </div>
       </div>
-
-      {/* Rooms & Dining Sections remain consistent */}
-      <section className="mb-32 md:mb-64 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-16 md:mb-24 reveal">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
-            <div>
-              <span className="text-[9px] font-bold text-sky-500 uppercase tracking-[0.4em] mb-4 block">Selected Sanctuaries</span>
-              <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-900 italic tracking-tight">Private Villas</h2>
-            </div>
-          </div>
-        </div>
-
-        <div ref={roomSliderRef} className="snap-slider no-scrollbar px-6 lg:px-[calc((100vw-80rem)/2+3rem)] scroll-smooth pb-12">
-          {resort.roomTypes?.map((room, idx) => (
-            <div key={idx} className="snap-item w-[80vw] md:w-[500px] group bg-white rounded-[3.5rem] p-4 md:p-6 shadow-sm hover:shadow-2xl transition-all duration-700">
-              <div className="h-[300px] md:h-[450px] rounded-[3rem] overflow-hidden mb-8 shadow-md relative">
-                <img src={room.image} alt={room.name} className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" />
-              </div>
-              <div className="px-4 pb-4">
-                <h3 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-4 group-hover:italic transition-all">{room.name}</h3>
-                <p className="text-slate-500 leading-relaxed mb-8 text-sm md:text-base line-clamp-3">{room.description}</p>
-                <div className="flex flex-wrap gap-4 border-t border-slate-50 pt-6">
-                  {room.highlights.slice(0, 2).map((h, i) => (
-                    <span key={i} className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{h}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Consultation Section */}
-      <section id="consultation" className="max-w-6xl mx-auto px-6 lg:px-12 py-24 md:py-32 bg-white rounded-[4rem] shadow-sm border border-slate-100 reveal">
-        <div className="text-center mb-16 md:mb-24">
-          <span className="text-[10px] font-bold text-amber-500 uppercase tracking-[0.6em] mb-8 block">Bespoke Concierge</span>
-          <h2 className="text-4xl md:text-6xl lg:text-[5rem] font-serif font-bold text-slate-900 mb-8 italic leading-tight">Consult with an Expert</h2>
-          <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] max-w-xl mx-auto leading-loose px-4">
-            Connect with our Maldivian destination specialists to refine your sanctuary selection.
-          </p>
-        </div>
-
-        {isSubmitted ? (
-          <div className="text-center py-16 animate-in fade-in zoom-in duration-700">
-            <div className="w-20 h-20 md:w-28 md:h-28 bg-sky-500 rounded-full flex items-center justify-center mx-auto mb-12 shadow-lg">
-               <svg className="w-10 h-10 md:w-12 md:h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-               </svg>
-            </div>
-            <h3 className="text-3xl md:text-5xl font-serif font-bold mb-6 italic text-slate-900">Request Sent</h3>
-            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
-              A private specialist will be in touch within 24 hours.
-            </p>
-          </div>
-        ) : (
-          <form onSubmit={handleFormSubmit} className="space-y-12 animate-in fade-in duration-1000 max-w-3xl mx-auto w-full">
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div className="space-y-4">
-                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Full Name</label>
-                  <input required type="text" placeholder="YOUR NAME" className="w-full bg-slate-50 p-6 md:p-8 rounded-[1.5rem] text-[11px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white border border-transparent focus:border-slate-100" />
-                </div>
-                <div className="space-y-4">
-                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Email Address</label>
-                  <input required type="email" placeholder="EMAIL@DESTINATION.COM" className="w-full bg-slate-50 p-6 md:p-8 rounded-[1.5rem] text-[11px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white border border-transparent focus:border-slate-100" />
-                </div>
-             </div>
-             <div className="pt-8">
-                <button type="submit" className="w-full bg-slate-950 text-white py-8 rounded-full font-bold uppercase tracking-[0.5em] text-[11px] shadow-2xl hover:bg-sky-500 transition-all">
-                  Initiate Consultation
-                </button>
-             </div>
-          </form>
-        )}
-      </section>
     </div>
   );
 };
