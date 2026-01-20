@@ -9,9 +9,9 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: use PascalCase to match the canonical filename and resolve casing conflicts
+// Using PascalCase to match the filename and resolve casing collision errors
 import Offers from './pages/Offers';
-// Fix: use PascalCase to match the canonical filename and resolve casing conflicts
+// Using PascalCase to match the filename and resolve casing collision errors
 import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';

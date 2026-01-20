@@ -12,55 +12,57 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close menu on route change
   useEffect(() => setIsOpen(false), [location.pathname]);
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'glass py-3 border-b-2 border-sky-500' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-700 ${scrolled ? 'glass py-3 border-b border-slate-100' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex justify-between items-center h-12">
+          {/* Menu Button - Left */}
           <div className="flex-1 flex justify-start">
             <button 
               onClick={() => setIsOpen(!isOpen)}
               className="flex items-center gap-3 group focus:outline-none"
               aria-label="Toggle menu"
             >
-              <div className="space-y-1.5 w-6">
-                <span className={`block h-0.5 transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-2 bg-amber-500' : 'w-6 bg-slate-900'}`}></span>
-                <span className={`block h-0.5 transition-all duration-300 ${isOpen ? 'opacity-0' : 'w-4 bg-sky-500'}`}></span>
-                <span className={`block h-0.5 transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2 bg-sky-500' : 'w-6 bg-slate-900'}`}></span>
+              <div className="space-y-1.5 w-5">
+                <span className={`block h-0.5 bg-slate-900 transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-2' : 'w-5'}`}></span>
+                <span className={`block h-0.5 bg-slate-900 transition-all duration-300 ${isOpen ? 'opacity-0' : 'w-3'}`}></span>
+                <span className={`block h-0.5 bg-slate-900 transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2' : 'w-5'}`}></span>
               </div>
-              <span className={`text-[10px] font-bold uppercase tracking-[0.4em] hidden sm:inline transition-colors ${isOpen ? 'text-amber-500' : 'text-slate-900 group-hover:text-sky-500'}`}>
-                {isOpen ? 'Close' : 'Menu'}
-              </span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-900 hidden sm:inline">Menu</span>
             </button>
           </div>
 
-          <Link to="/" className="flex flex-col items-center flex-1 group">
-            <span className="text-xl lg:text-2xl font-serif font-bold tracking-[0.25em] text-slate-900 uppercase transition-all group-hover:tracking-[0.4em]">Serenity</span>
-            <div className="w-6 h-1 bg-amber-500 mt-1"></div>
+          {/* Logo - Center */}
+          <Link to="/" className="flex flex-col items-center flex-1">
+            <span className="text-xl lg:text-2xl font-serif font-bold tracking-[0.2em] text-slate-900 uppercase">Serenity</span>
           </Link>
           
+          {/* Action - Right */}
           <div className="flex-1 flex justify-end">
-            <Link to="/plan" className="text-[10px] font-bold uppercase tracking-[0.4em] bg-sky-500 text-white px-6 py-2.5 rounded-full hover:bg-slate-900 transition-all">
+            <Link to="/plan" className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-900 border-b border-slate-900 pb-0.5 hover:opacity-50 transition-all">
               Book Now
             </Link>
           </div>
         </div>
       </div>
 
-      <div className={`fixed inset-0 bg-[#FCFAF7] transition-all duration-700 z-[-1] flex flex-col items-center justify-center ${isOpen ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="space-y-8 text-center relative z-10">
+      {/* Full Screen Menu Overlay */}
+      <div className={`fixed inset-0 bg-[#FCFAF7] transition-all duration-700 z-[-1] flex flex-col items-center justify-center ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+        <div className="space-y-8 text-center">
           {['Stays', 'Offers', 'Experiences', 'Stories'].map((item) => (
             <Link 
               key={item}
               to={`/${item.toLowerCase()}`}
-              className="group block text-5xl md:text-8xl font-serif font-bold text-slate-900 hover:text-sky-500 transition-all"
+              className="block text-4xl md:text-7xl font-serif font-bold text-slate-900 hover:italic hover:text-sky-800 transition-all"
             >
               {item}
             </Link>
           ))}
-          <div className="pt-20 mt-16 border-t-2 border-amber-500 w-64 mx-auto">
-             <Link to="/plan" className="text-[10px] font-bold uppercase tracking-[0.5em] text-sky-500 hover:text-amber-500 transition-colors">Start Planning Your Journey</Link>
+          <div className="pt-16 mt-16 border-t border-slate-200 w-64 mx-auto">
+             <Link to="/plan" className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400 hover:text-slate-900 transition-colors">Start Planning</Link>
           </div>
         </div>
       </div>
