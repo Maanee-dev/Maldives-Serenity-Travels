@@ -2,6 +2,7 @@
 import { Accommodation, AccommodationType, TransferType, MealPlan, Offer, Experience, BlogPost } from './types';
 
 export const RESORTS: Accommodation[] = [
+  // --- ULTRA LUXURY SIGNATURES ---
   {
     id: 'soneva-jani',
     name: 'Soneva Jani',
@@ -19,13 +20,13 @@ export const RESORTS: Accommodation[] = [
     uvp: 'The only resort in the Maldives with retractable roofs for stargazing and private slides in every villa.',
     isFeatured: true,
     rooms: {
-      description: 'The Chapter Two overwater villas are among the largest in the world. Crafted from sustainable woods, they feature expansive living areas, private pools, and the signature retractable roof over the master bedroom.',
-      highlights: ['Retractable roof for stargazing', 'Private water slide into the ocean', 'Catamaran nets for lounging over water'],
+      description: 'The Chapter Two overwater villas are architectural marvels. Crafted from sustainable woods, they feature expansive living areas and the signature retractable roof.',
+      highlights: ['Retractable roof for stargazing', 'Private water slide into the ocean', 'Catamaran nets for lounging'],
       image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800'
     },
     dining: {
-      description: 'Gastronomy at Soneva Jani is a global journey. From fresh organic salads grown on the island to "So Wild" by Diana Von Cranach, a plant-based experience that reimagines raw food.',
-      highlights: ['The Gathering: Three-story dining hub', 'Director’s Cut: Modern Japanese cuisine', 'So Primitive: Fire-pit cooking on the sand'],
+      description: 'A global culinary journey from organic salads grown on-island to high-end Japanese fare at Director’s Cut.',
+      highlights: ['The Gathering: Overwater dining hub', 'So Wild: Plant-based reimagining', 'Cinema Paradiso: Dining with stars'],
       image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800'
     }
   },
@@ -38,7 +39,7 @@ export const RESORTS: Accommodation[] = [
     priceRange: '$$$$',
     rating: 5,
     shortDescription: 'Ultra-luxury private island with twelve pristine beaches.',
-    description: 'One&Only Reethi Rah offers an unrivaled level of style and sophistication. Surrounded by the crystal clear waters of the Indian Ocean, this superb all-villa resort offers a sanctuary of privacy.',
+    description: 'A playground for the elite, offering twelve distinct beaches and an unrivaled level of privacy and style.',
     images: ['https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200'],
     features: ['12 Pristine Beaches', 'Beach Club', 'Private Concierge', 'Overwater Yoga'],
     transfers: [TransferType.SPEEDBOAT],
@@ -46,67 +47,93 @@ export const RESORTS: Accommodation[] = [
     uvp: 'Celebrity-favorite private island with twelve distinct beaches and world-class luxury.',
     isFeatured: true,
     rooms: {
-      description: 'Villas are positioned for ultimate privacy, either on the beach hidden by lush foliage or over the crystal turquoise lagoon. Each features high ceilings, oversized bathtubs, and a dedicated Villa Host.',
-      highlights: ['Grand Water Sunset Villa with 20m pool', 'Private outdoor rain showers', 'Bespoke smeg mini-bars and luxury linens'],
+      description: 'The Beach Villas are secluded by lush foliage, while Water Villas offer direct access to the turquoise lagoon.',
+      highlights: ['Grand Sunset Residences', 'Private beach cabanas', 'Hammocks over the reef'],
       image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800'
     },
     dining: {
-      description: 'Six world-class restaurants offer everything from organic "garden-to-table" fare at Botanica to contemporary Japanese at Tapasake, perched on the island’s edge.',
-      highlights: ['Tapasake: Modern Japanese with sunset views', 'Reethi: Global flavors in a spectacular pavilion', 'The Beach Club: Chic toes-in-the-sand dining'],
+      description: 'Culinary brilliance ranging from contemporary Japanese at Tapasake to organic garden dining at Botanica.',
+      highlights: ['Tapasake: Modern Japanese', 'Botanica: Garden-to-table', 'Reethi: Global fusion pavilion'],
       image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800'
     }
   },
   {
-    id: 'conrad-rangali',
-    name: 'Conrad Maldives Rangali Island',
-    slug: 'conrad-maldives-rangali-island-underwater-villas',
+    id: 'ritz-carlton-maldives',
+    name: 'The Ritz-Carlton Maldives, Fari Islands',
+    slug: 'the-ritz-carlton-maldives-fari-islands',
     type: AccommodationType.RESORT,
-    atoll: 'South Ari Atoll',
+    atoll: 'North Male Atoll',
     priceRange: '$$$$',
     rating: 5,
-    shortDescription: 'Dual-island concept featuring the world\'s first underwater bedroom.',
-    description: 'Rangali Island is spread across two islands connected by a bridge. Home to Ithaa, the world\'s first underwater restaurant.',
+    shortDescription: 'Architectural masterpiece with a minimalist, circular design.',
+    description: 'Set within the integrated Fari Islands development, this resort offers a modern take on Maldivian luxury.',
     images: ['https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&q=80&w=1200'],
-    features: ['The Muraka Villa', 'Ithaa Underwater Restaurant', 'Two-Island Concept'],
-    transfers: [TransferType.SEAPLANE],
+    features: ['Circular Villas', 'Aris Meeha Butler', 'Fari Marina Access'],
+    transfers: [TransferType.SPEEDBOAT],
     mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
-    uvp: 'Home to the first underwater restaurant and the first underwater villa (The Muraka).',
-    isFeatured: true,
+    uvp: 'Iconic circular architecture and access to the vibrant Fari Marina beach club.',
     rooms: {
-      description: 'The resort is home to "THE MURAKA," a first-of-its-kind luxury residence with a master bedroom submerged over 16 feet below sea level. Other villas offer sunset views and private infinity pools.',
-      highlights: ['The MURAKA underwater residence', 'Sunset Water Villas with glass-floor living areas', 'Beach Villas with outdoor garden bathrooms'],
+      description: 'The villas feature a unique circular design that blends indoor and outdoor spaces seamlessly.',
+      highlights: ['100% solar powered villas', 'Private infinity pools', 'Circular glass doors with 270-degree views'],
       image: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&q=80&w=800'
     },
     dining: {
-      description: 'Home to 12 world-class restaurants and bars. The crown jewel is Ithaa, the world’s first all-glass undersea restaurant, offering a truly immersive 270-degree view of marine life.',
-      highlights: ['Ithaa Undersea Restaurant', 'Ufaa by Jereme Leung: Authentic Chinese', 'Cheese & Wine Bar with 101 varieties'],
+      description: 'Seven dining venues, including the Michelin-starred Summer Pavilion for exquisite Cantonese cuisine.',
+      highlights: ['Summer Pavilion: Cantonese fine dining', 'Iwau: Chef’s table Teppanyaki', 'Beach Shack: Mediterranean vibes'],
       image: 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&q=80&w=800'
     }
   },
+  // --- ANANTARA COLLECTION ---
   {
-    id: 'adaaran-vadoo',
-    name: 'Adaaran Prestige Vadoo',
-    slug: 'adaaran-prestige-vadoo-luxury-water-villas',
+    id: 'anantara-kihavah',
+    name: 'Anantara Kihavah Maldives Villas',
+    slug: 'anantara-kihavah-maldives-villas',
+    type: AccommodationType.RESORT,
+    atoll: 'Baa Atoll',
+    priceRange: '$$$$',
+    rating: 5,
+    shortDescription: 'Home to the iconic underwater restaurant and sky observatory.',
+    description: 'Voted the most Instagrammable resort in the world, Kihavah offers the ultimate luxury escape in the UNESCO Biosphere Baa Atoll.',
+    images: ['https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1200'],
+    features: ['Underwater Dining', 'Overwater Observatory', 'Glass Bottom Tubs'],
+    transfers: [TransferType.SEAPLANE],
+    mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
+    uvp: 'Dine five meters below the sea or stargaze from the only overwater observatory in the Maldives.',
+    rooms: {
+      description: 'The beach and water villas are incredibly spacious, each featuring a private infinity pool and glass-bottom bathtubs.',
+      highlights: ['Private villa pools', 'Bespoke pillow menus', 'Indoor and outdoor rain showers'],
+      image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800'
+    },
+    dining: {
+      description: 'The award-winning SEA underwater restaurant offers a truly immersive 360-degree view of marine life.',
+      highlights: ['SEA: Underwater wine cellar & restaurant', 'FIRE: Teppanyaki under the stars', 'SKY: Overwater observatory bar'],
+      image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=800'
+    }
+  },
+  {
+    id: 'anantara-dhigu',
+    name: 'Anantara Dhigu Maldives Resort',
+    slug: 'anantara-dhigu-maldives-resort',
     type: AccommodationType.RESORT,
     atoll: 'South Male Atoll',
     priceRange: '$$$',
     rating: 5,
-    shortDescription: 'Award-winning water villas with glass-floor bathrooms.',
-    description: 'Located at the gateway to the South Atolls, Adaaran Prestige Vadoo has its own reef teeming with vibrant aquatic flora and fauna.',
-    images: ['https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=1200'],
-    features: ['Butler Service', 'Glass Floors', 'Plunge Pools'],
+    shortDescription: 'Family-friendly luxury in a shallow turquoise lagoon.',
+    description: 'Anantara Dhigu offers an idyllic island escape for families and couples, with a wide range of water sports and spa treatments.',
+    images: ['https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200'],
+    features: ['Kids Club', 'Overwater Spa', 'Surf School'],
     transfers: [TransferType.SPEEDBOAT],
-    mealPlans: [MealPlan.ALL_INCLUSIVE],
-    uvp: 'The closest all-water-villa resort to Male, perfect for quick luxury escapes.',
+    mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
+    uvp: 'The ultimate family playground with a dedicated surf school and overwater spa.',
     rooms: {
-      description: 'Each of the 50 overwater villas at Vadoo features teak wood flooring, thoughtfully designed interiors, and a private plunge pool on the sun deck with direct lagoon access.',
-      highlights: ['Glass-bottom bathroom floors', 'Private infinity plunge pool', '24-hour dedicated butler service'],
-      image: 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800'
+      description: 'Elegantly designed villas with direct beach or lagoon access, perfect for families needing extra space.',
+      highlights: ['Family Beach Villas', 'Overwater Suites', 'Outdoor garden bathrooms'],
+      image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800'
     },
     dining: {
-      description: 'Savor gourmet dishes across the Farivalhu and Kithajima restaurants, focusing on fresh seafood and traditional Japanese cuisine in a romantic overwater setting.',
-      highlights: ['Farivalhu Fine Dining', 'Kithajima Japanese Restaurant', 'Dhoni Bar over the reef'],
-      image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800'
+      description: 'Fushi Café serves a bountiful breakfast while Sea.Fire.Salt. offers freshly caught seafood and grilled meats.',
+      highlights: ['Sea.Fire.Salt.: Overwater grill', 'Fushi Café: International buffet', 'Aqua Bar: Poolside cocktails'],
+      image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800'
     }
   },
   {
@@ -125,40 +152,14 @@ export const RESORTS: Accommodation[] = [
     mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
     uvp: 'The most popular high-end stay on Maafushi local island with resort-style amenities.',
     rooms: {
-      description: 'Our Super Deluxe Seaview Rooms offer panoramic views of the turquoise ocean. Designed with a modern aesthetic, each room features a private balcony to enjoy the sea breeze.',
+      description: 'Our Super Deluxe Seaview Rooms offer panoramic views of the turquoise ocean. Designed with a modern aesthetic, each room features a private balcony.',
       highlights: ['Private sea-view balconies', 'Modern minimalist interiors', 'Complimentary snorkeling gear'],
       image: 'https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=800'
     },
     dining: {
-      description: 'The rooftop restaurant serves a blend of traditional Maldivian flavors and international buffet selections, all while overlooking the bustling local beach life.',
+      description: 'The rooftop restaurant serves a blend of traditional Maldivian flavors and international buffet selections.',
       highlights: ['Rooftop sunset dining', 'Fresh local fish grill', 'Floating breakfast options'],
       image: 'https://images.unsplash.com/photo-1506953064870-15873d93f893?auto=format&fit=crop&q=80&w=800'
-    }
-  },
-  {
-    id: 'barefoot-eco-hotel',
-    name: 'The Barefoot Eco Hotel',
-    slug: 'barefoot-eco-hotel-hanimaadhoo-maldives',
-    type: AccommodationType.GUEST_HOUSE,
-    atoll: 'Haa Alifu Atoll',
-    priceRange: '$',
-    rating: 4,
-    shortDescription: 'Unique ecological project on a local island with a focus on conservation.',
-    description: 'Authentic Maldivian experiences on a local island with a focus on conservation and community. Located in the northernmost atoll.',
-    images: ['https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200'],
-    features: ['Marine Biology Center', 'Private Bikini Beach', 'Yoga Retreats'],
-    transfers: [TransferType.DOMESTIC_FLIGHT],
-    mealPlans: [MealPlan.HALF_BOARD, MealPlan.BED_BREAKFAST],
-    uvp: 'The most sustainable guest house in the Maldives with its own private beach and forest area.',
-    rooms: {
-      description: 'The rooms are designed using ecological materials that blend into the surrounding tropical forest and white sand dunes, offering a peaceful, low-impact stay.',
-      highlights: ['Eco-friendly design & materials', 'Direct forest-to-beach paths', 'Minimalist "Slow Living" aesthetic'],
-      image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800'
-    },
-    dining: {
-      description: 'The Barefoot Restaurant focuses on fresh, seasonal ingredients sourced from the island’s local farms and sustainable fishing practices, served in a Mediterranean style.',
-      highlights: ['Organic farm-to-table focus', 'Mediterranean & Maldivian fusion', 'Zero-plastic dining policy'],
-      image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800'
     }
   }
 ];

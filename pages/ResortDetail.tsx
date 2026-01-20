@@ -12,6 +12,18 @@ const ResortDetail: React.FC = () => {
       document.title = `${resort.name} - Serenity Maldives`;
     }
     window.scrollTo(0, 0);
+
+    // Initialize Intersection Observer for reveal animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
   }, [resort]);
 
   if (!resort) return <div className="p-40 text-center font-serif text-2xl italic">Sanctuary not found.</div>;
@@ -38,8 +50,9 @@ const ResortDetail: React.FC = () => {
       </section>
 
       <div className="max-w-7xl mx-auto px-6 py-32 lg:px-12">
+        {/* Navigation & Header Section */}
         <div className="flex flex-col lg:flex-row gap-24 mb-32">
-          <div className="flex-grow reveal active">
+          <div className="flex-grow reveal">
             <nav className="flex items-center text-slate-400 text-[9px] font-bold uppercase tracking-[0.4em] gap-4 mb-12">
               <Link to="/" className="hover:text-slate-900">Home</Link>
               <span>/</span>
@@ -72,7 +85,7 @@ const ResortDetail: React.FC = () => {
               </div>
               <div className="space-y-4">
                 <span className="text-[8px] text-slate-400 uppercase font-bold tracking-[0.4em] block">Dining</span>
-                <span className="text-xs font-bold text-slate-900 uppercase tracking-widest leading-relaxed">{resort.mealPlans[0]}</span>
+                <span className="text-xs font-bold text-slate-900 uppercase tracking-widest leading-relaxed">{resort.mealPlans[0].replace('_', ' ')}</span>
               </div>
               <div className="space-y-4">
                 <span className="text-[8px] text-slate-400 uppercase font-bold tracking-[0.4em] block">Pricing</span>
@@ -103,7 +116,7 @@ const ResortDetail: React.FC = () => {
             </div>
           </div>
 
-          <aside className="lg:w-96 reveal active">
+          <aside className="lg:w-96 reveal">
             <div className="sticky top-32">
               <div className="bg-slate-950 text-white p-16 rounded-[4rem] shadow-2xl relative overflow-hidden">
                 <div className="relative z-10">
@@ -132,9 +145,9 @@ const ResortDetail: React.FC = () => {
         </div>
 
         {/* Detailed Sections for Dining & Rooms */}
-        <div className="space-y-64">
+        <div className="space-y-64 pt-32">
           {/* Rooms / Sanctuaries Section */}
-          <section className="reveal">
+          <section id="sanctuaries" className="reveal">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
               <div className={`order-2 lg:order-1`}>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-6 block">The Sanctuaries</span>
@@ -158,7 +171,7 @@ const ResortDetail: React.FC = () => {
           </section>
 
           {/* Dining / Gastronomy Section */}
-          <section className="reveal">
+          <section id="gastronomy" className="reveal">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
               <div className="h-[500px] lg:h-[700px] rounded-[4rem] overflow-hidden shadow-2xl">
                 <img src={resort.dining?.image || "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=1200"} className="w-full h-full object-cover" alt="Dining Experience" />
