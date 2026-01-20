@@ -65,18 +65,18 @@ const ResortDetail: React.FC = () => {
 
       {/* Gallery Header */}
       <section className="grid grid-cols-1 md:grid-cols-4 h-[80vh] md:h-[85vh] gap-4 p-4 pt-32 reveal active">
-        <div className="md:col-span-2 h-full overflow-hidden rounded-[3rem] shadow-xl border-l-8 border-sky-500">
+        <div className="md:col-span-2 h-full overflow-hidden rounded-[3rem] shadow-xl">
           <img src={getGalleryImage(0)} alt={resort.name} className="w-full h-full object-cover transition-all duration-[2s]" />
         </div>
         <div className="hidden md:flex flex-col gap-4 h-full">
-          <div className="h-1/2 rounded-[3rem] overflow-hidden shadow-xl border-t-8 border-amber-500">
+          <div className="h-1/2 rounded-[3rem] overflow-hidden shadow-xl">
              <img src={getGalleryImage(1)} alt={resort.name} className="w-full h-full object-cover" />
           </div>
-          <div className="h-1/2 rounded-[3rem] overflow-hidden shadow-xl border-b-8 border-sky-500">
+          <div className="h-1/2 rounded-[3rem] overflow-hidden shadow-xl">
              <img src={getGalleryImage(2)} alt="Detail" className="w-full h-full object-cover" />
           </div>
         </div>
-        <div className="hidden md:block h-full overflow-hidden rounded-[3rem] shadow-xl border-r-8 border-amber-500">
+        <div className="hidden md:block h-full overflow-hidden rounded-[3rem] shadow-xl">
           <img src={getGalleryImage(3)} alt="Aerial" className="w-full h-full object-cover" />
         </div>
       </section>
@@ -103,13 +103,13 @@ const ResortDetail: React.FC = () => {
                   <div key={i} className="w-2.5 h-2.5 rounded-full bg-amber-500"></div>
                 ))}
               </div>
-              <span className="text-[11px] font-bold text-sky-500 uppercase tracking-[0.6em] bg-sky-50 px-6 py-3 rounded-full border-2 border-sky-500">
+              <span className="text-[11px] font-bold text-sky-500 uppercase tracking-[0.6em] bg-sky-50 px-6 py-3 rounded-full border border-sky-100">
                 {resort.atoll}
               </span>
             </div>
 
             <div className="prose prose-slate max-w-none">
-              <p className="text-4xl md:text-6xl font-serif font-bold text-slate-900 leading-[1.2] mb-32 italic border-l-8 border-amber-500 pl-16 lg:pl-24 py-6">
+              <p className="text-4xl md:text-6xl font-serif font-bold text-slate-900 leading-[1.2] mb-32 italic border-l border-amber-500/20 pl-16 lg:pl-24 py-6">
                 "{resort.uvp}"
               </p>
               <div className="text-slate-600 leading-[2.6] text-xl mb-32 first-letter:text-[10rem] first-letter:font-serif first-letter:font-bold first-letter:mr-10 first-letter:float-left first-letter:text-sky-500 first-letter:leading-[0.75] first-letter:mt-4">
@@ -121,7 +121,7 @@ const ResortDetail: React.FC = () => {
           <aside className="lg:w-[420px] flex-shrink-0 reveal">
             <div className="sticky top-40">
               {/* Solid Luxury Concierge Card */}
-              <div className="bg-slate-900 text-white p-14 lg:p-20 rounded-[4rem] shadow-2xl relative overflow-hidden mb-12 border-b-8 border-amber-500">
+              <div className="bg-slate-900 text-white p-14 lg:p-20 rounded-[4rem] shadow-2xl relative overflow-hidden mb-12">
                 <div className="relative z-10">
                   <span className="text-[11px] font-bold uppercase tracking-[0.6em] text-amber-500 mb-12 block">Private Specialist</span>
                   <h3 className="text-5xl lg:text-6xl font-serif font-bold mb-14 italic leading-[1.05]">Secure <br />Your Stay</h3>
@@ -131,7 +131,7 @@ const ResortDetail: React.FC = () => {
                 </div>
               </div>
               
-              <div className="bg-white border-2 border-slate-100 p-14 rounded-[4rem] shadow-sm border-t-8 border-sky-500">
+              <div className="bg-white border border-slate-100 p-14 rounded-[4rem] shadow-sm">
                  <h3 className="text-[11px] font-bold text-slate-300 uppercase tracking-[0.7em] mb-14 text-center">Exclusive Features</h3>
                  <div className="space-y-10">
                     {resort.features.map((feat, idx) => (
@@ -164,12 +164,12 @@ const ResortDetail: React.FC = () => {
 
         <div ref={roomSliderRef} className="snap-slider no-scrollbar px-6 lg:px-[calc((100vw-80rem)/2+3rem)] scroll-smooth pb-12">
           {resort.roomTypes?.map((room, idx) => (
-            <div key={idx} className="snap-item w-[85vw] md:w-[550px] group bg-white rounded-[4.5rem] p-6 border-b-8 border-transparent hover:border-sky-500 shadow-sm hover:shadow-2xl transition-all duration-700">
+            <div key={idx} className="snap-item w-[85vw] md:w-[550px] group bg-white rounded-[4.5rem] p-6 shadow-sm hover:shadow-2xl transition-all duration-700">
               <div className="h-[400px] md:h-[500px] rounded-[3.5rem] overflow-hidden mb-10 shadow-lg relative">
                 <img src={room.image} alt={room.name} className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" />
                 <div className="absolute top-8 left-8 flex flex-col gap-3">
-                   {room.size && <div className="bg-white px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl border-l-4 border-amber-400 text-slate-900">{room.size}</div>}
-                   {room.capacity && <div className="bg-white px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl border-l-4 border-sky-400 text-slate-900">{room.capacity}</div>}
+                   {room.size && <div className="bg-white px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl text-slate-900">{room.size}</div>}
+                   {room.capacity && <div className="bg-white px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl text-slate-900">{room.capacity}</div>}
                 </div>
               </div>
               <div className="px-8 pb-8">
@@ -207,14 +207,14 @@ const ResortDetail: React.FC = () => {
 
         <div ref={diningSliderRef} className="snap-slider no-scrollbar px-6 lg:px-[calc((100vw-80rem)/2+3rem)] scroll-smooth pb-12">
           {resort.diningVenues?.map((venue, idx) => (
-            <div key={idx} className="snap-item w-[85vw] md:w-[500px] group bg-white rounded-[4rem] p-6 border-b-8 border-transparent hover:border-amber-500 shadow-sm hover:shadow-2xl transition-all duration-700">
+            <div key={idx} className="snap-item w-[85vw] md:w-[500px] group bg-white rounded-[4rem] p-6 shadow-sm hover:shadow-2xl transition-all duration-700">
               <div className="h-[350px] md:h-[450px] rounded-[3rem] overflow-hidden mb-10 shadow-lg relative">
                 <img src={venue.image} alt={venue.name} className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" />
                 <div className="absolute top-8 left-8">
                    <div className="bg-sky-500 text-white px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl">{venue.cuisine}</div>
                 </div>
                 <div className="absolute bottom-8 right-8">
-                   <div className="bg-white/95 text-slate-900 px-6 py-3 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] border-r-4 border-amber-500">{venue.vibe}</div>
+                   <div className="bg-white/95 text-slate-900 px-6 py-3 rounded-full text-[9px] font-bold uppercase tracking-[0.2em]">{venue.vibe}</div>
                 </div>
               </div>
               <div className="px-8 pb-8">
@@ -233,7 +233,7 @@ const ResortDetail: React.FC = () => {
       </section>
 
       {/* Consult Specialist Section */}
-      <section id="consultation" className="max-w-6xl mx-auto px-6 lg:px-12 py-32 bg-white rounded-[5rem] shadow-sm border-2 border-slate-100 reveal border-t-8 border-sky-500">
+      <section id="consultation" className="max-w-6xl mx-auto px-6 lg:px-12 py-32 bg-white rounded-[5rem] shadow-sm border border-slate-100 reveal">
         <div className="text-center mb-24">
           <span className="text-[11px] font-bold text-amber-500 uppercase tracking-[0.7em] mb-10 block">Bespoke Inquiry</span>
           <h2 className="text-6xl md:text-[5rem] font-serif font-bold text-slate-900 mb-10 italic leading-tight">Consult for {resort.name}</h2>
@@ -269,7 +269,7 @@ const ResortDetail: React.FC = () => {
                   className={`relative text-[12px] font-bold uppercase tracking-[0.6em] transition-all whitespace-nowrap ${activeTab === tab.id ? 'text-sky-500' : 'text-slate-300 hover:text-slate-600'}`}
                 >
                   {tab.label}
-                  {activeTab === tab.id && <div className="absolute -bottom-13 left-0 right-0 h-2 bg-amber-500 animate-in slide-in-from-left duration-500 rounded-full"></div>}
+                  {activeTab === tab.id && <div className="absolute -bottom-13 left-0 right-0 h-1 bg-amber-500 animate-in slide-in-from-left duration-500 rounded-full"></div>}
                 </button>
               ))}
             </div>
@@ -278,11 +278,11 @@ const ResortDetail: React.FC = () => {
                <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
                   <div className="space-y-4">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em]">Full Name</label>
-                    <input required type="text" placeholder="GUEST NAME" className="w-full bg-slate-50 border-b-4 border-transparent focus:border-sky-500 transition-all p-8 rounded-[1.5rem] text-[12px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white" />
+                    <input required type="text" placeholder="GUEST NAME" className="w-full bg-slate-50 transition-all p-8 rounded-[1.5rem] text-[12px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white border border-transparent focus:border-slate-100" />
                   </div>
                   <div className="space-y-4">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em]">Email Address</label>
-                    <input required type="email" placeholder="EMAIL@DESTINATION.COM" className="w-full bg-slate-50 border-b-4 border-transparent focus:border-amber-500 transition-all p-8 rounded-[1.5rem] text-[12px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white" />
+                    <input required type="email" placeholder="EMAIL@DESTINATION.COM" className="w-full bg-slate-50 transition-all p-8 rounded-[1.5rem] text-[12px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white border border-transparent focus:border-slate-100" />
                   </div>
                </div>
 
