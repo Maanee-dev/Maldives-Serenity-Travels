@@ -10,8 +10,9 @@ import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
 // Fixed casing for consistency and to resolve naming conflicts
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Use lowercase to match existing files in the environment and resolve naming conflicts
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
