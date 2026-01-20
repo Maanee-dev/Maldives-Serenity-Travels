@@ -9,13 +9,12 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Use lowercase file names to resolve casing conflicts ('Offers.tsx' vs 'offers.tsx')
-import Offers from './pages/offers';
-// Fix: Use lowercase file names to resolve casing conflicts ('Experiences.tsx' vs 'experiences.tsx')
-import Experiences from './pages/experiences';
+// Fixed casing to match Offers.tsx and resolve TypeScript error
+import Offers from './pages/Offers';
+// Fixed casing to match Experiences.tsx and resolve TypeScript error
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
-// Fix: Use the correct file name 'plan.tsx' to match the lowercase naming convention
 import PlanMyTrip from './pages/plan';
 
 const ScrollToTopOnRoute = () => {
