@@ -181,45 +181,52 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. THE EDITORIAL MANIFESTO */}
-      <section className="py-24 sm:py-32 md:py-48 lg:py-64 bg-white relative">
-        <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-48 items-start">
-            <div className="lg:col-span-7 reveal">
-               <div className="flex items-center gap-4 md:gap-6 mb-8 md:mb-12">
-                  <div className="w-8 md:w-12 h-[1px] bg-sky-500"></div>
-                  <span className="text-[9px] md:text-[10px] font-bold text-sky-500 uppercase tracking-[1em]">The Agency</span>
-               </div>
-               <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-[7.5rem] font-serif font-bold text-slate-950 leading-[0.95] mb-8 md:mb-16 tracking-tighter">
-                 Luxury is <br className="hidden md:block"/> No Longer <br className="hidden md:block"/> <span className="italic text-sky-500 underline decoration-sky-100 underline-offset-[0.6rem] md:underline-offset-[1.5rem]">Optional</span>.
-               </h2>
-               <p className="text-slate-500 text-base sm:text-lg md:text-2xl leading-[1.7] md:leading-[2] mb-10 md:mb-16 font-medium opacity-90 max-w-2xl">
-                 We are a bespoke boutique agency crafting unrivaled journeys across the Maldivian atolls. Defined by geography and refined by hand, we curate the silence that modern living lacks.
-               </p>
-               <div className="flex flex-row gap-10 md:gap-16">
-                  <div className="flex flex-col">
-                     <span className="text-[8px] md:text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em] mb-2 md:mb-4">Transfers</span>
-                     <p className="text-slate-900 font-bold uppercase tracking-widest text-[9px] md:text-xs">VIP Seaplane</p>
-                  </div>
-                  <div className="flex flex-col">
-                     <span className="text-[8px] md:text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em] mb-2 md:mb-4">Scouting</span>
-                     <p className="text-slate-900 font-bold uppercase tracking-widest text-[9px] md:text-xs">Private Atolls</p>
-                  </div>
-               </div>
+    {/* 2. THE EDITORIAL MANIFESTO */}
+<section className="py-24 sm:py-32 md:py-48 lg:py-64 bg-white relative">
+  <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
+    {/* Decreased gap from 48 to 12 or 20 for a tighter feel */}
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-center"> 
+      
+      {/* Increased span to 7 or kept at 7, but reduced right margin/padding */}
+      <div className="lg:col-span-7 reveal">
+         <div className="flex items-center gap-4 md:gap-6 mb-8 md:mb-12">
+            <div className="w-8 md:w-12 h-[1px] bg-sky-500"></div>
+            <span className="text-[9px] md:text-[10px] font-bold text-sky-500 uppercase tracking-[1em]">The Agency</span>
+         </div>
+         <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-[7.5rem] font-serif font-bold text-slate-950 leading-[0.95] mb-8 md:mb-16 tracking-tighter">
+           Luxury is <br className="hidden md:block"/> No Longer <br className="hidden md:block"/> <span className="italic text-sky-500 underline decoration-sky-100 underline-offset-[0.6rem] md:underline-offset-[1.5rem]">Optional</span>.
+         </h2>
+         {/* Removed max-w-2xl to allow text to breathe toward the image */}
+         <p className="text-slate-500 text-base sm:text-lg md:text-2xl leading-[1.7] md:leading-[2] mb-10 md:mb-16 font-medium opacity-90">
+           We are a bespoke boutique agency crafting unrivaled journeys across the Maldivian atolls. Defined by geography and refined by hand, we curate the silence that modern living lacks.
+         </p>
+         <div className="flex flex-row gap-10 md:gap-16">
+            <div className="flex flex-col">
+               <span className="text-[8px] md:text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em] mb-2 md:mb-4">Transfers</span>
+               <p className="text-slate-900 font-bold uppercase tracking-widest text-[9px] md:text-xs">VIP Seaplane</p>
             </div>
-            <div className="lg:col-span-5 relative mt-16 lg:mt-0 reveal transition-all duration-1000 delay-300">
-               <div className="aspect-[4/5] rounded-[2rem] sm:rounded-[4rem] lg:rounded-[5rem] overflow-hidden shadow-2xl group relative">
-                  <img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" alt="Local Life" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent"></div>
-               </div>
-               <div className="absolute -bottom-8 md:-bottom-16 -right-4 sm:-left-16 bg-[#FCFAF7] p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] shadow-2xl max-w-[200px] md:max-w-[320px] border border-slate-100 reveal transition-all duration-1000 delay-500">
-                  <p className="text-slate-900 font-serif italic text-base md:text-2xl leading-relaxed">"The most profound experiences happen in the gaps between the tides."</p>
-               </div>
+            <div className="flex flex-col">
+               <span className="text-[8px] md:text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em] mb-2 md:mb-4">Scouting</span>
+               <p className="text-slate-900 font-bold uppercase tracking-widest text-[9px] md:text-xs">Private Atolls</p>
             </div>
-          </div>
-        </div>
-      </section>
+         </div>
+      </div>
 
+      {/* Image Column */}
+      <div className="lg:col-span-5 relative mt-16 lg:mt-0 reveal">
+         <div className="aspect-[4/5] rounded-[2rem] sm:rounded-[4rem] lg:rounded-[5rem] overflow-hidden shadow-2xl group relative">
+            <img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" alt="Local Life" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent"></div>
+         </div>
+         {/* Adjusting the floating quote position to overlap slightly more with the image if desired */}
+         <div className="absolute -bottom-8 md:-bottom-16 -right-4 sm:-right-8 bg-[#FCFAF7] p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] shadow-2xl max-w-[200px] md:max-w-[320px] border border-slate-100 reveal">
+            <p className="text-slate-900 font-serif italic text-base md:text-2xl leading-relaxed">"The most profound experiences happen in the gaps between the tides."</p>
+         </div>
+      </div>
+
+    </div>
+  </div>
+</section>
       {/* 3. SIGNATURE ATOLLS */}
       <section className="py-24 sm:py-32 md:py-48 bg-[#FCFAF7] border-y border-slate-100">
          <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
