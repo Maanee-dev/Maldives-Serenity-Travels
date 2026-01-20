@@ -13,7 +13,7 @@ const ResortDetail: React.FC = () => {
 
   useEffect(() => {
     if (resort) {
-      document.title = `${resort.name} - Serenity Maldives`;
+      document.title = `${resort.name} | Maldivian Specialist - Serenity Travels`;
     }
     window.scrollTo(0, 0);
 
@@ -52,7 +52,7 @@ const ResortDetail: React.FC = () => {
       <style>{`
         .snap-slider {
           display: flex;
-          gap: 2.5rem;
+          gap: 2rem;
           overflow-x: auto;
           scroll-snap-type: x mandatory;
           -webkit-overflow-scrolling: touch;
@@ -61,83 +61,87 @@ const ResortDetail: React.FC = () => {
           scroll-snap-align: start;
           flex-shrink: 0;
         }
+        .hero-mosaic img {
+          transition: transform 3s ease;
+        }
+        .hero-mosaic div:hover img {
+          transform: scale(1.05);
+        }
       `}</style>
 
-      {/* Gallery Header */}
-      <section className="grid grid-cols-1 md:grid-cols-4 h-[80vh] md:h-[85vh] gap-4 p-4 pt-32 reveal active">
-        <div className="md:col-span-2 h-full overflow-hidden rounded-[3rem] shadow-xl">
-          <img src={getGalleryImage(0)} alt={resort.name} className="w-full h-full object-cover transition-all duration-[2s]" />
+      {/* Sharp Gallery Header - Borders/Rounds Removed */}
+      <section className="hero-mosaic grid grid-cols-1 md:grid-cols-4 h-[75vh] md:h-[90vh] gap-1 p-1 pt-24 md:pt-32 reveal active">
+        <div className="md:col-span-2 h-full overflow-hidden relative">
+          <img src={getGalleryImage(0)} alt={resort.name} className="w-full h-full object-cover" />
         </div>
-        <div className="hidden md:flex flex-col gap-4 h-full">
-          <div className="h-1/2 rounded-[3rem] overflow-hidden shadow-xl">
+        <div className="hidden md:flex flex-col gap-1 h-full">
+          <div className="h-1/2 overflow-hidden relative">
              <img src={getGalleryImage(1)} alt={resort.name} className="w-full h-full object-cover" />
           </div>
-          <div className="h-1/2 rounded-[3rem] overflow-hidden shadow-xl">
+          <div className="h-1/2 overflow-hidden relative">
              <img src={getGalleryImage(2)} alt="Detail" className="w-full h-full object-cover" />
           </div>
         </div>
-        <div className="hidden md:block h-full overflow-hidden rounded-[3rem] shadow-xl">
+        <div className="hidden md:block h-full overflow-hidden relative">
           <img src={getGalleryImage(3)} alt="Aerial" className="w-full h-full object-cover" />
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-6 py-24 lg:py-40 lg:px-12">
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-32 mb-48">
+      <div className="max-w-7xl mx-auto px-6 py-12 md:py-32 lg:px-12">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-32 mb-24 md:mb-48">
           <div className="flex-grow reveal">
-            {/* Breadcrumbs - Fixed Spacing */}
-            <nav className="flex items-center text-slate-400 text-[11px] font-bold uppercase tracking-[0.6em] gap-8 mb-24 lg:mb-32">
-              <Link to="/" className="hover:text-sky-500 transition-colors">Home</Link>
+            <nav className="flex items-center text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] gap-4 md:gap-8 mb-12 md:mb-24">
+              <Link to="/" className="hover:text-sky-500 transition-colors">Portfolio</Link>
               <span className="text-amber-500">/</span>
-              <Link to="/stays" className="hover:text-sky-500 transition-colors">Stays</Link>
+              <Link to="/stays" className="hover:text-sky-500 transition-colors">Collection</Link>
               <span className="text-amber-500">/</span>
-              <span className="text-slate-900">{resort.name}</span>
+              <span className="text-slate-900 truncate">{resort.name}</span>
             </nav>
 
-            <h1 className="text-6xl md:text-8xl lg:text-[8.5rem] font-serif font-bold text-slate-900 mb-20 tracking-tighter italic leading-[0.85] lg:leading-[0.8]">
+            <h1 className="text-4xl md:text-7xl lg:text-[8.5rem] font-serif font-bold text-slate-900 mb-12 tracking-tighter italic leading-[0.9]">
               {resort.name}
             </h1>
 
-            <div className="flex items-center gap-14 mb-28 pb-14 border-b-2 border-slate-100">
-              <div className="flex gap-2.5">
+            <div className="flex items-center gap-8 md:gap-14 mb-16 md:mb-28 pb-10 md:pb-14 border-b border-slate-100">
+              <div className="flex gap-2">
                 {[...Array(resort.rating)].map((_, i) => (
-                  <div key={i} className="w-2.5 h-2.5 rounded-full bg-amber-500"></div>
+                  <div key={i} className="w-2 h-2 rounded-full bg-amber-500"></div>
                 ))}
               </div>
-              <span className="text-[11px] font-bold text-sky-500 uppercase tracking-[0.6em] bg-sky-50 px-6 py-3 rounded-full border border-sky-100">
+              <span className="text-[9px] md:text-[11px] font-bold text-sky-500 uppercase tracking-[0.4em] bg-sky-50 px-4 md:px-6 py-2 md:py-3 rounded-full">
                 {resort.atoll}
               </span>
             </div>
 
             <div className="prose prose-slate max-w-none">
-              <p className="text-4xl md:text-6xl font-serif font-bold text-slate-900 leading-[1.2] mb-32 italic border-l border-amber-500/20 pl-16 lg:pl-24 py-6">
+              <p className="text-2xl md:text-5xl font-serif font-bold text-slate-900 leading-[1.3] mb-16 md:mb-32 italic border-l border-amber-500/20 pl-8 md:pl-24 py-4 md:py-6">
                 "{resort.uvp}"
               </p>
-              <div className="text-slate-600 leading-[2.6] text-xl mb-32 first-letter:text-[10rem] first-letter:font-serif first-letter:font-bold first-letter:mr-10 first-letter:float-left first-letter:text-sky-500 first-letter:leading-[0.75] first-letter:mt-4">
+              <div className="text-slate-600 leading-[2] md:leading-[2.6] text-lg md:text-xl mb-24 md:mb-32 font-medium opacity-90">
                 {resort.description}
               </div>
             </div>
           </div>
 
-          <aside className="lg:w-[420px] flex-shrink-0 reveal">
+          <aside className="lg:w-[400px] flex-shrink-0 reveal">
             <div className="sticky top-40">
-              {/* Solid Luxury Concierge Card */}
-              <div className="bg-slate-900 text-white p-14 lg:p-20 rounded-[4rem] shadow-2xl relative overflow-hidden mb-12">
+              <div className="bg-slate-950 text-white p-10 md:p-16 rounded-[3rem] shadow-2xl relative overflow-hidden mb-12">
                 <div className="relative z-10">
-                  <span className="text-[11px] font-bold uppercase tracking-[0.6em] text-amber-500 mb-12 block">Private Specialist</span>
-                  <h3 className="text-5xl lg:text-6xl font-serif font-bold mb-14 italic leading-[1.05]">Secure <br />Your Stay</h3>
-                  <a href="#consultation" className="block w-full bg-sky-500 text-white text-center py-8 rounded-full font-bold hover:bg-white hover:text-slate-950 transition-all uppercase tracking-[0.5em] text-[11px]">
-                    Inquire For Rates
+                  <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-amber-500 mb-8 block">Concierge Priority</span>
+                  <h3 className="text-4xl md:text-5xl font-serif font-bold mb-10 italic leading-[1.1]">Expert Consultation</h3>
+                  <a href="#consultation" className="block w-full bg-sky-500 text-white text-center py-6 rounded-full font-bold hover:bg-white hover:text-slate-950 transition-all uppercase tracking-[0.4em] text-[10px]">
+                    Inquire availability
                   </a>
                 </div>
               </div>
               
-              <div className="bg-white border border-slate-100 p-14 rounded-[4rem] shadow-sm">
-                 <h3 className="text-[11px] font-bold text-slate-300 uppercase tracking-[0.7em] mb-14 text-center">Exclusive Features</h3>
-                 <div className="space-y-10">
+              <div className="bg-white border border-slate-100 p-10 rounded-[3rem] shadow-sm hidden md:block">
+                 <h3 className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.6em] mb-10 text-center">Island Highlights</h3>
+                 <div className="space-y-8">
                     {resort.features.map((feat, idx) => (
-                      <div key={idx} className="flex items-center gap-8 group">
-                        <div className="w-2.5 h-2.5 rounded-full bg-sky-500 group-hover:bg-amber-500 transition-colors duration-500"></div>
-                        <span className="text-[12px] font-bold text-slate-900 uppercase tracking-[0.25em]">{feat}</span>
+                      <div key={idx} className="flex items-center gap-6 group">
+                        <div className="w-1.5 h-1.5 rounded-full bg-sky-500"></div>
+                        <span className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">{feat}</span>
                       </div>
                     ))}
                  </div>
@@ -147,156 +151,77 @@ const ResortDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Sanctuaries Section */}
-      <section className="mb-64 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-24 reveal">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-12">
+      {/* Rooms & Dining Sections remain consistent */}
+      <section className="mb-32 md:mb-64 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-16 md:mb-24 reveal">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
             <div>
-              <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.5em] mb-6 block">The Sanctuaries</span>
-              <h2 className="text-5xl md:text-8xl font-serif font-bold text-slate-900 italic tracking-tight">Villas & Residences</h2>
-            </div>
-            <div className="flex items-center gap-10">
-               <span className="text-slate-300 text-[10px] font-bold uppercase tracking-[0.4em]">Swipe Discovery</span>
-               <div className="w-24 h-px bg-sky-500"></div>
+              <span className="text-[9px] font-bold text-sky-500 uppercase tracking-[0.4em] mb-4 block">Selected Sanctuaries</span>
+              <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-900 italic tracking-tight">Private Villas</h2>
             </div>
           </div>
         </div>
 
         <div ref={roomSliderRef} className="snap-slider no-scrollbar px-6 lg:px-[calc((100vw-80rem)/2+3rem)] scroll-smooth pb-12">
           {resort.roomTypes?.map((room, idx) => (
-            <div key={idx} className="snap-item w-[85vw] md:w-[550px] group bg-white rounded-[4.5rem] p-6 shadow-sm hover:shadow-2xl transition-all duration-700">
-              <div className="h-[400px] md:h-[500px] rounded-[3.5rem] overflow-hidden mb-10 shadow-lg relative">
+            <div key={idx} className="snap-item w-[80vw] md:w-[500px] group bg-white rounded-[3.5rem] p-4 md:p-6 shadow-sm hover:shadow-2xl transition-all duration-700">
+              <div className="h-[300px] md:h-[450px] rounded-[3rem] overflow-hidden mb-8 shadow-md relative">
                 <img src={room.image} alt={room.name} className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" />
-                <div className="absolute top-8 left-8 flex flex-col gap-3">
-                   {room.size && <div className="bg-white px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl text-slate-900">{room.size}</div>}
-                   {room.capacity && <div className="bg-white px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl text-slate-900">{room.capacity}</div>}
-                </div>
               </div>
-              <div className="px-8 pb-8">
-                <h3 className="text-4xl font-serif font-bold text-slate-900 mb-6 group-hover:italic group-hover:text-sky-600 transition-all">{room.name}</h3>
-                <p className="text-slate-500 leading-relaxed mb-10 text-base line-clamp-3">{room.description}</p>
-                <div className="flex flex-wrap gap-y-4 gap-x-10 border-t border-slate-50 pt-8">
-                  {room.highlights.slice(0, 3).map((h, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <div className="w-1.5 h-px bg-sky-400"></div>
-                      <span className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em]">{h}</span>
-                    </div>
+              <div className="px-4 pb-4">
+                <h3 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-4 group-hover:italic transition-all">{room.name}</h3>
+                <p className="text-slate-500 leading-relaxed mb-8 text-sm md:text-base line-clamp-3">{room.description}</p>
+                <div className="flex flex-wrap gap-4 border-t border-slate-50 pt-6">
+                  {room.highlights.slice(0, 2).map((h, i) => (
+                    <span key={i} className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{h}</span>
                   ))}
                 </div>
               </div>
             </div>
           ))}
-          <div className="snap-item w-1 md:w-48"></div>
         </div>
       </section>
 
-      {/* Dining Section */}
-      <section className="mb-64 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-24 reveal">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-12">
-            <div>
-              <span className="text-[10px] font-bold text-amber-500 uppercase tracking-[0.5em] mb-6 block">Culinary Journeys</span>
-              <h2 className="text-5xl md:text-8xl font-serif font-bold text-slate-900 italic tracking-tight">Gastronomy</h2>
-            </div>
-            <div className="flex items-center gap-10">
-               <span className="text-slate-300 text-[10px] font-bold uppercase tracking-[0.4em]">Explore Venues</span>
-               <div className="w-24 h-px bg-amber-500"></div>
-            </div>
-          </div>
-        </div>
-
-        <div ref={diningSliderRef} className="snap-slider no-scrollbar px-6 lg:px-[calc((100vw-80rem)/2+3rem)] scroll-smooth pb-12">
-          {resort.diningVenues?.map((venue, idx) => (
-            <div key={idx} className="snap-item w-[85vw] md:w-[500px] group bg-white rounded-[4rem] p-6 shadow-sm hover:shadow-2xl transition-all duration-700">
-              <div className="h-[350px] md:h-[450px] rounded-[3rem] overflow-hidden mb-10 shadow-lg relative">
-                <img src={venue.image} alt={venue.name} className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" />
-                <div className="absolute top-8 left-8">
-                   <div className="bg-sky-500 text-white px-6 py-3 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl">{venue.cuisine}</div>
-                </div>
-                <div className="absolute bottom-8 right-8">
-                   <div className="bg-white/95 text-slate-900 px-6 py-3 rounded-full text-[9px] font-bold uppercase tracking-[0.2em]">{venue.vibe}</div>
-                </div>
-              </div>
-              <div className="px-8 pb-8">
-                <h3 className="text-3xl font-serif font-bold text-slate-900 mb-6 group-hover:italic group-hover:text-amber-600 transition-all">{venue.name}</h3>
-                <p className="text-slate-500 leading-relaxed mb-10 text-base line-clamp-3">{venue.description}</p>
-                <div className="flex flex-wrap gap-4 border-t border-slate-50 pt-8">
-                  {venue.highlights.map((h, i) => (
-                    <span key={i} className="text-[9px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">{h}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-          <div className="snap-item w-1 md:w-48"></div>
-        </div>
-      </section>
-
-      {/* Consult Specialist Section */}
-      <section id="consultation" className="max-w-6xl mx-auto px-6 lg:px-12 py-32 bg-white rounded-[5rem] shadow-sm border border-slate-100 reveal">
-        <div className="text-center mb-24">
-          <span className="text-[11px] font-bold text-amber-500 uppercase tracking-[0.7em] mb-10 block">Bespoke Inquiry</span>
-          <h2 className="text-6xl md:text-[5rem] font-serif font-bold text-slate-900 mb-10 italic leading-tight">Consult for {resort.name}</h2>
-          <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.5em] max-w-xl mx-auto leading-loose">
-            Connect with our dedicated specialists to curate your private island itinerary.
+      {/* Consultation Section */}
+      <section id="consultation" className="max-w-6xl mx-auto px-6 lg:px-12 py-24 md:py-32 bg-white rounded-[4rem] shadow-sm border border-slate-100 reveal">
+        <div className="text-center mb-16 md:mb-24">
+          <span className="text-[10px] font-bold text-amber-500 uppercase tracking-[0.6em] mb-8 block">Bespoke Concierge</span>
+          <h2 className="text-4xl md:text-6xl lg:text-[5rem] font-serif font-bold text-slate-900 mb-8 italic leading-tight">Consult with an Expert</h2>
+          <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] max-w-xl mx-auto leading-loose px-4">
+            Connect with our Maldivian destination specialists to refine your sanctuary selection.
           </p>
         </div>
 
         {isSubmitted ? (
-          <div className="text-center py-20 animate-in fade-in zoom-in duration-700">
-            <div className="w-28 h-28 bg-sky-500 rounded-full flex items-center justify-center mx-auto mb-16 shadow-lg">
-               <svg className="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="text-center py-16 animate-in fade-in zoom-in duration-700">
+            <div className="w-20 h-20 md:w-28 md:h-28 bg-sky-500 rounded-full flex items-center justify-center mx-auto mb-12 shadow-lg">
+               <svg className="w-10 h-10 md:w-12 md:h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                </svg>
             </div>
-            <h3 className="text-5xl font-serif font-bold mb-8 italic text-slate-900">Request Received</h3>
-            <p className="text-slate-500 text-xs font-bold uppercase tracking-widest leading-loose mb-16">
-              A private specialist will be in touch shortly.
+            <h3 className="text-3xl md:text-5xl font-serif font-bold mb-6 italic text-slate-900">Request Sent</h3>
+            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
+              A private specialist will be in touch within 24 hours.
             </p>
-            <button onClick={() => setIsSubmitted(false)} className="text-[12px] font-bold uppercase tracking-[0.5em] text-sky-500 hover:text-amber-500 transition-colors">Start New Consultation</button>
           </div>
         ) : (
-          <div className="flex flex-col gap-24">
-            <div className="flex justify-center items-center gap-12 md:gap-24 border-b-2 border-slate-50 pb-12 overflow-x-auto no-scrollbar">
-              {[
-                { id: 'rates', label: 'Availability' },
-                { id: 'experience', label: 'Experiences' },
-                { id: 'celebration', label: 'Events' }
-              ].map(tab => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`relative text-[12px] font-bold uppercase tracking-[0.6em] transition-all whitespace-nowrap ${activeTab === tab.id ? 'text-sky-500' : 'text-slate-300 hover:text-slate-600'}`}
-                >
-                  {tab.label}
-                  {activeTab === tab.id && <div className="absolute -bottom-13 left-0 right-0 h-1 bg-amber-500 animate-in slide-in-from-left duration-500 rounded-full"></div>}
+          <form onSubmit={handleFormSubmit} className="space-y-12 animate-in fade-in duration-1000 max-w-3xl mx-auto w-full">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="space-y-4">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Full Name</label>
+                  <input required type="text" placeholder="YOUR NAME" className="w-full bg-slate-50 p-6 md:p-8 rounded-[1.5rem] text-[11px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white border border-transparent focus:border-slate-100" />
+                </div>
+                <div className="space-y-4">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Email Address</label>
+                  <input required type="email" placeholder="EMAIL@DESTINATION.COM" className="w-full bg-slate-50 p-6 md:p-8 rounded-[1.5rem] text-[11px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white border border-transparent focus:border-slate-100" />
+                </div>
+             </div>
+             <div className="pt-8">
+                <button type="submit" className="w-full bg-slate-950 text-white py-8 rounded-full font-bold uppercase tracking-[0.5em] text-[11px] shadow-2xl hover:bg-sky-500 transition-all">
+                  Initiate Consultation
                 </button>
-              ))}
-            </div>
-
-            <form onSubmit={handleFormSubmit} className="space-y-16 animate-in fade-in duration-1000 max-w-4xl mx-auto w-full">
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em]">Full Name</label>
-                    <input required type="text" placeholder="GUEST NAME" className="w-full bg-slate-50 transition-all p-8 rounded-[1.5rem] text-[12px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white border border-transparent focus:border-slate-100" />
-                  </div>
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em]">Email Address</label>
-                    <input required type="email" placeholder="EMAIL@DESTINATION.COM" className="w-full bg-slate-50 transition-all p-8 rounded-[1.5rem] text-[12px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white border border-transparent focus:border-slate-100" />
-                  </div>
-               </div>
-
-               <div className="pt-10">
-                  <button type="submit" className="w-full btn-atoll py-10 rounded-full font-bold uppercase tracking-[0.6em] text-[12px] shadow-2xl flex items-center justify-center gap-10 group">
-                    <span>Initiate Concierge Request</span>
-                    <span className="text-amber-500 group-hover:translate-x-3 transition-transform">→</span>
-                  </button>
-                  <p className="text-center mt-12 text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em]">
-                    * Prioritized consultation for {resort.name} guests.
-                  </p>
-               </div>
-            </form>
-          </div>
+             </div>
+          </form>
         )}
       </section>
     </div>
