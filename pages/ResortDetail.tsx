@@ -55,7 +55,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. CORE LAYOUT GRID - Isolating columns to prevent Safari collision */}
+      {/* 2. CORE LAYOUT GRID */}
       <div className="max-w-[1440px] mx-auto px-6 py-20 md:py-40">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 xl:gap-24 items-start">
           
@@ -92,7 +92,7 @@ const ResortDetail: React.FC = () => {
               ))}
             </div>
 
-            {/* Accommodations (Rooms) */}
+            {/* Accommodations (The Residences) */}
             <div className="reveal">
               <div className="flex justify-between items-end mb-16">
                 <h3 className="text-4xl md:text-6xl font-serif font-bold text-slate-900 italic tracking-tighter">The Residences.</h3>
@@ -116,6 +116,41 @@ const ResortDetail: React.FC = () => {
                        {room.highlights.map(h => (
                          <span key={h} className="text-[8px] font-bold text-sky-500 uppercase tracking-widest border border-sky-100 px-3 py-1.5 rounded-full">{h}</span>
                        ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Culinary Perspective - Card Slider Section */}
+            <div className="reveal">
+              <div className="flex justify-between items-end mb-16">
+                <h3 className="text-4xl md:text-6xl font-serif font-bold text-slate-900 italic tracking-tighter">Culinary Perspective.</h3>
+                <span className="text-[9px] font-bold uppercase tracking-[0.5em] text-slate-300 hidden md:block">Dining Portfolio</span>
+              </div>
+              <div className="no-scrollbar overflow-x-auto flex gap-8 pb-12 -mx-6 px-6 lg:mx-0 lg:px-0 snap-x">
+                {resort.diningVenues?.map((venue, idx) => (
+                  <div key={idx} className="flex-shrink-0 w-[85vw] md:w-[60%] lg:w-[48%] snap-start group">
+                    <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden mb-8 shadow-xl">
+                      <img src={venue.image} alt={venue.name} className="w-full h-full object-cover transition-transform duration-[12s] group-hover:scale-110" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80 group-hover:opacity-40 transition-all duration-1000"></div>
+                      <div className="absolute bottom-12 left-10 right-10">
+                         <span className="text-sky-400 font-bold text-[9px] uppercase tracking-[0.4em] mb-4 block">{venue.cuisine}</span>
+                         <h4 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4 group-hover:italic transition-all leading-tight">
+                           {venue.name}
+                         </h4>
+                         <p className="text-white/80 text-[10px] uppercase font-bold tracking-[0.2em]">{venue.vibe}</p>
+                      </div>
+                    </div>
+                    <div className="px-2">
+                      <p className="text-slate-500 text-sm md:text-base leading-relaxed mb-6 opacity-90 font-medium">
+                        {venue.description}
+                      </p>
+                      <div className="flex gap-3 flex-wrap">
+                        {venue.highlights.map(h => (
+                          <span key={h} className="text-[8px] font-bold text-amber-500 uppercase tracking-widest border border-amber-100 px-3 py-1.5 rounded-full">{h}</span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -216,6 +251,11 @@ const ResortDetail: React.FC = () => {
                  <p className="text-[12px] text-sky-800 font-medium leading-[2.2] uppercase tracking-[0.05em] italic opacity-85">
                    "We highly recommend the north-facing residences at {resort.name} for those prioritizing sunrise meditation and the most vibrant shore-side marine sightings."
                  </p>
+              </div>
+
+              {/* Direct Link */}
+              <div className="p-8 text-center opacity-40">
+                <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400">Portfolio Reference: {resort.id}</p>
               </div>
 
             </div>
