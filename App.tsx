@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -9,10 +10,10 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Using PascalCase to match the filename and resolve casing collision errors
-import Offers from './pages/Offers';
-// Using PascalCase to match the filename and resolve casing collision errors
-import Experiences from './pages/Experiences';
+// Using lowercase to avoid casing collision errors in environments where both file variants exist
+import Offers from './pages/offers';
+// Using lowercase to avoid casing collision errors in environments where both file variants exist
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 // Updated to import the comprehensive PlanMyTrip component instead of the simplified plan.tsx

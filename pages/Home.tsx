@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { RESORTS } from '../constants';
@@ -23,111 +22,82 @@ const Home: React.FC = () => {
   return (
     <div className="bg-[#FCFAF7]">
       {/* Hero Section */}
-      <section className="pt-48 pb-32 px-4">
+      <section className="pt-64 pb-32 px-4 relative overflow-hidden">
+        {/* Sun & Sea Light Leaks */}
+        <div className="absolute top-20 right-[-10%] w-[600px] h-[600px] bg-sky-400/5 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-40 left-[-10%] w-[600px] h-[600px] bg-amber-400/5 blur-[120px] rounded-full"></div>
+
         <div className="max-w-7xl mx-auto text-center reveal">
-          <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-amber-500 mb-8 block">Discover a Serene Escape</span>
-          <h1 className="text-5xl md:text-8xl lg:text-[7rem] font-serif font-bold text-slate-900 mb-12 leading-[1.1] tracking-tight">
-            Where Nature <br /> Embraces Luxury
+          <span className="text-[11px] font-bold uppercase tracking-[0.7em] text-amber-500 mb-8 block">Maldivian Sun & Sea</span>
+          <h1 className="text-6xl md:text-8xl lg:text-[7.8rem] font-serif font-bold text-slate-900 mb-12 leading-[0.9] tracking-tighter italic">
+            Where Nature <br /> Embraces <span className="text-sky-500 not-italic">Luxury</span>
           </h1>
-          <div className="flex flex-col items-center mt-16">
-            <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-slate-900 mb-6">Select Your Stay</span>
-            <div className="w-px h-16 bg-gradient-to-b from-slate-900 to-amber-400/50"></div>
+          <div className="flex flex-col items-center mt-24">
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400 mb-8">Begin Your Journey</span>
+            <div className="w-px h-32 bg-gradient-to-b from-slate-900 via-sky-500 to-amber-500"></div>
           </div>
         </div>
 
-        {/* Asymmetric Image Grid */}
-        <div className="max-w-[1400px] mx-auto mt-32 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 px-6 lg:px-12">
-          <div className="md:col-span-4 h-[500px] lg:h-[700px] reveal transition-all duration-1000">
+        {/* Editorial Image Grid */}
+        <div className="max-w-[1400px] mx-auto mt-48 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-20 px-6 lg:px-12">
+          <div className="md:col-span-4 h-[500px] lg:h-[800px] reveal rounded-[5rem] overflow-hidden shadow-2xl relative group">
             <img 
               src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200" 
-              className="w-full h-full object-cover" 
-              alt="Soneva Jani Overwater" 
+              className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-[2.5s]" 
+              alt="Luxury" 
             />
+            <div className="absolute inset-0 bg-sky-900/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </div>
-          <div className="md:col-span-5 h-[600px] lg:h-[800px] md:-mt-12 reveal transition-all duration-1000 delay-200">
+          <div className="md:col-span-5 h-[600px] lg:h-[950px] md:-mt-32 reveal rounded-[5rem] overflow-hidden shadow-2xl relative group">
             <img 
               src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1200" 
-              className="w-full h-full object-cover" 
-              alt="Coastal Mountain View" 
+              className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" 
+              alt="Coastal" 
             />
+            <div className="absolute inset-0 bg-amber-900/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </div>
-          <div className="md:col-span-3 h-[400px] lg:h-[600px] md:mt-24 reveal transition-all duration-1000 delay-500">
+          <div className="md:col-span-3 h-[400px] lg:h-[700px] md:mt-24 reveal rounded-[5rem] overflow-hidden shadow-2xl relative group">
             <img 
               src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200" 
-              className="w-full h-full object-cover" 
-              alt="Resort Poolside" 
+              className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-[2.5s]" 
+              alt="Resort" 
             />
+            <div className="absolute inset-0 bg-sky-900/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </div>
         </div>
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-40 px-6 max-w-4xl mx-auto text-center reveal">
-        <p className="text-2xl md:text-4xl font-serif font-bold text-slate-900 leading-[1.5] mb-4">
-          Serenity is a <span className="text-sky-500">tranquil hotel</span>
+      <section className="py-48 px-6 max-w-5xl mx-auto text-center reveal">
+        <p className="text-3xl md:text-5xl font-serif font-bold text-slate-900 leading-[1.5] mb-8">
+          Serenity is a <span className="text-sky-500 underline decoration-sky-100 underline-offset-8">tranquil haven</span>
         </p>
-        <p className="text-2xl md:text-4xl font-serif font-bold text-slate-900 leading-[1.5] mb-4">
-          nestled amidst the Maldives' <span className="text-amber-500/80 italic">majestic</span>
+        <p className="text-3xl md:text-5xl font-serif font-bold text-slate-900 leading-[1.5] mb-8">
+          nestled amidst the <span className="text-amber-500 italic">golden sun</span> of the 
         </p>
-        <p className="text-2xl md:text-4xl font-serif font-bold text-slate-900 leading-[1.5]">
-          atolls, offering a harmonious blend of minimalist luxury and the pristine beauty of nature's oasis.
+        <p className="text-3xl md:text-5xl font-serif font-bold text-slate-900 leading-[1.5]">
+          majestic atolls, offering a harmonious blend of minimalist luxury and nature's deepest blue.
         </p>
-      </section>
-
-      {/* Immerse Yourself Section */}
-      <section className="py-32 px-6 lg:px-12 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
-          <div className="reveal">
-            <h2 className="text-5xl md:text-6xl font-serif font-bold text-slate-900 mb-16 leading-tight">
-              Immerse Yourself <br /> in the <span className="text-sky-600/20">Embrace</span> of Nature
-            </h2>
-            <div className="flex gap-4">
-              <div className="flex-1 h-[400px] lg:h-[600px]">
-                <img src="https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover" alt="Villa Lagoon" />
-              </div>
-              <div className="w-1/3 h-[300px] lg:h-[450px] mt-24">
-                <img src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover" alt="Interior Detail" />
-              </div>
-            </div>
-          </div>
-          <div className="lg:pl-32 lg:pt-48 reveal">
-            <p className="text-slate-500 text-sm leading-relaxed mb-12 max-w-sm">
-              At Serenity, we believe in the power of simplicity. Our curated collection is thoughtfully designed to provide you with a peaceful getaway from the hustle and bustle of daily life. Experience the Maldives in its purest form.
-            </p>
-            <Link to="/stories" className="group flex items-center gap-6">
-              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900">About Us</span>
-              <div className="relative flex items-center">
-                <div className="w-12 h-px bg-slate-900 group-hover:w-16 transition-all duration-700"></div>
-                <div className="w-10 h-10 rounded-full border border-slate-900 flex items-center justify-center -ml-5 group-hover:ml-0 transition-all bg-[#FCFAF7]">
-                   <svg className="w-3 h-3 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                   </svg>
-                </div>
-              </div>
-            </Link>
-          </div>
-        </div>
       </section>
 
       {/* Featured Stays */}
-      <section className="py-40 bg-white border-t border-slate-100">
+      <section className="py-48 bg-white border-t border-slate-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-12 reveal">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-28 gap-12 reveal">
             <div className="max-w-2xl">
-              <h2 className="text-5xl md:text-6xl font-serif font-bold text-slate-900 mb-6 leading-tight">Comfort and Space <br /> Combined</h2>
-              <p className="text-slate-400 text-sm font-medium tracking-wide">Relish the charm of our spacious rooms and separate houses, blending modern elegance with the tranquility of the surrounding natural oasis.</p>
+              <span className="text-[11px] font-bold uppercase tracking-[0.6em] text-sky-500 mb-6 block">The Collection</span>
+              <h2 className="text-5xl md:text-7xl font-serif font-bold text-slate-900 mb-8 tracking-tight">Comfort and Space <br /> Combined</h2>
+              <p className="text-slate-400 text-sm font-medium tracking-[0.2em] uppercase leading-loose opacity-60">Relish the charm of our spacious rooms and separate houses, blending modern elegance with the tranquility of the surrounding natural oasis.</p>
             </div>
-            <Link to="/stays" className="group flex items-center gap-6 pb-2 border-b border-slate-900 hover:border-amber-400 transition-colors">
-              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900">Select Accommodation</span>
-              <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center group-hover:bg-amber-500 transition-all">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7-7 7" />
-                </svg>
-              </div>
+            <Link to="/stays" className="btn-luxury px-16 py-6 rounded-full text-[11px] font-bold uppercase tracking-[0.5em] flex items-center gap-6 group border border-slate-900 hover:border-sky-500">
+              View All Stays
+              <svg className="w-5 h-5 group-hover:translate-x-2 transition-transform text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
             {featuredResorts.map(resort => (
               <ResortCard key={resort.id} resort={resort} />
             ))}
@@ -136,9 +106,12 @@ const Home: React.FC = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-60 px-4 text-center reveal">
-         <h2 className="text-5xl md:text-8xl font-serif font-bold text-slate-900 mb-16 italic">Have a question <br /> or need assistance?</h2>
-         <Link to="/plan" className="btn-maldive inline-block bg-slate-950 text-white px-20 py-7 rounded-full font-bold uppercase tracking-[0.4em] text-[10px] hover:bg-amber-500 transition-all shadow-2xl">
+      <section className="py-64 px-4 text-center reveal relative overflow-hidden">
+         <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none">
+            <h2 className="text-[25rem] font-serif font-bold italic tracking-tighter">Serenity</h2>
+         </div>
+         <h2 className="text-6xl md:text-9xl font-serif font-bold text-slate-900 mb-20 italic tracking-tight relative z-10">Have a question <br /> or need assistance?</h2>
+         <Link to="/plan" className="btn-luxury inline-block px-32 py-10 rounded-full font-bold uppercase tracking-[0.6em] text-[12px] shadow-2xl relative z-10 border border-slate-900 hover:border-sky-500">
             Book My Stay
          </Link>
       </section>
