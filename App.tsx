@@ -10,7 +10,7 @@ import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
 // Fixed casing for consistency and to resolve naming conflicts
-// Importing from lowercase filenames to align with project conventions and resolve duplicate casing issues
+// Using lowercase for these specific files to match the already included filenames 'offers.tsx' and 'experiences.tsx'
 import Offers from './pages/offers';
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
