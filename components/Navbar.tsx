@@ -12,57 +12,95 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close menu on route change
-  useEffect(() => setIsOpen(false), [location.pathname]);
+  useEffect(() => {
+    setIsOpen(false);
+    if (typeof window !== 'undefined') {
+      document.body.style.overflow = 'auto';
+    }
+  }, [location.pathname]);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+    document.body.style.overflow = !isOpen ? 'hidden' : 'auto';
+  };
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-700 ${scrolled ? 'glass py-3 border-b border-slate-100' : 'bg-transparent py-6'}`}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="flex justify-between items-center h-12">
-          {/* Menu Button - Left */}
-          <div className="flex-1 flex justify-start">
+    <nav className={`fixed w-full z-[100] transition-all duration-1000 ${scrolled ? 'glass-nav py-4 border-b border-slate-100' : 'bg-transparent py-8'}`}>
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+        <div className="flex justify-between items-center">
+          {/* Menu Trigger */}
+          <div className="flex-1">
             <button 
-              onClick={() => setIsOpen(!isOpen)}
-              className="flex items-center gap-3 group focus:outline-none"
+              onClick={toggleMenu}
+              className="group flex items-center gap-4 focus:outline-none"
               aria-label="Toggle menu"
             >
-              <div className="space-y-1.5 w-5">
-                <span className={`block h-0.5 bg-slate-900 transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-2' : 'w-5'}`}></span>
-                <span className={`block h-0.5 bg-slate-900 transition-all duration-300 ${isOpen ? 'opacity-0' : 'w-3'}`}></span>
-                <span className={`block h-0.5 bg-slate-900 transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2' : 'w-5'}`}></span>
+              <div className="flex flex-col gap-1.5 w-6">
+                <span className={`block h-px bg-slate-900 transition-all duration-500 origin-left ${isOpen ? 'rotate-45 w-7' : 'w-6'}`}></span>
+                <span className={`block h-px bg-slate-900 transition-all duration-500 ${isOpen ? 'opacity-0 scale-x-0' : 'w-4'}`}></span>
+                <span className={`block h-px bg-slate-900 transition-all duration-500 origin-left ${isOpen ? '-rotate-45 w-7' : 'w-6'}`}></span>
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-900 hidden sm:inline">Menu</span>
+              <span className={`text-[9px] font-bold uppercase tracking-[0.5em] text-slate-900 transition-all duration-500 ${isOpen ? 'opacity-0 -translate-x-4' : 'opacity-100'}`}>
+                Discover
+              </span>
             </button>
           </div>
 
-          {/* Logo - Center */}
-          <Link to="/" className="flex flex-col items-center flex-1">
-            <span className="text-xl lg:text-2xl font-serif font-bold tracking-[0.2em] text-slate-900 uppercase">Serenity</span>
+          {/* Center Brand */}
+          <Link to="/" className="flex flex-col items-center">
+            <span className="text-xl md:text-2xl font-serif font-bold tracking-[0.3em] text-slate-900 uppercase">Serenity</span>
           </Link>
           
-          {/* Action - Right */}
+          {/* Action Link */}
           <div className="flex-1 flex justify-end">
-            <Link to="/plan" className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-900 border-b border-slate-900 pb-0.5 hover:opacity-50 transition-all">
-              Book Now
+            <Link to="/plan" className="hidden sm:block text-[9px] font-bold uppercase tracking-[0.4em] text-slate-900 group relative">
+              <span className="relative z-10">Bespoke Inquiry</span>
+              <div className="absolute bottom-[-8px] left-0 w-full h-px bg-slate-900 scale-x-0 group-hover:scale-x-100 transition-transform origin-right duration-500"></div>
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Full Screen Menu Overlay */}
-      <div className={`fixed inset-0 bg-[#FCFAF7] transition-all duration-700 z-[-1] flex flex-col items-center justify-center ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-        <div className="space-y-8 text-center">
-          {['Stays', 'Offers', 'Experiences', 'Stories'].map((item) => (
-            <Link 
-              key={item}
-              to={`/${item.toLowerCase()}`}
-              className="block text-4xl md:text-7xl font-serif font-bold text-slate-900 hover:italic hover:text-sky-800 transition-all"
-            >
-              {item}
-            </Link>
-          ))}
-          <div className="pt-16 mt-16 border-t border-slate-200 w-64 mx-auto">
-             <Link to="/plan" className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400 hover:text-slate-900 transition-colors">Start Planning</Link>
+      {/* Premium Full-Screen Overlay */}
+      <div className={`fixed inset-0 bg-[#FCFAF7] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] z-[-1] flex items-center overflow-hidden ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
+        {/* Background Decorative Text */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none">
+           <h2 className="text-[30vw] font-serif font-bold italic">Maldives</h2>
+        </div>
+
+        <div className="max-w-7xl mx-auto w-full px-12 grid grid-cols-1 lg:grid-cols-12 gap-24 relative z-10">
+          <div className="lg:col-span-8">
+            <div className="space-y-4 md:space-y-8">
+              {['Stays', 'Offers', 'Experiences', 'Stories'].map((item, idx) => (
+                <Link 
+                  key={item}
+                  to={`/${item.toLowerCase()}`}
+                  className="group block overflow-hidden"
+                >
+                  <span className={`block text-5xl md:text-[8rem] font-serif font-bold text-slate-900 transition-all duration-700 delay-[${idx * 100}ms] translate-y-full group-hover:italic group-hover:text-sky-500 ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+                    {item}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+          
+          <div className={`lg:col-span-4 flex flex-col justify-end pb-12 transition-all duration-1000 delay-500 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+            <div className="space-y-12">
+               <div>
+                  <h4 className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.5em] mb-6">Connect</h4>
+                  <div className="flex gap-8 text-[11px] font-bold text-slate-900 uppercase tracking-widest">
+                    <a href="#" className="hover:text-sky-500 transition-colors">Instagram</a>
+                    <a href="#" className="hover:text-sky-500 transition-colors">WhatsApp</a>
+                  </div>
+               </div>
+               <div>
+                  <h4 className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.5em] mb-6">Office</h4>
+                  <p className="text-[11px] font-bold text-slate-900 uppercase tracking-widest leading-loose">
+                    Velana Building, 5th Floor<br/>Male, Republic of Maldives
+                  </p>
+               </div>
+            </div>
           </div>
         </div>
       </div>

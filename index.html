@@ -3,71 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serenity Maldives | Where Nature Embraces Luxury</title>
-    <meta name="description" content="A curated portal for the most tranquil and luxurious stays in the Maldives. Discover your serene escape.">
+    <title>Serenity Maldives | Defined by Perspective</title>
+    <meta name="description" content="A bespoke boutique agency crafting unrivaled journeys across the Maldivian atolls.">
     
-    <!-- Critical for SPA routing on reloads and nested paths -->
     <base href="/">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --bg-parchment: #FCFAF7;
-            --text-charcoal: #1A1A1A;
+            --text-charcoal: #0F172A;
             --atoll-blue: #0ea5e9;
-            --sun-gold: #f59e0b;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-serif: 'Playfair Display', serif;
         }
+
+        * { cursor: none; }
+
         body { 
-            font-family: 'Montserrat', sans-serif; 
-            scroll-behavior: smooth;
+            font-family: var(--font-main); 
             background-color: var(--bg-parchment);
             color: var(--text-charcoal);
             -webkit-font-smoothing: antialiased;
-        }
-        .font-serif { font-family: 'Playfair Display', serif; }
-        .glass { background: rgba(252, 250, 247, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        
-        ::selection {
-            background-color: rgba(14, 165, 233, 0.2);
-            color: #0c4a6e;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        ::-webkit-scrollbar { width: 6px; }
+        .font-serif { font-family: var(--font-serif); }
+
+        /* Sophisticated Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: var(--bg-parchment); }
-        ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--atoll-blue); }
 
-        .reveal { opacity: 0; transform: translateY(20px); transition: all 1s cubic-bezier(0.22, 1, 0.36, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        /* Reveal Animation System */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(60px); 
+            transition: all 1.4s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
 
-        /* Premium Brand Transitions */
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Luxury Button Components */
         .btn-luxury {
             position: relative;
-            overflow: hidden;
-            transition: all 0.5s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem 3.5rem;
             background: var(--text-charcoal);
             color: white;
-        }
-        .btn-luxury::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.2), transparent);
-            transition: 0.6s;
-        }
-        .btn-luxury:hover::after {
-            left: 100%;
-        }
-        .btn-luxury:hover {
-            background: var(--atoll-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.5);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5em;
+            border-radius: 100px;
+            overflow: hidden;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .gold-glow { text-shadow: 0 0 10px rgba(245, 158, 11, 0.2); }
+        .btn-luxury:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: var(--atoll-blue);
+            box-shadow: 0 30px 60px -12px rgba(14, 165, 233, 0.3);
+        }
+
+        /* Custom Cursor */
+        .cursor-outer {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.15s ease-out, opacity 0.3s ease, background 0.3s ease;
+        }
+        .cursor-inner {
+            width: 6px;
+            height: 6px;
+            background: var(--atoll-blue);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10001;
+        }
+
+        /* Responsive Cursor - Hide on touch */
+        @media (max-width: 1024px) {
+            * { cursor: auto; }
+            .cursor-outer, .cursor-inner { display: none; }
+        }
+
+        .text-liquid {
+            line-height: 0.85;
+            letter-spacing: -0.05em;
+        }
+
+        .glass-nav {
+            background: rgba(252, 250, 247, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+        }
+
+        .img-zoom-container {
+            overflow: hidden;
+        }
+        .img-zoom-container img {
+            transition: transform 10s ease;
+        }
+        .img-zoom-container:hover img {
+            transform: scale(1.15);
+        }
+
+        ::selection {
+            background: rgba(14, 165, 233, 0.15);
+            color: var(--atoll-blue);
+        }
     </style>
 
     <script type="importmap">
@@ -77,15 +145,42 @@
     "react-dom": "https://esm.sh/react-dom@19.0.0",
     "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
     "react-router-dom": "https://esm.sh/react-router-dom@7.1.5?deps=react@19.0.0,react-dom@19.0.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "next/": "https://esm.sh/next@^16.1.4/"
   }
 }
 </script>
 </head>
-<body class="overflow-x-hidden">
+<body>
+    <div class="cursor-outer" id="cursor-outer"></div>
+    <div class="cursor-inner" id="cursor-inner"></div>
     <div id="root"></div>
+    <script>
+        const outer = document.getElementById('cursor-outer');
+        const inner = document.getElementById('cursor-inner');
+        
+        document.addEventListener('mousemove', (e) => {
+            inner.style.transform = `translate3d(${e.clientX - 3}px, ${e.clientY - 3}px, 0)`;
+            outer.style.transform = `translate3d(${e.clientX - 20}px, ${e.clientY - 20}px, 0)`;
+        });
+
+        document.addEventListener('mousedown', () => {
+            outer.style.transform += ' scale(0.8)';
+            outer.style.background = 'rgba(14, 165, 233, 0.1)';
+        });
+        document.addEventListener('mouseup', () => {
+            outer.style.transform = outer.style.transform.replace(' scale(0.8)', '');
+            outer.style.background = 'transparent';
+        });
+
+        // Hover states for links
+        const links = document.querySelectorAll('a, button');
+        links.forEach(link => {
+            link.addEventListener('mouseenter', () => outer.classList.add('cursor-hover'));
+            link.addEventListener('mouseleave', () => outer.classList.remove('cursor-hover'));
+        });
+    </script>
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
