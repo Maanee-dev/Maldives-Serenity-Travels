@@ -10,9 +10,9 @@ import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
 // Fixed casing for consistency and to resolve naming conflicts
-// Using lowercase for these specific files to match the already included filenames 'offers.tsx' and 'experiences.tsx'
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Using PascalCase to match standard component naming and existing PascalCase files in the project
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
