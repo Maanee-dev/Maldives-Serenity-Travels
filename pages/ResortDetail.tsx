@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { RESORTS } from '../constants';
 
@@ -7,6 +7,9 @@ const ResortDetail: React.FC = () => {
   const resort = RESORTS.find(r => r.slug === slug);
   const roomSliderRef = useRef<HTMLDivElement>(null);
   const diningSliderRef = useRef<HTMLDivElement>(null);
+
+  const [activeTab, setActiveTab] = useState<'rates' | 'experience' | 'celebration'>('rates');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     if (resort) {
@@ -28,9 +31,14 @@ const ResortDetail: React.FC = () => {
 
   if (!resort) return <div className="p-40 text-center font-serif text-2xl italic">Sanctuary not found.</div>;
 
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+  };
+
   return (
-    <div className="bg-[#FCFAF7] min-h-screen pb-40">
-      {/* Custom Style for horizontal sliders */}
+    <div className="bg-[#FCFAF7] min-h-screen pb-20">
+      {/* Custom Style for horizontal sliders & forms */}
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -44,6 +52,11 @@ const ResortDetail: React.FC = () => {
         .snap-item {
           scroll-snap-align: start;
           flex-shrink: 0;
+        }
+        .tab-underline {
+          height: 1px;
+          background: #0f172a;
+          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
       `}</style>
 
@@ -107,9 +120,9 @@ const ResortDetail: React.FC = () => {
                 <div className="relative z-10">
                   <span className="text-[9px] font-bold uppercase tracking-[0.4em] text-sky-400 mb-6 block">Private Concierge</span>
                   <h3 className="text-4xl font-serif font-bold mb-8 italic leading-tight">Secure Your Stay</h3>
-                  <Link to="/plan" className="block w-full bg-white text-slate-950 text-center py-6 rounded-full font-bold hover:bg-sky-400 transition-all uppercase tracking-[0.3em] text-[10px]">
+                  <a href="#consultation" className="block w-full bg-white text-slate-950 text-center py-6 rounded-full font-bold hover:bg-sky-400 transition-all uppercase tracking-[0.3em] text-[10px]">
                     Inquire For Rates
-                  </Link>
+                  </a>
                 </div>
               </div>
               
@@ -129,7 +142,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* The Sanctuaries - Horizontal Scrollable Slider */}
+      {/* The Sanctuaries */}
       <section className="mb-64 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-16 reveal">
           <div className="flex flex-col md:flex-row justify-between items-end gap-8">
@@ -144,25 +157,14 @@ const ResortDetail: React.FC = () => {
           </div>
         </div>
 
-        <div 
-          ref={roomSliderRef}
-          className="snap-slider no-scrollbar px-6 lg:px-[calc((100vw-80rem)/2+3rem)] scroll-smooth pb-8"
-        >
+        <div ref={roomSliderRef} className="snap-slider no-scrollbar px-6 lg:px-[calc((100vw-80rem)/2+3rem)] scroll-smooth pb-8">
           {resort.roomTypes?.map((room, idx) => (
             <div key={idx} className="snap-item w-[85vw] md:w-[500px] group">
               <div className="h-[450px] md:h-[550px] rounded-[4rem] overflow-hidden mb-10 shadow-xl relative">
                 <img src={room.image} alt={room.name} className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" />
                 <div className="absolute top-8 left-8 flex flex-col gap-2">
-                   {room.size && (
-                     <div className="bg-white/95 backdrop-blur-sm px-5 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] shadow-lg w-fit">
-                       {room.size}
-                     </div>
-                   )}
-                   {room.capacity && (
-                     <div className="bg-white/95 backdrop-blur-sm px-5 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] shadow-lg w-fit">
-                       {room.capacity}
-                     </div>
-                   )}
+                   {room.size && <div className="bg-white/95 backdrop-blur-sm px-5 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] shadow-lg w-fit">{room.size}</div>}
+                   {room.capacity && <div className="bg-white/95 backdrop-blur-sm px-5 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] shadow-lg w-fit">{room.capacity}</div>}
                 </div>
               </div>
               <div className="px-4">
@@ -179,13 +181,12 @@ const ResortDetail: React.FC = () => {
               </div>
             </div>
           ))}
-          {/* Spacer to allow proper end snapping */}
           <div className="snap-item w-1 md:w-32"></div>
         </div>
       </section>
 
-      {/* Gastronomy - Horizontal Scrollable Slider */}
-      <section className="overflow-hidden">
+      {/* Gastronomy */}
+      <section className="mb-64 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-16 reveal">
           <div className="flex flex-col md:flex-row justify-between items-end gap-8">
             <div>
@@ -198,10 +199,7 @@ const ResortDetail: React.FC = () => {
           </div>
         </div>
 
-        <div 
-          ref={diningSliderRef}
-          className="snap-slider no-scrollbar px-6 lg:px-[calc((100vw-80rem)/2+3rem)] scroll-smooth pb-12"
-        >
+        <div ref={diningSliderRef} className="snap-slider no-scrollbar px-6 lg:px-[calc((100vw-80rem)/2+3rem)] scroll-smooth pb-12">
           {resort.diningVenues?.map((venue, idx) => (
             <div key={idx} className="snap-item w-[75vw] md:w-[400px] bg-white border border-slate-100 rounded-[4rem] p-10 shadow-sm hover:shadow-2xl transition-all duration-700">
               <div className="h-64 rounded-[3rem] overflow-hidden mb-10 shadow-inner">
@@ -225,9 +223,108 @@ const ResortDetail: React.FC = () => {
               </div>
             </div>
           ))}
-          {/* Spacer to allow proper end snapping */}
           <div className="snap-item w-1 md:w-32"></div>
         </div>
+      </section>
+
+      {/* Resort-Specific Consultation & Quote Section */}
+      <section id="consultation" className="max-w-5xl mx-auto px-6 lg:px-12 py-32 bg-white rounded-[5rem] shadow-sm border border-slate-100 reveal">
+        <div className="text-center mb-24">
+          <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.6em] mb-8 block">Inquiry Portfolio</span>
+          <h2 className="text-5xl md:text-7xl font-serif font-bold text-slate-900 mb-8 italic">Consult for {resort.name}</h2>
+          <p className="text-slate-400 text-xs font-bold uppercase tracking-[0.3em] max-w-xl mx-auto leading-loose">
+            Directly connect with our regional specialists to secure exclusive rates and curate your bespoke itinerary.
+          </p>
+        </div>
+
+        {isSubmitted ? (
+          <div className="text-center py-20 animate-in fade-in zoom-in duration-700">
+            <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-12">
+               <svg className="w-8 h-8 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+               </svg>
+            </div>
+            <h3 className="text-4xl font-serif font-bold mb-6 italic text-slate-900">Inquiry Received</h3>
+            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest leading-loose mb-12">
+              A dedicated specialist for {resort.name} will be in touch within 12 hours.
+            </p>
+            <button onClick={() => setIsSubmitted(false)} className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors">Submit Another Request</button>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-16">
+            {/* Consultation Tabs */}
+            <div className="flex justify-center items-center gap-8 md:gap-16 border-b border-slate-50 pb-8 overflow-x-auto no-scrollbar">
+              {[
+                { id: 'rates', label: 'Rates & Availability' },
+                { id: 'experience', label: 'Bespoke Experience' },
+                { id: 'celebration', label: 'Private Celebration' }
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`relative text-[10px] font-bold uppercase tracking-[0.4em] transition-all whitespace-nowrap ${activeTab === tab.id ? 'text-slate-950' : 'text-slate-300 hover:text-slate-500'}`}
+                >
+                  {tab.label}
+                  {activeTab === tab.id && <div className="absolute -bottom-9 left-0 right-0 h-px bg-slate-950 animate-in slide-in-from-left duration-500"></div>}
+                </button>
+              ))}
+            </div>
+
+            {/* Dynamic Form Content */}
+            <form onSubmit={handleFormSubmit} className="space-y-12 animate-in fade-in duration-1000">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Full Name</label>
+                    <input required type="text" placeholder="GUEST NAME" className="w-full bg-slate-50 border-b border-transparent focus:border-slate-900 transition-all p-5 rounded-3xl text-xs font-bold uppercase tracking-widest focus:outline-none" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Email Address</label>
+                    <input required type="email" placeholder="EMAIL@JOURNEY.COM" className="w-full bg-slate-50 border-b border-transparent focus:border-slate-900 transition-all p-5 rounded-3xl text-xs font-bold uppercase tracking-widest focus:outline-none" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Arrival Window</label>
+                    <input required type="text" placeholder="E.G. EARLY NOVEMBER" className="w-full bg-slate-50 border-b border-transparent focus:border-slate-900 transition-all p-5 rounded-3xl text-xs font-bold uppercase tracking-widest focus:outline-none" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Number of Guests</label>
+                    <select className="w-full bg-slate-50 border-b border-transparent focus:border-slate-900 transition-all p-5 rounded-3xl text-xs font-bold uppercase tracking-widest focus:outline-none cursor-pointer">
+                       <option>2 ADULTS</option>
+                       <option>2 ADULTS + 1 CHILD</option>
+                       <option>FAMILY (4+)</option>
+                       <option>LARGE GROUP / EVENT</option>
+                    </select>
+                  </div>
+               </div>
+
+               <div className="space-y-2">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                    {activeTab === 'rates' ? 'Specific Requirements' : 
+                     activeTab === 'experience' ? 'Activities of Interest' : 
+                     'Details of the Celebration'}
+                  </label>
+                  <textarea 
+                    rows={4} 
+                    placeholder={activeTab === 'rates' ? "Tell us about your preferred room types or meal plans..." : 
+                               activeTab === 'experience' ? "Mention diving, seaplane transfers, or private dining..." : 
+                               "Honeymoon, anniversary, or a surprise birthday arrangement?"}
+                    className="w-full bg-slate-50 border-b border-transparent focus:border-slate-900 transition-all p-8 rounded-[3rem] text-xs font-medium leading-loose focus:outline-none"
+                  ></textarea>
+               </div>
+
+               <div className="pt-8">
+                  <button type="submit" className="w-full bg-slate-950 text-white py-8 rounded-full font-bold uppercase tracking-[0.5em] text-[10px] hover:bg-sky-500 transition-all shadow-2xl flex items-center justify-center gap-6 group">
+                    <span>Send Request to Specialist</span>
+                    <svg className="w-4 h-4 group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                  <p className="text-center mt-12 text-[8px] font-bold text-slate-300 uppercase tracking-[0.3em]">
+                    * Requests for {resort.name} are prioritized by our luxury concierge team.
+                  </p>
+               </div>
+            </form>
+          </div>
+        )}
       </section>
     </div>
   );
