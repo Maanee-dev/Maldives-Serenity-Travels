@@ -9,10 +9,10 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Import using PascalCase to match the primary component file name and avoid casing ambiguity
-import Offers from './pages/Offers';
-// Fix: Import using PascalCase to match the primary component file name and avoid casing ambiguity
-import Experiences from './pages/Experiences';
+// Updated import to lowercase to match the root file and avoid casing conflict
+import Offers from './pages/offers';
+// Updated import to lowercase to match the root file and avoid casing conflict
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 // Updated to import the comprehensive PlanMyTrip component instead of the simplified plan.tsx

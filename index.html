@@ -20,8 +20,6 @@
             --font-serif: 'Playfair Display', serif;
         }
 
-        * { cursor: none; }
-
         body { 
             font-family: var(--font-main); 
             background-color: var(--bg-parchment);
@@ -76,39 +74,13 @@
             border-radius: 100px;
             overflow: hidden;
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
         }
 
         .btn-luxury:hover {
             transform: translateY(-4px) scale(1.02);
             background: var(--atoll-blue);
             box-shadow: 0 30px 60px -12px rgba(14, 165, 233, 0.3);
-        }
-
-        /* Custom Cursor */
-        .cursor-outer {
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(14, 165, 233, 0.3);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            transition: transform 0.15s ease-out, opacity 0.3s ease, background 0.3s ease;
-        }
-        .cursor-inner {
-            width: 6px;
-            height: 6px;
-            background: var(--atoll-blue);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10001;
-        }
-
-        /* Responsive Cursor - Hide on touch */
-        @media (max-width: 1024px) {
-            * { cursor: auto; }
-            .cursor-outer, .cursor-inner { display: none; }
         }
 
         .text-liquid {
@@ -153,34 +125,7 @@
 </script>
 </head>
 <body>
-    <div class="cursor-outer" id="cursor-outer"></div>
-    <div class="cursor-inner" id="cursor-inner"></div>
     <div id="root"></div>
-    <script>
-        const outer = document.getElementById('cursor-outer');
-        const inner = document.getElementById('cursor-inner');
-        
-        document.addEventListener('mousemove', (e) => {
-            inner.style.transform = `translate3d(${e.clientX - 3}px, ${e.clientY - 3}px, 0)`;
-            outer.style.transform = `translate3d(${e.clientX - 20}px, ${e.clientY - 20}px, 0)`;
-        });
-
-        document.addEventListener('mousedown', () => {
-            outer.style.transform += ' scale(0.8)';
-            outer.style.background = 'rgba(14, 165, 233, 0.1)';
-        });
-        document.addEventListener('mouseup', () => {
-            outer.style.transform = outer.style.transform.replace(' scale(0.8)', '');
-            outer.style.background = 'transparent';
-        });
-
-        // Hover states for links
-        const links = document.querySelectorAll('a, button');
-        links.forEach(link => {
-            link.addEventListener('mouseenter', () => outer.classList.add('cursor-hover'));
-            link.addEventListener('mouseleave', () => outer.classList.remove('cursor-hover'));
-        });
-    </script>
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
