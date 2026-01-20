@@ -9,9 +9,9 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Using standard PascalCase imports to resolve naming conflicts with duplicate files
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Fix: Use lowercase filenames for these specific pages to match the files already included in the program context
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
