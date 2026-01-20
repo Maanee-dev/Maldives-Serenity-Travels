@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { RESORTS, BLOG_POSTS, EXPERIENCES } from '../constants';
+import { RESORTS, BLOG_POSTS } from '../constants';
 import ResortCard from '../components/ResortCard';
 
 const Home: React.FC = () => {
@@ -61,10 +60,10 @@ const Home: React.FC = () => {
   };
 
   const signatureAtolls = [
-    { name: 'Noonu Atoll', image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=600', count: '12 Sanctuaries', desc: 'The Realm of Untouched Blue' },
-    { name: 'Baa Atoll', image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=600', count: '18 Sanctuaries', desc: 'UNESCO Biosphere Reserve' },
-    { name: 'North Male', image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=600', count: '24 Sanctuaries', desc: 'The Epicenter of Luxury' },
-    { name: 'Ari Atoll', image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=600', count: '15 Sanctuaries', desc: 'Whale Shark Corridors' }
+    { name: 'Noonu Atoll', image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=600', count: '12 Stays', desc: 'Untouched Blue' },
+    { name: 'Baa Atoll', image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=600', count: '18 Stays', desc: 'UNESCO Biosphere' },
+    { name: 'North Male', image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=600', count: '24 Stays', desc: 'The Epicenter' },
+    { name: 'Ari Atoll', image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=600', count: '15 Stays', desc: 'Whale Shark Paths' }
   ];
 
   const featuredResorts = RESORTS.slice(0, 4);
@@ -72,8 +71,8 @@ const Home: React.FC = () => {
   return (
     <div className="bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
       
-      {/* 1. CINEMATIC STAGGERED HERO */}
-      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-slate-950">
+      {/* 1. CINEMATIC HERO */}
+      <section className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden bg-slate-950">
         <div className="absolute inset-0 z-0">
           {heroSlides.map((slide, idx) => (
             <div 
@@ -92,114 +91,117 @@ const Home: React.FC = () => {
           ))}
         </div>
 
-        <div className="relative z-10 w-full max-w-[1600px] px-6 md:px-20">
+        <div className="relative z-10 w-full max-w-[1600px] px-6 sm:px-12 md:px-20">
           <div className="flex flex-col items-start text-left">
-             <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[1em] text-sky-400 mb-8 block reveal active transition-all duration-1000">
+             <span className="text-[8px] md:text-[11px] font-bold uppercase tracking-[1em] text-sky-400 mb-6 md:mb-8 block reveal active transition-all duration-1000">
                {heroSlides[heroIndex].subtitle}
              </span>
-             <h1 className="flex flex-col mb-16 reveal active">
-                <span className="text-5xl md:text-8xl lg:text-[7rem] font-serif font-bold text-white leading-none tracking-tighter transition-all duration-1000">
+             <h1 className="flex flex-col mb-10 md:mb-16 reveal active">
+                <span className="text-4xl sm:text-6xl md:text-8xl lg:text-[7rem] font-serif font-bold text-white leading-none tracking-tighter transition-all duration-1000">
                   {heroSlides[heroIndex].title}
                 </span>
-                <span className="text-7xl md:text-9xl lg:text-[13rem] font-serif font-bold text-white italic leading-[0.8] tracking-tighter opacity-90 transition-all duration-1000 delay-150">
+                <span className="text-6xl sm:text-8xl md:text-9xl lg:text-[13rem] font-serif font-bold text-white italic leading-[0.8] tracking-tighter opacity-90 transition-all duration-1000 delay-150">
                   {heroSlides[heroIndex].titleAlt}<span className="not-italic text-sky-500">.</span>
                 </span>
              </h1>
              
-             <div className="flex flex-col md:flex-row items-start md:items-center gap-12 w-full reveal active transition-all duration-1000 delay-500">
+             <div className="flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-12 w-full reveal active transition-all duration-1000 delay-500">
                 <form onSubmit={handleSearch} className="w-full max-w-xl">
                   <div className="relative group">
                     <input 
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="SEARCH DESTINATION OR RESORT..."
-                      className="w-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-12 py-7 text-white text-[10px] font-bold uppercase tracking-[0.4em] outline-none transition-all group-hover:bg-white/20 group-hover:border-white/40 focus:bg-white focus:text-slate-950 focus:border-white placeholder:text-white/40 shadow-2xl"
+                      placeholder="EXPLORE..."
+                      className="w-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-8 md:px-12 py-5 md:py-7 text-white text-[9px] md:text-[10px] font-bold uppercase tracking-[0.4em] outline-none transition-all group-hover:bg-white/20 group-hover:border-white/40 focus:bg-white focus:text-slate-950 focus:border-white placeholder:text-white/40 shadow-2xl"
                     />
-                    <button type="submit" className="absolute right-4 top-4 bg-sky-500 text-white w-14 h-14 rounded-full flex items-center justify-center hover:bg-slate-950 transition-all duration-700">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    <button type="submit" className="absolute right-2 md:right-4 top-2 md:top-4 bg-sky-500 text-white w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center hover:bg-slate-950 transition-all duration-700">
+                      <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </button>
                   </div>
                 </form>
                 <div className="hidden lg:flex flex-col gap-2 border-l border-white/20 pl-12">
-                   <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.4em]">Curated Since</p>
+                   <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.4em]">Est.</p>
                    <p className="text-white text-xl font-serif italic">MMXII</p>
                 </div>
              </div>
           </div>
         </div>
 
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
-           <div className="w-[1px] h-20 bg-white/20 relative overflow-hidden">
+        <div className="absolute bottom-10 md:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
+           <div className="w-[1px] h-12 md:h-20 bg-white/20 relative overflow-hidden">
              <div className="absolute top-0 left-0 w-full h-full bg-sky-500 animate-[scrollLine_2s_infinite]"></div>
            </div>
         </div>
       </section>
 
       {/* 2. THE EDITORIAL MANIFESTO */}
-      <section className="py-56 md:py-80 bg-white relative">
-        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FCFAF7] to-transparent pointer-events-none"></div>
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 lg:gap-48 items-start">
+      <section className="py-24 sm:py-32 md:py-48 lg:py-64 bg-white relative">
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-48 items-start">
             <div className="lg:col-span-7 reveal">
-               <div className="flex items-center gap-6 mb-16">
-                  <div className="w-12 h-[1px] bg-sky-500"></div>
-                  <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em]">The Agency</span>
+               <div className="flex items-center gap-4 md:gap-6 mb-8 md:mb-12">
+                  <div className="w-8 md:w-12 h-[1px] bg-sky-500"></div>
+                  <span className="text-[9px] md:text-[10px] font-bold text-sky-500 uppercase tracking-[1em]">The Agency</span>
                </div>
-               <h2 className="text-5xl md:text-8xl lg:text-[7.5rem] font-serif font-bold text-slate-950 leading-[0.9] mb-16 tracking-tighter">
-                 Luxury is <br className="hidden md:block"/> No Longer <br className="hidden md:block"/> <span className="italic text-sky-500 underline decoration-sky-100 underline-offset-[1.5rem]">Optional</span>.
+               <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-[7.5rem] font-serif font-bold text-slate-950 leading-[0.95] mb-8 md:mb-16 tracking-tighter">
+                 Luxury is <br className="hidden md:block"/> No Longer <br className="hidden md:block"/> <span className="italic text-sky-500 underline decoration-sky-100 underline-offset-[0.6rem] md:underline-offset-[1.5rem]">Optional</span>.
                </h2>
-               <p className="text-slate-500 text-lg md:text-2xl leading-[2] mb-16 font-medium opacity-90 max-w-2xl">
+               <p className="text-slate-500 text-base sm:text-lg md:text-2xl leading-[1.7] md:leading-[2] mb-10 md:mb-16 font-medium opacity-90 max-w-2xl">
                  We are a bespoke boutique agency crafting unrivaled journeys across the Maldivian atolls. Defined by geography and refined by hand, we curate the silence that modern living lacks.
                </p>
-               <div className="flex flex-wrap gap-16">
+               <div className="flex flex-row gap-10 md:gap-16">
                   <div className="flex flex-col">
-                     <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em] mb-4">Transfer Specialists</span>
-                     <p className="text-slate-900 font-bold uppercase tracking-widest text-xs">VIP Seaplane Charters</p>
+                     <span className="text-[8px] md:text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em] mb-2 md:mb-4">Transfers</span>
+                     <p className="text-slate-900 font-bold uppercase tracking-widest text-[9px] md:text-xs">VIP Seaplane</p>
                   </div>
                   <div className="flex flex-col">
-                     <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em] mb-4">Island Scouting</span>
-                     <p className="text-slate-900 font-bold uppercase tracking-widest text-xs">Private Atoll Access</p>
+                     <span className="text-[8px] md:text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em] mb-2 md:mb-4">Scouting</span>
+                     <p className="text-slate-900 font-bold uppercase tracking-widest text-[9px] md:text-xs">Private Atolls</p>
                   </div>
                </div>
             </div>
-            <div className="lg:col-span-5 relative mt-12 lg:mt-0 reveal transition-all duration-1000 delay-300">
-               <div className="aspect-[4/5] rounded-[5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] group relative">
+            <div className="lg:col-span-5 relative mt-16 lg:mt-0 reveal transition-all duration-1000 delay-300">
+               <div className="aspect-[4/5] rounded-[2rem] sm:rounded-[4rem] lg:rounded-[5rem] overflow-hidden shadow-2xl group relative">
                   <img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" alt="Local Life" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 flex items-end p-16">
-                     <p className="text-white text-[10px] font-bold uppercase tracking-[0.5em] leading-loose text-center">Authentic Maldivian Heritage — Preserved for the Aesthetic Mind.</p>
-                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent"></div>
                </div>
-               {/* Floating Quote */}
-               <div className="absolute -bottom-16 -left-16 bg-[#FCFAF7] p-12 rounded-[3rem] shadow-2xl hidden lg:block max-w-[320px] border border-slate-100">
-                  <p className="text-slate-900 font-serif italic text-2xl leading-relaxed">"The most profound experiences happen in the gaps between the tides."</p>
-                  <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mt-8 block">Ahmed N. — Lead Curator</span>
+               {/* Floating Quote - Mobile Zig-Zag */}
+               <div className="absolute -bottom-8 md:-bottom-16 -right-4 sm:-left-16 bg-[#FCFAF7] p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] shadow-2xl max-w-[200px] md:max-w-[320px] border border-slate-100 reveal transition-all duration-1000 delay-500">
+                  <p className="text-slate-900 font-serif italic text-base md:text-2xl leading-relaxed">"The most profound experiences happen in the gaps between the tides."</p>
                </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. SENSORY PALETTE DISCOVERY */}
-      <section className="py-48 bg-[#FCFAF7] border-y border-slate-100">
-         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-32 reveal">
-               <div>
-                  <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-8 block">Regional Mastery</span>
-                  <h3 className="text-5xl md:text-7xl font-serif font-bold text-slate-900 tracking-tighter italic">Signature Atolls.</h3>
+      {/* 3. SIGNATURE ATOLLS (ASYMMETRIC MOBILE DISCOVERY) */}
+      <section className="py-24 sm:py-32 md:py-48 bg-[#FCFAF7] border-y border-slate-100">
+         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-32 reveal">
+               <div className="max-w-xl">
+                  <span className="text-[9px] md:text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-4 md:mb-8 block">Regional Mastery</span>
+                  <h3 className="text-4xl md:text-7xl font-serif font-bold text-slate-900 tracking-tighter italic leading-tight">Signature Atolls.</h3>
                </div>
-               <Link to="/stays" className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.5em] border-b border-sky-500 pb-2 mb-4 hover:text-slate-950 hover:border-slate-950 transition-all">Explore Geography</Link>
+               <Link to="/stays" className="text-[8px] md:text-[10px] font-bold text-sky-500 uppercase tracking-[0.5em] border-b border-sky-500 pb-1 mt-6 md:mb-4 hover:text-slate-950 hover:border-slate-950 transition-all">Explore Geography</Link>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 reveal transition-all duration-1000">
+            {/* 2-Column Zig-Zag Grid for Mobile */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 reveal transition-all duration-1000">
                {signatureAtolls.map((atoll, i) => (
-                 <Link key={i} to={`/stays?q=${atoll.name}`} className="group relative aspect-[3/4] overflow-hidden rounded-[3rem] md:rounded-[4rem] cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-1000">
-                   <img src={atoll.image} className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110 grayscale-[50%] group-hover:grayscale-0" alt={atoll.name} />
-                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent group-hover:via-transparent transition-all duration-1000"></div>
-                   <div className="absolute bottom-10 left-10 right-10 flex flex-col items-start">
-                      <span className="text-sky-400 text-[8px] font-bold uppercase tracking-[0.4em] mb-2">{atoll.count}</span>
-                      <h4 className="text-white text-3xl font-serif font-bold group-hover:italic transition-all duration-500 mb-3">{atoll.name}</h4>
-                      <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-all duration-1000 translate-y-4 group-hover:translate-y-0">{atoll.desc}</p>
+                 <Link 
+                   key={i} 
+                   to={`/stays?q=${atoll.name}`} 
+                   className={`group relative overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] md:rounded-[4rem] cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-1000 
+                    ${i % 2 !== 0 ? 'mt-8 md:mt-0' : 'mb-8 md:mb-0'} 
+                    ${i % 2 === 0 ? 'aspect-[3/5] md:aspect-[3/4]' : 'aspect-[3/4]'}`}
+                 >
+                   <img src={atoll.image} className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110 grayscale-[30%] group-hover:grayscale-0" alt={atoll.name} />
+                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/10 to-transparent group-hover:via-transparent transition-all duration-1000"></div>
+                   <div className="absolute bottom-4 sm:bottom-6 md:bottom-10 left-4 sm:left-6 md:left-10 right-4 sm:right-6 md:right-10 flex flex-col items-start">
+                      <span className="text-sky-400 text-[6px] md:text-[8px] font-bold uppercase tracking-[0.4em] mb-1 md:mb-2">{atoll.count}</span>
+                      <h4 className="text-lg md:text-3xl font-serif font-bold group-hover:italic transition-all duration-500 mb-1 leading-tight text-white">{atoll.name}</h4>
+                      <p className="text-white/40 text-[7px] md:text-[9px] font-bold uppercase tracking-[0.2em] hidden md:block opacity-0 group-hover:opacity-100 transition-all duration-1000 translate-y-4 group-hover:translate-y-0">{atoll.desc}</p>
                    </div>
                  </Link>
                ))}
@@ -207,58 +209,68 @@ const Home: React.FC = () => {
          </div>
       </section>
 
-      {/* 4. THE COLLECTION (STAGGERED MASONRY) */}
-      <section className="py-56 bg-white overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
-          <div className="mb-32 reveal">
-            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-8 block">Exclusive Access</span>
-            <h3 className="text-5xl md:text-8xl font-serif font-bold text-slate-900 tracking-tighter italic">The Collection.</h3>
+      {/* 4. THE COLLECTION (STAGGERED MOBILE OFFSET) */}
+      <section className="py-24 sm:py-32 md:py-56 bg-white overflow-hidden">
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
+          <div className="mb-12 md:mb-32 reveal">
+            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-4 md:mb-8 block">Exclusive Portfolio</span>
+            <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 tracking-tighter italic">The Collection.</h3>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+          {/* Mobile Staggering: 1 Column with alternating horizontal shift and padding */}
+          <div className="flex flex-col md:grid md:grid-cols-2 gap-16 sm:gap-24 lg:gap-32">
             {featuredResorts.map((resort, idx) => (
-              <div key={resort.id} className={`reveal transition-all duration-1000 ${idx % 2 !== 0 ? 'md:mt-32' : ''}`} style={{ transitionDelay: `${idx * 150}ms` }}>
+              <div 
+                key={resort.id} 
+                className={`reveal transition-all duration-1000 
+                  ${idx % 2 !== 0 ? 'md:mt-40' : ''} 
+                  ${idx % 2 === 0 ? 'pr-4 md:pr-0' : 'pl-4 md:pl-0'}`} 
+                style={{ transitionDelay: `${idx * 150}ms` }}
+              >
                 <ResortCard resort={resort} />
               </div>
             ))}
           </div>
           
-          <div className="mt-40 flex justify-center reveal">
-             <Link to="/stays" className="group relative flex items-center gap-10">
-               <div className="w-20 h-20 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 group-hover:border-slate-950 transition-all duration-700">
-                  <svg className="w-6 h-6 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="mt-20 md:mt-40 flex justify-center reveal">
+             <Link to="/stays" className="group relative flex items-center gap-6 md:gap-10">
+               <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 group-hover:border-slate-950 transition-all duration-700 shadow-sm">
+                  <svg className="w-5 h-5 md:w-6 md:h-6 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                </div>
-               <span className="text-[11px] font-bold uppercase tracking-[0.6em] text-slate-950">View Full Portfolio</span>
+               <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.6em] text-slate-950 group-hover:text-sky-500 transition-colors">View All Sanctuaries</span>
              </Link>
           </div>
         </div>
       </section>
 
-      {/* 5. THE JOURNAL (EDITORIAL) */}
-      <section className="py-56 bg-[#FCFAF7] border-t border-slate-100">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
-           <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 items-center mb-40 reveal">
+      {/* 5. THE JOURNAL (EDITORIAL RHYTHM) */}
+      <section className="py-24 sm:py-32 md:py-48 bg-[#FCFAF7] border-t border-slate-100">
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
+           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-24 items-start mb-16 md:mb-40 reveal">
               <div className="lg:col-span-6">
-                 <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em] mb-8 block">The Perspective</span>
-                 <h3 className="text-5xl md:text-7xl font-serif font-bold text-slate-950 tracking-tighter italic leading-tight">Digital Journal.</h3>
+                 <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em] mb-4 md:mb-8 block">The Perspective</span>
+                 <h3 className="text-4xl md:text-7xl font-serif font-bold text-slate-900 tracking-tighter italic leading-tight">Digital Journal.</h3>
               </div>
-              <div className="lg:col-span-6">
-                 <p className="text-slate-400 text-sm md:text-lg font-medium leading-loose uppercase tracking-widest max-w-lg">A curated exploration of heritage, luxury, and the art of travel across the archipelago.</p>
+              <div className="lg:col-span-6 md:pt-4">
+                 <p className="text-slate-400 text-[10px] md:text-lg font-medium leading-relaxed uppercase tracking-[0.3em] max-w-lg opacity-80">A curated exploration of heritage, luxury, and the art of travel across the atolls.</p>
               </div>
            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 reveal transition-all duration-1000 delay-300">
+           {/* Journal Mobile Stacking with varying scales */}
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-12 lg:gap-16 reveal transition-all duration-1000 delay-300">
               {BLOG_POSTS.slice(0, 3).map((post, i) => (
-                <Link key={post.id} to={`/stories/${post.slug}`} className="group block">
-                   <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden mb-10 shadow-sm group-hover:shadow-2xl transition-all duration-700">
-                      <img src={post.image} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-110" alt={post.title} />
-                      <div className="absolute inset-0 bg-slate-950/5 group-hover:bg-transparent transition-colors duration-700"></div>
+                <Link key={post.id} to={`/stories/${post.slug}`} className={`group block ${i === 1 ? 'md:mt-12 scale-105 md:scale-100' : ''}`}>
+                   <div className="relative aspect-[4/5] rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] overflow-hidden mb-6 md:mb-10 shadow-sm group-hover:shadow-2xl transition-all duration-700">
+                      <img src={post.image} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-110 grayscale-[20%] group-hover:grayscale-0" alt={post.title} />
+                      <div className="absolute inset-0 bg-slate-950/10 group-hover:bg-transparent transition-colors duration-700"></div>
                    </div>
-                   <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest block mb-4">{new Date(post.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
-                   <h4 className="text-2xl font-serif font-bold text-slate-950 mb-6 group-hover:italic transition-all duration-500">{post.title}</h4>
-                   <div className="w-8 h-px bg-slate-200 group-hover:w-full group-hover:bg-sky-500 transition-all duration-700"></div>
+                   <div className="px-2">
+                    <span className="text-[7px] md:text-[9px] font-bold text-slate-300 uppercase tracking-widest block mb-2 md:mb-4">{new Date(post.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+                    <h4 className="text-lg md:text-2xl font-serif font-bold text-slate-950 mb-4 md:mb-6 group-hover:italic transition-all duration-500 leading-tight">{post.title}</h4>
+                    <div className="w-6 md:w-8 h-[1px] bg-slate-200 group-hover:w-full group-hover:bg-sky-500 transition-all duration-700"></div>
+                   </div>
                 </Link>
               ))}
            </div>
@@ -266,16 +278,16 @@ const Home: React.FC = () => {
       </section>
 
       {/* 6. IMMERSIVE FOOTER CTA */}
-      <section className="relative py-80 bg-slate-950 text-white overflow-hidden text-center">
+      <section className="relative py-32 sm:py-48 md:py-64 lg:py-80 bg-slate-950 text-white overflow-hidden text-center">
          <div className="absolute inset-0 opacity-20 pointer-events-none">
-            <img src="https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=90&w=1920" className="w-full h-full object-cover" alt="Footer Background" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950" />
+            <img src="https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=90&w=1920" className="w-full h-full object-cover grayscale brightness-50" alt="Footer Background" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950" />
          </div>
          <div className="relative z-10 max-w-4xl mx-auto px-6 reveal">
-            <span className="text-[10px] font-bold text-sky-400 uppercase tracking-[1em] mb-12 block">Bespoke Inquiries</span>
-            <h2 className="text-6xl md:text-9xl font-serif font-bold mb-16 italic leading-none tracking-tighter">Define Your <br/> Journey.</h2>
-            <p className="text-slate-400 text-sm md:text-lg font-medium leading-loose mb-20 opacity-80 uppercase tracking-[0.4em]">From unlisted sanctuaries to private atoll charters.</p>
-            <Link to="/plan" className="inline-block bg-white text-slate-950 font-bold px-16 py-7 rounded-full hover:bg-sky-400 hover:text-white transition-all duration-700 uppercase tracking-[0.5em] text-[10px] shadow-2xl">
+            <span className="text-[8px] md:text-[10px] font-bold text-sky-400 uppercase tracking-[1em] mb-8 md:mb-12 block">Bespoke Inquiries</span>
+            <h2 className="text-4xl sm:text-6xl md:text-9xl font-serif font-bold mb-10 md:mb-16 italic leading-none tracking-tighter">Define Your <br/> Journey.</h2>
+            <p className="text-slate-400 text-[9px] md:text-lg font-medium leading-relaxed mb-12 md:mb-20 opacity-80 uppercase tracking-[0.4em]">From unlisted sanctuaries to private atoll charters.</p>
+            <Link to="/plan" className="inline-block bg-white text-slate-950 font-bold px-10 md:px-16 py-4 md:py-7 rounded-full hover:bg-sky-400 hover:text-white transition-all duration-700 uppercase tracking-[0.5em] text-[8px] md:text-[10px] shadow-2xl">
                Start Planning
             </Link>
          </div>
