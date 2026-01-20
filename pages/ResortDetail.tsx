@@ -36,6 +36,19 @@ const ResortDetail: React.FC = () => {
     setIsSubmitted(true);
   };
 
+  // Helper for gallery images to avoid broken links
+  const getGalleryImage = (index: number) => {
+    if (resort.images && resort.images[index]) return resort.images[index];
+    // Decorative fallbacks
+    const fallbacks = [
+      "https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200",
+      "https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=1200",
+      "https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200",
+      "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1200"
+    ];
+    return fallbacks[index % fallbacks.length];
+  };
+
   return (
     <div className="bg-[#FCFAF7] min-h-screen pb-20">
       {/* Custom Style for horizontal sliders & forms */}
@@ -60,78 +73,80 @@ const ResortDetail: React.FC = () => {
         }
       `}</style>
 
-      {/* Immersive Gallery Header */}
-      <section className="grid grid-cols-1 md:grid-cols-4 h-[85vh] gap-4 p-4 pt-28 reveal active">
+      {/* Immersive Gallery Header - Adjusted height and fallback logic */}
+      <section className="grid grid-cols-1 md:grid-cols-4 h-[80vh] md:h-[85vh] gap-4 p-4 pt-28 reveal active">
         <div className="md:col-span-2 h-full overflow-hidden rounded-[4rem]">
-          <img src={resort.images[0]} alt={resort.name} className="w-full h-full object-cover grayscale-[0.1] hover:grayscale-0 transition-all duration-[2s]" />
+          <img src={getGalleryImage(0)} alt={resort.name} className="w-full h-full object-cover grayscale-[0.1] hover:grayscale-0 transition-all duration-[2s]" />
         </div>
         <div className="hidden md:flex flex-col gap-4 h-full">
           <div className="h-1/2 rounded-[4rem] overflow-hidden">
-             <img src={resort.images[1] || resort.images[0]} alt={resort.name} className="w-full h-full object-cover" />
+             <img src={getGalleryImage(1)} alt={resort.name} className="w-full h-full object-cover" />
           </div>
           <div className="h-1/2 rounded-[4rem] overflow-hidden">
-             <img src="https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800" alt="Detail" className="w-full h-full object-cover" />
+             <img src={getGalleryImage(2)} alt="Detail" className="w-full h-full object-cover" />
           </div>
         </div>
         <div className="hidden md:block h-full overflow-hidden rounded-[4rem] relative">
-          <img src="https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800" alt="Aerial" className="w-full h-full object-cover" />
+          <img src={getGalleryImage(3)} alt="Aerial" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/5"></div>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-6 py-32 lg:px-12">
-        {/* Navigation & Introduction */}
-        <div className="flex flex-col lg:flex-row gap-24 mb-48">
+      <div className="max-w-7xl mx-auto px-6 py-24 lg:py-32 lg:px-12">
+        {/* Navigation & Introduction - Fixed overlapping via spacing and leading */}
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 mb-48">
           <div className="flex-grow reveal">
-            <nav className="flex items-center text-slate-400 text-[9px] font-bold uppercase tracking-[0.4em] gap-4 mb-12">
-              <Link to="/" className="hover:text-slate-900">Home</Link>
-              <span>/</span>
-              <Link to="/stays" className="hover:text-slate-900">Stays</Link>
-              <span>/</span>
+            <nav className="flex items-center text-slate-400 text-[9px] font-bold uppercase tracking-[0.5em] gap-4 mb-16 lg:mb-20">
+              <Link to="/" className="hover:text-slate-900 transition-colors">Home</Link>
+              <span className="opacity-30">/</span>
+              <Link to="/stays" className="hover:text-slate-900 transition-colors">Stays</Link>
+              <span className="opacity-30">/</span>
               <span className="text-slate-900">{resort.name}</span>
             </nav>
 
-            <h1 className="text-6xl md:text-9xl font-serif font-bold text-slate-900 mb-12 tracking-tight italic">
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold text-slate-900 mb-16 tracking-tight italic leading-[0.9] lg:leading-[0.85]">
               {resort.name}
             </h1>
 
             <div className="flex items-center gap-12 mb-24 pb-12 border-b border-slate-100">
-              <div className="flex gap-1.5">
+              <div className="flex gap-2">
                 {[...Array(resort.rating)].map((_, i) => (
-                  <div key={i} className="w-1 h-1 rounded-full bg-sky-500"></div>
+                  <div key={i} className="w-1.5 h-1.5 rounded-full bg-sky-500"></div>
                 ))}
               </div>
-              <span className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.4em]">{resort.atoll}</span>
+              <span className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.5em]">{resort.atoll}</span>
             </div>
 
             <div className="prose prose-slate max-w-none">
-              <p className="text-3xl md:text-5xl font-serif font-bold text-slate-900 leading-[1.3] mb-24 italic border-l-[1px] border-slate-200 pl-16 py-4">
+              <p className="text-3xl md:text-5xl font-serif font-bold text-slate-900 leading-[1.3] mb-24 italic border-l-[1px] border-slate-200 pl-12 lg:pl-16 py-4">
                 "{resort.uvp}"
               </p>
-              <div className="text-slate-500 leading-[2] text-lg mb-32 first-letter:text-8xl first-letter:font-serif first-letter:font-bold first-letter:mr-6 first-letter:float-left first-letter:text-slate-900">
+              <div className="text-slate-500 leading-[2.2] text-lg mb-32 first-letter:text-8xl first-letter:font-serif first-letter:font-bold first-letter:mr-6 first-letter:float-left first-letter:text-slate-900">
                 {resort.description}
               </div>
             </div>
           </div>
 
-          <aside className="lg:w-96 reveal">
+          <aside className="lg:w-[400px] flex-shrink-0 reveal">
             <div className="sticky top-32">
-              <div className="bg-slate-950 text-white p-16 rounded-[4rem] shadow-2xl relative overflow-hidden mb-12">
+              <div className="bg-slate-950 text-white p-12 lg:p-16 rounded-[4rem] shadow-2xl relative overflow-hidden mb-12">
                 <div className="relative z-10">
-                  <span className="text-[9px] font-bold uppercase tracking-[0.4em] text-sky-400 mb-6 block">Private Concierge</span>
-                  <h3 className="text-4xl font-serif font-bold mb-8 italic leading-tight">Secure Your Stay</h3>
-                  <a href="#consultation" className="block w-full bg-white text-slate-950 text-center py-6 rounded-full font-bold hover:bg-sky-400 transition-all uppercase tracking-[0.3em] text-[10px]">
+                  <span className="text-[9px] font-bold uppercase tracking-[0.5em] text-sky-400 mb-8 block">Private Concierge</span>
+                  <h3 className="text-4xl lg:text-5xl font-serif font-bold mb-10 italic leading-[1.1]">Secure <br />Your Stay</h3>
+                  <a href="#consultation" className="block w-full bg-white text-slate-950 text-center py-6 rounded-full font-bold hover:bg-sky-400 transition-all uppercase tracking-[0.4em] text-[10px] shadow-lg">
                     Inquire For Rates
                   </a>
                 </div>
+                {/* Decorative element for card */}
+                <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
               </div>
               
               <div className="bg-white border border-slate-100 p-12 rounded-[4rem] shadow-sm">
-                 <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.5em] mb-8">Amenities</h3>
-                 <div className="space-y-4">
+                 <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.5em] mb-10">Exclusive Amenities</h3>
+                 <div className="space-y-6">
                     {resort.features.map((feat, idx) => (
-                      <div key={idx} className="flex items-center gap-4">
-                        <div className="w-1 h-1 rounded-full bg-slate-300"></div>
+                      <div key={idx} className="flex items-center gap-4 group">
+                        <div className="w-1 h-1 rounded-full bg-slate-200 group-hover:bg-sky-400 transition-colors"></div>
                         <span className="text-[10px] font-bold text-slate-900 uppercase tracking-widest">{feat}</span>
                       </div>
                     ))}
