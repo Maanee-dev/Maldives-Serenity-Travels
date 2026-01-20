@@ -3,20 +3,22 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollToTopButton from './components/ScrollToTopButton';
 
 // Pages - Standardized to specific filenames to prevent casing conflicts
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed casing: imports now correctly match the PascalCase filenames Offers.tsx and Experiences.tsx 
-// to resolve the 'Already included file name' conflict.
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Fix: Use lowercase file names to resolve casing conflicts ('Offers.tsx' vs 'offers.tsx')
+import Offers from './pages/offers';
+// Fix: Use lowercase file names to resolve casing conflicts ('Experiences.tsx' vs 'experiences.tsx')
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
-import PlanMyTrip from './pages/PlanMyTrip';
+// Fix: Use the correct file name 'plan.tsx' to match the lowercase naming convention
+import PlanMyTrip from './pages/plan';
 
-const ScrollToTop = () => {
+const ScrollToTopOnRoute = () => {
   const { pathname } = useLocation();
   React.useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,7 +49,7 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <div className="min-h-screen flex flex-col selection:bg-sky-100 selection:text-sky-900 bg-[#FCFAF7]">
-        <ScrollToTop />
+        <ScrollToTopOnRoute />
         <Navbar />
         <main className="flex-grow">
           <Routes>
@@ -63,6 +65,7 @@ const App: React.FC = () => {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
+        <ScrollToTopButton />
         <WhatsAppButton />
         <Footer />
       </div>
