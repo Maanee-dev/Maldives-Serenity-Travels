@@ -99,3 +99,131 @@ const ResortDetail: React.FC = () => {
               </p>
               <div className="text-slate-500 leading-[2.2] text-lg md:text-xl mb-32 font-medium opacity-90 max-w-3xl">
                 {resort.description}
+              </div>
+
+              {/* Unique Features Section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-40">
+                {resort.features.map((feature, idx) => (
+                  <div key={idx} className="flex gap-8 group">
+                    <div className="w-14 h-14 rounded-full border border-slate-200 flex-shrink-0 flex items-center justify-center group-hover:bg-slate-950 group-hover:border-slate-950 transition-all duration-700">
+                      <div className="w-1.5 h-1.5 rounded-full bg-sky-500 group-hover:bg-white"></div>
+                    </div>
+                    <div>
+                      <h4 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.3em] mb-3">{feature}</h4>
+                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] opacity-60">Signature Amenity</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Accommodation Previews */}
+              <div className="mb-40">
+                <h3 className="text-4xl md:text-6xl font-serif font-bold text-slate-900 mb-20 italic">The Sanctuaries</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  {resort.roomTypes?.map((room, idx) => (
+                    <div key={idx} className="group">
+                      <div className="aspect-[4/3] rounded-[2.5rem] overflow-hidden mb-8 shadow-sm transition-all duration-700 group-hover:shadow-2xl">
+                        <img src={room.image} alt={room.name} className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-105" />
+                      </div>
+                      <h4 className="text-2xl font-serif font-bold text-slate-900 mb-2 group-hover:italic transition-all">{room.name}</h4>
+                      <p className="text-[9px] font-bold text-slate-300 uppercase tracking-[0.4em] mb-4">{room.size} — {room.capacity}</p>
+                      <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">{room.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Dining Previews */}
+              <div className="mb-24">
+                <h3 className="text-4xl md:text-6xl font-serif font-bold text-slate-900 mb-20 italic">Culinary Perspective</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  {resort.diningVenues?.map((venue, idx) => (
+                    <div key={idx} className="group">
+                      <div className="aspect-[4/3] rounded-[2.5rem] overflow-hidden mb-8 shadow-sm transition-all duration-700 group-hover:shadow-2xl">
+                        <img src={venue.image} alt={venue.name} className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-105" />
+                      </div>
+                      <h4 className="text-2xl font-serif font-bold text-slate-900 mb-2 group-hover:italic transition-all">{venue.name}</h4>
+                      <p className="text-[9px] font-bold text-sky-500 uppercase tracking-[0.4em] mb-4">{venue.cuisine} — {venue.vibe}</p>
+                      <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">{venue.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar Area: Inquire & Concierge */}
+          <aside className="lg:w-[400px] flex-shrink-0">
+            <div className="sticky top-40 bg-white rounded-[3rem] p-10 md:p-14 shadow-2xl border border-slate-50 reveal transition-all duration-1000 delay-300">
+              {isSubmitted ? (
+                <div className="text-center py-20">
+                  <div className="w-16 h-16 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                    <svg className="w-8 h-8 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  </div>
+                  <h4 className="text-2xl font-serif font-bold italic mb-6">Vision Received</h4>
+                  <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] leading-loose">Our concierge specialists are reviewing your request.</p>
+                </div>
+              ) : (
+                <>
+                  <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.6em] mb-10 block">Private Concierge</span>
+                  <h3 className="text-3xl font-serif font-bold text-slate-900 mb-8 italic">Define Your Stay</h3>
+                  <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.3em] leading-relaxed mb-12 opacity-80">
+                    Bespoke transfers, unlisted villas, and curated atoll journeys.
+                  </p>
+
+                  <form onSubmit={handleFormSubmit} className="space-y-8">
+                    <div className="border-b border-slate-100 pb-4">
+                      <label className="block text-[8px] font-bold text-slate-300 uppercase tracking-[0.5em] mb-3">Your Identity</label>
+                      <input type="text" placeholder="FULL NAME" required className="w-full bg-transparent text-[10px] font-bold uppercase tracking-widest outline-none placeholder:text-slate-100" />
+                    </div>
+                    <div className="border-b border-slate-100 pb-4">
+                      <label className="block text-[8px] font-bold text-slate-300 uppercase tracking-[0.5em] mb-3">Email Protocol</label>
+                      <input type="email" placeholder="ADDRESS@DOMAIN.COM" required className="w-full bg-transparent text-[10px] font-bold uppercase tracking-widest outline-none placeholder:text-slate-100" />
+                    </div>
+                    <div className="border-b border-slate-100 pb-4">
+                      <label className="block text-[8px] font-bold text-slate-300 uppercase tracking-[0.5em] mb-3">Travel Window</label>
+                      <input type="text" placeholder="E.G. OCTOBER 2024" className="w-full bg-transparent text-[10px] font-bold uppercase tracking-widest outline-none placeholder:text-slate-100" />
+                    </div>
+                    
+                    <button type="submit" className="w-full bg-slate-950 text-white font-bold py-6 rounded-full text-[10px] uppercase tracking-[0.5em] hover:bg-sky-500 transition-all duration-700 shadow-xl">
+                      Consult Specialist
+                    </button>
+                  </form>
+                  
+                  <div className="mt-12 flex items-center justify-center gap-6">
+                    <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></div>
+                    <span className="text-[8px] font-bold text-slate-300 uppercase tracking-[0.5em]">Direct line available 24/7</span>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="mt-12 p-12 bg-sky-50 rounded-[3rem] border border-sky-100 reveal transition-all duration-1000 delay-500">
+               <h4 className="text-[10px] font-bold text-sky-900 uppercase tracking-[0.5em] mb-6 underline underline-offset-8 decoration-sky-200">Regional Mastery</h4>
+               <p className="text-[11px] text-sky-800 font-medium leading-loose uppercase tracking-[0.1em] italic">
+                 "Expect unparalleled visibility for marine excursions in {resort.atoll} during the dry season. We recommend seaplane arrival for the ultimate visual narrative."
+               </p>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      {/* Narrative Transition Footer */}
+      <section className="py-32 bg-white border-t border-slate-50 reveal">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-12">
+          <Link to="/stays" className="group flex items-center gap-8">
+            <div className="w-16 h-16 rounded-full border border-slate-100 flex items-center justify-center group-hover:bg-slate-950 group-hover:border-slate-950 transition-all duration-700">
+              <svg className="w-4 h-4 text-slate-900 group-hover:text-white transition-colors rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-slate-950 group-hover:italic transition-all">Full Portfolio</span>
+          </Link>
+          <p className="text-slate-300 text-[8px] font-bold uppercase tracking-[0.8em]">Defined by Perspective. Serenity Maldives Travels.</p>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default ResortDetail;
