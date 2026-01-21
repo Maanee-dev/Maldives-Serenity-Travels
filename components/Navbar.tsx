@@ -34,10 +34,16 @@ const Navbar: React.FC = () => {
     { name: 'Stories', path: '/stories' },
   ];
 
+  // Logic: When scrolled or menu is open, we want black. Initially (transparent nav), we want white.
+  const isDarkState = scrolled || isOpen;
+  const textColorClass = isDarkState ? 'text-black' : 'text-white';
+  const bgColorClass = isDarkState ? 'bg-black' : 'bg-white';
+  const fillClass = isDarkState ? 'fill-black' : 'fill-white';
+
   return (
     <>
-      {/* Header - Optimized for Mobile & Desktop */}
-      <nav className={`fixed w-full z-[300] transition-all duration-700 ${scrolled || isOpen ? 'glass-nav py-3 md:py-4 border-b border-slate-100' : 'bg-transparent py-6 md:py-10'}`}>
+      {/* Header */}
+      <nav className={`fixed w-full z-[300] transition-all duration-700 ${isDarkState ? 'glass-nav py-3 md:py-4 border-b border-slate-100 shadow-sm' : 'bg-transparent py-6 md:py-10'}`}>
         <div className="max-w-[1440px] mx-auto px-5 md:px-12 flex justify-between items-center relative">
           
           {/* Left: Discover Toggle */}
@@ -48,27 +54,24 @@ const Navbar: React.FC = () => {
               aria-label={isOpen ? "Close menu" : "Open menu"}
             >
               <div className="relative w-6 h-5 flex items-center justify-center">
-                {/* Top Line */}
-                <span className={`absolute block h-[1.5px] bg-slate-900 transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'w-6 rotate-45' : 'w-6 -translate-y-[6px]'}`}></span>
-                {/* Middle Line */}
-                <span className={`absolute block h-[1.5px] bg-slate-900 transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'w-0 opacity-0' : 'w-4 translate-x-[-4px]'}`}></span>
-                {/* Bottom Line */}
-                <span className={`absolute block h-[1.5px] bg-slate-900 transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'w-6 -rotate-45' : 'w-6 translate-y-[6px]'}`}></span>
+                <span className={`absolute block h-[1.5px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-6 rotate-45' : 'w-6 -translate-y-[6px]'}`}></span>
+                <span className={`absolute block h-[1.5px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-0 opacity-0' : 'w-4 translate-x-[-4px]'}`}></span>
+                <span className={`absolute block h-[1.5px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-6 -rotate-45' : 'w-6 translate-y-[6px]'}`}></span>
               </div>
-              <span className={`hidden md:block text-[9px] font-bold uppercase tracking-[0.5em] text-slate-900 transition-all duration-700 delay-100 ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
+              <span className={`hidden md:block text-[9px] font-bold uppercase tracking-[0.5em] transition-all duration-700 delay-100 ${textColorClass} ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
                 Discover
               </span>
             </button>
           </div>
 
-          {/* Center: Custom SVG Logo */}
+          {/* Center: Custom SVG Logo - Updated Fill Logic */}
           <Link to="/" className="flex flex-col items-center group transition-transform duration-500 hover:scale-[1.02]">
             <svg 
               version="1.0" 
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 600 600"
               preserveAspectRatio="xMidYMid meet"
-              className="w-32 h-32 md:w-56 md:h-56 -my-10 md:-my-16 fill-slate-950"
+              className={`w-32 h-32 md:w-56 md:h-56 -my-10 md:-my-16 transition-colors duration-700 ${fillClass}`}
             >
               <g transform="translate(0.000000,600.000000) scale(0.100000,-0.100000)" stroke="none">
                 <path d="M3116 3398 c-10 -14 -16 -44 -16 -81 0 -63 -18 -108 -67 -166 -27 -32 -33 -34 -100 -37 -159 -6 -255 -146 -123 -179 75 -18 277 140 338 266 38 77 59 183 41 205 -17 21 -56 17 -73 -8z"/>
@@ -85,100 +88,42 @@ const Navbar: React.FC = () => {
                 <path d="M4495 2803 c-66 -16 -63 -73 5 -115 51 -32 59 -45 38 -66 -22 -22 -57 -14 -64 13 -8 30 -20 32 -27 4 -10 -37 2 -49 49 -49 103 0 113 80 16 132 -44 23 -44 58 -1 58 22 0 32 -5 36 -20 8 -30 23 -24 23 10 0 19 -5 30 -14 30 -8 0 -20 2 -28 4 -7 2 -22 1 -33 -1z"/>
                 <path d="M1616 2791 c-4 -5 -2 -12 4 -16 14 -9 13 -148 -2 -163 -17 -17 10 -24 77 -19 66 5 68 7 62 44 -4 27 -5 27 -12 6 -6 -19 -15 -23 -46 -23 -37 0 -39 2 -39 30 0 35 23 49 51 32 27 -17 29 -15 29 18 0 29 -13 40 -25 20 -15 -25 -55 -11 -55 20 0 28 2 30 40 30 29 0 40 -4 40 -15 0 -8 5 -15 11 -15 6 0 9 12 7 28 -3 26 -5 27 -70 30 -36 2 -69 -2 -72 -7z"/>
                 <path d="M1820 2790 c0 -5 5 -10 10 -10 6 0 10 -33 10 -79 0 -44 -4 -83 -10 -86 -5 -3 -10 -10 -10 -16 0 -12 57 -12 65 1 3 6 1 10 -4 10 -6 0 -11 18 -11 41 0 33 3 40 16 35 9 -3 19 -6 24 -6 5 0 14 -15 20 -34 14 -42 34 -60 57 -51 16 6 16 8 3 18 -9 7 -25 28 -37 48 -20 36 -20 37 -2 53 25 21 24 51 -3 70 -25 18 -128 22 -128 6z m113 -31 c6 -23 -23 -59 -48 -59 -11 0 -15 11 -15 40 0 37 2 40 29 40 21 0 30 -6 34 -21z"/>
-                <path d="M2036 2792 c-3 -6 1 -15 9 -22 22 -18 20 -127 -1 -152 -23 -24 -2 -32 71 -26 65 5 68 8 62 45 -4 27 -5 27 -12 6 -6 -18 -15 -23 -44 -23 -34 0 -36 2 -36 32 0 35 26 51 48 29 18 -18 27 -12 27 19 0 17 -4 30 -10 30 -5 0 -10 -4 -10 -10 0 -5 -13 -10 -30 -10 -27 0 -30 3 -30 30 0 28 2 30 40 30 29 0 40 -4 40 -15 0 -8 5 -15 11 -15 6 0 9 12 7 28 -3 26 -5 27 -70 30 -36 2 -69 -1 -72 -6z"/>
-                <path d="M2240 2790 c0 -5 5 -10 10 -10 6 0 10 -33 10 -79 0 -44 -4 -83 -10 -86 -20 -12 -9 -25 20 -25 29 0 40 13 20 25 -5 3 -10 38 -10 77 l0 71 58 -83 c78 -114 84 -113 81 1 -1 63 2 94 10 97 23 8 10 22 -20 22 -24 0 -30 -3 -25 -16 11 -29 19 -124 10 -124 -5 0 -29 32 -54 70 -37 57 -50 69 -72 70 -16 0 -28 -4 -28 -10z"/>
-                <path d="M2500 2790 c0 -5 5 -10 10 -10 18 0 12 -149 -7 -168 -16 -16 -15 -17 16 -20 46 -5 72 6 49 19 -25 14 -27 169 -2 169 8 0 12 5 9 10 -3 6 -22 10 -41 10 -19 0 -34 -4 -34 -10z"/>
-                <path d="M2634 2786 c-3 -8 -4 -25 -2 -38 4 -22 5 -22 13 -3 10 23 24 35 43 35 20 0 17 -156 -4 -164 -25 -10 -6 -26 31 -26 36 0 54 14 30 24 -26 10 -21 166 5 166 13 0 24 -10 30 -25 13 -35 20 -31 20 10 l0 35 -80 0 c-61 0 -82 -4 -86 -14z"/>
-                <path d="M2840 2790 c0 -5 4 -10 9 -10 36 0 90 -147 61 -165 -21 -13 -9 -25 25 -25 34 0 46 12 25 25 -28 17 27 165 61 165 5 0 9 5 9 10 0 6 -16 10 -35 10 -19 0 -35 -4 -35 -10 0 -5 5 -10 11 -10 5 0 2 -13 -8 -30 -9 -16 -20 -30 -24 -30 -13 0 -39 49 -33 64 5 13 -1 16 -30 16 -20 0 -36 -4 -36 -10z"/>
-                <path d="M3146 2774 c-10 -38 10 -55 24 -20 7 18 16 26 28 24 24 -5 31 -147 7 -160 -27 -16 -16 -28 25 -28 38 0 52 12 30 25 -5 3 -10 42 -10 86 0 88 12 101 49 52 l21 -28 -2 35 -3 35 -81 3 c-81 3 -82 3 -88 -24z"/>
-                <path d="M3366 2791 c-3 -5 1 -11 9 -15 18 -6 22 -150 5 -161 -5 -3 -10 -10 -10 -16 0 -12 57 -12 65 1 3 6 1 10 -4 10 -6 0 -11 18 -11 41 0 33 3 40 16 35 9 -3 18 -6 20 -6 3 0 13 -20 24 -45 14 -32 25 -45 40 -45 21 0 27 14 10 25 -6 4 -19 24 -30 44 -19 38 -19 39 0 56 45 41 6 85 -74 85 -30 0 -57 -4 -60 -9z m112 -43 c3 -22 -2 -30 -23 -40 -33 -15 -44 -3 -38 40 7 45 56 44 61 0z"/>
-                <path d="M3646 2768 c-7 -18 -21 -54 -30 -81 -10 -26 -27 -54 -39 -62 -23 -16 -18 -27 15 -32 36 -6 53 4 38 22 -20 24 -4 45 35 45 39 0 55 -20 36 -44 -10 -12 -6 -15 18 -21 43 -9 55 2 34 29 -10 12 -29 57 -43 99 -27 84 -44 95 -64 45z m39 -55 c5 -20 3 -23 -19 -23 -24 0 -24 2 -14 31 11 32 21 29 33 -8z"/>
-                <path d="M3800 2791 c0 -5 6 -11 13 -14 7 -3 26 -46 41 -97 35 -116 48 -116 86 -2 15 46 32 88 39 95 18 18 13 27 -19 27 -28 0 -41 -14 -21 -22 11 -4 -26 -128 -38 -128 -15 0 -47 123 -33 128 7 2 10 8 6 13 -7 12 -74 12 -74 0z"/>
-                <path d="M4046 2791 c-3 -5 1 -11 9 -15 18 -6 22 -141 5 -151 -30 -19 -8 -35 48 -35 71 0 85 9 79 46 -4 27 -5 28 -12 7 -6 -18 -15 -23 -41 -23 -32 0 -34 2 -34 35 0 31 3 35 25 35 14 0 25 -4 25 -10 0 -5 5 -10 10 -10 6 0 10 14 10 30 0 17 -4 30 -10 30 -5 0 -10 -4 -10 -10 0 -11 -50 -14 -50 -2 0 4 -3 17 -6 30 -6 20 -3 22 35 22 30 0 41 -4 41 -15 0 -8 5 -15 10 -15 6 0 10 14 10 30 l0 30 -69 0 c-39 0 -72 -4 -75 -9z"/>
-                <path d="M4250 2790 c0 -5 7 -10 15 -10 22 0 22 -155 -1 -164 -33 -13 0 -26 67 -26 l69 0 0 35 c0 40 -11 45 -25 13 -7 -14 -20 -22 -37 -23 l-28 -1 0 83 c0 49 4 83 10 83 6 0 10 5 10 10 0 6 -18 10 -40 10 -22 0 -40 -4 -40 -10z"/>
               </g>
             </svg>
           </Link>
-          
-          {/* Right: Bespoke Inquiry Link */}
-          <div className="flex-1 flex justify-end items-center">
-            <Link to="/plan" className="group relative flex items-center gap-3">
-              <span className={`hidden sm:block text-[9px] font-bold uppercase tracking-[0.4em] text-slate-900 transition-all duration-500 ${isOpen ? 'opacity-0 translate-x-4' : 'opacity-100'}`}>
-                Inquire
-              </span>
-              {/* Mobile Inquiry Icon (Compass/Star style) */}
-              <div className="w-5 h-5 md:hidden flex items-center justify-center">
-                <svg className="w-full h-full text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 21l-8.228-9.96a5 5 0 117.758-6.307 5 5 0 117.758 6.307L12 21z" />
-                </svg>
-              </div>
-              <div className="absolute bottom-[-8px] right-0 w-full h-px bg-slate-900 scale-x-0 group-hover:scale-x-100 transition-transform origin-right duration-500 hidden md:block"></div>
+
+          {/* Right: Plan CTA */}
+          <div className="flex-1 flex justify-end">
+            <Link 
+              to="/plan" 
+              className={`text-[9px] font-bold uppercase tracking-[0.4em] px-8 py-3 rounded-full border transition-all duration-700 ${isDarkState ? 'border-black text-black hover:bg-black hover:text-white' : 'border-white/30 text-white hover:bg-white hover:text-slate-950'}`}
+            >
+              Plan Trip
             </Link>
           </div>
         </div>
       </nav>
 
-      {/* Full-Screen Overlay Navigation */}
-      <div 
-        className={`fixed inset-0 bg-[#FCFAF7] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] z-[250] flex flex-col ${isOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'}`}
-      >
-        {/* Large Decorative Background Watermark */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none overflow-hidden">
-           <h2 className="text-[35vw] font-serif font-bold italic whitespace-nowrap leading-none">Perspective</h2>
-        </div>
-
-        {/* Overlay Content Area */}
-        <div className="relative z-[260] flex-grow overflow-y-auto w-full pt-28 md:pt-48 pb-12 px-6">
-          <div className="max-w-7xl mx-auto flex flex-col min-h-[60vh]">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start">
-              
-              {/* Primary Links */}
-              <div className="lg:col-span-7">
-                <div className="flex flex-col gap-6 md:gap-8">
-                  {navLinks.map((link, idx) => (
-                    <Link 
-                      key={link.name}
-                      to={link.path}
-                      className="group block overflow-hidden w-fit"
-                    >
-                      <span className={`block text-5xl md:text-7xl lg:text-[7.5rem] font-serif font-bold text-slate-900 transition-all duration-1000 group-hover:italic group-hover:text-sky-500 group-hover:translate-x-6 ${isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: `${isOpen ? 200 + (idx * 60) : 0}ms` }}>
-                        {link.name}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
+      {/* Fullscreen Overlay Menu */}
+      <div className={`fixed inset-0 z-[250] bg-white transition-all duration-1000 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+        <div className="h-full flex flex-col justify-center items-center px-6">
+          <div className="space-y-8 md:space-y-12 text-center">
+            {navLinks.map((link, i) => (
+              <div key={link.name} className="overflow-hidden">
+                <Link 
+                  to={link.path}
+                  style={{ transitionDelay: `${200 + i * 100}ms` }}
+                  className={`block text-4xl md:text-8xl font-serif font-bold text-slate-900 italic hover:text-sky-500 transition-all duration-700 transform ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
+                >
+                  {link.name}.
+                </Link>
               </div>
-
-              {/* Secondary Navigation & Contact */}
-              <div className={`lg:col-span-5 lg:pt-16 transition-all duration-1000 delay-500 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 lg:gap-16">
-                  <div>
-                    <h4 className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.5em] mb-8 border-b border-slate-100 pb-2">Experience</h4>
-                    <div className="flex flex-col gap-5 text-[11px] font-bold text-slate-900 uppercase tracking-widest">
-                      <Link to="/stays" className="hover:text-sky-500 transition-colors w-fit">The Portfolio</Link>
-                      <Link to="/offers" className="hover:text-sky-500 transition-colors w-fit">Limited Access</Link>
-                      <Link to="/plan" className="hover:text-sky-500 transition-colors w-fit">Private Concierge</Link>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.5em] mb-8 border-b border-slate-100 pb-2">Studio</h4>
-                    <p className="text-[11px] font-bold text-slate-900 uppercase tracking-widest leading-loose">
-                      Velana Building, 5F<br/>Male, Maldives<br/>
-                      <span className="text-slate-300 mt-2 block">Available 24/7</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
-        </div>
-
-        {/* Footer in Overlay */}
-        <div className={`relative z-[260] w-full max-w-7xl mx-auto px-6 py-10 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 transition-all duration-1000 delay-700 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <p className="text-[9px] font-bold text-slate-300 uppercase tracking-[0.4em]">© 2024 Serenity Boutique Travels</p>
-          <div className="flex gap-10">
-            <a href="#" className="text-[9px] font-bold text-slate-900 uppercase tracking-[0.5em] hover:text-sky-500 transition-colors">Instagram</a>
-            <a href="#" className="text-[9px] font-bold text-slate-900 uppercase tracking-[0.5em] hover:text-sky-500 transition-colors">WhatsApp</a>
+          
+          <div className={`mt-24 md:mt-32 flex gap-12 transition-all duration-1000 delay-500 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <a href="#" className="text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 hover:text-slate-900 transition-colors">Instagram</a>
+            <a href="#" className="text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 hover:text-slate-900 transition-colors">Inquiries</a>
           </div>
         </div>
       </div>
