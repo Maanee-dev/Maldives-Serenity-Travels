@@ -16,7 +16,7 @@ const Home: React.FC = () => {
   const heroSlides = [
     {
       type: 'video',
-      src: 'https://assets.mixkit.co/videos/preview/mixkit-top-view-of-a-luxury-island-resort-in-the-maldives-32551-large.mp4',
+      src: 'https://maldives-serenitytravels.com/assets/videos/Villa Haven - Cinematic Video - 3840 x 2160.mp4',
       title: 'Defined by',
       titleAlt: 'Perspective',
       subtitle: 'VOL. 01 — THE ARCHIPELAGO'
