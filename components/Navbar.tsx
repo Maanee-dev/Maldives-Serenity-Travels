@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
     { name: 'Stories', path: '/stories' },
   ];
 
-  // Logic: When scrolled or menu is open, we want black. Initially (transparent nav), we want white.
+  // Logic: When scrolled or menu is open, use black. Initially (transparent nav), use white.
   const isDarkState = scrolled || isOpen;
   const textColorClass = isDarkState ? 'text-black' : 'text-white';
   const bgColorClass = isDarkState ? 'bg-black' : 'bg-white';
@@ -50,21 +50,21 @@ const Navbar: React.FC = () => {
           <div className="flex-1 flex items-center">
             <button 
               onClick={toggleMenu}
-              className="group flex items-center gap-2 md:gap-6 focus:outline-none"
+              className="group flex items-center gap-2 md:gap-5 focus:outline-none"
               aria-label={isOpen ? "Close menu" : "Open menu"}
             >
               <div className="relative w-6 h-5 flex items-center justify-center">
-                <span className={`absolute block h-[1.5px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-6 rotate-45' : 'w-6 -translate-y-[6px]'}`}></span>
-                <span className={`absolute block h-[1.5px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-0 opacity-0' : 'w-4 translate-x-[-4px]'}`}></span>
-                <span className={`absolute block h-[1.5px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-6 -rotate-45' : 'w-6 translate-y-[6px]'}`}></span>
+                <span className={`absolute block h-[1.2px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-6 rotate-45' : 'w-6 -translate-y-[5px]'}`}></span>
+                <span className={`absolute block h-[1.2px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-0 opacity-0' : 'w-4 translate-x-[-4px]'}`}></span>
+                <span className={`absolute block h-[1.2px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-6 -rotate-45' : 'w-6 translate-y-[5px]'}`}></span>
               </div>
-              <span className={`hidden md:block text-[9px] font-bold uppercase tracking-[0.5em] transition-all duration-700 delay-100 ${textColorClass} ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
+              <span className={`hidden md:block text-[9px] font-bold uppercase tracking-[0.5em] transition-all duration-700 ${textColorClass} ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
                 Discover
               </span>
             </button>
           </div>
 
-          {/* Center: Brand Identity Logo (Updated SVG) */}
+          {/* Center: Brand Identity Logo */}
           <Link to="/" className="flex flex-col items-center group transition-transform duration-500 hover:scale-[1.02]">
             <svg 
               version="1.0" 
@@ -96,9 +96,7 @@ const Navbar: React.FC = () => {
                 <path d="M3146 2774 c-10 -38 10 -55 24 -20 7 18 16 26 28 24 24 -5 31 -147 7 -160 -27 -16 -16 -28 25 -28 38 0 52 12 30 25 -5 3 -10 42 -10 86 0 88 12 101 49 52 l21 -28 -2 35 -3 35 -81 3 c-81 3 -82 3 -88 -24z"/>
                 <path d="M3366 2791 c-3 -5 1 -11 9 -15 18 -6 22 -150 5 -161 -5 -3 -10 -10 -10 -16 0 -12 57 -12 65 1 3 6 1 10 -4 10 -6 0 -11 18 -11 41 0 33 3 40 16 35 9 -3 19 -6 20 -6 3 0 13 -20 24 -45 14 -32 25 -45 40 -45 21 0 27 14 10 25 -6 4 -19 24 -30 44 -19 38 -19 39 0 56 45 41 6 85 -74 85 -30 0 -57 -4 -60 -9z m112 -43 c3 -22 -2 -30 -23 -40 -33 -15 -44 -3 -38 40 7 45 56 44 61 0z"/>
                 <path d="M3646 2768 c-7 -18 -21 -54 -30 -81 -10 -26 -27 -54 -39 -62 -23 -16 -18 -27 15 -32 36 -6 53 4 38 22 -20 24 -4 45 35 45 39 0 55 -20 36 -44 -10 -12 -6 -15 18 -21 43 -9 55 2 34 29 -10 12 -29 57 -43 99 -27 84 -44 95 -64 45z m39 -55 c5 -20 3 -23 -19 -23 -24 0 -24 2 -14 31 11 32 21 29 33 -8z"/>
-                <path d="M3800 2791 c0 -5 6 -11 13 -14 7 -3 26 -46 41 -97 35 -116 48 -116 86 -2 15 46 32 88 39 95 18 18 13 27 -19 27 -28 0 -41 -14 -21 -22 11 -4 -26 -128 -38 -128 -15 0 -47 123 -33 128 7 2 10 8 6 13 -7 12 -74 12 -74 0z"/>
-                <path d="M4046 2791 c-3 -5 1 -11 9 -15 18 -6 22 -141 5 -151 -30 -19 -8 -35 48 -35 71 0 85 9 79 46 -4 27 -5 28 -12 7 -6 -18 -15 -23 -41 -23 -32 0 -34 2 -34 35 0 31 3 35 25 35 14 0 25 -4 25 -10 0 -5 5 -10 10 -10 6 0 10 14 10 30 0 17 -4 30 -10 30 -5 0 -10 -4 -10 -10 0 -11 -50 -14 -50 -2 0 4 -3 17 -6 30 -6 20 -3 22 35 22 30 0 41 -4 41 -15 0 -8 5 -15 10 -15 6 0 10 14 10 30 l0 30 -69 0 c-39 0 -72 -4 -75 -9z"/>
-                <path d="M4250 2790 c0 -5 7 -10 15 -10 22 0 22 -155 -1 -164 -33 -13 0 -26 67 -26 l69 0 0 35 c0 40 -11 45 -25 13 -7 -14 -20 -22 -37 -23 l-28 -1 0 83 c0 49 4 83 10 83 6 0 10 5 10 10 0 6 -18 10 -40 10 -22 0 -40 -4 -40 -10z"/>
+                <path d="M3800 2791 c0 -5 6 -11 13 -14 7 -3 26 -46 41 -97 35 -116 48 -116 86 -2 15 46 32 88 39 95 18 18 13 27 -19 27 -28 0 -41 -14 -21 -22 11 -4 -26 -128 -38 -128 -15 0 -47 123 -33 128 7 2" />
               </g>
             </svg>
           </Link>
@@ -107,7 +105,7 @@ const Navbar: React.FC = () => {
           <div className="flex-1 flex justify-end">
             <Link 
               to="/plan" 
-              className={`text-[9px] font-bold uppercase tracking-[0.4em] px-8 py-3 rounded-full border transition-all duration-700 ${isDarkState ? 'border-black text-black hover:bg-black hover:text-white' : 'border-white/30 text-white hover:bg-white hover:text-slate-950'}`}
+              className={`inline-flex items-center justify-center text-[10px] font-bold uppercase tracking-[0.22em] px-8 py-2.5 rounded-full border border-[1.2px] whitespace-nowrap transition-all duration-700 ${isDarkState ? 'border-black text-black hover:bg-black hover:text-white' : 'border-white/30 text-white hover:bg-white hover:text-slate-950 shadow-sm'}`}
             >
               Plan Trip
             </Link>
