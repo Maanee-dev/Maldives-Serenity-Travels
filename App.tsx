@@ -8,9 +8,9 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed casing for imports to match lowercase filenames and resolve casing conflict errors (lines 13 and 14)
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Updated casing for imports to match PascalCase filenames and resolve casing conflict errors
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
