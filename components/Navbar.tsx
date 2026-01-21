@@ -34,44 +34,44 @@ const Navbar: React.FC = () => {
     { name: 'Stories', path: '/stories' },
   ];
 
-  // Logic: When scrolled or menu is open, use black. Initially (transparent nav), use white.
   const isDarkState = scrolled || isOpen;
-  const textColorClass = isDarkState ? 'text-black' : 'text-white';
-  const bgColorClass = isDarkState ? 'bg-black' : 'bg-white';
-  const fillClass = isDarkState ? 'fill-black' : 'fill-white';
+  const textColorClass = isDarkState ? 'text-slate-900' : 'text-white';
+  const bgColorClass = isDarkState ? 'bg-slate-900' : 'bg-white';
+  const fillClass = isDarkState ? 'fill-slate-900' : 'fill-white';
+  const strokeClass = isDarkState ? 'stroke-slate-900' : 'stroke-white';
 
   return (
     <>
       {/* Header */}
-      <nav className={`fixed w-full z-[300] transition-all duration-700 ${isDarkState ? 'glass-nav py-3 md:py-4 border-b border-slate-100 shadow-sm' : 'bg-transparent py-6 md:py-10'}`}>
-        <div className="max-w-[1440px] mx-auto px-5 md:px-12 flex justify-between items-center relative">
+      <nav className={`fixed w-full z-[300] transition-all duration-1000 ${isDarkState ? 'glass-nav py-4 border-b border-slate-100/50 shadow-sm' : 'bg-transparent py-8 md:py-12'}`}>
+        <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex justify-between items-center relative">
           
           {/* Left: Discover Toggle */}
           <div className="flex-1 flex items-center">
             <button 
               onClick={toggleMenu}
-              className="group flex items-center gap-2 md:gap-5 focus:outline-none"
+              className="group flex items-center gap-4 focus:outline-none"
               aria-label={isOpen ? "Close menu" : "Open menu"}
             >
               <div className="relative w-6 h-5 flex items-center justify-center">
-                <span className={`absolute block h-[1.2px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-6 rotate-45' : 'w-6 -translate-y-[5px]'}`}></span>
-                <span className={`absolute block h-[1.2px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-0 opacity-0' : 'w-4 translate-x-[-4px]'}`}></span>
-                <span className={`absolute block h-[1.2px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-6 -rotate-45' : 'w-6 translate-y-[5px]'}`}></span>
+                <span className={`absolute block h-[1px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-6 rotate-45' : 'w-6 -translate-y-[5px]'}`}></span>
+                <span className={`absolute block h-[1px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-0 opacity-0' : 'w-4 translate-x-[-4px]'}`}></span>
+                <span className={`absolute block h-[1px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-6 -rotate-45' : 'w-6 translate-y-[5px]'}`}></span>
               </div>
-              <span className={`hidden md:block text-[9px] font-bold uppercase tracking-[0.5em] transition-all duration-700 ${textColorClass} ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
+              <span className={`hidden lg:block text-[9px] font-bold uppercase tracking-[0.6em] transition-all duration-700 ${textColorClass} ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
                 Discover
               </span>
             </button>
           </div>
 
-          {/* Center: Brand Identity Logo */}
-          <Link to="/" className="flex flex-col items-center group transition-transform duration-500 hover:scale-[1.02]">
+          {/* Center: Brand Identity Logo (Calibrated for full visibility) */}
+          <Link to="/" className="flex flex-col items-center group transition-transform duration-500 hover:scale-[1.02] relative z-10">
             <svg 
               version="1.0" 
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 600 600"
               preserveAspectRatio="xMidYMid meet"
-              className={`w-32 h-32 md:w-56 md:h-56 -my-10 md:-my-16 transition-all duration-700 ${fillClass}`}
+              className={`w-36 h-36 md:w-64 md:h-64 -my-14 md:-my-24 transition-all duration-1000 ${fillClass}`}
             >
               <g transform="translate(0.000000,600.000000) scale(0.100000,-0.100000)" stroke="none">
                 <path d="M3116 3398 c-10 -14 -16 -44 -16 -81 0 -63 -18 -108 -67 -166 -27 -32 -33 -34 -100 -37 -159 -6 -255 -146 -123 -179 75 -18 277 140 338 266 38 77 59 183 41 205 -17 21 -56 17 -73 -8z"/>
@@ -86,7 +86,7 @@ const Navbar: React.FC = () => {
                 <path d="M4146 3018 c-43 -60 17 -123 68 -72 29 29 6 94 -34 94 -10 0 -26 -10 -34 -22z"/>
                 <path d="M1475 2802 c-76 -15 -61 -77 30 -128 41 -23 27 -64 -22 -64 -16 0 -25 8 -29 25 -8 30 -20 32 -27 4 -10 -37 2 -49 49 -49 103 0 113 80 16 132 -20 11 -32 25 -32 38 0 29 52 28 73 -2 l16 -23 0 31 c1 33 -24 45 -74 36z"/>
                 <path d="M4495 2803 c-66 -16 -63 -73 5 -115 51 -32 59 -45 38 -66 -22 -22 -57 -14 -64 13 -8 30 -20 32 -27 4 -10 -37 2 -49 49 -49 103 0 113 80 16 132 -44 23 -44 58 -1 58 22 0 32 -5 36 -20 8 -30 23 -24 23 10 0 19 -5 30 -14 30 -8 0 -20 2 -28 4 -7 2 -22 1 -33 -1z"/>
-                <path d="M1616 2791 c-4 -5 -2 -12 4 -16 14 -9 13 -148 -2 -163 -17 -17 10 -24 77 -19 66 5 68 7 62 44 -4 27 -5 27 -12 6 -6 -19 -15 -23 -46 -23 -37 0 -39 2 -39 30 0 35 23 49 51 32 27 -17 29 -15 29 18 0 29 -13 40 -25 20 -15 -25 -55 -11 -55 20 0 28 2 30 40 30 29 0 40 -4 40 -15 0 -8 5 -15 11 -15 6 0 9 12 7 28 -3 26 -5 27 -70 30 -36 2 -69 -2 -72 -7z"/>
+                <path d="M1616 2791 c-4 -5 -2 -12 4 -16 14 -9 13 -148 -2 -163 -17 -17 10 -24 77 -19 66 5 68 7 62 44 -4 27 -5 27 -12 6 -6 -18 -15 -23 -46 -23 -37 0 -39 2 -39 30 0 35 23 49 51 32 27 -17 29 -15 29 18 0 29 -13 40 -25 20 -15 -25 -55 -11 -55 20 0 28 2 30 40 30 29 0 40 -4 40 -15 0 -8 5 -15 11 -15 6 0 9 12 7 28 -3 26 -5 27 -70 30 -36 2 -69 -2 -72 -7z"/>
                 <path d="M1820 2790 c0 -5 5 -10 10 -10 6 0 10 -33 10 -79 0 -44 -4 -83 -10 -86 -5 -3 -10 -10 -10 -16 0 -12 57 -12 65 1 3 6 1 10 -4 10 -6 0 -11 18 -11 41 0 33 3 40 16 35 9 -3 19 -6 24 -6 5 0 14 -15 20 -34 14 -42 34 -60 57 -51 16 6 16 8 3 18 -9 7 -25 28 -37 48 -20 36 -20 37 -2 53 25 21 24 51 -3 70 -25 18 -128 22 -128 6z m113 -31 c6 -23 -23 -59 -48 -59 -11 0 -15 11 -15 40 0 37 2 40 29 40 21 0 30 -6 34 -21z"/>
                 <path d="M2036 2792 c-3 -6 1 -15 9 -22 22 -18 20 -127 -1 -152 -23 -24 -2 -32 71 -26 65 5 68 8 62 45 -4 27 -5 27 -12 6 -6 -18 -15 -23 -44 -23 -34 0 -36 2 -36 32 0 35 26 51 48 29 18 -18 27 -12 27 19 0 17 -4 30 -10 30 -5 0 -10 -4 -10 -10 0 -5 -13 -10 -30 -10 -27 0 -30 3 -30 30 0 28 2 30 40 30 29 0 40 -4 40 -15 0 -8 5 -15 11 -15 6 0 9 12 7 28 -3 26 -5 27 -70 30 -36 2 -69 -1 -72 -6z"/>
                 <path d="M2240 2790 c0 -5 5 -10 10 -10 6 0 10 -33 10 -79 0 -44 -4 -83 -10 -86 -20 -12 -9 -25 20 -25 29 0 40 13 20 25 -5 3 -10 38 -10 77 l0 71 58 -83 c78 -114 84 -113 81 1 -1 63 2 94 10 97 23 8 10 22 -20 22 -24 0 -30 -3 -25 -16 11 -29 19 -124 10 -124 -5 0 -29 32 -54 70 -37 57 -50 69 -72 70 -16 0 -28 -4 -28 -10z"/>
@@ -96,18 +96,44 @@ const Navbar: React.FC = () => {
                 <path d="M3146 2774 c-10 -38 10 -55 24 -20 7 18 16 26 28 24 24 -5 31 -147 7 -160 -27 -16 -16 -28 25 -28 38 0 52 12 30 25 -5 3 -10 42 -10 86 0 88 12 101 49 52 l21 -28 -2 35 -3 35 -81 3 c-81 3 -82 3 -88 -24z"/>
                 <path d="M3366 2791 c-3 -5 1 -11 9 -15 18 -6 22 -150 5 -161 -5 -3 -10 -10 -10 -16 0 -12 57 -12 65 1 3 6 1 10 -4 10 -6 0 -11 18 -11 41 0 33 3 40 16 35 9 -3 19 -6 20 -6 3 0 13 -20 24 -45 14 -32 25 -45 40 -45 21 0 27 14 10 25 -6 4 -19 24 -30 44 -19 38 -19 39 0 56 45 41 6 85 -74 85 -30 0 -57 -4 -60 -9z m112 -43 c3 -22 -2 -30 -23 -40 -33 -15 -44 -3 -38 40 7 45 56 44 61 0z"/>
                 <path d="M3646 2768 c-7 -18 -21 -54 -30 -81 -10 -26 -27 -54 -39 -62 -23 -16 -18 -27 15 -32 36 -6 53 4 38 22 -20 24 -4 45 35 45 39 0 55 -20 36 -44 -10 -12 -6 -15 18 -21 43 -9 55 2 34 29 -10 12 -29 57 -43 99 -27 84 -44 95 -64 45z m39 -55 c5 -20 3 -23 -19 -23 -24 0 -24 2 -14 31 11 32 21 29 33 -8z"/>
-                <path d="M3800 2791 c0 -5 6 -11 13 -14 7 -3 26 -46 41 -97 35 -116 48 -116 86 -2 15 46 32 88 39 95 18 18 13 27 -19 27 -28 0 -41 -14 -21 -22 11 -4 -26 -128 -38 -128 -15 0 -47 123 -33 128 7 2" />
+                <path d="M3800 2791 c0 -5 6 -11 13 -14 7 -3 26 -46 41 -97 35 -116 48 -116 86 -2 15 46 32 88 39 95 18 18 13 27 -19 27 -28 0 -41 -14 -21 -22 11 -4 -26 -128 -38 -128 -15 0 -47 123 -33 128 7 2 10 8 6 13 -7 12 -74 12 -74 0z"/>
+                <path d="M4046 2791 c-3 -5 1 -11 9 -15 18 -6 22 -141 5 -151 -30 -19 -8 -35 48 -35 71 0 85 9 79 46 -4 27 -5 28 -12 7 -6 -18 -15 -23 -41 -23 -32 0 -34 2 -34 35 0 31 3 35 25 35 14 0 25 -4 25 -10 0 -5 5 -10 10 -10 6 0 10 14 10 30 0 17 -4 30 -10 30 -5 0 -10 -4 -10 -10 0 -11 -50 -14 -50 -2 0 4 -3 17 -6 30 -6 20 -3 22 35 22 30 0 41 -4 41 -15 0 -8 5 -15 10 -15 6 0 10 14 10 30 l0 30 -69 0 c-39 0 -72 -4 -75 -9z"/>
+                <path d="M4250 2790 c0 -5 7 -10 15 -10 22 0 22 -155 -1 -164 -33 -13 0 -26 67 -26 l69 0 0 35 c0 40 -11 45 -25 13 -7 -14 -20 -22 -37 -23 l-28 -1 0 83 c0 49 4 83 10 83 6 0 10 5 10 10 0 6 -18 10 -40 10 -22 0 -40 -4 -40 -10z"/>
               </g>
             </svg>
           </Link>
 
-          {/* Right: Plan CTA */}
+          {/* Right: Unique Minimalist Plan CTA (Updated: Borderless, Icon for Mobile) */}
           <div className="flex-1 flex justify-end">
             <Link 
               to="/plan" 
-              className={`inline-flex items-center justify-center text-[10px] font-bold uppercase tracking-[0.22em] px-8 py-2.5 rounded-full border border-[1.2px] whitespace-nowrap transition-all duration-700 ${isDarkState ? 'border-black text-black hover:bg-black hover:text-white' : 'border-white/30 text-white hover:bg-white hover:text-slate-950 shadow-sm'}`}
+              className={`group relative flex items-center justify-center transition-all duration-700 ${textColorClass}`}
             >
-              Plan Trip
+              {/* Desktop View: Shifting text with arrow reveal */}
+              <div className="hidden md:flex items-center overflow-hidden">
+                <span className="text-[10px] font-bold uppercase tracking-[0.4em] transition-all duration-500 group-hover:-translate-x-3">
+                  Plan Trip
+                </span>
+                <span className="absolute right-0 opacity-0 translate-x-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-0 font-serif italic text-lg leading-none lowercase">
+                  &rarr;
+                </span>
+              </div>
+
+              {/* Mobile View: Minimalist Icon */}
+              <div className="md:hidden p-2 group-active:scale-90 transition-transform">
+                <svg 
+                  className={`w-6 h-6 ${strokeClass}`} 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="1.2" />
+                  <path d="M3 10H21" strokeWidth="1.2" />
+                  <path d="M8 2V6" strokeWidth="1.2" />
+                  <path d="M16 2V6" strokeWidth="1.2" />
+                  <circle cx="12" cy="15" r="1.5" className={fillClass} stroke="none" />
+                </svg>
+              </div>
             </Link>
           </div>
         </div>

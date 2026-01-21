@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -8,7 +9,8 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix casing conflicts by matching the filenames already in the program
+// Fix casing conflicts by matching the filenames with lowercase to resolve TypeScript duplicate file errors
+// as the program already includes 'offers.tsx' and 'experiences.tsx' as root files.
 import Offers from './pages/offers';
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
