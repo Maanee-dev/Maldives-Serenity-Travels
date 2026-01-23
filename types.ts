@@ -82,4 +82,5 @@ export interface BlogPost {
   image: string;
   date: string;
   author: string;
+  category: 'Dispatch' | 'Guide';
 }

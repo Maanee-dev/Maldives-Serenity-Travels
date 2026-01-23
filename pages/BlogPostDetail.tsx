@@ -75,6 +75,9 @@ const BlogPostDetail: React.FC = () => {
          <div className="absolute inset-0 bg-black/30"></div>
          <div className="absolute bottom-0 left-0 right-0 p-8 md:p-20 max-w-7xl mx-auto">
             <Link to="/stories" className="text-white/80 font-bold text-xs uppercase tracking-widest mb-4 inline-block hover:text-white transition-colors">← Journal</Link>
+            <div className="flex items-center gap-4 mb-6">
+               <span className="bg-sky-500 text-white px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest">{post.category}</span>
+            </div>
             <h1 className="text-4xl md:text-6xl font-serif font-bold text-white leading-tight drop-shadow-2xl">{post.title}</h1>
          </div>
       </div>
@@ -99,12 +102,31 @@ const BlogPostDetail: React.FC = () => {
              <p>{post.content}</p>
              <p>The Maldives is more than just luxury; it's a feeling of weightlessness. Whether you're flying in a seaplane or taking a slow local ferry, the views remain iconic. Planning your trip requires attention to detail—especially when it comes to transfers and weather windows.</p>
              
-             <h3 className="text-3xl font-serif font-bold text-slate-900 mt-12 mb-6">Key Insights for Your Trip</h3>
-             <ul className="list-disc pl-6 space-y-4">
-                <li>Best visibility for diving is between January and April.</li>
-                <li>Seaplanes only operate during daylight hours.</li>
-                <li>Local islands offer high-quality diving at a fraction of resort prices.</li>
-             </ul>
+             {post.category === 'Guide' && (
+               <div className="bg-slate-50 p-12 rounded-[3rem] border border-slate-100 my-16">
+                  <h3 className="text-3xl font-serif font-bold text-slate-900 mb-8 italic">Key Perspectives for Planning</h3>
+                  <ul className="space-y-6">
+                     <li className="flex items-start gap-4">
+                        <div className="w-6 h-6 rounded-full bg-sky-100 flex items-center justify-center flex-shrink-0 mt-1">
+                           <div className="w-1.5 h-1.5 bg-sky-500 rounded-full"></div>
+                        </div>
+                        <p className="text-slate-600 font-medium">Best visibility for diving is between January and April.</p>
+                     </li>
+                     <li className="flex items-start gap-4">
+                        <div className="w-6 h-6 rounded-full bg-sky-100 flex items-center justify-center flex-shrink-0 mt-1">
+                           <div className="w-1.5 h-1.5 bg-sky-500 rounded-full"></div>
+                        </div>
+                        <p className="text-slate-600 font-medium">Seaplanes only operate during daylight hours; plan your arrival accordingly.</p>
+                     </li>
+                     <li className="flex items-start gap-4">
+                        <div className="w-6 h-6 rounded-full bg-sky-100 flex items-center justify-center flex-shrink-0 mt-1">
+                           <div className="w-1.5 h-1.5 bg-sky-500 rounded-full"></div>
+                        </div>
+                        <p className="text-slate-600 font-medium">Sustainable choices, like reef-safe sunscreen, are essential for preservation.</p>
+                     </li>
+                  </ul>
+               </div>
+             )}
 
              <div className="bg-sky-50 p-10 rounded-[2rem] border border-sky-100 my-16">
                 <h4 className="text-2xl font-serif font-bold text-sky-900 mb-4">Want to experience this yourself?</h4>

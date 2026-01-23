@@ -123,113 +123,80 @@ export const EXPERIENCES: Experience[] = [
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: 'atoll-guide-2026',
+    title: 'The Ultimate Atoll Selection Guide',
+    slug: 'maldives-atoll-selection-guide',
+    excerpt: 'Not all islands are created equal. Discover which atoll suits your personal perspective of paradise.',
+    content: 'Choosing the right atoll is the most critical decision in planning your Maldivian escape. From the UNESCO Biosphere of Baa Atoll to the whale shark corridors of South Ari, each region offers a distinct ecological and luxury signature. In this guide, we break down the geography of the archipelago to help you find your sanctuary.',
+    image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-23',
+    author: 'Travel Intelligence',
+    category: 'Guide'
+  },
+  {
+    id: 'seaplane-logistics-2026',
+    title: 'Navigating the Blue: Seaplane & Transfer Logistics',
+    slug: 'maldives-seaplane-transfer-logistics',
+    excerpt: 'Everything you need to know about the most scenic (and complex) part of your journey.',
+    content: 'The seaplane transfer is an iconic Maldivian experience, but it requires careful coordination with your international arrival. Operating only during daylight hours, these flights offer bird\'s-eye views of the atolls that are unrivaled. This guide covers baggage limits, timing, and what to expect at the VIP terminals.',
+    image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-23',
+    author: 'Logistics Desk',
+    category: 'Guide'
+  },
+  {
+    id: 'sustainable-packing-2026',
+    title: 'Sustainable Luxury: A Packing List for the Atolls',
+    slug: 'maldives-sustainable-luxury-packing-list',
+    excerpt: 'Leave only bubbles. Pack with the ocean in mind without sacrificing elegance.',
+    content: 'Packing for the Maldives is an exercise in "Barefoot Luxury." We recommend lightweight linens, reef-safe sunscreens, and reusable essentials. With many resorts aiming for zero-plastic, your choices as a traveler can support the preservation of this delicate ecosystem.',
+    image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-22',
+    author: 'Aesthetic Living',
+    category: 'Guide'
+  },
+  {
+    id: 'cinnamon-flash-sale-2026',
+    title: 'Cinnamon Hotels & Resorts Maldives Announces 80% Savings Flash Sale',
+    slug: 'cinnamon-hotels-maldives-flash-sale-march-2026',
+    excerpt: 'A limited-time offer inviting travellers to experience the Maldives in March with unprecedented savings across four luxury resorts.',
+    content: 'Cinnamon Hotels & Resorts Maldives has announced a limited-time flash offer inviting travellers to experience the Maldives in March, one of the destination’s most favourable months, with savings of up to 80 per cent when booking direct. The promotion is available across all four Cinnamon resorts in the Maldives and combines discounted rates with added benefits for the ultimate spring escape.',
+    image: 'https://hoteliermaldives.com/wp-content/uploads/2026/01/2-1-scaled.jpg',
+    date: '2026-01-22',
+    author: 'Hotelier News Desk',
+    category: 'Dispatch'
+  },
+  {
     id: 'fitur-2026-showcase',
     title: 'Visit Maldives Showcases at FITUR 2026 in Madrid',
     slug: 'visit-maldives-showcase-fitur-2026-madrid',
     excerpt: 'The archipelago takes center stage at the first major travel exhibition of the year, fostering global industry engagement.',
-    content: 'Visit Maldives Corporation (VMC) is showcasing the Maldives at FITUR 2026 in Madrid, Spain. As one of the world’s leading tourism fairs, FITUR provides a key platform for networking and industry growth, attracting more than 50,000 visitors.',
-    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200',
+    content: 'Visit Maldives Corporation (VMC) is showcasing the Maldives at the first travel exhibition of the year, FITUR 2026, held from 21 January to 25 January, in Madrid, Spain. Recognized globally as one of the world’s leading tourism fairs, FITUR provides a key platform for networking, industry engagement and business development, attracting more than 50,000 visitors annually.',
+    image: 'https://visitmaldives.s3.amazonaws.com/KYyv2kqR/c/1kh8cyhe-square_md.jpg',
     date: '2026-01-21',
-    author: 'Editorial Desk'
-  },
-  {
-    id: 'ifuru-island-top-100',
-    title: 'Ifuru Island Recognized in TOP 100 Hotels of 2025',
-    slug: 'ifuru-island-maldives-top-100-hotels-2025',
-    excerpt: 'An extraordinary achievement earning recognition among the worlds best by the Luxury Lifestyle Awards for the second year.',
-    content: 'Ifuru Island Maldives celebrates earning recognition among the TOP 100 Hotels & Resorts of the World 2025. This milestone journey of excellence highlights the resorts commitment to unparalleled service and guest satisfaction.',
-    image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
-    date: '2026-01-21',
-    author: 'Luxury Insider'
+    author: 'Editorial Desk',
+    category: 'Dispatch'
   },
   {
     id: 'ritz-carlton-masters-2026',
-    title: 'Masters of Crafts 2026: Artistry at The Ritz-Carlton Fari Islands',
+    title: 'The Ritz-Carlton Maldives, Fari Islands Announces Masters of Crafts Residencies',
     slug: 'ritz-carlton-maldives-masters-of-crafts-2026',
-    excerpt: 'Unveiling a year-long celebration of artistry and innovation featuring Michelin-starred chefs and world-renowned artisans.',
-    content: 'The Ritz-Carlton Maldives, Fari Islands unveils its highly anticipated Masters of Crafts program for 2026. This year-long celebration brings global artistry and innovative culinary perspectives to the Maldives.',
-    image: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&q=80&w=1200',
+    excerpt: 'A year-long celebration of artistry and innovation featuring Michelin-starred chefs and world-renowned artisans at Fari Islands.',
+    content: 'The Ritz-Carlton Maldives, Fari Islands unveils its highly anticipated Masters of Crafts program for 2026 in an inspired year-long celebration of artistry and innovation. From Michelin masters to innovative artisans, the residency program promises an unparalleled cultural exchange in a setting defined by architectural brilliance and natural beauty.',
+    image: 'https://visitmaldives.s3.amazonaws.com/rY4G3JwB/c/k0j8fm8u-square_md.jpg',
     date: '2026-01-21',
-    author: 'Arts & Culture'
-  },
-  {
-    id: 'siyam-world-football-legends',
-    title: 'Football Legends Torres and Noble Lead Kids’ Camp at Siyam World',
-    slug: 'fernando-torres-mark-noble-siyam-world-football',
-    excerpt: 'Unforgettable football masterclasses transformed the festive holidays into shared dreams for young guests.',
-    content: 'Siyam World Maldives set the stage for two unforgettable football experiences as Fernando Torres and Mark Noble hosted kids’ football camps. The organic and carefully planned event offered young travelers a unique sporting holiday.',
-    image: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&q=80&w=1200',
-    date: '2026-01-21',
-    author: 'Sporting Travels'
-  },
-  {
-    id: 'lily-beach-michelin-chef',
-    title: 'Lily Beach Welcomes Michelin Chef Bruno Ménard for Valentine’s',
-    slug: 'lily-beach-resort-chef-bruno-menard-valentines',
-    excerpt: 'Asia’s most respected culinary icons bring an exclusive Valentine’s Day gastronomic celebration to the islands.',
-    content: 'Lily Beach Resort & Spa is set to host world-renowned French chef Bruno Ménard. The exclusive Valentine’s Day culinary celebration promises a three-Michelin-star experience under the Maldivian stars.',
-    image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1200',
-    date: '2026-01-21',
-    author: 'Culinary Pulse'
-  },
-  {
-    id: 'alila-kothaifaru-wine-dinner',
-    title: 'Alila Kothaifaru Hosts Wine Dinner on Private Sandbank',
-    slug: 'alila-kothaifaru-mastroberardino-wine-dinner-sandbank',
-    excerpt: 'Inviting epicureans to an extraordinary evening of fine wine and gastronomy on a secluded strip of white sand.',
-    content: 'Alila Kothaifaru Maldives invites discerning wine connoisseurs to an exclusive Mastroberardino Wine Dinner. The event takes place on a private sandbank, combining elite vintages with the serenity of the atoll.',
-    image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200',
-    date: '2026-01-21',
-    author: 'Gourmet Gazette'
-  },
-  {
-    id: 'across-maldives-2026-diving',
-    title: 'Across Maldives 2026: An Ambitious Underwater Record Attempt',
-    slug: 'visit-maldives-shafraz-naeem-diving-record-2026',
-    excerpt: 'Maldivian diver Shafraz Naeem sets out to cross the archipelago underwater in an unprecedented expedition.',
-    content: 'Visit Maldives Corporation (VMC) has announced "Across Maldives 2026," an ambitious underwater record attempt by Maldivian diver Shafraz Naeem. Starting January 23, the expedition aims to showcase the archipelago’s maritime heritage.',
-    image: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&fit=crop&q=80&w=1200',
-    date: '2026-01-20',
-    author: 'Ocean Affairs'
-  },
-  {
-    id: 'tripadvisor-best-of-best-2026',
-    title: 'Maldives Outshines Global Giants in TripAdvisor Best Rankings',
-    slug: 'maldives-tripadvisor-best-of-best-2026-rankings',
-    excerpt: 'Cementing its status as a premier global destination, securing prestigious spots in the Travelers’ Choice awards.',
-    content: 'Maldives has once again outshone global giants in TripAdvisor’s elite "Best of the Best" rankings for 2026. The awards highlight the destination’s unrivaled commitment to hospitality and natural preservation.',
-    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200',
-    date: '2026-01-20',
-    author: 'Travel Trends'
-  },
-  {
-    id: 'cinnamon-hotels-flash-sale',
-    title: 'Cinnamon Hotels & Resorts Announces 80% Savings Flash Sale',
-    slug: 'cinnamon-hotels-maldives-march-flash-sale-80-percent',
-    excerpt: 'A limited-time offer inviting travelers to experience the Maldives in March with unprecedented savings.',
-    content: 'Cinnamon Hotels & Resorts Maldives has announced a flash sale with savings of up to 80 per cent for March bookings. The promotion is available across all four Cinnamon properties in the Maldives.',
-    image: 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=1200',
-    date: '2026-01-22',
-    author: 'Travel Finance'
+    author: 'Luxury Insider',
+    category: 'Dispatch'
   },
   {
     id: 'ambani-merchant-arrival',
     title: 'Island Royalty: Anant Ambani & Radhika Merchant Arrive in Maldives',
     slug: 'anant-ambani-radhika-merchant-maldives-holiday',
     excerpt: 'High-profile guests arrive in the archipelago for a secluded luxury holiday following world-renowned celebrations.',
-    content: 'High-profile guests Anant Ambani and Radhika Merchant have arrived in the Maldives for a private holiday. Their presence underscores the Maldives as the destination of choice for the worlds most discerning travelers.',
-    image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=1200',
+    content: 'High-profile guests Anant Ambani and Radhika Merchant have arrived in the Maldives for a private holiday. Their presence underscores the Maldives as the destination of choice for the world\'s most discerning travellers seeking ultimate seclusion and luxury.',
+    image: 'https://hoteliermaldives.com/wp-content/uploads/2026/01/Untitled-2000-x-900-px-51.png',
     date: '2026-01-20',
-    author: 'Social Dispatch'
-  },
-  {
-    id: 'tourist-arrivals-rise-2026',
-    title: 'The Rising Tide: Tourist Arrivals Rise 10% in Early 2026',
-    slug: 'maldives-tourist-arrivals-growth-2026',
-    excerpt: 'The Maldives sees a significant surge in international visitors as the sunny side of life remains a top choice.',
-    content: 'Tourist arrivals to the Maldives have risen by 10% in the first weeks of 2026. The growth reflects the destination’s enduring appeal and the successful marketing efforts of MMPRC.',
-    image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
-    date: '2026-01-19',
-    author: 'Market Watch'
+    author: 'Social Dispatch',
+    category: 'Dispatch'
   }
 ];
