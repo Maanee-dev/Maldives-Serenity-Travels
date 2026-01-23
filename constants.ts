@@ -115,9 +115,65 @@ export const EXPERIENCES: Experience[] = [
   {
     id: 'whale-shark-dive',
     title: 'Whale Shark Quest',
-    description: 'Swim alongside the gentle giants of the ocean in the South Ari Atoll.',
-    image: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&fit=crop&q=80&w=800',
+    description: 'Swim alongside the gentle giants of the ocean in the South Ari Atoll corridor.',
+    image: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&fit=crop&q=80&w=1200',
     category: 'Adventure'
+  },
+  {
+    id: 'sandbank-soirée',
+    title: 'The Sandbank Soirée',
+    description: 'A disappearing sanctuary where custom culinary artistry meets absolute oceanic isolation.',
+    image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200',
+    category: 'Culinary'
+  },
+  {
+    id: 'dhoni-stargazing',
+    title: 'Heritage Stargazing',
+    description: 'Navigate the night sky as ancient voyagers did, aboard a traditional handcrafted Dhoni.',
+    image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=1200',
+    category: 'Culture'
+  },
+  {
+    id: 'coral-propagation',
+    title: 'The Coral Ark',
+    description: 'Engage in the art of restoration. Plant your legacy within the atolls under expert marine guidance.',
+    image: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?auto=format&fit=crop&q=80&w=1200',
+    category: 'Adventure'
+  },
+  {
+    id: 'manta-ballet',
+    title: 'Manta Ray Ballet',
+    description: 'Witness the rhythmic dance of the ocean’s most graceful giants in the UNESCO Biosphere.',
+    image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
+    category: 'Water Sports'
+  },
+  {
+    id: 'subaquatic-vinology',
+    title: 'Subaquatic Vinology',
+    description: 'A curated tasting of rare vintages in an glass-walled cellar beneath the Indian Ocean.',
+    image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1200',
+    category: 'Culinary'
+  },
+  {
+    id: 'floating-yoga',
+    title: 'Equilibrium Rituals',
+    description: 'Find stillness on a floating pavilion, guided by masters of the Ayurvedic arts.',
+    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=1200',
+    category: 'Wellness'
+  },
+  {
+    id: 'island-bivouac',
+    title: 'The Private Bivouac',
+    description: 'An overnight glamping residency on a completely uninhabited atoll under the Milky Way.',
+    image: 'https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&q=80&w=1200',
+    category: 'Adventure'
+  },
+  {
+    id: 'artisanal-residency',
+    title: 'The Artisanal Path',
+    description: 'Learn the craft of traditional mat weaving and lacquer work from local village elders.',
+    image: 'https://images.unsplash.com/photo-1582213706367-175f73d8ba63?auto=format&fit=crop&q=80&w=1200',
+    category: 'Culture'
   }
 ];
 

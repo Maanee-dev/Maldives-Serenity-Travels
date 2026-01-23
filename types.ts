@@ -70,7 +70,7 @@ export interface Experience {
   title: string;
   description: string;
   image: string;
-  category: 'Water Sports' | 'Relaxation' | 'Adventure';
+  category: 'Water Sports' | 'Relaxation' | 'Adventure' | 'Wellness' | 'Culture' | 'Culinary';
 }
 
 export interface BlogPost {
