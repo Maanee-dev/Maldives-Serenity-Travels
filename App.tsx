@@ -1,17 +1,16 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTopButton from './components/ScrollToTopButton';
 
-// Pages - Casing matched to local filenames
+// Pages
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix casing conflicts by matching the filenames with lowercase to resolve TypeScript duplicate file errors
-// as the program already includes 'offers.tsx' and 'experiences.tsx' as root files.
+// Fix: Use lowercase import to resolve casing conflict with existing 'pages/offers.tsx'
 import Offers from './pages/offers';
+// Fix: Use lowercase import to resolve casing conflict with existing 'pages/experiences.tsx'
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';

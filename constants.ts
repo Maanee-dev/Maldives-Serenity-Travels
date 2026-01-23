@@ -1,106 +1,42 @@
 import { Accommodation, AccommodationType, TransferType, MealPlan, Offer, Experience, BlogPost } from './types';
 
-// Helper to generate 6 dummy room types with dynamic resort naming
+// Helper to generate room types
 const generateDummyRooms = (resortName: string) => [
   {
     name: 'Beach Sunrise Villa',
-    description: `Wake up to the gentle sounds of the Indian Ocean in this secluded beachfront haven at ${resortName}. Designed with natural textures and open-air spaces.`,
+    description: `Wake up to the gentle sounds of the Indian Ocean in this secluded beachfront haven at ${resortName}.`,
     highlights: ['Direct beach access', 'Private plunge pool', 'Outdoor rain shower'],
     image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800',
     size: '150 sqm',
     capacity: '2 Adults'
   },
   {
-    name: 'Sunset Water Villa with Pool',
-    description: 'Perched over the turquoise lagoon, offering unobstructed views of the horizon as the sun dips below the waves. Features a glass floor panel in the living area.',
+    name: 'Sunset Water Villa',
+    description: 'Perched over the turquoise lagoon, offering unobstructed views of the horizon.',
     highlights: ['Infinity pool', 'Glass floor panel', 'Sunset views'],
     image: 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800',
     size: '185 sqm',
-    capacity: '2 Adults + 1 Child'
+    capacity: '2 Adults'
   },
   {
-    name: 'Two-Bedroom Family Pavilion',
-    description: 'A spacious retreat designed for families, featuring interconnected spaces and a shared private garden with a large family pool.',
+    name: 'Family Pavilion',
+    description: 'A spacious retreat designed for families, featuring interconnected spaces.',
     highlights: ['Family-sized pool', 'Butler service', 'Kids amenity kit'],
     image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800',
     size: '320 sqm',
     capacity: '4 Adults + 2 Children'
-  },
-  {
-    name: 'Ocean Residence with Water Slide',
-    description: 'The ultimate playground for adults and children alike, featuring a signature slide into the crystal lagoon from the second floor.',
-    highlights: ['Private water slide', 'Retractable roof', 'Sunken lounge'],
-    image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800',
-    size: '450 sqm',
-    capacity: '2 Adults + 2 Children'
-  },
-  {
-    name: 'Island Sanctuary Reserve',
-    description: 'Hidden deep within the island jungle, this villa offers maximum privacy and an authentic natural experience with a private beach strip.',
-    highlights: ['Private jungle garden', 'Dedicated villa host', 'Sustainable design'],
-    image: 'https://images.unsplash.com/photo-1506953064870-15873d93f893?auto=format&fit=crop&q=80&w=800',
-    size: '500 sqm',
-    capacity: '6 Adults'
-  },
-  {
-    name: 'Royal Panoramic Suite',
-    description: 'Commanding 360-degree views of the atoll, this suite is the pinnacle of luxury and architectural brilliance with a private gym and spa room.',
-    highlights: ['Rooftop terrace', 'Personal gym', 'Chef’s kitchen'],
-    image: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&q=80&w=800',
-    size: '750 sqm',
-    capacity: '4 Adults'
   }
 ];
 
-// Helper to generate 6 dummy dining venues with dynamic resort naming
+// Helper to generate dining venues
 const generateDummyDining = (resortName: string) => [
   {
     name: 'Azure Waters',
-    cuisine: 'Modern Mediterranean',
-    description: 'Al fresco dining with the freshest seafood caught daily from the surrounding reefs, paired with fine Mediterranean wines.',
-    highlights: ['Ocean-to-table', 'Sunset views', 'Catch of the day'],
+    cuisine: 'Mediterranean',
+    description: 'Al fresco dining with the freshest seafood caught daily.',
+    highlights: ['Ocean-to-table', 'Sunset views'],
     image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800',
     vibe: 'Beachfront Chic'
-  },
-  {
-    name: 'Spice Route',
-    cuisine: 'Authentic Thai & Indian',
-    description: 'A sensory journey through the ancient spice routes, featuring aromatic curries and clay-oven specialties in an exotic setting.',
-    highlights: ['Tandoor station', 'Wok-fired favorites', 'Vegetarian focus'],
-    image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=800',
-    vibe: 'Exotic Elegance'
-  },
-  {
-    name: 'The Sandbank Grill',
-    cuisine: 'Steakhouse & BBQ',
-    description: 'Barefoot luxury at its finest. Enjoy premium cuts of meat and grilled delights on a private sandbank under the stars.',
-    highlights: ['Customizable BBQ', 'Toes-in-sand', 'Private dining available'],
-    image: 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&q=80&w=800',
-    vibe: 'Romantic Castaway'
-  },
-  {
-    name: 'Indigo Lounge',
-    cuisine: 'Tapas & Cocktails',
-    description: 'The social heartbeat of the resort. Sip on artisanal cocktails while the DJ spins ambient beats against the sunset.',
-    highlights: ['Molecular mixology', 'Gourmet snacks', 'Late-night vibes'],
-    image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800',
-    vibe: 'Vibrant Social'
-  },
-  {
-    name: 'Under the Canopy',
-    cuisine: 'Organic & Farm-to-Table',
-    description: 'Nestled in the island’s vegetable gardens, serving nutritious meals prepared with zero-waste principles and fresh harvest.',
-    highlights: ['Hydroponic produce', 'Vegan options', 'Natural wines'],
-    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800',
-    vibe: 'Sustainable Serenity'
-  },
-  {
-    name: 'Crystallin',
-    cuisine: 'Japanese Teppanyaki',
-    description: 'Watch our master chefs showcase their skills on the teppan grill in an intimate overwater setting with premium ingredients.',
-    highlights: ['A5 Wagyu', 'Chef’s table', 'Sake pairing'],
-    image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800',
-    vibe: 'Theatrical Fine Dining'
   }
 ];
 
@@ -160,60 +96,6 @@ export const RESORTS: Accommodation[] = [
     uvp: 'Iconic circular architecture and access to the vibrant Fari Marina beach club.',
     roomTypes: generateDummyRooms('The Ritz-Carlton Maldives'),
     diningVenues: generateDummyDining('The Ritz-Carlton Maldives')
-  },
-  {
-    id: 'anantara-kihavah',
-    name: 'Anantara Kihavah Maldives Villas',
-    slug: 'anantara-kihavah-maldives-villas',
-    type: AccommodationType.RESORT,
-    atoll: 'Baa Atoll',
-    priceRange: '$$$$',
-    rating: 5,
-    shortDescription: 'Home to the iconic underwater restaurant and sky observatory.',
-    description: 'Voted the most Instagrammable resort in the world, Kihavah offers the ultimate luxury escape in the UNESCO Biosphere Baa Atoll.',
-    images: ['https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1200'],
-    features: ['Underwater Dining', 'Overwater Observatory', 'Glass Bottom Tubs'],
-    transfers: [TransferType.SEAPLANE],
-    mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
-    uvp: 'Dine five meters below the sea or stargaze from the only overwater observatory in the Maldives.',
-    roomTypes: generateDummyRooms('Anantara Kihavah'),
-    diningVenues: generateDummyDining('Anantara Kihavah')
-  },
-  {
-    id: 'anantara-dhigu',
-    name: 'Anantara Dhigu Maldives Resort',
-    slug: 'anantara-dhigu-maldives-resort',
-    type: AccommodationType.RESORT,
-    atoll: 'South Male Atoll',
-    priceRange: '$$$',
-    rating: 5,
-    shortDescription: 'Family-friendly luxury in a shallow turquoise lagoon.',
-    description: 'Anantara Dhigu offers an idyllic island escape for families and couples, with a wide range of water sports and spa treatments.',
-    images: ['https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200'],
-    features: ['Kids Club', 'Overwater Spa', 'Surf School'],
-    transfers: [TransferType.SPEEDBOAT],
-    mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
-    uvp: 'The ultimate family playground with a dedicated surf school and overwater spa.',
-    roomTypes: generateDummyRooms('Anantara Dhigu'),
-    diningVenues: generateDummyDining('Anantara Dhigu')
-  },
-  {
-    id: 'kaani-grand-maafushi',
-    name: 'Kaani Grand Seaview',
-    slug: 'kaani-grand-seaview-maafushi-guest-house',
-    type: AccommodationType.GUEST_HOUSE,
-    atoll: 'South Male Atoll',
-    priceRange: '$',
-    rating: 4,
-    shortDescription: 'Premier beachside guest house in the heart of Maafushi local island.',
-    description: 'Experience the real Maldives. Kaani Grand Seaview offers premium accommodation directly facing the bikini beach of Maafushi.',
-    images: ['https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200'],
-    features: ['Bikini Beach Access', 'Rooftop Dining', 'Daily Excursions'],
-    transfers: [TransferType.SPEEDBOAT],
-    mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
-    uvp: 'The most popular high-end stay on Maafushi local island with resort-style amenities.',
-    roomTypes: generateDummyRooms('Kaani Grand'),
-    diningVenues: generateDummyDining('Kaani Grand')
   }
 ];
 
@@ -226,24 +108,6 @@ export const OFFERS: Offer[] = [
     expiryDate: '2024-08-31',
     image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800',
     category: 'Early Bird'
-  },
-  {
-    id: 'honeymoon-perks',
-    title: 'Honeymoon Dreams Bundle',
-    discount: 'COMPLIMENTARY DINNER',
-    resortName: 'One&Only Reethi Rah',
-    expiryDate: '2024-12-31',
-    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800',
-    category: 'Honeymoon'
-  },
-  {
-    id: 'last-minute-luxury',
-    title: 'Last Minute Overwater Bliss',
-    discount: '40% OFF',
-    resortName: 'Adaaran Prestige Vadoo',
-    expiryDate: '2024-07-15',
-    image: 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800',
-    category: 'Last Minute'
   }
 ];
 
@@ -251,45 +115,121 @@ export const EXPERIENCES: Experience[] = [
   {
     id: 'whale-shark-dive',
     title: 'Whale Shark Quest',
-    description: 'Swim alongside the gentle giants of the ocean in the South Ari Atoll marine protected area.',
+    description: 'Swim alongside the gentle giants of the ocean in the South Ari Atoll.',
     image: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&fit=crop&q=80&w=800',
     category: 'Adventure'
-  },
-  {
-    id: 'sandbank-picnic',
-    title: 'Private Sandbank Picnic',
-    description: 'A castaway experience on a deserted strip of white sand, surrounded only by turquoise waters.',
-    image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800',
-    category: 'Relaxation'
-  },
-  {
-    id: 'underwater-dining',
-    title: 'Gourmet Underwater Dining',
-    description: 'Dine 5 meters below the surface with 360-degree views of the coral reef.',
-    image: 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&q=80&w=800',
-    category: 'Relaxation'
   }
 ];
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-    id: 'guide-to-transfers',
-    title: 'The Ultimate Guide to Maldives Transfers',
-    slug: 'maldives-transfer-guide-seaplane-speedboat',
-    excerpt: 'Everything you need to know about getting from Velana International Airport to your island paradise.',
-    content: 'Navigating the Maldives archipelago requires a mix of seaplanes, speedboats, and domestic flights. Seaplanes offer the most iconic views but only fly during daylight hours...',
-    image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800',
-    date: '2024-05-15',
-    author: 'Ahmed Naseem'
+    id: 'fitur-2026-showcase',
+    title: 'Visit Maldives Showcases at FITUR 2026 in Madrid',
+    slug: 'visit-maldives-showcase-fitur-2026-madrid',
+    excerpt: 'The archipelago takes center stage at the first major travel exhibition of the year, fostering global industry engagement.',
+    content: 'Visit Maldives Corporation (VMC) is showcasing the Maldives at FITUR 2026 in Madrid, Spain. As one of the world’s leading tourism fairs, FITUR provides a key platform for networking and industry growth, attracting more than 50,000 visitors.',
+    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-21',
+    author: 'Editorial Desk'
   },
   {
-    id: 'resort-vs-guesthouse',
-    title: 'Resort vs. Guest House: Which is right for you?',
-    slug: 'maldives-resort-vs-guesthouse-comparison',
-    excerpt: 'Comparing the ultra-luxury private island experience with the authentic charm of local island stays.',
-    content: 'While resorts offer total seclusion and luxury, guest houses on islands like Maafushi allow you to experience the local culture and save significantly on your budget...',
-    image: 'https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=800',
-    date: '2024-06-02',
-    author: 'Sarah Jenkins'
+    id: 'ifuru-island-top-100',
+    title: 'Ifuru Island Recognized in TOP 100 Hotels of 2025',
+    slug: 'ifuru-island-maldives-top-100-hotels-2025',
+    excerpt: 'An extraordinary achievement earning recognition among the worlds best by the Luxury Lifestyle Awards for the second year.',
+    content: 'Ifuru Island Maldives celebrates earning recognition among the TOP 100 Hotels & Resorts of the World 2025. This milestone journey of excellence highlights the resorts commitment to unparalleled service and guest satisfaction.',
+    image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-21',
+    author: 'Luxury Insider'
+  },
+  {
+    id: 'ritz-carlton-masters-2026',
+    title: 'Masters of Crafts 2026: Artistry at The Ritz-Carlton Fari Islands',
+    slug: 'ritz-carlton-maldives-masters-of-crafts-2026',
+    excerpt: 'Unveiling a year-long celebration of artistry and innovation featuring Michelin-starred chefs and world-renowned artisans.',
+    content: 'The Ritz-Carlton Maldives, Fari Islands unveils its highly anticipated Masters of Crafts program for 2026. This year-long celebration brings global artistry and innovative culinary perspectives to the Maldives.',
+    image: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-21',
+    author: 'Arts & Culture'
+  },
+  {
+    id: 'siyam-world-football-legends',
+    title: 'Football Legends Torres and Noble Lead Kids’ Camp at Siyam World',
+    slug: 'fernando-torres-mark-noble-siyam-world-football',
+    excerpt: 'Unforgettable football masterclasses transformed the festive holidays into shared dreams for young guests.',
+    content: 'Siyam World Maldives set the stage for two unforgettable football experiences as Fernando Torres and Mark Noble hosted kids’ football camps. The organic and carefully planned event offered young travelers a unique sporting holiday.',
+    image: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-21',
+    author: 'Sporting Travels'
+  },
+  {
+    id: 'lily-beach-michelin-chef',
+    title: 'Lily Beach Welcomes Michelin Chef Bruno Ménard for Valentine’s',
+    slug: 'lily-beach-resort-chef-bruno-menard-valentines',
+    excerpt: 'Asia’s most respected culinary icons bring an exclusive Valentine’s Day gastronomic celebration to the islands.',
+    content: 'Lily Beach Resort & Spa is set to host world-renowned French chef Bruno Ménard. The exclusive Valentine’s Day culinary celebration promises a three-Michelin-star experience under the Maldivian stars.',
+    image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-21',
+    author: 'Culinary Pulse'
+  },
+  {
+    id: 'alila-kothaifaru-wine-dinner',
+    title: 'Alila Kothaifaru Hosts Wine Dinner on Private Sandbank',
+    slug: 'alila-kothaifaru-mastroberardino-wine-dinner-sandbank',
+    excerpt: 'Inviting epicureans to an extraordinary evening of fine wine and gastronomy on a secluded strip of white sand.',
+    content: 'Alila Kothaifaru Maldives invites discerning wine connoisseurs to an exclusive Mastroberardino Wine Dinner. The event takes place on a private sandbank, combining elite vintages with the serenity of the atoll.',
+    image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-21',
+    author: 'Gourmet Gazette'
+  },
+  {
+    id: 'across-maldives-2026-diving',
+    title: 'Across Maldives 2026: An Ambitious Underwater Record Attempt',
+    slug: 'visit-maldives-shafraz-naeem-diving-record-2026',
+    excerpt: 'Maldivian diver Shafraz Naeem sets out to cross the archipelago underwater in an unprecedented expedition.',
+    content: 'Visit Maldives Corporation (VMC) has announced "Across Maldives 2026," an ambitious underwater record attempt by Maldivian diver Shafraz Naeem. Starting January 23, the expedition aims to showcase the archipelago’s maritime heritage.',
+    image: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-20',
+    author: 'Ocean Affairs'
+  },
+  {
+    id: 'tripadvisor-best-of-best-2026',
+    title: 'Maldives Outshines Global Giants in TripAdvisor Best Rankings',
+    slug: 'maldives-tripadvisor-best-of-best-2026-rankings',
+    excerpt: 'Cementing its status as a premier global destination, securing prestigious spots in the Travelers’ Choice awards.',
+    content: 'Maldives has once again outshone global giants in TripAdvisor’s elite "Best of the Best" rankings for 2026. The awards highlight the destination’s unrivaled commitment to hospitality and natural preservation.',
+    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-20',
+    author: 'Travel Trends'
+  },
+  {
+    id: 'cinnamon-hotels-flash-sale',
+    title: 'Cinnamon Hotels & Resorts Announces 80% Savings Flash Sale',
+    slug: 'cinnamon-hotels-maldives-march-flash-sale-80-percent',
+    excerpt: 'A limited-time offer inviting travelers to experience the Maldives in March with unprecedented savings.',
+    content: 'Cinnamon Hotels & Resorts Maldives has announced a flash sale with savings of up to 80 per cent for March bookings. The promotion is available across all four Cinnamon properties in the Maldives.',
+    image: 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-22',
+    author: 'Travel Finance'
+  },
+  {
+    id: 'ambani-merchant-arrival',
+    title: 'Island Royalty: Anant Ambani & Radhika Merchant Arrive in Maldives',
+    slug: 'anant-ambani-radhika-merchant-maldives-holiday',
+    excerpt: 'High-profile guests arrive in the archipelago for a secluded luxury holiday following world-renowned celebrations.',
+    content: 'High-profile guests Anant Ambani and Radhika Merchant have arrived in the Maldives for a private holiday. Their presence underscores the Maldives as the destination of choice for the worlds most discerning travelers.',
+    image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-20',
+    author: 'Social Dispatch'
+  },
+  {
+    id: 'tourist-arrivals-rise-2026',
+    title: 'The Rising Tide: Tourist Arrivals Rise 10% in Early 2026',
+    slug: 'maldives-tourist-arrivals-growth-2026',
+    excerpt: 'The Maldives sees a significant surge in international visitors as the sunny side of life remains a top choice.',
+    content: 'Tourist arrivals to the Maldives have risen by 10% in the first weeks of 2026. The growth reflects the destination’s enduring appeal and the successful marketing efforts of MMPRC.',
+    image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-01-19',
+    author: 'Market Watch'
   }
 ];
