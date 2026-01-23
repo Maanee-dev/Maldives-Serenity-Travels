@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -8,10 +9,10 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed casing: Using lowercase to match the actual file name 'offers.tsx' and resolve casing collision
-import Offers from './pages/offers';
-// Fixed casing: Using lowercase to match the actual file name 'experiences.tsx' and resolve casing collision
-import Experiences from './pages/experiences';
+// Updated to use PascalCase to match the canonical component file names 'Offers.tsx'
+import Offers from './pages/Offers';
+// Updated to use PascalCase to match the canonical component file names 'Experiences.tsx'
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

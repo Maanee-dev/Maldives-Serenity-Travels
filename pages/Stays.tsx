@@ -23,7 +23,7 @@ const Stays: React.FC = () => {
     if (q) setFilterQuery(q);
   }, [location.search]);
 
-  // SEO and Meta Management - Ensuring "The Dream" is sold via search visibility
+  // SEO and Meta Management
   useEffect(() => {
     const title = stayType === AccommodationType.RESORT 
       ? 'Ultra-Luxury Resorts | Maldives Serenity Stays' 
@@ -39,12 +39,12 @@ const Stays: React.FC = () => {
     metaDesc.setAttribute('content', `Discover the most ${stayType === AccommodationType.RESORT ? 'exclusive private island resorts' : 'authentic local island stays'} in the Maldives. Curated for the discerning traveler.`);
   }, [stayType]);
 
-  // Reset page to 1 whenever any filter or stay type changes to prevent empty page states
+  // Reset page to 1 whenever any filter or stay type changes
   useEffect(() => {
     setCurrentPage(1);
   }, [filterQuery, stayType, selectedAtoll, selectedTransfer]);
 
-  // Smooth entry animations for new results
+  // Smooth entry animations
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -83,8 +83,8 @@ const Stays: React.FC = () => {
   }, [filteredStays, currentPage]);
 
   const handlePageChange = (page: number) => {
+    if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
-    // Smooth scroll to results area for better UX
     const element = document.getElementById('results-anchor');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -95,8 +95,8 @@ const Stays: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen">
-      {/* Editorial Header - Atmospheric & Minimal */}
-      <section className="pt-56 pb-40 px-6 text-center reveal">
+      {/* Editorial Header */}
+      <section className="pt-56 pb-24 md:pb-40 px-6 text-center reveal">
         <div className="max-w-7xl mx-auto">
           <span className="text-[10px] uppercase tracking-[1em] font-bold mb-10 block text-sky-500">The Portfolio</span>
           <h1 className="text-6xl md:text-9xl font-serif font-bold mb-12 text-slate-900 tracking-tighter italic leading-none">
@@ -109,31 +109,51 @@ const Stays: React.FC = () => {
         </div>
       </section>
 
-      {/* Results Anchor for smooth navigation pagination scroll */}
+      {/* Search & Results Anchor */}
       <div id="results-anchor" className="scroll-mt-32"></div>
+      
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-24 reveal">
+        <div className="relative group max-w-4xl mx-auto">
+          <span className="absolute left-0 top-0 text-[8px] font-bold uppercase tracking-[0.8em] text-slate-300 group-focus-within:text-sky-500 transition-colors">
+            Search Sanctuaries
+          </span>
+          <input 
+            type="text"
+            value={filterQuery}
+            onChange={(e) => setFilterQuery(e.target.value)}
+            placeholder="PROPERTY OR REGION..."
+            className="w-full bg-transparent border-b border-slate-200 pt-10 pb-6 text-xl md:text-3xl font-serif italic text-slate-900 outline-none transition-all focus:border-slate-950 placeholder:text-slate-100"
+          />
+          <div className="absolute right-0 bottom-6 opacity-20 group-hover:opacity-100 transition-opacity">
+            <svg className="w-6 h-6 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
 
-      {/* Boutique Filters & Results Grid */}
+      {/* Boutique Filters & Grid */}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 pb-48">
         <div className="flex flex-col gap-24">
           
-          {/* Refined Filter Bar */}
+          {/* Filter Bar */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-12 border-b border-slate-100 pb-16 reveal">
             <div className="flex gap-4 p-1.5 bg-slate-100/30 backdrop-blur-sm rounded-full border border-slate-200/50">
               <button 
                 onClick={() => setStayType(AccommodationType.RESORT)}
-                className={`px-10 py-3 rounded-full text-[9px] font-bold transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.RESORT ? 'bg-white text-slate-900 shadow-xl' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`px-6 md:px-10 py-3 rounded-full text-[9px] font-bold transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.RESORT ? 'bg-white text-slate-900 shadow-xl' : 'text-slate-400 hover:text-slate-600'}`}
               >
                 Resorts
               </button>
               <button 
                 onClick={() => setStayType(AccommodationType.GUEST_HOUSE)}
-                className={`px-10 py-3 rounded-full text-[9px] font-bold transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.GUEST_HOUSE ? 'bg-white text-slate-900 shadow-xl' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`px-6 md:px-10 py-3 rounded-full text-[9px] font-bold transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.GUEST_HOUSE ? 'bg-white text-slate-900 shadow-xl' : 'text-slate-400 hover:text-slate-600'}`}
               >
                 Local Islands
               </button>
             </div>
 
-            <div className="flex flex-wrap justify-center md:justify-end gap-16 items-center">
+            <div className="flex flex-wrap justify-center md:justify-end gap-10 md:gap-16 items-center">
               <div className="flex items-center gap-6">
                 <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Region</span>
                 <select 
@@ -159,8 +179,8 @@ const Stays: React.FC = () => {
             </div>
           </div>
 
-          {/* Luxury Listing Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16 min-h-[600px]">
+          {/* Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16 min-h-[400px]">
             {currentStays.length > 0 ? (
               currentStays.map((stay, idx) => (
                 <div key={stay.id} className="reveal" style={{ transitionDelay: `${idx * 50}ms` }}>
@@ -175,21 +195,22 @@ const Stays: React.FC = () => {
             )}
           </div>
 
-          {/* Minimalist Pagination Controls */}
+          {/* Mobile-Responsive Pagination */}
           {totalPages > 1 && (
             <div className="mt-12 flex flex-col items-center gap-10 reveal border-t border-slate-100 pt-16">
-              <div className="flex items-center gap-10 md:gap-16">
+              <div className="flex items-center justify-between w-full max-w-sm md:max-w-none md:gap-16">
+                {/* Previous Button */}
                 <button 
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`flex items-center gap-4 text-[9px] font-bold uppercase tracking-[0.4em] transition-all duration-500 ${currentPage === 1 ? 'opacity-0 pointer-events-none' : 'text-slate-950 hover:text-sky-500'}`}
-                  aria-label="Previous Page"
+                  className={`flex items-center gap-4 text-[9px] font-bold uppercase tracking-[0.4em] transition-all duration-500 ${currentPage === 1 ? 'opacity-20 cursor-not-allowed' : 'text-slate-950 hover:text-sky-500'}`}
                 >
                   <span className="text-lg">←</span>
                   <span className="hidden sm:inline">Previous</span>
                 </button>
 
-                <div className="flex items-center gap-4 md:gap-6">
+                {/* Desktop Numeric Indicators */}
+                <div className="hidden md:flex items-center gap-4 md:gap-6">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <button
                       key={page}
@@ -201,19 +222,26 @@ const Stays: React.FC = () => {
                   ))}
                 </div>
 
+                {/* Mobile Page Tracker */}
+                <div className="md:hidden flex flex-col items-center">
+                  <span className="text-[10px] font-bold text-slate-950 uppercase tracking-widest">
+                    {currentPage} / {totalPages}
+                  </span>
+                </div>
+
+                {/* Next Button */}
                 <button 
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`flex items-center gap-4 text-[9px] font-bold uppercase tracking-[0.4em] transition-all duration-500 ${currentPage === totalPages ? 'opacity-0 pointer-events-none' : 'text-slate-950 hover:text-sky-500'}`}
-                  aria-label="Next Page"
+                  className={`flex items-center gap-4 text-[9px] font-bold uppercase tracking-[0.4em] transition-all duration-500 ${currentPage === totalPages ? 'opacity-20 cursor-not-allowed' : 'text-slate-950 hover:text-sky-500'}`}
                 >
                   <span className="hidden sm:inline">Next</span>
                   <span className="text-lg">→</span>
                 </button>
               </div>
 
-              <div className="text-[8px] font-bold text-slate-300 uppercase tracking-[0.6em]">
-                Page {currentPage} of {totalPages} — Curating {filteredStays.length} Options
+              <div className="text-[8px] font-bold text-slate-300 uppercase tracking-[0.6em] text-center">
+                Refining {filteredStays.length} Options — Exploring {stayType.replace('_', ' ')}
               </div>
             </div>
           )}

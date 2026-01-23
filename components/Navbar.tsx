@@ -34,7 +34,11 @@ const Navbar: React.FC = () => {
     { name: 'Stories', path: '/stories' },
   ];
 
-  const isDarkState = scrolled || isOpen;
+  // Logic: Navbar should be "dark mode" (white text) ONLY on Home page at the top.
+  // On all other pages or when scrolled, it should be "light mode" (dark text/glass).
+  const isHomePage = location.pathname === '/';
+  const isDarkState = (scrolled || isOpen || !isHomePage);
+  
   const textColorClass = isDarkState ? 'text-slate-900' : 'text-white';
   const bgColorClass = isDarkState ? 'bg-slate-900' : 'bg-white';
   const fillClass = isDarkState ? 'fill-slate-900' : 'fill-white';
@@ -64,7 +68,7 @@ const Navbar: React.FC = () => {
             </button>
           </div>
 
-          {/* Center: Brand Identity Logo (Calibrated for full visibility) */}
+          {/* Center: Brand Identity Logo */}
           <Link to="/" className="flex flex-col items-center group transition-transform duration-500 hover:scale-[1.02] relative z-10">
             <svg 
               version="1.0" 
@@ -103,13 +107,12 @@ const Navbar: React.FC = () => {
             </svg>
           </Link>
 
-          {/* Right: Unique Minimalist Plan CTA (Updated: Borderless, Icon for Mobile) */}
+          {/* Right: Plan CTA */}
           <div className="flex-1 flex justify-end">
             <Link 
               to="/plan" 
               className={`group relative flex items-center justify-center transition-all duration-700 ${textColorClass}`}
             >
-              {/* Desktop View: Shifting text with arrow reveal */}
               <div className="hidden md:flex items-center overflow-hidden">
                 <span className="text-[10px] font-bold uppercase tracking-[0.4em] transition-all duration-500 group-hover:-translate-x-3">
                   Plan Trip
@@ -119,7 +122,6 @@ const Navbar: React.FC = () => {
                 </span>
               </div>
 
-              {/* Mobile View: Minimalist Icon */}
               <div className="md:hidden p-2 group-active:scale-90 transition-transform">
                 <svg 
                   className={`w-6 h-6 ${strokeClass}`} 
