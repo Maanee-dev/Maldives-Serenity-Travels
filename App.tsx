@@ -9,10 +9,10 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Use lowercase imports to match the lowercase filenames and avoid casing collision errors in the build environment
-import Offers from './pages/offers';
-// Fix: Use lowercase imports to match the lowercase filenames and avoid casing collision errors in the build environment
-import Experiences from './pages/experiences';
+// Correcting casing to match PascalCase filenames and avoid casing collision errors in the build environment
+import Offers from './pages/Offers';
+// Correcting casing to match PascalCase filenames and avoid casing collision errors in the build environment
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

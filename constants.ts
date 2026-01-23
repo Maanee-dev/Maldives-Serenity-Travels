@@ -32,7 +32,6 @@ const generateDummyDining = (resortName: string) => [
   }
 ];
 
-// Raw data for the massive expansion
 const RAW_RESORTS = [
   { name: 'Adaaran Prestige Vadoo', atoll: 'South Male Atoll' },
   { name: 'Adaaran Prestige Water Villas', atoll: 'Raa Atoll' },
@@ -251,6 +250,17 @@ export const EXPERIENCES: Experience[] = [
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: 'dispatch-luxury-2026',
+    title: 'The New Era of Maldivian Ultra-Luxury',
+    slug: 'the-new-era-of-maldivian-luxury',
+    excerpt: 'How the archipelago is redefining high-end hospitality through sustainable architecture and private atoll concepts.',
+    content: 'The Maldives has always been a beacon for luxury seekers, but the latest wave of resort openings in Noonu and Raa Atolls is pushing boundaries. Beyond overwater villas, we are seeing the rise of "Total Privacy" concepts where entire islands are dedicated to a single guest party...',
+    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=90&w=1200',
+    date: '2026-02-15',
+    author: 'Elena Vance',
+    category: 'Dispatch'
+  },
+  {
     id: 'atoll-guide-2026',
     title: 'The Ultimate Atoll Selection Guide',
     slug: 'maldives-atoll-selection-guide',
@@ -260,6 +270,17 @@ export const BLOG_POSTS: BlogPost[] = [
     date: '2026-01-23',
     author: 'Travel Intelligence',
     category: 'Guide'
+  },
+  {
+    id: 'dispatch-culture-2026',
+    title: 'Restoring Heritage: The Handcrafted Dhoni',
+    slug: 'restoring-maldives-heritage-dhoni',
+    excerpt: 'A look into the revival of traditional shipbuilding and how it’s becoming the ultimate guest experience.',
+    content: 'On the island of Alifushi, master boatbuilders are seeing a resurgence in demand for traditional Dhonis. These are no longer just fishing vessels but high-art vessels of exploration...',
+    image: 'https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200',
+    date: '2026-03-01',
+    author: 'Ismail Ahmed',
+    category: 'Dispatch'
   },
   {
     id: 'seaplane-logistics-2026',
