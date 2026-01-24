@@ -20,6 +20,31 @@ const Stays: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
+  // DERIVE ATOLS
+  const atolls = useMemo(() => {
+    const set = new Set(resorts.filter(r => r.type === stayType).map(r => r.atoll));
+    return ['All', ...Array.from(set)].sort();
+  }, [stayType, resorts]);
+
+  // FILTER LOGIC
+  const filteredStays = useMemo(() => {
+    return resorts.filter(stay => {
+      const matchesType = stay.type === stayType;
+      const matchesSearch = stay.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
+                            stay.atoll.toLowerCase().includes(filterQuery.toLowerCase());
+      const matchesAtoll = selectedAtoll === 'All' || stay.atoll === selectedAtoll;
+      const matchesTransfer = selectedTransfer === 'All' || (stay.transfers && stay.transfers.includes(selectedTransfer as TransferType));
+      
+      return matchesType && matchesSearch && matchesAtoll && matchesTransfer;
+    });
+  }, [stayType, filterQuery, selectedAtoll, selectedTransfer, resorts]);
+
+  const totalPages = Math.ceil(filteredStays.length / itemsPerPage);
+  const currentStays = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredStays.slice(start, start + itemsPerPage);
+  }, [filteredStays, currentPage]);
+
   useEffect(() => {
     const fetchResorts = async () => {
       setLoading(true);
@@ -72,33 +97,9 @@ const Stays: React.FC = () => {
     setCurrentPage(1);
   }, [filterQuery, stayType, selectedAtoll, selectedTransfer]);
 
-  // DERIVE DATA BEFORE USE IN EFFECTS
-  const atolls = useMemo(() => {
-    const set = new Set(resorts.filter(r => r.type === stayType).map(r => r.atoll));
-    return ['All', ...Array.from(set)].sort();
-  }, [stayType, resorts]);
-
-  const filteredStays = useMemo(() => {
-    return resorts.filter(stay => {
-      const matchesType = stay.type === stayType;
-      const matchesSearch = stay.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
-                            stay.atoll.toLowerCase().includes(filterQuery.toLowerCase());
-      const matchesAtoll = selectedAtoll === 'All' || stay.atoll === selectedAtoll;
-      const matchesTransfer = selectedTransfer === 'All' || (stay.transfers && stay.transfers.includes(selectedTransfer as TransferType));
-      
-      return matchesType && matchesSearch && matchesAtoll && matchesTransfer;
-    });
-  }, [stayType, filterQuery, selectedAtoll, selectedTransfer, resorts]);
-
-  const totalPages = Math.ceil(filteredStays.length / itemsPerPage);
-  const currentStays = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredStays.slice(start, start + itemsPerPage);
-  }, [filteredStays, currentPage]);
-
   useEffect(() => {
     if (!loading) {
-      // Small timeout ensures the DOM has rendered the new stays
+      // Small timeout ensures the DOM has rendered the new stays before observing
       const timeoutId = setTimeout(() => {
         const observer = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
@@ -110,7 +111,7 @@ const Stays: React.FC = () => {
         
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         return () => observer.disconnect();
-      }, 100);
+      }, 50);
       return () => clearTimeout(timeoutId);
     }
   }, [currentStays, loading]);
@@ -205,7 +206,7 @@ const Stays: React.FC = () => {
               </div>
             ) : currentStays.length > 0 ? (
               currentStays.map((stay, idx) => (
-                <div key={stay.id} className="reveal" style={{ transitionDelay: `${idx * 50}ms` }}>
+                <div key={stay.id} className="reveal active" style={{ transitionDelay: `${idx * 50}ms` }}>
                   <ResortCard resort={stay} />
                 </div>
               ))
