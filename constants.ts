@@ -27,72 +27,92 @@ export const RESORTS: Accommodation[] = [
     mealPlans: [MealPlan.ALL_INCLUSIVE, MealPlan.FULL_BOARD],
     uvp: 'The picture-perfect romantic getaway in the tropics.',
     roomTypes: [
-      { 
-        name: 'Sunrise Villa', 
-        size: '95 sqm', 
-        capacity: '3 Adults', 
-        description: 'Overwater luxury featuring a private sundeck and plunge pool with sunrise views.', 
-        highlights: ['Private Jacuzzi', 'Glass floor panel', '24-hour butler'], 
-        image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800' 
-      },
-      { 
-        name: 'Sunset Villa', 
-        size: '95 sqm', 
-        capacity: '3 Adults', 
-        description: 'Bask in the golden hour from your private deck over the turquoise lagoon.', 
-        highlights: ['Plunge Pool', 'Rain shower', 'DVD Player'], 
-        image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800' 
-      },
-      { 
-        name: 'Overwater Villa', 
-        size: '95 sqm', 
-        capacity: '3 Adults', 
-        description: 'The signature Vadoo experience suspended above a rich underwater paradise.', 
-        highlights: ['Jacuzzi', 'Mini bar', 'Sundeck'], 
-        image: 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800' 
-      },
-      { 
-        name: 'Honeymoon Villa', 
-        size: '110 sqm', 
-        capacity: '2 Adults', 
-        description: 'Ultimate romantic escape with extra space and absolute privacy for couples.', 
-        highlights: ['Large Sundeck', 'Exclusive Amenities', 'Privacy'], 
-        image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800' 
-      }
+      { name: 'Sunrise Villa', size: '95 sqm', capacity: '3 Adults', description: 'Overwater luxury featuring a private sundeck and plunge pool with sunrise views.', highlights: ['Private Jacuzzi', 'Glass floor panel', '24-hour butler'], image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Sunset Villa', size: '95 sqm', capacity: '3 Adults', description: 'Bask in the golden hour from your private deck over the turquoise lagoon.', highlights: ['Plunge Pool', 'Rain shower', 'DVD Player'], image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Overwater Villa', size: '95 sqm', capacity: '3 Adults', description: 'The signature Vadoo experience suspended above a rich underwater paradise.', highlights: ['Jacuzzi', 'Mini bar', 'Sundeck'], image: 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Honeymoon Villa', size: '110 sqm', capacity: '2 Adults', description: 'Ultimate romantic escape with extra space and absolute privacy for couples.', highlights: ['Large Sundeck', 'Exclusive Amenities', 'Privacy'], image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800' }
     ],
     diningVenues: [
-      { 
-        name: 'Farivalhu Fine Dining', 
-        cuisine: 'International', 
-        vibe: 'Refined', 
-        description: 'Exquisite set menus and à la carte dining overlooking the ocean.', 
-        highlights: ['Breakfast: 06:30 - 10:00', 'Lunch: 12:30 - 14:30', 'Dinner: 19:30 - 22:30'], 
-        image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' 
-      },
-      { 
-        name: 'Kithajima Restaurant', 
-        cuisine: 'Japanese', 
-        vibe: 'Sophisticated', 
-        description: 'Authentic Japanese flavors served in an intimate, traditional setting.', 
-        highlights: ['Dinner: 19:30 - 22:30'], 
-        image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800' 
-      },
-      { 
-        name: 'Kandolhi Bar', 
-        cuisine: 'Cocktails & Spirits', 
-        vibe: 'Social', 
-        description: 'A perfect spot for sunset cocktails and premium spirits.', 
-        highlights: ['Open: 08:00 - 00:00'], 
-        image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=800' 
-      },
-      { 
-        name: 'Dhoni Bar', 
-        cuisine: 'Cocktails & Spirits', 
-        vibe: 'Social', 
-        description: 'Traditional Dhoni-shaped bar offering tropical refreshments.', 
-        highlights: ['10:00 - 17:00', '20:30 - 00:00'], 
-        image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' 
-      }
+      { name: 'Farivalhu Fine Dining', cuisine: 'International', vibe: 'Refined', description: 'Exquisite set menus and à la carte dining overlooking the ocean.', highlights: ['Breakfast: 06:30 - 10:00', 'Lunch: 12:30 - 14:30', 'Dinner: 19:30 - 22:30'], image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Kithajima Restaurant', cuisine: 'Japanese', vibe: 'Sophisticated', description: 'Authentic Japanese flavors served in an intimate, traditional setting.', highlights: ['Dinner: 07:30 p.m - 10:30 p.m'], image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Kandolhi Bar', cuisine: 'Spirits & Cocktails', vibe: 'Social', description: 'A perfect spot for sunset cocktails and premium spirits.', highlights: ['08.00 a.m - 12.00 a.m'], image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Dhoni Bar', cuisine: 'Spirits & Cocktails', vibe: 'Social', description: 'Traditional Dhoni-shaped bar offering tropical refreshments.', highlights: ['10.00 a.m - 05.00 p.m', '08.30 p.m - 12.00 a.m'], image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' }
+    ]
+  },
+  {
+    id: 'adaaran-prestige-water-villas',
+    name: 'Adaaran Prestige Water Villas',
+    slug: 'adaaran-prestige-water-villas',
+    type: AccommodationType.RESORT,
+    atoll: 'Raa Atoll',
+    priceRange: '$$$$',
+    rating: 5,
+    shortDescription: 'An oasis of tranquillity and relaxation in a rich underwater paradise.',
+    description: 'Adaaran Prestige Water Villas, an oasis of tranquillity and relaxation in the exotic setting of the Maldive Islands, never fails to captivate discerning travellers. The delights of an idyllic tropical setting – sparkling turquoise seas and immaculate white beaches – may all be experienced at this fine resort.',
+    images: ['https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200'],
+    features: ['Personalized Butler', 'Private Jacuzzi on Deck', 'Mandara Spa', 'Pillow Menu', 'Rich House Reef'],
+    transfers: [TransferType.SEAPLANE],
+    mealPlans: [MealPlan.ALL_INCLUSIVE],
+    uvp: 'Luxury wooden interiors with spacious accommodation and blue crystal water.',
+    roomTypes: [
+      { name: 'Water Villa', size: '84 sqm', capacity: '2 Adults', description: 'Exquisite interior with its own sun deck and private Jacuzzi.', highlights: ['Butler Service', 'Private Jacuzzi', 'Glass floor panel'], image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800' }
+    ],
+    diningVenues: [
+      { name: 'Water Villa Restaurant', cuisine: 'A la carte', vibe: 'Exclusive', description: 'Fine dining exclusively for water villa guests.', highlights: ['Breakfast: 06:30 - 12:00', 'Lunch: 12:00 - 14:30', 'Dinner: 18:00 - 22:00'], image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Jaafaiy Restaurant', cuisine: 'International Buffet', vibe: 'Casual', description: 'Main buffet restaurant serving global delicacies.', highlights: ['Breakfast: 07:30 - 09:30', 'Lunch: 12:30 - 14:30', 'Dinner: 19:30 - 21:30'], image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Sufura Restaurant', cuisine: 'Indian', vibe: 'Authentic', description: 'Authentic Indian cuisine prepared by specialty chefs.', highlights: ['Lunch: 12:30 - 14:30', 'Dinner: 19:30 - 21:30'], image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=800' }
+    ]
+  },
+  {
+    id: 'adaaran-select-hudhuran-fushi',
+    name: 'Adaaran Select Hudhuran Fushi',
+    slug: 'adaaran-select-hudhuran-fushi',
+    type: AccommodationType.RESORT,
+    atoll: 'North Male Atoll',
+    priceRange: '$$$$',
+    rating: 4,
+    shortDescription: 'The "Surf Island" of the Maldives with 24-hour Premium All-Inclusive.',
+    description: 'An unforgettable holiday experience in the tropical paradise of the Maldives, surrounded by thriving vegetation and pristine waters. "Surf Island", Adaaran Select Hudhuran Fushi is an escape for the soul, offering one of the best surf holiday resorts with a perfect left breaking down one side of the island.',
+    images: ['https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1200'],
+    features: ['Lohis Surf Break', '24-hour Premium All-Inclusive', 'Tennis & Squash', 'Kiddies Pool', 'Animation Activities'],
+    transfers: [TransferType.SPEEDBOAT],
+    mealPlans: [MealPlan.ALL_INCLUSIVE],
+    uvp: 'The ideal holiday for surfers and adrenaline junkies.',
+    roomTypes: [
+      { name: 'Garden Villa', size: '43 sqm', capacity: '3 Adults', description: 'Set amidst lush greenery for ultimate seclusion.', highlights: ['Easy beach access', 'AC', 'Mini bar'], image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Lohis Villa', size: '43 sqm', capacity: '3 Adults', description: 'Designed exclusively for surfers, just a 20 second walk to the surf.', highlights: ['Surf Access', 'Terrace', 'Bathtub'], image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Beach Villa', size: '59.4 sqm', capacity: '3 Adults', description: 'Directly overlooking the pristine Maldivian beach.', highlights: ['Beachfront', 'Outdoor Shower'], image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Sunrise Ocean Villa', size: '64 sqm', capacity: '3 Adults', description: 'Luxury overwater living with sunrise views.', highlights: ['Private Deck', 'Ocean View'], image: 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800' }
+    ],
+    diningVenues: [
+      { name: 'Banyan Restaurant', cuisine: 'International Buffet', vibe: 'Lively', description: 'Main restaurant with themed buffet nights.', highlights: ['Breakfast: 07:30 - 09:30', 'Lunch: 12:30 - 14:30', 'Dinner: 19:30 - 21:30'], image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Sunset Restaurant', cuisine: 'International', vibe: 'Romantic', description: 'Exclusive for ocean villa guests with a la carte options.', highlights: ['Breakfast: 07:30 - 10:00', 'Dinner: 19:30 - 21:30'], image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Lohis Wave', cuisine: 'Buffet & Pizza', vibe: 'Casual', description: 'Serving international buffet and special oven-baked pizza.', highlights: ['Oven baked pizza: 10:00 - 22:00'], image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' }
+    ]
+  },
+  {
+    id: 'adaaran-select-meedhupparu',
+    name: 'Adaaran Select Meedhupparu',
+    slug: 'adaaran-select-meedhupparu',
+    type: AccommodationType.RESORT,
+    atoll: 'Raa Atoll',
+    priceRange: '$$$$',
+    rating: 4,
+    shortDescription: 'A mature island sanctuary offering breathtaking experiences.',
+    description: 'Adaaran Select Meedhupparu is an island escape like no other, offering a 24-hour Premium All-Inclusive experience. A mature island presenting plenty of sun, sea, and palm trees, it is the perfect base to explore the Indian Ocean and partake in exhilarating fun activities.',
+    images: ['https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=1200'],
+    features: ['Mandara Spa', '221 Well-appointed Villas', 'Meedhupparu Residence', 'Dive Center', 'Kids Club'],
+    transfers: [TransferType.SEAPLANE, TransferType.DOMESTIC_FLIGHT],
+    mealPlans: [MealPlan.ALL_INCLUSIVE],
+    uvp: 'Your exquisite personal hideaway in the Raa Atoll.',
+    roomTypes: [
+      { name: 'Beach Villa', size: '51 sqm', capacity: '3 Adults', description: 'Classic Maldivian beach villas just steps from the shore.', highlights: ['Outdoor shower', 'Bathtub'], image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Meedhupparu Residence with Pool', size: '158 sqm', capacity: '2 Adults', description: 'The peak of luxury on the island with a private pool.', highlights: ['Private Pool', 'Large Terrace'], image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800' }
+    ],
+    diningVenues: [
+      { name: 'Jaafaiy Restaurant', cuisine: 'International Buffet', vibe: 'Grand', description: 'Main dining hall with a wide range of global cuisines.', highlights: ['24-hour snacks at Cafe Mass'], image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Sufura Restaurant', cuisine: 'Indian', vibe: 'Traditional', description: 'Signature Indian dining in a warm, welcoming setting.', highlights: ['Dinner: 19:30 - 21:30'], image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Thavaa Restaurant', cuisine: 'Mediterranean', vibe: 'Coastal', description: 'Mediterranean flavors with stunning ocean views.', highlights: ['Lunch: 12:30 - 14:30'], image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' }
     ]
   },
   {
@@ -140,9 +160,6 @@ export const RESORTS: Accommodation[] = [
     ]
   },
   ...[
-    { name: 'Adaaran Prestige Water Villas', atoll: 'Raa Atoll' },
-    { name: 'Adaaran Select Huduran Fushi', atoll: 'North Male Atoll' },
-    { name: 'Adaaran Select Meedhupparu', atoll: 'Raa Atoll' },
     { name: 'Alila Kothaifaru Maldives', atoll: 'Raa Atoll' },
     { name: 'Amilla Maldives', atoll: 'Baa Atoll' },
     { name: 'Ananea Madivaru Maldives', atoll: 'North Ari Atoll' },
@@ -332,6 +349,13 @@ export const EXPERIENCES: Experience[] = [
     id: 'exp-2',
     title: 'Tourist Submarine Dive',
     description: 'Explore the depths of the ocean without getting wet.',
+    image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
+    category: 'Adventure'
+  },
+  {
+    id: 'exp-3',
+    title: 'Dolphin Safari',
+    description: 'Witness playful dolphins in their natural habitat.',
     image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
     category: 'Adventure'
   }
