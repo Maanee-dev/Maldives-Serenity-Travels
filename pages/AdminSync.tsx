@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { RESORTS } from '../constants';
@@ -11,9 +12,6 @@ const AdminSync: React.FC = () => {
     setLoading(true);
     setStatus('Clearing existing data...');
     
-    // We don't delete by default for safety, but you could add:
-    // await supabase.from('resorts').delete().neq('id', '0');
-
     try {
       const total = RESORTS.length;
       let count = 0;
@@ -21,7 +19,7 @@ const AdminSync: React.FC = () => {
       for (const resort of RESORTS) {
         setStatus(`Syncing: ${resort.name}...`);
         
-        // 1. Insert Resort
+        // 1. Insert/Update Resort
         const { error: resortErr } = await supabase.from('resorts').upsert({
           id: resort.id,
           name: resort.name,
@@ -44,6 +42,9 @@ const AdminSync: React.FC = () => {
 
         // 2. Insert Rooms
         if (resort.roomTypes && resort.roomTypes.length > 0) {
+          // Clear old rooms for this resort first to avoid duplicates
+          await supabase.from('rooms').delete().eq('resort_id', resort.id);
+
           const roomsData = resort.roomTypes.map(room => ({
             resort_id: resort.id,
             name: room.name,
@@ -53,12 +54,15 @@ const AdminSync: React.FC = () => {
             size: room.size,
             capacity: room.capacity
           }));
-          const { error: roomErr } = await supabase.from('rooms').upsert(roomsData);
+          const { error: roomErr } = await supabase.from('rooms').insert(roomsData);
           if (roomErr) console.warn(`Room sync err for ${resort.name}:`, roomErr);
         }
 
         // 3. Insert Dining
         if (resort.diningVenues && resort.diningVenues.length > 0) {
+          // Clear old dining for this resort first
+          await supabase.from('dining').delete().eq('resort_id', resort.id);
+
           const diningData = resort.diningVenues.map(venue => ({
             resort_id: resort.id,
             name: venue.name,
@@ -68,7 +72,7 @@ const AdminSync: React.FC = () => {
             image: venue.image,
             vibe: venue.vibe
           }));
-          const { error: diningErr } = await supabase.from('dining').upsert(diningData);
+          const { error: diningErr } = await supabase.from('dining').insert(diningData);
           if (diningErr) console.warn(`Dining sync err for ${resort.name}:`, diningErr);
         }
 
@@ -76,7 +80,7 @@ const AdminSync: React.FC = () => {
         setProgress(Math.round((count / total) * 100));
       }
 
-      setStatus('Sync Complete! All 144+ resorts are now in Supabase.');
+      setStatus('Sync Complete! All resorts, rooms, and dining venues are now in Supabase.');
     } catch (err: any) {
       console.error(err);
       setStatus(`Error: ${err.message}`);
@@ -91,7 +95,7 @@ const AdminSync: React.FC = () => {
         <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em] mb-12 block">System Utility</span>
         <h1 className="text-4xl font-serif font-bold italic mb-8">Database Migration</h1>
         <p className="text-slate-400 text-sm mb-12 uppercase tracking-widest leading-loose">
-          Pushing the curated collection of {RESORTS.length} resorts to Supabase.
+          Pushing the curated collection of {RESORTS.length} resorts, room types, and dining options to Supabase.
         </p>
         
         {loading && (

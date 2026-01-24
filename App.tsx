@@ -9,7 +9,9 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
+// Fix: Corrected casing for Offers import to match file system (Offers.tsx)
 import Offers from './pages/Offers';
+// Fix: Corrected casing for Experiences import to match file system (Experiences.tsx)
 import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';

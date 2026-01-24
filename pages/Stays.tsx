@@ -72,7 +72,7 @@ const Stays: React.FC = () => {
     setCurrentPage(1);
   }, [filterQuery, stayType, selectedAtoll, selectedTransfer]);
 
-  // Derive atolls, filteredStays, totalPages, and currentStays before they are used in useEffect
+  // DERIVE DATA BEFORE USE IN EFFECTS
   const atolls = useMemo(() => {
     const set = new Set(resorts.filter(r => r.type === stayType).map(r => r.atoll));
     return ['All', ...Array.from(set)].sort();
@@ -98,16 +98,20 @@ const Stays: React.FC = () => {
 
   useEffect(() => {
     if (!loading) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-          }
-        });
-      }, { threshold: 0.1 });
-      
-      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-      return () => observer.disconnect();
+      // Small timeout ensures the DOM has rendered the new stays
+      const timeoutId = setTimeout(() => {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('active');
+            }
+          });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        return () => observer.disconnect();
+      }, 100);
+      return () => clearTimeout(timeoutId);
     }
   }, [currentStays, loading]);
 
@@ -201,7 +205,7 @@ const Stays: React.FC = () => {
               </div>
             ) : currentStays.length > 0 ? (
               currentStays.map((stay, idx) => (
-                <div key={stay.id} className="reveal active" style={{ transitionDelay: `${idx * 50}ms` }}>
+                <div key={stay.id} className="reveal" style={{ transitionDelay: `${idx * 50}ms` }}>
                   <ResortCard resort={stay} />
                 </div>
               ))
