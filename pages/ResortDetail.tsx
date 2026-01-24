@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
@@ -107,16 +106,16 @@ const ResortDetail: React.FC = () => {
   return (
     <div className="bg-[#FCFAF7] min-h-screen selection:bg-sky-100 selection:text-sky-900 pb-32">
       
-      {/* 1. CINEMATIC HERO */}
+      {/* 1. CINEMATIC HERO - Updated aspect ratio for mobile */}
       <section className="relative w-full pt-20 md:pt-32 px-4 md:px-6 reveal active">
-        <div className="relative aspect-[16/10] md:aspect-[21/9] w-full rounded-[2.5rem] md:rounded-[4.5rem] overflow-hidden shadow-2xl bg-slate-200">
+        <div className="relative aspect-[4/5] md:aspect-[21/9] w-full rounded-[2.5rem] md:rounded-[4.5rem] overflow-hidden shadow-2xl bg-slate-200">
           <img 
             src={resort.images[0] || 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200'} 
             alt={resort.name} 
             className="w-full h-full object-cover scale-100 transition-transform duration-[20s] hover:scale-110" 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
-          <div className="absolute bottom-10 left-10 md:bottom-20 md:left-20 max-w-5xl">
+          <div className="absolute bottom-10 left-8 md:bottom-20 md:left-20 max-w-5xl">
             <span className="inline-block bg-sky-500 text-white px-5 py-2 rounded-full text-[9px] font-bold uppercase tracking-[0.5em] mb-6 shadow-xl">
               {resort.atoll}
             </span>
@@ -193,7 +192,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* 3. FULL WIDTH ACCOMMODATIONS */}
+      {/* 3. FULL WIDTH ACCOMMODATIONS - Updated aspect ratio for mobile */}
       {resort.roomTypes && resort.roomTypes.length > 0 && (
         <section className="mt-40 md:mt-64 bg-white py-32 md:py-48">
           <div className="max-w-[1440px] mx-auto px-6">
@@ -206,7 +205,7 @@ const ResortDetail: React.FC = () => {
             <div className="no-scrollbar overflow-x-auto flex gap-8 md:gap-12 pb-12 snap-x snap-mandatory px-4">
               {resort.roomTypes.map((room, idx) => (
                 <div key={idx} className="flex-shrink-0 w-[85vw] md:w-[60vw] lg:w-[45vw] snap-center group">
-                  <div className="relative aspect-[16/10] rounded-[3.5rem] overflow-hidden mb-10 shadow-2xl">
+                  <div className="relative aspect-[4/5] md:aspect-[16/10] rounded-[3.5rem] overflow-hidden mb-10 shadow-2xl">
                     <img src={room.image || 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800'} alt={room.name} className="w-full h-full object-cover transition-transform duration-[12s] group-hover:scale-110" />
                     <div className="absolute inset-0 bg-black/10"></div>
                     {(room.size || room.capacity) && (

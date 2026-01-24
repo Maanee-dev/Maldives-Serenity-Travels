@@ -9,10 +9,10 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Match lowercase filename 'offers.tsx' to resolve casing conflict
-import Offers from './pages/offers';
-// Match lowercase filename 'experiences.tsx' to resolve casing conflict
-import Experiences from './pages/experiences';
+// Fixed casing to match Offers.tsx and resolve compilation errors
+import Offers from './pages/Offers';
+// Fixed casing to match Experiences.tsx and resolve compilation errors
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
