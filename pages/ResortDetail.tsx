@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
@@ -12,12 +13,12 @@ const ResortDetail: React.FC = () => {
   useEffect(() => {
     const fetchFullDetails = async () => {
       setLoading(true);
-      // Fetch Resort Base
+      // 1. Fetch Resort Base
       const { data: resData, error: resErr } = await supabase
         .from('resorts')
         .select('*')
         .eq('slug', slug)
-        .single();
+        .maybeSingle();
       
       if (resErr) {
         console.error('Fetch error:', resErr);
@@ -26,13 +27,13 @@ const ResortDetail: React.FC = () => {
       }
 
       if (resData) {
-        // Fetch Associated Rooms
+        // 2. Fetch Associated Rooms
         const { data: roomData } = await supabase
           .from('rooms')
           .select('*')
           .eq('resort_id', resData.id);
 
-        // Fetch Associated Dining
+        // 3. Fetch Associated Dining
         const { data: diningData } = await supabase
           .from('dining')
           .select('*')
@@ -42,20 +43,20 @@ const ResortDetail: React.FC = () => {
           id: resData.id,
           name: resData.name,
           slug: resData.slug,
-          type: resData.type as AccommodationType,
-          atoll: resData.atoll,
-          priceRange: resData.price_range,
-          rating: resData.rating,
-          description: resData.description,
-          shortDescription: resData.short_description,
-          images: resData.images,
-          features: resData.features,
-          transfers: resData.transfers as TransferType[],
-          mealPlans: resData.meal_plans,
-          uvp: resData.uvp,
-          isFeatured: resData.is_featured,
-          roomTypes: roomData as RoomType[],
-          diningVenues: diningData as DiningVenue[]
+          type: (resData.type || 'RESORT') as AccommodationType,
+          atoll: resData.atoll || 'Unknown',
+          priceRange: resData.price_range || '$$$$',
+          rating: resData.rating || 5,
+          description: resData.description || '',
+          shortDescription: resData.short_description || '',
+          images: resData.images || [],
+          features: resData.features || [],
+          transfers: (resData.transfers || []) as TransferType[],
+          mealPlans: resData.meal_plans || [],
+          uvp: resData.uvp || 'Defined by perspective.',
+          isFeatured: resData.is_featured || false,
+          roomTypes: (roomData || []) as RoomType[],
+          diningVenues: (diningData || []) as DiningVenue[]
         };
 
         setResort(mappedResort);
@@ -84,12 +85,19 @@ const ResortDetail: React.FC = () => {
   }, [resort]);
 
   if (loading) return (
-    <div className="min-h-screen bg-[#FCFAF7] flex items-center justify-center">
-       <div className="w-12 h-12 border-4 border-slate-100 border-t-sky-500 rounded-full animate-spin"></div>
+    <div className="min-h-screen bg-[#FCFAF7] flex flex-col items-center justify-center">
+       <div className="w-12 h-12 border-4 border-slate-100 border-t-sky-500 rounded-full animate-spin mb-8"></div>
+       <p className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.5em]">Opening the archive...</p>
     </div>
   );
 
-  if (!resort) return <div className="p-40 text-center font-serif text-2xl italic">Sanctuary not found.</div>;
+  if (!resort) return (
+    <div className="min-h-screen bg-[#FCFAF7] flex flex-col items-center justify-center px-6 text-center">
+      <h2 className="text-4xl font-serif font-bold italic mb-6">Sanctuary not found.</h2>
+      <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-10">The destination you are looking for may have moved.</p>
+      <Link to="/stays" className="bg-slate-950 text-white px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest">Return to Portfolio</Link>
+    </div>
+  );
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,7 +111,7 @@ const ResortDetail: React.FC = () => {
       <section className="relative w-full pt-20 md:pt-32 px-4 md:px-6 reveal active">
         <div className="relative aspect-[16/10] md:aspect-[21/9] w-full rounded-[2.5rem] md:rounded-[4.5rem] overflow-hidden shadow-2xl bg-slate-200">
           <img 
-            src={resort.images[0]} 
+            src={resort.images[0] || 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200'} 
             alt={resort.name} 
             className="w-full h-full object-cover scale-100 transition-transform duration-[20s] hover:scale-110" 
           />
@@ -199,7 +207,7 @@ const ResortDetail: React.FC = () => {
               {resort.roomTypes.map((room, idx) => (
                 <div key={idx} className="flex-shrink-0 w-[85vw] md:w-[60vw] lg:w-[45vw] snap-center group">
                   <div className="relative aspect-[16/10] rounded-[3.5rem] overflow-hidden mb-10 shadow-2xl">
-                    <img src={room.image} alt={room.name} className="w-full h-full object-cover transition-transform duration-[12s] group-hover:scale-110" />
+                    <img src={room.image || 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800'} alt={room.name} className="w-full h-full object-cover transition-transform duration-[12s] group-hover:scale-110" />
                     <div className="absolute inset-0 bg-black/10"></div>
                     {(room.size || room.capacity) && (
                       <div className="absolute bottom-10 left-10">
@@ -209,11 +217,11 @@ const ResortDetail: React.FC = () => {
                       </div>
                     )}
                   </div>
-                  <div className="max-w-2xl">
+                  <div className="max-w-2xl px-4">
                     <h4 className="text-3xl md:text-5xl font-serif font-bold text-slate-900 mb-6 group-hover:italic transition-all">{room.name}</h4>
                     <p className="text-slate-500 text-lg leading-relaxed mb-8 opacity-90 font-medium">{room.description}</p>
                     <div className="flex gap-3 flex-wrap">
-                       {room.highlights.map(h => (
+                       {room.highlights && room.highlights.map(h => (
                          <span key={h} className="text-[9px] font-bold text-sky-500 uppercase tracking-widest border border-sky-100 px-4 py-2 rounded-full">{h}</span>
                        ))}
                     </div>
@@ -239,7 +247,7 @@ const ResortDetail: React.FC = () => {
               {resort.diningVenues.map((venue, idx) => (
                 <div key={idx} className="flex-shrink-0 w-[80vw] md:w-[45vw] lg:w-[32vw] snap-center group">
                   <div className="relative aspect-[3/4] rounded-[4rem] overflow-hidden mb-10 shadow-2xl">
-                    <img src={venue.image} alt={venue.name} className="w-full h-full object-cover transition-transform duration-[15s] group-hover:scale-110" />
+                    <img src={venue.image || 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800'} alt={venue.name} className="w-full h-full object-cover transition-transform duration-[15s] group-hover:scale-110" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
                     <div className="absolute bottom-12 left-10 right-10">
                        <span className="text-sky-400 font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block">{venue.cuisine}</span>
@@ -254,7 +262,7 @@ const ResortDetail: React.FC = () => {
                       "{venue.description}"
                     </p>
                     <div className="space-y-3">
-                      {venue.highlights.map(h => (
+                      {venue.highlights && venue.highlights.map(h => (
                         <div key={h} className="flex items-center gap-4">
                           <div className="w-1 h-1 bg-amber-400 rounded-full"></div>
                           <span className="text-[9px] font-bold text-slate-900 uppercase tracking-widest">{h}</span>

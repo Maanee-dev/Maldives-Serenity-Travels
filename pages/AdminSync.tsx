@@ -7,10 +7,12 @@ const AdminSync: React.FC = () => {
   const [status, setStatus] = useState<string>('Idle');
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [errorDetails, setErrorDetails] = useState<string | null>(null);
 
   const syncData = async () => {
     setLoading(true);
-    setStatus('Clearing existing data...');
+    setErrorDetails(null);
+    setStatus('Initializing connection...');
     
     try {
       const total = RESORTS.length;
@@ -38,12 +40,15 @@ const AdminSync: React.FC = () => {
           is_featured: resort.isFeatured || false
         });
 
-        if (resortErr) throw resortErr;
+        if (resortErr) {
+          console.error("Resort Sync Error:", resortErr);
+          throw new Error(`Failed to sync resort ${resort.name}: ${resortErr.message}`);
+        }
 
-        // 2. Insert Rooms
+        // 2. Sync Rooms (Delete old, Insert new for this resort)
         if (resort.roomTypes && resort.roomTypes.length > 0) {
-          // Clear old rooms for this resort first to avoid duplicates
-          await supabase.from('rooms').delete().eq('resort_id', resort.id);
+          const { error: delRoomErr } = await supabase.from('rooms').delete().eq('resort_id', resort.id);
+          if (delRoomErr) console.warn("Old room deletion failed:", delRoomErr);
 
           const roomsData = resort.roomTypes.map(room => ({
             resort_id: resort.id,
@@ -54,14 +59,15 @@ const AdminSync: React.FC = () => {
             size: room.size,
             capacity: room.capacity
           }));
+          
           const { error: roomErr } = await supabase.from('rooms').insert(roomsData);
-          if (roomErr) console.warn(`Room sync err for ${resort.name}:`, roomErr);
+          if (roomErr) throw new Error(`Room sync failed for ${resort.name}: ${roomErr.message}`);
         }
 
-        // 3. Insert Dining
+        // 3. Sync Dining (Delete old, Insert new for this resort)
         if (resort.diningVenues && resort.diningVenues.length > 0) {
-          // Clear old dining for this resort first
-          await supabase.from('dining').delete().eq('resort_id', resort.id);
+          const { error: delDiningErr } = await supabase.from('dining').delete().eq('resort_id', resort.id);
+          if (delDiningErr) console.warn("Old dining deletion failed:", delDiningErr);
 
           const diningData = resort.diningVenues.map(venue => ({
             resort_id: resort.id,
@@ -72,18 +78,20 @@ const AdminSync: React.FC = () => {
             image: venue.image,
             vibe: venue.vibe
           }));
+          
           const { error: diningErr } = await supabase.from('dining').insert(diningData);
-          if (diningErr) console.warn(`Dining sync err for ${resort.name}:`, diningErr);
+          if (diningErr) throw new Error(`Dining sync failed for ${resort.name}: ${diningErr.message}`);
         }
 
         count++;
         setProgress(Math.round((count / total) * 100));
       }
 
-      setStatus('Sync Complete! All resorts, rooms, and dining venues are now in Supabase.');
+      setStatus('Sync Complete! Your Maldivian portfolio is now live in the cloud.');
     } catch (err: any) {
-      console.error(err);
-      setStatus(`Error: ${err.message}`);
+      console.error("Migration Fatal Error:", err);
+      setStatus('Migration Failed');
+      setErrorDetails(err.message || 'An unknown error occurred during sync.');
     } finally {
       setLoading(false);
     }
@@ -91,33 +99,45 @@ const AdminSync: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FCFAF7] flex items-center justify-center p-6">
-      <div className="max-w-xl w-full bg-white rounded-[3rem] p-12 shadow-2xl border border-slate-100 text-center">
-        <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em] mb-12 block">System Utility</span>
-        <h1 className="text-4xl font-serif font-bold italic mb-8">Database Migration</h1>
-        <p className="text-slate-400 text-sm mb-12 uppercase tracking-widest leading-loose">
-          Pushing the curated collection of {RESORTS.length} resorts, room types, and dining options to Supabase.
+      <div className="max-w-2xl w-full bg-white rounded-[3.5rem] p-12 md:p-16 shadow-2xl border border-slate-50 text-center">
+        <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em] mb-12 block">Cloud Synchronization</span>
+        <h1 className="text-4xl md:text-5xl font-serif font-bold italic mb-8">Database Migration</h1>
+        <p className="text-slate-400 text-sm mb-12 uppercase tracking-[0.3em] leading-loose">
+          Pushing {RESORTS.length} local resort profiles to your Supabase instance.
         </p>
         
         {loading && (
-          <div className="w-full bg-slate-100 h-1 rounded-full mb-12 overflow-hidden">
+          <div className="w-full bg-slate-50 h-1 rounded-full mb-12 overflow-hidden">
             <div 
-              className="bg-sky-500 h-full transition-all duration-500" 
+              className="bg-sky-500 h-full transition-all duration-700 ease-out" 
               style={{ width: `${progress}%` }}
             ></div>
           </div>
         )}
 
-        <div className="bg-slate-50 p-6 rounded-2xl mb-12">
-          <p className="text-[10px] font-bold text-slate-900 uppercase tracking-widest">{status}</p>
+        <div className={`p-8 rounded-3xl mb-12 transition-all duration-500 ${errorDetails ? 'bg-red-50 border border-red-100' : 'bg-slate-50'}`}>
+          <p className={`text-[11px] font-bold uppercase tracking-widest ${errorDetails ? 'text-red-600' : 'text-slate-900'}`}>
+            {status}
+          </p>
+          {errorDetails && (
+            <p className="mt-4 text-[10px] text-red-400 font-medium leading-relaxed">
+              {errorDetails}
+            </p>
+          )}
         </div>
 
         {!loading && (
-          <button 
-            onClick={syncData}
-            className="w-full bg-slate-950 text-white font-bold py-6 rounded-full text-[10px] uppercase tracking-[0.5em] hover:bg-sky-500 transition-all duration-700 shadow-xl"
-          >
-            Start Migration
-          </button>
+          <div className="space-y-6">
+            <button 
+              onClick={syncData}
+              className="w-full bg-slate-950 text-white font-bold py-6 rounded-full text-[10px] uppercase tracking-[0.5em] hover:bg-sky-500 transition-all duration-700 shadow-xl active:scale-95"
+            >
+              Start Migration
+            </button>
+            <p className="text-[9px] text-slate-300 font-bold uppercase tracking-widest">
+              Note: This will overwrite existing cloud data with local constants.
+            </p>
+          </div>
         )}
       </div>
     </div>
