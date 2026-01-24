@@ -8,10 +8,10 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix casing conflict by importing from lowercase files
-import Offers from './pages/offers';
-// Fix casing conflict by importing from lowercase files
-import Experiences from './pages/experiences';
+// Casing corrected to match PascalCase file names: Offers.tsx
+import Offers from './pages/Offers';
+// Casing corrected to match PascalCase file names: Experiences.tsx
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

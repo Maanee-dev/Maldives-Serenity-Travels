@@ -1,3 +1,4 @@
+
 import { Accommodation, AccommodationType, TransferType, MealPlan, Offer, Experience, BlogPost } from './types';
 
 /**
@@ -19,18 +20,79 @@ export const RESORTS: Accommodation[] = [
     priceRange: '$$$$',
     rating: 5,
     shortDescription: 'An intimate overwater affair featuring private jacuzzis and butler service.',
-    description: 'Adaaran Prestige Vadoo transcends the tropical Maldivian experience to an intimate affair with overwater villas with private jacuzzis, plunge pools and butler services. Strategically located at the gateway to the South Atolls.',
+    description: 'Adaaran Prestige Vadoo transcends the tropical Maldivian experience to an intimate affair with overwater villas with private jacuzzis, plunge pools and butler services. Strategically located at the gateway to the South Atolls, the resort possesses its own exotic reef teeming with vibrant aquatic flora and fauna.',
     images: ['https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200'],
-    features: ['24-Hour Butler', 'Overwater Spa', 'Private Plunge Pools', 'Exotic House Reef'],
+    features: ['24-Hour Butler', 'Overwater Spa', 'Private Plunge Pools', 'Exotic House Reef', 'Glass floor panel', 'Jacuzzi', 'Submarine Dive'],
     transfers: [TransferType.SPEEDBOAT],
-    mealPlans: [MealPlan.ALL_INCLUSIVE],
-    uvp: 'The gateway to intimate overwater luxury.',
+    mealPlans: [MealPlan.ALL_INCLUSIVE, MealPlan.FULL_BOARD],
+    uvp: 'The picture-perfect romantic getaway in the tropics.',
     roomTypes: [
-      { name: 'Sunrise Villa', size: '95 sqm', capacity: '3 Adults', description: 'Overwater luxury with sunrise views.', highlights: ['Private Jacuzzi', 'Plunge Pool'], image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800' },
-      { name: 'Honeymoon Villa', size: '110 sqm', capacity: '2 Adults', description: 'Ultimate romantic escape.', highlights: ['Absolute Privacy', 'Luxury Bath'], image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800' }
+      { 
+        name: 'Sunrise Villa', 
+        size: '95 sqm', 
+        capacity: '3 Adults', 
+        description: 'Overwater luxury featuring a private sundeck and plunge pool with sunrise views.', 
+        highlights: ['Private Jacuzzi', 'Glass floor panel', '24-hour butler'], 
+        image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800' 
+      },
+      { 
+        name: 'Sunset Villa', 
+        size: '95 sqm', 
+        capacity: '3 Adults', 
+        description: 'Bask in the golden hour from your private deck over the turquoise lagoon.', 
+        highlights: ['Plunge Pool', 'Rain shower', 'DVD Player'], 
+        image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800' 
+      },
+      { 
+        name: 'Overwater Villa', 
+        size: '95 sqm', 
+        capacity: '3 Adults', 
+        description: 'The signature Vadoo experience suspended above a rich underwater paradise.', 
+        highlights: ['Jacuzzi', 'Mini bar', 'Sundeck'], 
+        image: 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800' 
+      },
+      { 
+        name: 'Honeymoon Villa', 
+        size: '110 sqm', 
+        capacity: '2 Adults', 
+        description: 'Ultimate romantic escape with extra space and absolute privacy for couples.', 
+        highlights: ['Large Sundeck', 'Exclusive Amenities', 'Privacy'], 
+        image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800' 
+      }
     ],
     diningVenues: [
-      { name: 'Farivalhu Fine Dining', cuisine: 'International', vibe: 'Refined', description: 'Exquisite set menus by the beach.', highlights: ['Breakfast', 'Dinner'], image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' }
+      { 
+        name: 'Farivalhu Fine Dining', 
+        cuisine: 'International', 
+        vibe: 'Refined', 
+        description: 'Exquisite set menus and à la carte dining overlooking the ocean.', 
+        highlights: ['Breakfast: 06:30 - 10:00', 'Lunch: 12:30 - 14:30', 'Dinner: 19:30 - 22:30'], 
+        image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' 
+      },
+      { 
+        name: 'Kithajima Restaurant', 
+        cuisine: 'Japanese', 
+        vibe: 'Sophisticated', 
+        description: 'Authentic Japanese flavors served in an intimate, traditional setting.', 
+        highlights: ['Dinner: 19:30 - 22:30'], 
+        image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800' 
+      },
+      { 
+        name: 'Kandolhi Bar', 
+        cuisine: 'Cocktails & Spirits', 
+        vibe: 'Social', 
+        description: 'A perfect spot for sunset cocktails and premium spirits.', 
+        highlights: ['Open: 08:00 - 00:00'], 
+        image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=800' 
+      },
+      { 
+        name: 'Dhoni Bar', 
+        cuisine: 'Cocktails & Spirits', 
+        vibe: 'Social', 
+        description: 'Traditional Dhoni-shaped bar offering tropical refreshments.', 
+        highlights: ['10:00 - 17:00', '20:30 - 00:00'], 
+        image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' 
+      }
     ]
   },
   {
@@ -77,7 +139,6 @@ export const RESORTS: Accommodation[] = [
       { name: 'Saoke', cuisine: 'Japanese', vibe: 'Sophisticated', description: 'Designed by world-renowned architect Noriyoshi Muramatsu.', highlights: ['Kotatsu Seating', 'Sake Selection'], image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800' }
     ]
   },
-  // Mapping the remaining list provided by user
   ...[
     { name: 'Adaaran Prestige Water Villas', atoll: 'Raa Atoll' },
     { name: 'Adaaran Select Huduran Fushi', atoll: 'North Male Atoll' },
@@ -266,6 +327,13 @@ export const EXPERIENCES: Experience[] = [
     description: 'A private dining experience on a disappearing sandbank.',
     image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200',
     category: 'Culinary'
+  },
+  {
+    id: 'exp-2',
+    title: 'Tourist Submarine Dive',
+    description: 'Explore the depths of the ocean without getting wet.',
+    image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
+    category: 'Adventure'
   }
 ];
 
