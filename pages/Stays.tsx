@@ -1,7 +1,8 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { AccommodationType, TransferType, Accommodation } from '../types';
+import { AccommodationType, TransferType, Accommodation, MealPlan } from '../types';
 import ResortCard from '../components/ResortCard';
 
 const Stays: React.FC = () => {
@@ -16,38 +17,36 @@ const Stays: React.FC = () => {
   const [selectedAtoll, setSelectedAtoll] = useState<string>('All');
   const [selectedTransfer, setSelectedTransfer] = useState<string>('All');
   
-  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
-  // Data Fetching from Supabase
   useEffect(() => {
     const fetchResorts = async () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('resorts')
-        .select('*');
+        .select('*')
+        .order('name', { ascending: true });
       
       if (error) {
         console.error('Supabase fetch error:', error);
       } else if (data) {
-        // Map snake_case database fields back to camelCase types
         const mappedData: Accommodation[] = data.map(item => ({
           id: item.id,
           name: item.name,
           slug: item.slug,
-          type: item.type as AccommodationType,
-          atoll: item.atoll,
-          priceRange: item.price_range,
-          rating: item.rating,
-          description: item.description,
-          shortDescription: item.short_description,
-          images: item.images,
-          features: item.features,
-          transfers: item.transfers as TransferType[],
-          mealPlans: item.meal_plans,
-          uvp: item.uvp,
-          isFeatured: item.is_featured
+          type: (item.type || 'RESORT') as AccommodationType,
+          atoll: item.atoll || 'Unknown',
+          priceRange: item.price_range || '$$$$',
+          rating: item.rating || 5,
+          description: item.description || '',
+          shortDescription: item.short_description || '',
+          images: item.images || [],
+          features: item.features || [],
+          transfers: (item.transfers || []) as TransferType[],
+          mealPlans: (item.meal_plans || []) as MealPlan[],
+          uvp: item.uvp || 'Defined by perspective.',
+          isFeatured: item.is_featured || false
         }));
         setResorts(mappedData);
       }
@@ -62,28 +61,41 @@ const Stays: React.FC = () => {
     if (q) setFilterQuery(q);
   }, [location.search]);
 
-  // SEO and Meta Management
   useEffect(() => {
     const title = stayType === AccommodationType.RESORT 
       ? 'Ultra-Luxury Resorts | Maldives Serenity Stays' 
       : 'Boutique Guest Houses | Maldivian Island Life';
     document.title = title;
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      (metaDesc as HTMLMetaElement).name = "description";
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.setAttribute('content', `Discover the most ${stayType === AccommodationType.RESORT ? 'exclusive private island resorts' : 'authentic local island stays'} in the Maldives. Curated for the discerning traveler.`);
   }, [stayType]);
 
-  // Reset page to 1 whenever any filter or stay type changes
   useEffect(() => {
     setCurrentPage(1);
   }, [filterQuery, stayType, selectedAtoll, selectedTransfer]);
 
-  // Smooth entry animations
+  // Derive atolls, filteredStays, totalPages, and currentStays before they are used in useEffect
+  const atolls = useMemo(() => {
+    const set = new Set(resorts.filter(r => r.type === stayType).map(r => r.atoll));
+    return ['All', ...Array.from(set)].sort();
+  }, [stayType, resorts]);
+
+  const filteredStays = useMemo(() => {
+    return resorts.filter(stay => {
+      const matchesType = stay.type === stayType;
+      const matchesSearch = stay.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
+                            stay.atoll.toLowerCase().includes(filterQuery.toLowerCase());
+      const matchesAtoll = selectedAtoll === 'All' || stay.atoll === selectedAtoll;
+      const matchesTransfer = selectedTransfer === 'All' || (stay.transfers && stay.transfers.includes(selectedTransfer as TransferType));
+      
+      return matchesType && matchesSearch && matchesAtoll && matchesTransfer;
+    });
+  }, [stayType, filterQuery, selectedAtoll, selectedTransfer, resorts]);
+
+  const totalPages = Math.ceil(filteredStays.length / itemsPerPage);
+  const currentStays = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredStays.slice(start, start + itemsPerPage);
+  }, [filteredStays, currentPage]);
+
   useEffect(() => {
     if (!loading) {
       const observer = new IntersectionObserver((entries) => {
@@ -97,46 +109,16 @@ const Stays: React.FC = () => {
       document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
       return () => observer.disconnect();
     }
-  }, [stayType, selectedAtoll, selectedTransfer, filterQuery, currentPage, loading]);
-
-  const atolls = useMemo(() => {
-    const set = new Set(resorts.filter(r => r.type === stayType).map(r => r.atoll));
-    return ['All', ...Array.from(set)];
-  }, [stayType, resorts]);
-
-  const filteredStays = useMemo(() => {
-    return resorts.filter(stay => {
-      const matchesType = stay.type === stayType;
-      const matchesSearch = stay.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
-                            stay.atoll.toLowerCase().includes(filterQuery.toLowerCase());
-      const matchesAtoll = selectedAtoll === 'All' || stay.atoll === selectedAtoll;
-      const matchesTransfer = selectedTransfer === 'All' || stay.transfers.includes(selectedTransfer as TransferType);
-      
-      return matchesType && matchesSearch && matchesAtoll && matchesTransfer;
-    });
-  }, [stayType, filterQuery, selectedAtoll, selectedTransfer, resorts]);
-
-  // Calculate Paginated Results
-  const totalPages = Math.ceil(filteredStays.length / itemsPerPage);
-  const currentStays = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredStays.slice(start, start + itemsPerPage);
-  }, [filteredStays, currentPage]);
+  }, [currentStays, loading]);
 
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
-    const element = document.getElementById('results-anchor');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 400, behavior: 'smooth' });
-    }
+    window.scrollTo({ top: 400, behavior: 'smooth' });
   };
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen">
-      {/* Editorial Header */}
       <section className="pt-56 pb-24 md:pb-40 px-6 text-center reveal active">
         <div className="max-w-7xl mx-auto">
           <span className="text-[10px] uppercase tracking-[1em] font-bold mb-10 block text-sky-500">The Portfolio</span>
@@ -150,7 +132,6 @@ const Stays: React.FC = () => {
         </div>
       </section>
 
-      {/* Search & Results Anchor */}
       <div id="results-anchor" className="scroll-mt-32"></div>
       
       <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-24 reveal active">
@@ -165,19 +146,11 @@ const Stays: React.FC = () => {
             placeholder="PROPERTY OR REGION..."
             className="w-full bg-transparent border-b border-slate-200 pt-10 pb-6 text-xl md:text-3xl font-serif italic text-slate-900 outline-none transition-all focus:border-slate-950 placeholder:text-slate-100"
           />
-          <div className="absolute right-0 bottom-6 opacity-20 group-hover:opacity-100 transition-opacity">
-            <svg className="w-6 h-6 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
         </div>
       </div>
 
-      {/* Boutique Filters & Grid */}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 pb-48">
         <div className="flex flex-col gap-24">
-          
-          {/* Filter Bar */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-12 border-b border-slate-100 pb-16 reveal active">
             <div className="flex gap-4 p-1.5 bg-slate-100/30 backdrop-blur-sm rounded-full border border-slate-200/50">
               <button 
@@ -220,7 +193,6 @@ const Stays: React.FC = () => {
             </div>
           </div>
 
-          {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16 min-h-[400px]">
             {loading ? (
               <div className="col-span-full py-40 text-center">
@@ -241,11 +213,9 @@ const Stays: React.FC = () => {
             )}
           </div>
 
-          {/* Mobile-Responsive Pagination */}
           {!loading && totalPages > 1 && (
             <div className="mt-12 flex flex-col items-center gap-10 reveal active border-t border-slate-100 pt-16">
               <div className="flex items-center justify-between w-full max-w-sm md:max-w-none md:gap-16">
-                {/* Previous Button */}
                 <button 
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
@@ -255,7 +225,6 @@ const Stays: React.FC = () => {
                   <span className="hidden sm:inline">Previous</span>
                 </button>
 
-                {/* Desktop Numeric Indicators */}
                 <div className="hidden md:flex items-center gap-4 md:gap-6">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <button
@@ -268,14 +237,12 @@ const Stays: React.FC = () => {
                   ))}
                 </div>
 
-                {/* Mobile Page Tracker */}
                 <div className="md:hidden flex flex-col items-center">
                   <span className="text-[10px] font-bold text-slate-950 uppercase tracking-widest">
                     {currentPage} / {totalPages}
                   </span>
                 </div>
 
-                {/* Next Button */}
                 <button 
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
@@ -284,10 +251,6 @@ const Stays: React.FC = () => {
                   <span className="hidden sm:inline">Next</span>
                   <span className="text-lg">→</span>
                 </button>
-              </div>
-
-              <div className="text-[8px] font-bold text-slate-300 uppercase tracking-[0.6em] text-center">
-                Refining {filteredStays.length} Options — Exploring {stayType.replace('_', ' ')}
               </div>
             </div>
           )}

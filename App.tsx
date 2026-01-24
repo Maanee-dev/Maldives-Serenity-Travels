@@ -9,10 +9,8 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Imported via lowercase path to avoid casing conflict with duplicate files (Offers.tsx vs offers.tsx) in the project
-import Offers from './pages/offers';
-// Fix: Imported via lowercase path to avoid casing conflict with duplicate files (Experiences.tsx vs experiences.tsx) in the project
-import Experiences from './pages/experiences';
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
