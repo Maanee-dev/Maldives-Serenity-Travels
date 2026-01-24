@@ -1,5 +1,14 @@
 import { Accommodation, AccommodationType, TransferType, MealPlan, Offer, Experience, BlogPost } from './types';
 
+/**
+ * HELPER: Simple Slugify
+ */
+const slugify = (text: string) => text.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
+
+/**
+ * THE PORTFOLIO
+ * An exhaustive collection of Maldivian resorts and guest houses.
+ */
 export const RESORTS: Accommodation[] = [
   {
     id: 'adaaran-prestige-vadoo',
@@ -9,93 +18,19 @@ export const RESORTS: Accommodation[] = [
     atoll: 'South Male Atoll',
     priceRange: '$$$$',
     rating: 5,
-    shortDescription: 'An intimate overwater affair featuring private jacuzzis and 24-hour butler service.',
-    description: 'The picture-perfect romantic getaway in the tropics – Adaaran Prestige Vadoo transcends the tropical Maldivian experience to an intimate affair with overwater villas with private jacuzzis, plunge pools and butler services. Strategically located at the gateway to the South Atolls, the resort possesses its own exotic reef teeming with vibrant aquatic flora and fauna. The list of indulgences that awaits you here can only be matched by the captivating beauty of the surroundings, warmed by signature Adaaran hospitality.',
-    images: [
-      'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
-      'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=1200',
-      'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200'
-    ],
-    features: [
-      '24-Hour Butler Service',
-      'Overwater Spa (Elemis Products)',
-      'Private Plunge Pools',
-      'Exotic House Reef',
-      'Glass Floor Bathroom Panels',
-      'PADI Diving Centre',
-      'Traditional Maldivian Weddings'
-    ],
+    shortDescription: 'An intimate overwater affair featuring private jacuzzis and butler service.',
+    description: 'Adaaran Prestige Vadoo transcends the tropical Maldivian experience to an intimate affair with overwater villas with private jacuzzis, plunge pools and butler services. Strategically located at the gateway to the South Atolls.',
+    images: ['https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200'],
+    features: ['24-Hour Butler', 'Overwater Spa', 'Private Plunge Pools', 'Exotic House Reef'],
     transfers: [TransferType.SPEEDBOAT],
-    mealPlans: [MealPlan.ALL_INCLUSIVE, MealPlan.FULL_BOARD, MealPlan.HALF_BOARD],
-    uvp: 'Transcend the tropical Maldivian experience to an intimate overwater affair.',
-    isFeatured: true,
+    mealPlans: [MealPlan.ALL_INCLUSIVE],
+    uvp: 'The gateway to intimate overwater luxury.',
     roomTypes: [
-      {
-        name: 'Sunrise Villa',
-        size: '95 sqm',
-        capacity: '3 Adults',
-        description: 'Wake up to the gentle sounds of the Indian Ocean with unobstructed sunrise views from your private deck.',
-        highlights: ['Private Jacuzzi', 'Plunge Pool', 'Sundeck', 'Glass floor panel'],
-        image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800'
-      },
-      {
-        name: 'Sunset Villa',
-        size: '95 sqm',
-        capacity: '3 Adults',
-        description: 'Perfectly positioned for the golden hour, these villas offer a private sanctuary to witness the Maldivian sunset.',
-        highlights: ['Sunset views', 'Butler service', 'Plunge pool', 'Direct ocean access'],
-        image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800'
-      },
-      {
-        name: 'Overwater Villa',
-        size: '95 sqm',
-        capacity: '3 Adults',
-        description: 'Classic overwater luxury featuring elegant interiors and direct access to the vibrant house reef.',
-        highlights: ['Rain shower', 'Glass floor panel', 'Private deck', 'Jacuzzi'],
-        image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800'
-      },
-      {
-        name: 'Honeymoon Villa',
-        size: '110 sqm',
-        capacity: '2 Adults',
-        description: 'The ultimate romantic escape, offering expanded living space and absolute privacy for newlyweds.',
-        highlights: ['Enhanced privacy', 'Luxury bathroom', 'Private pool', 'Honeymoon amenities'],
-        image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800'
-      }
+      { name: 'Sunrise Villa', size: '95 sqm', capacity: '3 Adults', description: 'Overwater luxury with sunrise views.', highlights: ['Private Jacuzzi', 'Plunge Pool'], image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Honeymoon Villa', size: '110 sqm', capacity: '2 Adults', description: 'Ultimate romantic escape.', highlights: ['Absolute Privacy', 'Luxury Bath'], image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800' }
     ],
     diningVenues: [
-      {
-        name: 'Farivalhu Fine Dining',
-        cuisine: 'International Fine Dining',
-        vibe: 'Refined Elegance',
-        description: 'Serving exquisite set menus and à la carte options across all three meals in a refined beachfront setting.',
-        highlights: ['Breakfast: 6:30-10:00', 'Lunch: 12:30-14:30', 'Dinner: 19:30-22:30'],
-        image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800'
-      },
-      {
-        name: 'Kithajima Restaurant',
-        cuisine: 'Japanese',
-        vibe: 'Intimate Zen',
-        description: 'Specializing in authentic Japanese flavors and fresh local catches in a zen-like atmosphere.',
-        highlights: ['Japanese cuisine', 'Dinner: 19:30-22:30', 'Authentic flavors'],
-        image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=800'
-      },
-      {
-        name: 'Kandolhi Bar',
-        cuisine: 'Spirits, Wines & Cocktails',
-        vibe: 'Evening Elegance',
-        description: 'A serene overwater bar serving curated cocktails and fine wines from morning till midnight.',
-        highlights: ['08:00 - 00:00', 'Panoramic lagoon views', 'Premium Spirits'],
-        image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800'
-      },
-      {
-        name: 'Dhoni Bar',
-        cuisine: 'Spirits & Light Fare',
-        vibe: 'Coastal Casual',
-        description: 'A relaxed poolside bar serving refreshing drinks and spirits throughout the day.',
-        highlights: ['10:00 - 17:00', '20:30 - 00:00', 'Poolside service'],
-        image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=800'
-      }
+      { name: 'Farivalhu Fine Dining', cuisine: 'International', vibe: 'Refined', description: 'Exquisite set menus by the beach.', highlights: ['Breakfast', 'Dinner'], image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' }
     ]
   },
   {
@@ -106,46 +41,210 @@ export const RESORTS: Accommodation[] = [
     atoll: 'Noonu Atoll',
     priceRange: '$$$$+',
     rating: 5,
-    shortDescription: 'An overwater sanctuary of unparalleled imagination.',
+    shortDescription: 'A sanctuary of overwater imagination with retractable roofs.',
     description: 'Soneva Jani is one of the world\'s lowest density resorts. Located in the Medhufaru lagoon in the Noonu Atoll, the resort features overwater villas with retractable roofs to stargaze from the master bedroom.',
-    images: ['https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200'],
+    images: ['https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200'],
     features: ['Retractable Roofs', 'Water Slides', 'Organic Gardens', 'Observatory'],
     transfers: [TransferType.SEAPLANE],
-    mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.FULL_BOARD],
+    mealPlans: [MealPlan.FULL_BOARD],
     uvp: 'Inspiring a lifetime of rare experiences.',
+    roomTypes: [
+      { name: '1BR Water Retreat with Slide', size: '411 sqm', capacity: '2 Adults + 2 Children', description: 'Featuring a private pool and water slide into the lagoon.', highlights: ['Water Slide', 'Retractable Roof'], image: 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800' }
+    ],
+    diningVenues: [
+      { name: 'The Gathering', cuisine: 'Organic', vibe: 'Relaxed', description: 'The heart of the resort, offering fresh juices to wood-fired pizzas.', highlights: ['Sustainable', 'Lagoon Views'], image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=800' }
+    ]
   },
   {
-    id: 'ayada-maldives',
-    name: 'Ayada Maldives',
-    slug: 'ayada-maldives',
+    id: 'joali-maldives',
+    name: 'JOALI Maldives',
+    slug: 'joali-maldives',
     type: AccommodationType.RESORT,
-    atoll: 'Gaafu Dhaalu Atoll',
-    priceRange: '$$$$',
+    atoll: 'Raa Atoll',
+    priceRange: '$$$$+',
     rating: 5,
-    shortDescription: 'Middle Eastern luxury in the deep south of Maldives.',
-    description: 'Ayada Maldives is a luxury resort located amidst a pristine reef within the southern rim of the Gaafu Dhaalu Atoll in the southern Maldives.',
+    shortDescription: 'The Maldives first art-immersive luxury resort.',
+    description: 'JOALI Maldives is a luxury island retreat that celebrates the "Joy of Living". Located on Muravandhoo island, it features curated art pieces and sustainable luxury.',
     images: ['https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1200'],
-    features: ['Turkish Bath', 'Surf Club', 'Private Pools', 'Island Biking'],
-    transfers: [TransferType.DOMESTIC_FLIGHT, TransferType.SPEEDBOAT],
-    mealPlans: [MealPlan.ALL_INCLUSIVE, MealPlan.HALF_BOARD],
-    uvp: 'A Turkish-inspired paradise in the untouched south.',
+    features: ['Art Studio', 'Herbal Garden', 'Whiskey & Cigar Lounge', 'Marine Biology Lab'],
+    transfers: [TransferType.SEAPLANE],
+    mealPlans: [MealPlan.HALF_BOARD],
+    uvp: 'Experience the Joie de Vivre through art and nature.',
+    roomTypes: [
+      { name: 'Water Villa with Pool', size: '240 sqm', capacity: '3 Adults', description: 'Artistically designed villas over the turquoise waters.', highlights: ['Private Pool', 'Art Pieces'], image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800' }
+    ],
+    diningVenues: [
+      { name: 'Saoke', cuisine: 'Japanese', vibe: 'Sophisticated', description: 'Designed by world-renowned architect Noriyoshi Muramatsu.', highlights: ['Kotatsu Seating', 'Sake Selection'], image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=800' }
+    ]
   },
-  {
-    id: 'fulidhoo-guest-house',
-    name: 'Island Break Fulidhoo',
-    slug: 'island-break-fulidhoo',
-    type: AccommodationType.GUEST_HOUSE,
-    atoll: 'Vaavu Atoll',
-    priceRange: '$',
-    rating: 4,
-    shortDescription: 'Authentic local island experience with legendary hospitality.',
-    description: 'Experience the real Maldives on Fulidhoo island. Known for its stingrays and nurse sharks, this guest house offers clean, modern comfort at a fraction of resort prices.',
-    images: ['https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200'],
-    features: ['Stingray Feeding', 'Local Island Tours', 'Bikini Beach Access', 'Snorkeling Expeditions'],
-    transfers: [TransferType.SPEEDBOAT],
-    mealPlans: [MealPlan.BED_BREAKFAST, MealPlan.HALF_BOARD],
-    uvp: 'Traditional Maldivian spirit with modern boutique comfort.',
-  }
+  // Mapping the remaining list provided by user
+  ...[
+    { name: 'Adaaran Prestige Water Villas', atoll: 'Raa Atoll' },
+    { name: 'Adaaran Select Huduran Fushi', atoll: 'North Male Atoll' },
+    { name: 'Adaaran Select Meedhupparu', atoll: 'Raa Atoll' },
+    { name: 'Alila Kothaifaru Maldives', atoll: 'Raa Atoll' },
+    { name: 'Amilla Maldives', atoll: 'Baa Atoll' },
+    { name: 'Ananea Madivaru Maldives', atoll: 'North Ari Atoll' },
+    { name: 'Anantara Dhigu Maldives Resort', atoll: 'South Male Atoll' },
+    { name: 'Anantara Kihavah Maldives Villas', atoll: 'Baa Atoll' },
+    { name: 'Anantara Veli Maldives Resort', atoll: 'South Male Atoll' },
+    { name: 'Angsana Velavaru', atoll: 'Dhaalu Atoll' },
+    { name: 'Angsana Velavaru In-Ocean Villas', atoll: 'Dhaalu Atoll' },
+    { name: 'Atmosphere Kanifushi', atoll: 'Lhaviyani Atoll' },
+    { name: 'Avani Plus Fares Maldives Resort', atoll: 'Baa Atoll' },
+    { name: 'Ayada Maldives', atoll: 'Gaafu Dhaalu Atoll' },
+    { name: 'Baglioni Resort Maldives', atoll: 'Dhaalu Atoll' },
+    { name: 'Bandos Maldives', atoll: 'North Male Atoll' },
+    { name: 'Banyan Tree Vabbinfaru', atoll: 'North Male Atoll' },
+    { name: 'Baros Maldives', atoll: 'North Male Atoll' },
+    { name: 'Brennia Kottefaru Maldives', atoll: 'Raa Atoll' },
+    { name: 'COMO Cocoa Island', atoll: 'South Male Atoll' },
+    { name: 'COMO Maalifushi', atoll: 'Thaa Atoll' },
+    { name: 'Canareef Resort Maldives', atoll: 'Addu Atoll' },
+    { name: 'Centara Grand Lagoon Maldives', atoll: 'South Male Atoll' },
+    { name: 'Centara Mirage Lagoon Maldives', atoll: 'North Male Atoll' },
+    { name: 'Centara Ras Fushi Resort & Spa Maldives', atoll: 'North Male Atoll' },
+    { name: 'Cinnamon Dhonveli Maldives', atoll: 'North Male Atoll' },
+    { name: 'Cinnamon Hakuraa Huraa Maldives', atoll: 'Meemu Atoll' },
+    { name: 'Cinnamon Velifushi Maldives', atoll: 'Vaavu Atoll' },
+    { name: 'Coco Bodu Hithi', atoll: 'North Male Atoll' },
+    { name: 'Coco Palm Dhuni Kolhu', atoll: 'Baa Atoll' },
+    { name: 'Conrad Maldives Rangali Island', atoll: 'South Ari Atoll' },
+    { name: 'Constance Moofushi Maldives', atoll: 'South Ari Atoll' },
+    { name: 'Dhigali Maldives', atoll: 'Raa Atoll' },
+    { name: 'Dhigufaru Island Resort', atoll: 'Baa Atoll' },
+    { name: 'Diamonds Athuruga Maldives Resort & Spa', atoll: 'South Ari Atoll' },
+    { name: 'Diamonds Thudufushi Maldives Resort & Spa', atoll: 'South Ari Atoll' },
+    { name: 'Dusit Thani Maldives', atoll: 'Baa Atoll' },
+    { name: 'Ellaidhoo Maldives by Cinnamon', atoll: 'North Ari Atoll' },
+    { name: 'Emerald Faarufushi Resort & Spa', atoll: 'Raa Atoll' },
+    { name: 'Emerald Maldives Resort & Spa', atoll: 'Raa Atoll' },
+    { name: 'Eri Maldives', atoll: 'North Male Atoll' },
+    { name: 'Filitheyo Island Resort', atoll: 'Faafu Atoll' },
+    { name: 'Finolhu, A Seaside Collection Resort', atoll: 'Baa Atoll' },
+    { name: 'Four Seasons Resort Maldives at Kuda Huraa', atoll: 'North Male Atoll' },
+    { name: 'Four Seasons Resort Maldives at Landaa Giraavaru', atoll: 'Baa Atoll' },
+    { name: 'Furaveri Maldives', atoll: 'Raa Atoll' },
+    { name: 'Gangehi Island Resort & Spa', atoll: 'North Ari Atoll' },
+    { name: 'Gili Lankanfushi Maldives', atoll: 'North Male Atoll' },
+    { name: 'Grand Park Kodhipparu Maldives', atoll: 'North Male Atoll' },
+    { name: 'Hard Rock Hotel Maldives', atoll: 'South Male Atoll' },
+    { name: 'Heritance Aarah', atoll: 'Raa Atoll' },
+    { name: 'Hideaway Beach Resort & Spa', atoll: 'Haa Alifu Atoll' },
+    { name: 'Hilton Maldives Amingiri Resort & Spa', atoll: 'North Male Atoll' },
+    { name: 'Holiday Inn Resort Kandooma Maldives', atoll: 'South Male Atoll' },
+    { name: 'Hondaafushi Island Resort', atoll: 'Haa Dhaalu Atoll' },
+    { name: 'Hurawalhi Island Resort', atoll: 'Lhaviyani Atoll' },
+    { name: 'Huvafen Fushi Maldives', atoll: 'North Male Atoll' },
+    { name: 'Ifuru Island Maldives', atoll: 'Raa Atoll' },
+    { name: 'Intercontinental Maldives Maamunagau Resort', atoll: 'Raa Atoll' },
+    { name: 'JA Manafaru, The Real Maldives', atoll: 'Haa Alifu Atoll' },
+    { name: 'JW Marriott Maldives Resort & Spa', atoll: 'Shaviyani Atoll' },
+    { name: 'Jawakara Islands Maldives', atoll: 'Lhaviyani Atoll' },
+    { name: 'Joy Island Maldives All Inclusive Resort', atoll: 'North Male Atoll' },
+    { name: 'Jumeirah Olhahali Island Maldives', atoll: 'North Male Atoll' },
+    { name: 'Kagi Maldives Resort & Spa', atoll: 'North Male Atoll' },
+    { name: 'Kandima Maldives', atoll: 'Dhaalu Atoll' },
+    { name: 'Kandolhu Maldives', atoll: 'North Ari Atoll' },
+    { name: 'Komandoo Island Resort & Spa', atoll: 'Lhaviyani Atoll' },
+    { name: 'Kuda Villingili Maldives', atoll: 'North Male Atoll' },
+    { name: 'Kudadoo Maldives Private Island', atoll: 'Lhaviyani Atoll' },
+    { name: 'Kuramathi Maldives', atoll: 'North Ari Atoll' },
+    { name: 'Kuredu Island Resort & Spa', atoll: 'Lhaviyani Atoll' },
+    { name: 'Kurumba Maldives', atoll: 'North Male Atoll' },
+    { name: 'LUX* South Ari Atoll Resort & Villas', atoll: 'South Ari Atoll' },
+    { name: 'Le Meridien Maldives Resort & Spa', atoll: 'Lhaviyani Atoll' },
+    { name: 'Lily Beach Resort and Spa', atoll: 'South Ari Atoll' },
+    { name: 'Madifushi Private Island', atoll: 'Meemu Atoll' },
+    { name: 'Makunudu Island', atoll: 'North Male Atoll' },
+    { name: 'Medhufushi Island Resort', atoll: 'Meemu Atoll' },
+    { name: 'Meeru Maldives Resort Island', atoll: 'North Male Atoll' },
+    { name: 'Mercure Maldives Kooddoo', atoll: 'Gaafu Alifu Atoll' },
+    { name: 'Milaidhoo Maldives', atoll: 'Baa Atoll' },
+    { name: 'NH Collection Maldives Havodda Resort', atoll: 'Gaafu Dhaalu Atoll' },
+    { name: 'NH Collection Maldives Reethi Resort', atoll: 'Baa Atoll' },
+    { name: 'NH Maldives Kuda Rah Resort', atoll: 'South Ari Atoll' },
+    { name: 'NOOE Maldives Kunaavashi', atoll: 'Vaavu Atoll' },
+    { name: 'Naladhu Private Island Maldives', atoll: 'South Male Atoll' },
+    { name: 'Nika Island Resort & Spa', atoll: 'North Ari Atoll' },
+    { name: 'Niyama Private Islands', atoll: 'Dhaalu Atoll' },
+    { name: 'Noku Maldives, Vignette Collection', atoll: 'Noonu Atoll' },
+    { name: 'Nova Maldives', atoll: 'South Ari Atoll' },
+    { name: 'OBLU NATURE Helengeli', atoll: 'North Male Atoll' },
+    { name: 'OBLU SELECT Lobigili', atoll: 'North Male Atoll' },
+    { name: 'OBLU SELECT Sangeli', atoll: 'North Male Atoll' },
+    { name: 'OBLU XPERIENCE Ailafushi', atoll: 'North Male Atoll' },
+    { name: 'OUTRIGGER Maldives Maafushivaru Resort', atoll: 'South Ari Atoll' },
+    { name: 'OZEN LIFE MAADHOO', atoll: 'South Male Atoll' },
+    { name: 'OZEN RESERVE BOLIFUSHI', atoll: 'South Male Atoll' },
+    { name: 'Oaga Art Resort Maldives', atoll: 'North Male Atoll' },
+    { name: 'One&Only Reethi Rah', atoll: 'North Male Atoll' },
+    { name: 'Park Hyatt Maldives Hadahaa', atoll: 'Gaafu Alifu Atoll' },
+    { name: 'Patina Maldives, Fari Islands', atoll: 'North Male Atoll' },
+    { name: 'Pullman Maldives Maamutaa', atoll: 'Gaafu Alifu Atoll' },
+    { name: 'Radisson Blu Resort Maldives', atoll: 'South Ari Atoll' },
+    { name: 'Riu Atoll', atoll: 'Dhaalu Atoll' },
+    { name: 'Riu Palace Maldivas', atoll: 'Dhaalu Atoll' },
+    { name: 'SAii Lagoon Maldives, Curio Collection By Hilton', atoll: 'South Male Atoll' },
+    { name: 'SO/ Maldives', atoll: 'South Male Atoll' },
+    { name: 'Safari Island', atoll: 'North Ari Atoll' },
+    { name: 'Sandies Bathala', atoll: 'North Ari Atoll' },
+    { name: 'Sheraton Maldives Full Moon Resort & Spa', atoll: 'North Male Atoll' },
+    { name: 'Sirru Fen Fushi Private Lagoon', atoll: 'Shaviyani Atoll' },
+    { name: 'Six Senses Kanuhura', atoll: 'Lhaviyani Atoll' },
+    { name: 'Six Senses Laamu', atoll: 'Laamu Atoll' },
+    { name: 'Siyam World Maldives', atoll: 'Noonu Atoll' },
+    { name: 'Soneva Fushi', atoll: 'Baa Atoll' },
+    { name: 'St. Regis Maldives Vommuli Resort', atoll: 'Dhaalu Atoll' },
+    { name: 'Summer Island Maldives', atoll: 'North Male Atoll' },
+    { name: 'Sun Siyam Iru Fushi', atoll: 'Noonu Atoll' },
+    { name: 'Sun Siyam Iru Veli', atoll: 'Dhaalu Atoll' },
+    { name: 'Sun Siyam Olhuveli', atoll: 'South Male Atoll' },
+    { name: 'Sun Siyam Vilu Reef', atoll: 'Dhaalu Atoll' },
+    { name: 'Taj Exotica Resort & Spa, Maldives', atoll: 'South Male Atoll' },
+    { name: 'The Barefoot Eco Hotel', atoll: 'Haa Dhaalu Atoll' },
+    { name: 'The Centara Collection, Machchafushi', atoll: 'South Ari Atoll' },
+    { name: 'The Nautilus Maldives', atoll: 'Baa Atoll' },
+    { name: 'The Residence Maldives', atoll: 'Gaafu Alifu Atoll' },
+    { name: 'The Residence Maldives at Dhigurah', atoll: 'Gaafu Alifu Atoll' },
+    { name: 'The Ritz-Carlton Maldives, Fari Islands', atoll: 'North Male Atoll' },
+    { name: 'The Standard, Huruvalhi Maldives', atoll: 'Raa Atoll' },
+    { name: 'The Westin Maldives Miriandhoo Resort', atoll: 'Baa Atoll' },
+    { name: 'V Villas Maldives at Mirihi', atoll: 'South Ari Atoll' },
+    { name: 'VARU by Atmosphere', atoll: 'North Male Atoll' },
+    { name: 'Vakkaru Maldives', atoll: 'Baa Atoll' },
+    { name: 'Velassaru Maldives', atoll: 'South Male Atoll' },
+    { name: 'Veligandu Maldives Resort Island', atoll: 'North Ari Atoll' },
+    { name: 'Vilamendhoo Island Resort & Spa', atoll: 'South Ari Atoll' },
+    { name: 'Villa Nautica Paradise Island Resort', atoll: 'North Male Atoll' },
+    { name: 'Villa Park Sun Island Resort', atoll: 'South Ari Atoll' },
+    { name: 'W Maldives', atoll: 'North Ari Atoll' },
+    { name: 'Waldorf Astoria Maldives Ithaafushi', atoll: 'South Male Atoll' },
+    { name: 'You & Me Maldives', atoll: 'Raa Atoll' },
+    { name: 'dusitD2 Feydhoo Maldives', atoll: 'Addu Atoll' }
+  ].map(item => ({
+    id: slugify(item.name),
+    name: item.name,
+    slug: slugify(item.name),
+    type: AccommodationType.RESORT,
+    atoll: item.atoll,
+    priceRange: item.name.includes('Soneva') || item.name.includes('Four Seasons') || item.name.includes('Ritz') ? '$$$$+' : '$$$$',
+    rating: 5,
+    shortDescription: `A premier escape located in the beautiful ${item.atoll}.`,
+    description: `Experience the pinnacle of Maldivian hospitality at ${item.name}. This sanctuary in ${item.atoll} offers an unparalleled blend of luxury, privacy, and natural beauty.`,
+    images: ['https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200'],
+    features: ['Overwater Villas', 'Marine Biology Center', 'Signature Dining', 'Spa & Wellness'],
+    transfers: [TransferType.SEAPLANE, TransferType.SPEEDBOAT],
+    mealPlans: [MealPlan.ALL_INCLUSIVE, MealPlan.HALF_BOARD],
+    uvp: `The ultimate definition of ${item.atoll} luxury.`,
+    roomTypes: [
+      { name: 'Beach Villa with Pool', size: '120 sqm', capacity: '2 Adults + 1 Child', description: 'Step directly from your deck into the soft white sands.', highlights: ['Private Pool', 'Beach Access'], image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800' },
+      { name: 'Ocean Water Villa', size: '150 sqm', capacity: '2 Adults', description: 'Suspended over the turquoise lagoon with panoramic views.', highlights: ['Glass Floor', 'Direct Lagoon Access'], image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=800' }
+    ],
+    diningVenues: [
+      { name: 'Azure Horizon', cuisine: 'Seafood', vibe: 'Coastal', description: 'Freshly caught treasures served under the stars.', highlights: ['Fresh Catch', 'Oceanfront'], image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800' }
+    ]
+  }))
 ];
 
 export const OFFERS: Offer[] = [
@@ -157,24 +256,6 @@ export const OFFERS: Offer[] = [
     expiryDate: '2024-12-31',
     image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800',
     category: 'Honeymoon'
-  },
-  {
-    id: 'offer-2',
-    title: 'Early Bird Summer Escape',
-    discount: '25% OFF',
-    resortName: 'Soneva Jani',
-    expiryDate: '2024-09-30',
-    image: 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800',
-    category: 'Early Bird'
-  },
-  {
-    id: 'offer-3',
-    title: 'Last Minute Atoll Hopping',
-    discount: '40% OFF',
-    resortName: 'Island Break Fulidhoo',
-    expiryDate: '2024-06-15',
-    image: 'https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=800',
-    category: 'Last Minute'
   }
 ];
 
@@ -182,47 +263,22 @@ export const EXPERIENCES: Experience[] = [
   {
     id: 'exp-1',
     title: 'Sandbank Soirée',
-    description: 'A private dining experience on a disappearing sandbank, surrounded only by the rising tide and flickering candlelight.',
+    description: 'A private dining experience on a disappearing sandbank.',
     image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200',
     category: 'Culinary'
-  },
-  {
-    id: 'exp-2',
-    title: 'Whale Shark Odyssey',
-    description: 'Swim alongside the gentle giants of the South Ari Atoll in a guided, sustainable encounter.',
-    image: 'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&q=80&w=1200',
-    category: 'Adventure'
-  },
-  {
-    id: 'exp-3',
-    title: 'Bio-Luminescent Night',
-    description: 'Witness the sea of stars as the shoreline glows with natural phosphorescence under the new moon.',
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1200',
-    category: 'Wellness'
   }
 ];
 
 export const BLOG_POSTS: BlogPost[] = [
   {
     id: 'post-1',
-    title: 'The Art of the Seaplane: A Perspective',
+    title: 'The Art of the Seaplane',
     slug: 'art-of-the-seaplane',
-    excerpt: 'How the worlds largest seaplane fleet defines the logistics of Maldivian luxury.',
-    content: 'The Maldives is more than just luxury; it\'s a feeling of weightlessness. Whether you\'re flying in a seaplane or taking a slow local ferry, the views remain iconic. Planning your trip requires attention to detail—especially when it comes to transfers and weather windows.',
+    excerpt: 'How the worlds largest seaplane fleet defines luxury.',
+    content: 'The Maldives is more than just luxury; it\'s a feeling of weightlessness.',
     image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
     date: '2024-05-15',
     author: 'Elena Rossi',
     category: 'Dispatch'
-  },
-  {
-    id: 'post-2',
-    title: 'Sustainability in the Atolls',
-    slug: 'sustainability-atolls',
-    excerpt: 'Defining zero-waste luxury in the face of a changing climate.',
-    content: 'Discover how resorts like Soneva are leading the way in sustainable architecture and coral reef preservation through innovative science and traditional wisdom.',
-    image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1200',
-    date: '2024-04-20',
-    author: 'Marcus Vance',
-    category: 'Guide'
   }
 ];

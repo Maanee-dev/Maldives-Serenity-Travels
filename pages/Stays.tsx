@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { RESORTS } from '../constants';
-import { AccommodationType, TransferType } from '../types';
+import { supabase } from '../lib/supabase';
+import { AccommodationType, TransferType, Accommodation } from '../types';
 import ResortCard from '../components/ResortCard';
 
 const Stays: React.FC = () => {
@@ -9,6 +9,8 @@ const Stays: React.FC = () => {
   const searchParams = new URLSearchParams(location.search);
   const initialQuery = searchParams.get('q') || '';
   
+  const [resorts, setResorts] = useState<Accommodation[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filterQuery, setFilterQuery] = useState(initialQuery);
   const [stayType, setStayType] = useState<AccommodationType>(AccommodationType.RESORT);
   const [selectedAtoll, setSelectedAtoll] = useState<string>('All');
@@ -17,6 +19,43 @@ const Stays: React.FC = () => {
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
+
+  // Data Fetching from Supabase
+  useEffect(() => {
+    const fetchResorts = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('resorts')
+        .select('*');
+      
+      if (error) {
+        console.error('Supabase fetch error:', error);
+      } else if (data) {
+        // Map snake_case database fields back to camelCase types
+        const mappedData: Accommodation[] = data.map(item => ({
+          id: item.id,
+          name: item.name,
+          slug: item.slug,
+          type: item.type as AccommodationType,
+          atoll: item.atoll,
+          priceRange: item.price_range,
+          rating: item.rating,
+          description: item.description,
+          shortDescription: item.short_description,
+          images: item.images,
+          features: item.features,
+          transfers: item.transfers as TransferType[],
+          mealPlans: item.meal_plans,
+          uvp: item.uvp,
+          isFeatured: item.is_featured
+        }));
+        setResorts(mappedData);
+      }
+      setLoading(false);
+    };
+
+    fetchResorts();
+  }, []);
 
   useEffect(() => {
     const q = searchParams.get('q');
@@ -46,25 +85,27 @@ const Stays: React.FC = () => {
 
   // Smooth entry animations
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
-      });
-    }, { threshold: 0.1 });
-    
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
-  }, [stayType, selectedAtoll, selectedTransfer, filterQuery, currentPage]);
+    if (!loading) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      return () => observer.disconnect();
+    }
+  }, [stayType, selectedAtoll, selectedTransfer, filterQuery, currentPage, loading]);
 
   const atolls = useMemo(() => {
-    const set = new Set(RESORTS.filter(r => r.type === stayType).map(r => r.atoll));
+    const set = new Set(resorts.filter(r => r.type === stayType).map(r => r.atoll));
     return ['All', ...Array.from(set)];
-  }, [stayType]);
+  }, [stayType, resorts]);
 
   const filteredStays = useMemo(() => {
-    return RESORTS.filter(stay => {
+    return resorts.filter(stay => {
       const matchesType = stay.type === stayType;
       const matchesSearch = stay.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
                             stay.atoll.toLowerCase().includes(filterQuery.toLowerCase());
@@ -73,7 +114,7 @@ const Stays: React.FC = () => {
       
       return matchesType && matchesSearch && matchesAtoll && matchesTransfer;
     });
-  }, [stayType, filterQuery, selectedAtoll, selectedTransfer]);
+  }, [stayType, filterQuery, selectedAtoll, selectedTransfer, resorts]);
 
   // Calculate Paginated Results
   const totalPages = Math.ceil(filteredStays.length / itemsPerPage);
@@ -96,7 +137,7 @@ const Stays: React.FC = () => {
   return (
     <div className="bg-[#FCFAF7] min-h-screen">
       {/* Editorial Header */}
-      <section className="pt-56 pb-24 md:pb-40 px-6 text-center reveal">
+      <section className="pt-56 pb-24 md:pb-40 px-6 text-center reveal active">
         <div className="max-w-7xl mx-auto">
           <span className="text-[10px] uppercase tracking-[1em] font-bold mb-10 block text-sky-500">The Portfolio</span>
           <h1 className="text-6xl md:text-9xl font-serif font-bold mb-12 text-slate-900 tracking-tighter italic leading-none">
@@ -112,7 +153,7 @@ const Stays: React.FC = () => {
       {/* Search & Results Anchor */}
       <div id="results-anchor" className="scroll-mt-32"></div>
       
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-24 reveal">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-24 reveal active">
         <div className="relative group max-w-4xl mx-auto">
           <span className="absolute left-0 top-0 text-[8px] font-bold uppercase tracking-[0.8em] text-slate-300 group-focus-within:text-sky-500 transition-colors">
             Search Sanctuaries
@@ -137,7 +178,7 @@ const Stays: React.FC = () => {
         <div className="flex flex-col gap-24">
           
           {/* Filter Bar */}
-          <div className="flex flex-col md:flex-row justify-between items-center gap-12 border-b border-slate-100 pb-16 reveal">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-12 border-b border-slate-100 pb-16 reveal active">
             <div className="flex gap-4 p-1.5 bg-slate-100/30 backdrop-blur-sm rounded-full border border-slate-200/50">
               <button 
                 onClick={() => setStayType(AccommodationType.RESORT)}
@@ -181,14 +222,19 @@ const Stays: React.FC = () => {
 
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16 min-h-[400px]">
-            {currentStays.length > 0 ? (
+            {loading ? (
+              <div className="col-span-full py-40 text-center">
+                <div className="w-12 h-12 border-4 border-slate-100 border-t-sky-500 rounded-full animate-spin mx-auto mb-8"></div>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.6em]">Consulting the archives...</p>
+              </div>
+            ) : currentStays.length > 0 ? (
               currentStays.map((stay, idx) => (
-                <div key={stay.id} className="reveal" style={{ transitionDelay: `${idx * 50}ms` }}>
+                <div key={stay.id} className="reveal active" style={{ transitionDelay: `${idx * 50}ms` }}>
                   <ResortCard resort={stay} />
                 </div>
               ))
             ) : (
-              <div className="col-span-full py-40 text-center reveal">
+              <div className="col-span-full py-40 text-center reveal active">
                 <h3 className="text-4xl font-serif font-bold italic text-slate-900 mb-6">No Sanctuaries Found.</h3>
                 <p className="text-slate-400 uppercase tracking-widest text-[10px]">Adjust your boutique filters to continue the journey.</p>
               </div>
@@ -196,8 +242,8 @@ const Stays: React.FC = () => {
           </div>
 
           {/* Mobile-Responsive Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-12 flex flex-col items-center gap-10 reveal border-t border-slate-100 pt-16">
+          {!loading && totalPages > 1 && (
+            <div className="mt-12 flex flex-col items-center gap-10 reveal active border-t border-slate-100 pt-16">
               <div className="flex items-center justify-between w-full max-w-sm md:max-w-none md:gap-16">
                 {/* Previous Button */}
                 <button 

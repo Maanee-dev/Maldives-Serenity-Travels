@@ -9,13 +9,14 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Updated to use lowercase to match the filenames reported in casing conflict errors
+// Fix: Imported via lowercase path to avoid casing conflict with duplicate files (Offers.tsx vs offers.tsx) in the project
 import Offers from './pages/offers';
-// Updated to use lowercase to match the filenames reported in casing conflict errors
+// Fix: Imported via lowercase path to avoid casing conflict with duplicate files (Experiences.tsx vs experiences.tsx) in the project
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
+import AdminSync from './pages/AdminSync';
 
 const ScrollToTopOnRoute = () => {
   const { pathname } = useLocation();
@@ -60,6 +61,7 @@ const App: React.FC = () => {
             <Route path="/stories" element={<Stories />} />
             <Route path="/stories/:slug" element={<BlogPostDetail />} />
             <Route path="/plan" element={<PlanMyTrip />} />
+            <Route path="/admin-sync" element={<AdminSync />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
