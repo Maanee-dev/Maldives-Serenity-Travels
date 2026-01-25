@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { RESORTS } from '../constants';
-import { Accommodation, AccommodationType, TransferType, MealPlan, RoomType, DiningVenue } from '../types';
+import { Accommodation, AccommodationType, TransferType, MealPlan } from '../types';
 
 const ResortDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -43,6 +43,8 @@ const ResortDetail: React.FC = () => {
       setLoading(true);
       try {
         const localBackup = RESORTS.find(r => r.slug === slug);
+        
+        // 1. Fetch the main resort record
         const { data: resData, error: resErr } = await supabase
           .from('resorts')
           .select('*')
@@ -52,16 +54,14 @@ const ResortDetail: React.FC = () => {
         if (resErr) console.warn('Supabase resort fetch error:', resErr);
 
         if (resData) {
-          const [roomsResponse, diningResponse] = await Promise.all([
-            supabase
-              .from('room_types')
-              .select('*')
-              .eq('resort_id', resData.slug || slug),
-            supabase
-              .from('dining_venues')
-              .select('*')
-              .eq('resort_id', resData.slug || slug)
-          ]);
+          // 2. Map data, prioritizing Supabase JSONB columns then local constants
+          const rawRooms = (resData.room_types && resData.room_types.length > 0) 
+            ? resData.room_types 
+            : (localBackup?.roomTypes || []);
+
+          const rawDining = (resData.dining_venues && resData.dining_venues.length > 0)
+            ? resData.dining_venues
+            : (localBackup?.diningVenues || []);
 
           const mappedResort: Accommodation = {
             id: resData.id,
@@ -79,26 +79,22 @@ const ResortDetail: React.FC = () => {
             mealPlans: (resData.meal_plans || localBackup?.mealPlans || []) as MealPlan[],
             uvp: resData.uvp || localBackup?.uvp || 'A sanctuary defined by perspective.',
             isFeatured: resData.is_featured || false,
-            roomTypes: (roomsResponse.data && roomsResponse.data.length > 0)
-              ? roomsResponse.data.map(r => ({
-                  name: r.name,
-                  description: r.description,
-                  highlights: parseHighlights(r.highlights),
-                  image: r.image,
-                  size: r.size,
-                  capacity: r.capacity
-                }))
-              : (localBackup?.roomTypes || []),
-            diningVenues: (diningResponse.data && diningResponse.data.length > 0)
-              ? diningResponse.data.map(d => ({
-                  name: d.name,
-                  cuisine: d.cuisine,
-                  description: d.description,
-                  highlights: parseHighlights(d.highlights),
-                  image: d.image,
-                  vibe: d.vibe
-                }))
-              : (localBackup?.diningVenues || [])
+            roomTypes: rawRooms.map((r: any) => ({
+              name: r.name,
+              description: r.description,
+              highlights: parseHighlights(r.highlights),
+              image: r.image,
+              size: r.size,
+              capacity: r.capacity
+            })),
+            diningVenues: rawDining.map((d: any) => ({
+              name: d.name,
+              cuisine: d.cuisine,
+              description: d.description,
+              highlights: parseHighlights(d.highlights),
+              image: d.image,
+              vibe: d.vibe
+            }))
           };
           
           setResort(mappedResort);
@@ -143,8 +139,7 @@ const ResortDetail: React.FC = () => {
   if (!resort) return (
     <div className="min-h-screen bg-[#FCFAF7] flex flex-col items-center justify-center px-6 text-center">
       <h2 className="text-4xl md:text-6xl font-serif font-bold italic mb-6 text-slate-900 tracking-tighter">Sanctuary not found.</h2>
-      <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.6em] mb-12">The island you seek has faded into the blue.</p>
-      <Link to="/stays" className="bg-slate-950 text-white px-12 py-5 rounded-full text-[10px] font-bold uppercase tracking-[0.5em] hover:bg-sky-500 transition-all duration-700 shadow-xl">Return to Portfolio</Link>
+      <Link to="/stays" className="text-sky-500 font-bold uppercase tracking-widest text-xs underline decoration-sky-100 underline-offset-8">Return to Portfolio</Link>
     </div>
   );
 
@@ -253,7 +248,7 @@ const ResortDetail: React.FC = () => {
         </section>
       )}
 
-      {/* Culinary Portfolio - Horizontal Scroller */}
+      {/* Culinary Portfolio */}
       {resort.diningVenues && resort.diningVenues.length > 0 && (
         <section className="py-24 md:py-48 px-6 bg-[#FCFAF7] overflow-hidden">
           <div className="max-w-[1440px] mx-auto">
@@ -262,11 +257,7 @@ const ResortDetail: React.FC = () => {
                   <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em] mb-8 block">Gastronomy</span>
                   <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 italic tracking-tighter">Culinary Portfolio.</h3>
                 </div>
-                <div className="flex gap-4 mb-4">
-                   <div className="w-2 h-2 rounded-full bg-slate-200"></div>
-                   <div className="w-2 h-2 rounded-full bg-slate-900"></div>
-                   <div className="w-2 h-2 rounded-full bg-slate-200"></div>
-                </div>
+                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] mb-2">Refined Island Flavours</p>
              </div>
              
              <div className="flex gap-16 md:gap-24 overflow-x-auto no-scrollbar pb-16 snap-x snap-mandatory">
@@ -284,7 +275,7 @@ const ResortDetail: React.FC = () => {
                        <p className="text-slate-500 text-lg leading-relaxed mb-10 italic">"{venue.description}"</p>
                        <div className="flex items-center gap-6">
                           <div className="w-12 h-px bg-slate-200"></div>
-                          <span className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.4em]">{venue.vibe} Vibe</span>
+                          <span className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.4em]">{venue.vibe}</span>
                        </div>
                     </div>
                   </div>
@@ -303,7 +294,7 @@ const ResortDetail: React.FC = () => {
         <div className="max-w-4xl mx-auto px-6 relative z-10">
           {isSubmitted ? (
             <div className="text-center py-20 reveal active">
-               <h3 className="text-5xl md:text-8xl font-serif font-bold text-white mb-12 italic">Your request is floating to us.</h3>
+               <h3 className="text-5xl md:text-8xl font-serif font-bold text-white mb-12 italic">Vision Received.</h3>
                <p className="text-sky-400 text-[10px] font-bold uppercase tracking-[0.5em] leading-loose">One of our sanctuary experts will reach out <br/> to refine your perspective within 24 hours.</p>
             </div>
           ) : (
@@ -356,7 +347,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* Suggested Stays - Horizontal Scroller */}
+      {/* Suggested Stays */}
       <section className="py-32 px-6 bg-white overflow-hidden">
          <div className="max-w-[1440px] mx-auto">
             <div className="flex justify-between items-end mb-24 reveal">
@@ -368,7 +359,7 @@ const ResortDetail: React.FC = () => {
             </div>
             
             <div className="flex gap-12 overflow-x-auto no-scrollbar pb-12 snap-x snap-mandatory">
-               {RESORTS.filter(r => r.slug !== slug).map((r, i) => (
+               {RESORTS.filter(r => r.slug !== slug).slice(0, 4).map((r, i) => (
                  <div key={i} className="reveal flex-shrink-0 w-[70vw] md:w-[35vw] lg:w-[22vw] snap-start">
                    <Link to={`/stays/${r.slug}`} className="group block">
                       <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden mb-8 shadow-sm group-hover:shadow-xl transition-all duration-1000 bg-slate-100">
