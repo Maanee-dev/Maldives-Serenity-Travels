@@ -9,10 +9,10 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Updated to use PascalCase to match the existing filename and resolve casing conflict
-import Offers from './pages/Offers';
-// Updated to use PascalCase to match the existing filename and resolve casing conflict
-import Experiences from './pages/Experiences';
+// Using lowercase to resolve casing conflict with existing files in the project
+import Offers from './pages/offers';
+// Using lowercase to resolve casing conflict with existing files in the project
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

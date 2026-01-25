@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { RESORTS } from '../constants';
-import { Accommodation, AccommodationType, TransferType, MealPlan } from '../types';
+import { Accommodation, AccommodationType, TransferType, MealPlan, RoomType, DiningVenue } from '../types';
 
 const ResortDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -16,17 +16,42 @@ const ResortDetail: React.FC = () => {
       try {
         const localBackup = RESORTS.find(r => r.slug === slug);
 
+        // 1. Fetch the main Resort record
         const { data: resData, error: resErr } = await supabase
           .from('resorts')
           .select('*')
           .eq('slug', slug)
           .maybeSingle();
         
-        if (resErr) {
-          console.warn('Supabase fetch error, falling back to local.', resErr);
-        }
+        if (resErr) console.warn('Supabase resort fetch error:', resErr);
 
         if (resData) {
+          // 2. Fetch associated Room Types from the separate table
+          const { data: roomsData, error: roomsErr } = await supabase
+            .from('room_types')
+            .select('*')
+            .eq('resort_id', resData.id);
+          
+          if (roomsErr) console.warn('Rooms fetch error:', roomsErr);
+
+          // 3. Fetch associated Dining Venues from the separate table
+          const { data: diningData, error: diningErr } = await supabase
+            .from('dining_venues')
+            .select('*')
+            .eq('resort_id', resData.id);
+          
+          if (diningErr) console.warn('Dining fetch error:', diningErr);
+
+          // Helper to safely parse highlights (handles JSONB or stringified JSON)
+          const parseList = (item: any) => {
+            if (Array.isArray(item)) return item;
+            try {
+              return typeof item === 'string' ? JSON.parse(item) : [];
+            } catch (e) {
+              return [];
+            }
+          };
+
           const mappedResort: Accommodation = {
             id: resData.id,
             name: resData.name,
@@ -43,9 +68,15 @@ const ResortDetail: React.FC = () => {
             mealPlans: (resData.meal_plans || localBackup?.mealPlans || []) as MealPlan[],
             uvp: resData.uvp || localBackup?.uvp || 'A sanctuary defined by perspective.',
             isFeatured: resData.is_featured || false,
-            roomTypes: (resData.room_types && resData.room_types.length > 0) ? resData.room_types : (localBackup?.roomTypes || []),
-            diningVenues: (resData.dining_venues && resData.dining_venues.length > 0) ? resData.dining_venues : (localBackup?.diningVenues || [])
+            // Prioritize relational tables, fallback to JSONB column, then local constant
+            roomTypes: (roomsData && roomsData.length > 0) 
+              ? roomsData.map(r => ({ ...r, highlights: parseList(r.highlights) }))
+              : (resData.room_types && resData.room_types.length > 0 ? resData.room_types : (localBackup?.roomTypes || [])),
+            diningVenues: (diningData && diningData.length > 0)
+              ? diningData.map(d => ({ ...d, highlights: parseList(d.highlights) }))
+              : (resData.dining_venues && resData.dining_venues.length > 0 ? resData.dining_venues : (localBackup?.diningVenues || []))
           };
+          
           setResort(mappedResort);
           document.title = `${mappedResort.name} | Serenity Maldives`;
         } else if (localBackup) {
@@ -187,7 +218,7 @@ const ResortDetail: React.FC = () => {
                   <h4 className="text-2xl font-serif font-bold text-slate-900 mb-4 group-hover:italic transition-all">{room.name}</h4>
                   <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 opacity-80 mb-8">{room.description}</p>
                   <div className="flex flex-wrap gap-4">
-                    {room.highlights.slice(0, 3).map((h, i) => (
+                    {room.highlights && room.highlights.slice(0, 3).map((h, i) => (
                       <span key={i} className="text-[8px] font-bold text-slate-400 uppercase tracking-widest border border-slate-100 px-3 py-1 rounded-full">{h}</span>
                     ))}
                   </div>
