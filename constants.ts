@@ -7,7 +7,7 @@ const slugify = (text: string) => text.toLowerCase().replace(/[^\w ]+/g, '').rep
 
 export const RESORTS: Accommodation[] = [
   {
-    id: 'adaaran-prestige-vadoo',
+    id: '739a8c14-2391-4d32-8456-789012345678',
     name: 'Adaaran Prestige Vadoo',
     slug: 'adaaran-prestige-vadoo',
     type: AccommodationType.RESORT,
@@ -31,7 +31,7 @@ export const RESORTS: Accommodation[] = [
     ]
   },
   {
-    id: 'adaaran-prestige-water-villas',
+    id: '839a8c14-2391-4d32-8456-789012345679',
     name: 'Adaaran Prestige Water Villas',
     slug: 'adaaran-prestige-water-villas',
     type: AccommodationType.RESORT,
@@ -53,7 +53,7 @@ export const RESORTS: Accommodation[] = [
     ]
   },
   {
-    id: 'adaaran-select-hudhuran-fushi',
+    id: '939a8c14-2391-4d32-8456-789012345680',
     name: 'Adaaran Select Hudhuran Fushi',
     slug: 'adaaran-select-hudhuran-fushi',
     type: AccommodationType.RESORT,
@@ -75,7 +75,7 @@ export const RESORTS: Accommodation[] = [
     ]
   },
   {
-    id: 'adaaran-select-meedhupparu',
+    id: '039a8c14-2391-4d32-8456-789012345681',
     name: 'Adaaran Select Meedhupparu',
     slug: 'adaaran-select-meedhupparu',
     type: AccommodationType.RESORT,
@@ -147,7 +147,7 @@ export const EXPERIENCES: Experience[] = [
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-    id: 'dispatch-01',
+    id: '43e74212-349c-4876-90f7-5264b971a62d',
     title: 'The Rise of Regenerative Tourism',
     slug: 'rise-of-regenerative-tourism',
     excerpt: 'Beyond sustainability, the Maldives is embracing a new era of travel that actively restores our delicate coral ecosystems.',
@@ -159,7 +159,7 @@ export const BLOG_POSTS: BlogPost[] = [
     is_featured: true
   },
   {
-    id: 'guide-01',
+    id: 'b9875952-4740-4560-848e-71649666f284',
     title: 'A Guide to Private Island Buyouts',
     slug: 'guide-private-island-buyouts',
     excerpt: 'Ultimate seclusion for those who demand the entire archipelago to themselves.',
@@ -170,7 +170,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Guide'
   },
   {
-    id: 'dispatch-02',
+    id: '63d040a4-3158-4562-95f7-64098935c17d',
     title: 'Michelin Stars Over the Indian Ocean',
     slug: 'michelin-stars-maldives',
     excerpt: 'The Maldives is becoming a global culinary hotspot, attracting the world\'s most decorated chefs for seasonal residencies.',
@@ -181,7 +181,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Dispatch'
   },
   {
-    id: 'update-01',
+    id: 'a0504543-7845-4221-8208-161048679545',
     title: 'Seaplane Network Expansion for 2026',
     slug: 'seaplane-network-expansion',
     excerpt: 'New routes and modern fleets make reaching remote atolls faster and more comfortable than ever.',
@@ -192,7 +192,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Update'
   },
   {
-    id: 'dispatch-03',
+    id: 'f8439045-3123-4567-8901-234567890123',
     title: 'The Art of the Sandbank Soirée',
     slug: 'art-of-sandbank-soiree',
     excerpt: 'The definitive Maldivian experience: a private dinner on a ribbon of sand, appearing only at low tide.',
@@ -203,7 +203,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Dispatch'
   },
   {
-    id: 'guide-02',
+    id: 'e1439045-3123-4567-8901-234567890124',
     title: 'Maldives Architecture: Circularity and Sea',
     slug: 'maldives-architecture-circularity',
     excerpt: 'How the latest resorts are blending traditional Maldivian craftsmanship with futuristic circular design.',
@@ -214,7 +214,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Guide'
   },
   {
-    id: 'tip-01',
+    id: 'd1439045-3123-4567-8901-234567890125',
     title: 'Packing for the Atolls: A Curated Edit',
     slug: 'packing-for-the-atolls',
     excerpt: 'The "Barefoot Luxury" dress code explained, along with the essential kit for a Maldivian escape.',
@@ -225,7 +225,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Tip'
   },
   {
-    id: 'dispatch-04',
+    id: 'c1439045-3123-4567-8901-234567890126',
     title: 'Diving with Gentle Giants: Baa Atoll',
     slug: 'diving-gentle-giants-baa-atoll',
     excerpt: 'A firsthand account of the annual Manta Ray aggregation in the UNESCO Biosphere Reserve.',
@@ -236,7 +236,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Dispatch'
   },
   {
-    id: 'dispatch-05',
+    id: 'b1439045-3123-4567-8901-234567890127',
     title: 'The Wellness Retreats of 2026',
     slug: 'wellness-retreats-2026',
     excerpt: 'Holistic healing meets island seclusion in the newest wave of Maldivian wellness sanctuaries.',
@@ -247,7 +247,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Dispatch'
   },
   {
-    id: 'guide-03',
+    id: 'a1439045-3123-4567-8901-234567890128',
     title: 'Sustainable Surfing in the North Male Atoll',
     slug: 'sustainable-surfing-north-male',
     excerpt: 'Chasing the perfect left at Lohis and how surf tourism is supporting local reef health.',

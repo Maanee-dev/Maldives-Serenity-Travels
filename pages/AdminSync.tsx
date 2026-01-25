@@ -1,33 +1,32 @@
-
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { RESORTS } from '../constants';
+import { RESORTS, BLOG_POSTS } from '../constants';
 
 const AdminSync: React.FC = () => {
-  const [status, setStatus] = useState<string>('Idle');
+  const [status, setStatus] = useState<string>('Ready for deployment');
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [errorDetails, setErrorDetails] = useState<string | null>(null);
+  const [log, setLog] = useState<string[]>([]);
 
-  const syncData = async () => {
+  const addLog = (msg: string) => {
+    setLog(prev => [msg, ...prev].slice(0, 50));
+  };
+
+  const syncAllData = async () => {
     setLoading(true);
-    setErrorDetails(null);
-    setStatus('Initializing migration...');
+    setLog([]);
     setProgress(0);
+    setStatus('Syncing Portfolio & Editorial Archives...');
     
     try {
-      const total = RESORTS.length;
-      let count = 0;
+      const totalSteps = RESORTS.length + BLOG_POSTS.length;
+      let completed = 0;
 
+      // 1. SYNC RESORTS
+      addLog('--- INITIATING RESORT MIGRATION ---');
       for (const resort of RESORTS) {
-        setStatus(`Syncing Property: ${resort.name}...`);
-        
-        /**
-         * Atomic Upsert:
-         * We now push rooms and dining as JSONB columns directly into the resorts table.
-         * This ensures that if the resort is saved, all its rooms and dining are saved too.
-         */
-        const { error: resortErr } = await supabase.from('resorts').upsert({
+        addLog(`Pushing Property: ${resort.name}`);
+        const { error } = await supabase.from('resorts').upsert({
           id: resort.id,
           name: resort.name,
           slug: resort.slug,
@@ -43,22 +42,49 @@ const AdminSync: React.FC = () => {
           meal_plans: resort.mealPlans,
           uvp: resort.uvp,
           is_featured: resort.isFeatured || false,
-          // New nested data columns
           room_types: resort.roomTypes || [],
           dining_venues: resort.diningVenues || []
         }, { onConflict: 'id' });
 
-        if (resortErr) throw new Error(`Sync failed for ${resort.name}: ${resortErr.message}`);
-
-        count++;
-        setProgress(Math.round((count / total) * 100));
+        if (error) {
+          addLog(`❌ FAILED: ${resort.name} - ${error.message}`);
+          throw error;
+        }
+        completed++;
+        setProgress(Math.round((completed / totalSteps) * 100));
       }
 
-      setStatus('Success! Portfolio fully synchronized with Room & Dining data.');
+      // 2. SYNC STORIES
+      addLog('--- INITIATING EDITORIAL MIGRATION ---');
+      for (const post of BLOG_POSTS) {
+        addLog(`Pushing Dispatch: ${post.title}`);
+        const { error } = await supabase.from('stories').upsert({
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt,
+          content: post.content,
+          image: post.image,
+          date: post.date,
+          author: post.author,
+          category: post.category,
+          is_featured: post.is_featured || false
+        }, { onConflict: 'id' });
+
+        if (error) {
+          addLog(`❌ FAILED: ${post.title} - ${error.message}`);
+          throw error;
+        }
+        completed++;
+        setProgress(Math.round((completed / totalSteps) * 100));
+      }
+
+      setStatus('Operational Success. Cloud Archive Updated.');
+      addLog('✅ ALL SYSTEMS SYNCHRONIZED');
     } catch (err: any) {
-      console.error("Migration Error:", err);
-      setStatus('Migration Failed');
-      setErrorDetails(err.message || 'Check browser console for more details.');
+      console.error("Migration Critical Failure:", err);
+      setStatus('Operational Failure');
+      addLog(`‼️ CRITICAL ERROR: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -66,47 +92,58 @@ const AdminSync: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FCFAF7] flex items-center justify-center p-6">
-      <div className="max-w-2xl w-full bg-white rounded-[3.5rem] p-12 md:p-16 shadow-2xl border border-slate-50 text-center">
-        <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em] mb-12 block">Cloud Systems</span>
-        <h1 className="text-4xl md:text-5xl font-serif font-bold italic mb-8">Unified Synchronizer</h1>
-        <p className="text-slate-400 text-sm mb-12 uppercase tracking-[0.3em] leading-loose">
-          Pushing {RESORTS.length} properties with nested residences and dining.
-        </p>
-        
-        {loading && (
-          <div className="w-full bg-slate-50 h-1 rounded-full mb-12 overflow-hidden">
-            <div 
-              className="bg-sky-500 h-full transition-all duration-700 ease-out" 
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-        )}
-
-        <div className={`p-8 rounded-3xl mb-12 transition-all duration-500 ${errorDetails ? 'bg-red-50 border border-red-100' : 'bg-slate-50'}`}>
-          <p className={`text-[11px] font-bold uppercase tracking-widest ${errorDetails ? 'text-red-600' : 'text-slate-900'}`}>
-            {status}
-          </p>
-          {errorDetails && (
-            <div className="mt-4 text-[10px] text-red-500 font-medium space-y-2 text-left">
-              <p className="font-bold underline uppercase tracking-widest">Debug Info:</p>
-              <p className="leading-relaxed opacity-80">{errorDetails}</p>
-            </div>
-          )}
-        </div>
-
-        {!loading && (
-          <div className="space-y-6">
-            <button 
-              onClick={syncData}
-              className="w-full bg-slate-950 text-white font-bold py-6 rounded-full text-[10px] uppercase tracking-[0.5em] hover:bg-sky-500 transition-all duration-700 shadow-xl active:scale-95"
-            >
-              Start Migration
-            </button>
-            <p className="text-[8px] text-slate-300 font-bold uppercase tracking-[0.4em]">
-              Note: This will update the 'resorts' table with nested room and dining data.
+      <div className="max-w-3xl w-full bg-white rounded-[4rem] p-16 shadow-2xl border border-slate-50 relative overflow-hidden">
+        <div className="relative z-10 text-center">
+            <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1.2em] mb-12 block">Cloud Infrastructure</span>
+            <h1 className="text-5xl font-serif font-bold italic mb-10 tracking-tight">Master Synchronizer</h1>
+            
+            <p className="text-slate-400 text-[10px] mb-16 uppercase tracking-[0.4em] leading-loose max-w-lg mx-auto">
+              Deployment targeting {RESORTS.length} Properties and {BLOG_POSTS.length} Editorial Dispatches. 
+              UUID validation enforced.
             </p>
-          </div>
-        )}
+            
+            <div className="bg-slate-50 p-10 rounded-[2.5rem] mb-12 border border-slate-100">
+               <div className="flex justify-between items-center mb-6">
+                  <span className={`text-[9px] font-bold uppercase tracking-widest ${loading ? 'animate-pulse text-sky-500' : 'text-slate-900'}`}>
+                    {status}
+                  </span>
+                  <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">{progress}%</span>
+               </div>
+               <div className="w-full bg-slate-200 h-1 rounded-full overflow-hidden">
+                  <div 
+                    className="bg-sky-500 h-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(14,165,233,0.5)]" 
+                    style={{ width: `${progress}%` }}
+                  ></div>
+               </div>
+            </div>
+
+            <div className="mb-12">
+               <button 
+                 onClick={syncAllData}
+                 disabled={loading}
+                 className="w-full bg-slate-900 text-white font-bold py-7 rounded-full text-[10px] uppercase tracking-[0.6em] hover:bg-sky-500 transition-all duration-700 shadow-2xl active:scale-[0.98] disabled:opacity-50"
+               >
+                 {loading ? 'Consulting Servers...' : 'Initiate Master Sync'}
+               </button>
+            </div>
+
+            <div className="text-left bg-slate-950 rounded-[2rem] p-8 h-48 overflow-y-auto no-scrollbar font-mono text-[9px] border border-white/5">
+               <div className="text-sky-400 mb-4 font-bold uppercase tracking-widest opacity-50 border-b border-white/10 pb-2">System Diagnostics</div>
+               {log.length === 0 ? (
+                 <p className="text-slate-600 italic">Waiting for connection...</p>
+               ) : (
+                 log.map((m, i) => (
+                   <p key={i} className={`mb-1.5 ${m.includes('❌') || m.includes('‼️') ? 'text-red-400' : m.includes('✅') ? 'text-emerald-400' : 'text-slate-400'}`}>
+                     {`> ${m}`}
+                   </p>
+                 ))
+               )}
+            </div>
+        </div>
+        
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none flex items-center justify-center">
+            <h2 className="text-[35vw] font-serif italic -rotate-12">Serenity</h2>
+        </div>
       </div>
     </div>
   );
