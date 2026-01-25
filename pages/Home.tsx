@@ -1,8 +1,7 @@
-
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Accommodation, AccommodationType, TransferType, MealPlan } from '../types';
+import { Accommodation, AccommodationType, TransferType, MealPlan, BlogPost } from '../types';
 import { BLOG_POSTS } from '../constants';
 import ResortCard from '../components/ResortCard';
 
@@ -12,20 +11,22 @@ const Home: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [typedPlaceholder, setTypedPlaceholder] = useState("");
   const [featuredResorts, setFeaturedResorts] = useState<Accommodation[]>([]);
+  const [recentStories, setRecentStories] = useState<BlogPost[]>([]);
 
   const typingIdx = useRef(0);
   const charIdx = useRef(0);
   const isDeleting = useRef(false);
 
   useEffect(() => {
-    const fetchFeatured = async () => {
-      const { data, error } = await supabase
+    const fetchData = async () => {
+      // Fetch Resorts
+      const { data: resortsData } = await supabase
         .from('resorts')
         .select('*')
         .limit(6);
       
-      if (data) {
-        const mapped: Accommodation[] = data.map(item => ({
+      if (resortsData) {
+        const mappedResorts: Accommodation[] = resortsData.map(item => ({
           id: item.id,
           name: item.name,
           slug: item.slug,
@@ -40,12 +41,27 @@ const Home: React.FC = () => {
           transfers: item.transfers as TransferType[],
           mealPlans: item.meal_plans as MealPlan[],
           uvp: item.uvp,
-          isFeatured: item.is_featured
+          isFeatured: item.is_featured,
+          roomTypes: item.room_types || [],
+          diningVenues: item.dining_venues || []
         }));
-        setFeaturedResorts(mapped);
+        setFeaturedResorts(mappedResorts);
+      }
+
+      // Fetch Stories
+      const { data: storiesData } = await supabase
+        .from('stories')
+        .select('*')
+        .order('date', { ascending: false })
+        .limit(3);
+
+      if (storiesData && storiesData.length > 0) {
+        setRecentStories(storiesData as BlogPost[]);
+      } else {
+        setRecentStories(BLOG_POSTS.slice(0, 3));
       }
     };
-    fetchFeatured();
+    fetchData();
   }, []);
 
   const heroSlides = [
@@ -121,7 +137,7 @@ const Home: React.FC = () => {
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     return () => observer.disconnect();
-  }, [featuredResorts]);
+  }, [featuredResorts, recentStories]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,6 +153,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
+      {/* HERO SECTION */}
       <section className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden bg-slate-950">
         <div className="absolute inset-0 z-0">
           {heroSlides.map((slide, idx) => (
@@ -167,6 +184,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* PHILOSOPHY SECTION */}
       <section className="py-24 sm:py-32 md:py-48 lg:py-64 bg-white relative">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-center">
@@ -183,6 +201,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* ATOLLS SECTION */}
       <section className="py-24 sm:py-32 md:py-48 bg-[#FCFAF7] border-y border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
           <div className="flex flex-col md:flex-row justify-between items-end mb-32 reveal">
@@ -201,6 +220,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* COLLECTION SECTION */}
       <section className="py-24 sm:py-32 md:py-56 bg-white overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
           <div className="mb-24 reveal"><span className="text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-8 block">Exclusive Portfolio</span><h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 tracking-tighter italic">The Collection.</h3></div>
@@ -212,6 +232,52 @@ const Home: React.FC = () => {
           <div className="mt-12 flex justify-between items-center reveal">
             <div className="flex gap-4"><div className="w-2 h-2 rounded-full bg-slate-950"></div><div className="w-2 h-2 rounded-full bg-slate-100"></div><div className="w-2 h-2 rounded-full bg-slate-100"></div></div>
             <Link to="/stays" className="group relative flex items-center gap-8"><span className="text-[10px] font-bold uppercase tracking-[0.5em] text-slate-950 border-b border-slate-200 group-hover:border-sky-500 transition-all pb-1">View Full Portfolio</span><div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700 shadow-sm"><svg className="w-5 h-5 text-slate-950 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div></Link>
+          </div>
+        </div>
+      </section>
+
+      {/* STORIES SECTION (Added above footer) */}
+      <section className="py-24 sm:py-32 md:py-48 bg-[#FCFAF7] border-t border-slate-100">
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-24 reveal">
+            <div className="max-w-2xl">
+              <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em] mb-8 block">Editorial Archive</span>
+              <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 italic tracking-tighter leading-none">The Journal.</h3>
+            </div>
+            <Link to="/stories" className="text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] border-b border-slate-950 pb-2 mb-4 hover:text-sky-500 hover:border-sky-500 transition-all">View All Dispatches</Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-20">
+            {recentStories.map((post, idx) => (
+              <Link 
+                key={post.id} 
+                to={`/stories/${post.slug}`} 
+                className="group reveal"
+                style={{ transitionDelay: `${idx * 150}ms` }}
+              >
+                <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl group-hover:-translate-y-2 bg-slate-100">
+                  <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-slate-950/5"></div>
+                  <div className="absolute top-8 left-8">
+                    <span className="bg-white/90 backdrop-blur px-5 py-2 rounded-full text-[8px] font-bold text-slate-900 uppercase tracking-[0.3em] shadow-sm">
+                      {post.category}
+                    </span>
+                  </div>
+                </div>
+                <div className="px-2">
+                  <span className="text-slate-300 font-bold text-[8px] uppercase tracking-[0.5em] mb-4 block">
+                    {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                  </span>
+                  <h4 className="text-2xl font-serif font-bold text-slate-900 mb-6 group-hover:italic group-hover:text-sky-600 transition-all duration-500 leading-tight">
+                    {post.title}
+                  </h4>
+                  <div className="flex items-center gap-6 group">
+                     <div className="w-8 h-px bg-slate-200 group-hover:w-16 group-hover:bg-sky-500 transition-all duration-700"></div>
+                     <span className="text-[9px] font-bold text-slate-900 uppercase tracking-[0.4em]">Read Narrative</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
