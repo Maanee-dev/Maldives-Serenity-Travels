@@ -10,7 +10,7 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Corrected: Use PascalCase filenames in imports to match the actual files and fix casing errors
+// Fix: Use PascalCase imports to match the actual PascalCase files in pages/ and resolve casing conflicts
 import Offers from './pages/Offers';
 import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
