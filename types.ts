@@ -49,7 +49,7 @@ export interface Accommodation {
   features: string[];
   transfers: TransferType[];
   mealPlans: MealPlan[];
-  uvp: string; // Unique Value Proposition
+  uvp: string;
   isFeatured?: boolean;
   roomTypes?: RoomType[];
   diningVenues?: DiningVenue[];
@@ -73,6 +73,8 @@ export interface Experience {
   category: 'Water Sports' | 'Relaxation' | 'Adventure' | 'Wellness' | 'Culture' | 'Culinary';
 }
 
+export type StoryCategory = 'Dispatch' | 'Guide' | 'Update' | 'Tip';
+
 export interface BlogPost {
   id: string;
   title: string;
@@ -82,5 +84,6 @@ export interface BlogPost {
   image: string;
   date: string;
   author: string;
-  category: 'Dispatch' | 'Guide';
+  category: StoryCategory;
+  is_featured?: boolean;
 }

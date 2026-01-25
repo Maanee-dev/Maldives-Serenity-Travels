@@ -10,14 +10,14 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Already included file name 'file:///pages/Offers.tsx' differs from file name 'file:///pages/offers.tsx' only in casing.
+// Fix casing conflict: import from lowercase filenames to resolve compiler ambiguity
 import Offers from './pages/offers';
-// Fix: Already included file name 'file:///pages/Experiences.tsx' differs from file name 'file:///pages/experiences.tsx' only in casing.
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
 import AdminSync from './pages/AdminSync';
+import AdminStories from './pages/AdminStories';
 
 const ScrollToTopOnRoute = () => {
   const { pathname } = useLocation();
@@ -42,6 +42,7 @@ const App: React.FC = () => {
         <Route path="/stories/:slug" element={<BlogPostDetail />} />
         <Route path="/plan" element={<PlanMyTrip />} />
         <Route path="/admin/sync" element={<AdminSync />} />
+        <Route path="/admin/stories" element={<AdminStories />} />
       </Routes>
       <ChatBot />
       <ScrollToTopButton />

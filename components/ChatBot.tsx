@@ -31,6 +31,7 @@ const ChatBot: React.FC = () => {
     setIsTyping(true);
 
     try {
+      // Correct initialization: Create a new instance right before making an API call
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const systemInstruction = `
@@ -55,23 +56,24 @@ const ChatBot: React.FC = () => {
         Keep responses concise but poetic.
       `;
 
-      const history = messages.map(m => ({
-        role: m.role,
-        parts: [{ text: m.text }]
-      }));
-
-      const response = await ai.models.generateContent({
+      // Correct usage: Use ai.chats.create for chat interactions with history
+      const chat = ai.chats.create({
         model: 'gemini-3-flash-preview',
-        contents: [
-          ...history,
-          { role: 'user', parts: [{ text: input }] }
-        ],
         config: {
           systemInstruction,
           temperature: 0.7,
-        }
+        },
+        // Correct history format: array of objects with role and parts
+        history: messages.map(m => ({
+          role: m.role,
+          parts: [{ text: m.text }]
+        }))
       });
 
+      // Correct usage: sendMessage only accepts message parameter
+      const response = await chat.sendMessage({ message: input });
+
+      // Correct extraction: Access .text as a property, not a method
       const aiText = response.text || "I apologize, I am momentarily offline. Please reach out to our human concierge.";
       setMessages(prev => [...prev, { role: 'model', text: aiText }]);
     } catch (error) {
