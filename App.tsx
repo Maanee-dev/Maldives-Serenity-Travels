@@ -10,9 +10,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed: Use PascalCase imports to resolve casing ambiguity errors and match standard component naming
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Fixed: Use lowercase imports to match the file system and resolve casing ambiguity errors (lines 14-15)
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
