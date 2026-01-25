@@ -1,7 +1,7 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { RESORTS } from '../constants';
 import { AccommodationType, TransferType, Accommodation, MealPlan } from '../types';
 import ResortCard from '../components/ResortCard';
 
@@ -48,34 +48,48 @@ const Stays: React.FC = () => {
   useEffect(() => {
     const fetchResorts = async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('resorts')
-        .select('*')
-        .order('name', { ascending: true });
-      
-      if (error) {
-        console.error('Supabase fetch error:', error);
-      } else if (data) {
-        const mappedData: Accommodation[] = data.map(item => ({
-          id: item.id,
-          name: item.name,
-          slug: item.slug,
-          type: (item.type || 'RESORT') as AccommodationType,
-          atoll: item.atoll || 'Unknown',
-          priceRange: item.price_range || '$$$$',
-          rating: item.rating || 5,
-          description: item.description || '',
-          shortDescription: item.short_description || '',
-          images: item.images || [],
-          features: item.features || [],
-          transfers: (item.transfers || []) as TransferType[],
-          mealPlans: (item.meal_plans || []) as MealPlan[],
-          uvp: item.uvp || 'Defined by perspective.',
-          isFeatured: item.is_featured || false
-        }));
-        setResorts(mappedData);
+      try {
+        const { data, error } = await supabase
+          .from('resorts')
+          .select('*')
+          .order('name', { ascending: true });
+        
+        let finalData: Accommodation[] = [];
+
+        if (data && data.length > 0) {
+          finalData = data.map(item => ({
+            id: item.id,
+            name: item.name,
+            slug: item.slug,
+            type: (item.type || 'RESORT') as AccommodationType,
+            atoll: item.atoll || 'Unknown',
+            priceRange: item.price_range || '$$$$',
+            rating: item.rating || 5,
+            description: item.description || '',
+            shortDescription: item.short_description || '',
+            images: item.images || [],
+            features: item.features || [],
+            transfers: (item.transfers || []) as TransferType[],
+            mealPlans: (item.meal_plans || []) as MealPlan[],
+            uvp: item.uvp || 'Defined by perspective.',
+            isFeatured: item.is_featured || false,
+            roomTypes: item.room_types || [],
+            diningVenues: item.dining_venues || []
+          }));
+        }
+
+        // Hybrid Strategy: Merge Supabase results with local constants
+        // This ensures the portfolio is ALWAYS populated even if DB is empty
+        const dbSlugs = new Set(finalData.map(r => r.slug));
+        const localFallbacks = RESORTS.filter(r => !dbSlugs.has(r.slug));
+        
+        setResorts([...finalData, ...localFallbacks]);
+      } catch (err) {
+        console.error('Data acquisition error:', err);
+        setResorts(RESORTS); // Emergency fallback to constants
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchResorts();
@@ -99,7 +113,6 @@ const Stays: React.FC = () => {
 
   useEffect(() => {
     if (!loading) {
-      // Small timeout ensures the DOM has rendered the new stays before observing
       const timeoutId = setTimeout(() => {
         const observer = new IntersectionObserver((entries) => {
           entries.forEach(entry => {

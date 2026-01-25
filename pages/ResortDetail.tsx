@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { RESORTS } from '../constants';
 import { Accommodation, AccommodationType, TransferType, MealPlan } from '../types';
 
 const ResortDetail: React.FC = () => {
@@ -13,15 +14,21 @@ const ResortDetail: React.FC = () => {
     const fetchFullDetails = async () => {
       setLoading(true);
       try {
-        // Fetch the unified resort data including nested JSONB for rooms and dining
+        // Find the local backup first
+        const localBackup = RESORTS.find(r => r.slug === slug);
+
+        // Fetch from Supabase
         const { data: resData, error: resErr } = await supabase
           .from('resorts')
           .select('*')
           .eq('slug', slug)
           .maybeSingle();
         
-        if (resErr) throw resErr;
+        if (resErr) {
+          console.warn('Supabase fetch failed, using local portfolio.', resErr);
+        }
 
+        // Hybrid merge logic: Prefer DB if available and has deep data, else fallback
         if (resData) {
           const mappedResort: Accommodation = {
             id: resData.id,
@@ -31,21 +38,26 @@ const ResortDetail: React.FC = () => {
             atoll: resData.atoll || 'Unknown Atoll',
             priceRange: resData.price_range || '$$$$',
             rating: resData.rating || 5,
-            description: resData.description || '',
-            shortDescription: resData.short_description || '',
-            images: resData.images || [],
-            features: resData.features || [],
-            transfers: (resData.transfers || []) as TransferType[],
-            mealPlans: (resData.meal_plans || []) as MealPlan[],
-            uvp: resData.uvp || 'A sanctuary defined by perspective.',
+            description: resData.description || localBackup?.description || '',
+            shortDescription: resData.short_description || localBackup?.shortDescription || '',
+            images: resData.images && resData.images.length > 0 ? resData.images : (localBackup?.images || []),
+            features: resData.features && resData.features.length > 0 ? resData.features : (localBackup?.features || []),
+            transfers: (resData.transfers || localBackup?.transfers || []) as TransferType[],
+            mealPlans: (resData.meal_plans || localBackup?.mealPlans || []) as MealPlan[],
+            uvp: resData.uvp || localBackup?.uvp || 'A sanctuary defined by perspective.',
             isFeatured: resData.is_featured || false,
-            // Nested data from JSONB columns
-            roomTypes: resData.room_types || [],
-            diningVenues: resData.dining_venues || []
+            // Deep merge room types and dining venues
+            roomTypes: (resData.room_types && resData.room_types.length > 0) ? resData.room_types : (localBackup?.roomTypes || []),
+            diningVenues: (resData.dining_venues && resData.dining_venues.length > 0) ? resData.dining_venues : (localBackup?.diningVenues || [])
           };
-
           setResort(mappedResort);
-          document.title = `${mappedResort.name} | Serenity Maldives`;
+        } else if (localBackup) {
+          // Complete fallback to local if not in DB at all
+          setResort(localBackup);
+        }
+
+        if (resort || localBackup) {
+          document.title = `${(resData?.name || localBackup?.name)} | Serenity Maldives`;
         }
       } catch (error) {
         console.error('Fetch error:', error);
@@ -194,7 +206,7 @@ const ResortDetail: React.FC = () => {
               {resort.roomTypes.map((room, idx) => (
                 <div key={idx} className="flex-shrink-0 w-[85vw] md:w-[60vw] lg:w-[45vw] snap-center group">
                   <div className="relative aspect-[4/5] md:aspect-[16/10] rounded-[3.5rem] overflow-hidden mb-10 shadow-2xl">
-                    <img src={room.image} alt={room.name} className="w-full h-full object-cover transition-transform duration-[12s] group-hover:scale-110" />
+                    <img src={room.image || 'https://images.unsplash.com/photo-1573843225233-9fca73af994d?auto=format&fit=crop&q=80&w=800'} alt={room.name} className="w-full h-full object-cover transition-transform duration-[12s] group-hover:scale-110" />
                     <div className="absolute inset-0 bg-black/10"></div>
                   </div>
                   <div className="max-w-2xl px-4">
@@ -227,7 +239,7 @@ const ResortDetail: React.FC = () => {
               {resort.diningVenues.map((venue, idx) => (
                 <div key={idx} className="flex-shrink-0 w-[80vw] md:w-[45vw] lg:w-[32vw] snap-center group">
                   <div className="relative aspect-[3/4] rounded-[4rem] overflow-hidden mb-10 shadow-2xl">
-                    <img src={venue.image} alt={venue.name} className="w-full h-full object-cover transition-transform duration-[15s] group-hover:scale-110" />
+                    <img src={venue.image || 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=800'} alt={venue.name} className="w-full h-full object-cover transition-transform duration-[15s] group-hover:scale-110" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
                     <div className="absolute bottom-12 left-10 right-10">
                        <span className="text-sky-400 font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block">{venue.cuisine}</span>
