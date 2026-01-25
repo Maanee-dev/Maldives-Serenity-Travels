@@ -9,14 +9,12 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed casing to match offers.tsx and resolve compilation errors
+// Fix: Use lowercase imports to resolve casing conflict errors in the compilation environment
 import Offers from './pages/offers';
-// Fixed casing to match experiences.tsx and resolve compilation errors
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
-import AdminSync from './pages/AdminSync';
 
 const ScrollToTopOnRoute = () => {
   const { pathname } = useLocation();
@@ -61,7 +59,6 @@ const App: React.FC = () => {
             <Route path="/stories" element={<Stories />} />
             <Route path="/stories/:slug" element={<BlogPostDetail />} />
             <Route path="/plan" element={<PlanMyTrip />} />
-            <Route path="/admin-sync" element={<AdminSync />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

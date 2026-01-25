@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Accommodation, AccommodationType, TransferType, RoomType, DiningVenue, MealPlan } from '../types';
+import { Accommodation, AccommodationType, TransferType, MealPlan } from '../types';
 
 const ResortDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -13,6 +13,7 @@ const ResortDetail: React.FC = () => {
     const fetchFullDetails = async () => {
       setLoading(true);
       try {
+        // Fetch the unified resort data including nested JSONB for rooms and dining
         const { data: resData, error: resErr } = await supabase
           .from('resorts')
           .select('*')
@@ -22,16 +23,6 @@ const ResortDetail: React.FC = () => {
         if (resErr) throw resErr;
 
         if (resData) {
-          const { data: roomData } = await supabase
-            .from('rooms')
-            .select('*')
-            .eq('resort_id', resData.id);
-
-          const { data: diningData } = await supabase
-            .from('dining')
-            .select('*')
-            .eq('resort_id', resData.id);
-
           const mappedResort: Accommodation = {
             id: resData.id,
             name: resData.name,
@@ -48,40 +39,13 @@ const ResortDetail: React.FC = () => {
             mealPlans: (resData.meal_plans || []) as MealPlan[],
             uvp: resData.uvp || 'A sanctuary defined by perspective.',
             isFeatured: resData.is_featured || false,
-            roomTypes: (roomData || []) as RoomType[],
-            diningVenues: (diningData || []) as DiningVenue[]
+            // Nested data from JSONB columns
+            roomTypes: resData.room_types || [],
+            diningVenues: resData.dining_venues || []
           };
 
           setResort(mappedResort);
-          
-          // SEO Metadata
-          document.title = `${mappedResort.name} | Serenity Maldives Portfolio`;
-          
-          // Structured Data (JSON-LD)
-          const scriptId = 'resort-jsonld';
-          let script = document.getElementById(scriptId) as HTMLScriptElement;
-          if (!script) {
-            script = document.createElement('script');
-            script.type = 'application/ld+json';
-            script.id = scriptId;
-            document.head.appendChild(script);
-          }
-          script.innerHTML = JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Hotel",
-            "name": mappedResort.name,
-            "description": mappedResort.shortDescription,
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": mappedResort.atoll,
-              "addressCountry": "Maldives"
-            },
-            "starRating": {
-              "@type": "Rating",
-              "ratingValue": mappedResort.rating
-            },
-            "image": mappedResort.images
-          });
+          document.title = `${mappedResort.name} | Serenity Maldives`;
         }
       } catch (error) {
         console.error('Fetch error:', error);
@@ -92,13 +56,6 @@ const ResortDetail: React.FC = () => {
 
     fetchFullDetails();
     window.scrollTo(0, 0);
-
-    return () => {
-      const script = document.getElementById('resort-jsonld');
-      if (script && document.head.contains(script)) {
-        document.head.removeChild(script);
-      }
-    };
   }, [slug]);
 
   useEffect(() => {
@@ -139,27 +96,27 @@ const ResortDetail: React.FC = () => {
   return (
     <div className="bg-[#FCFAF7] min-h-screen selection:bg-sky-100 selection:text-sky-900 pb-32 overflow-x-hidden">
       
-      {/* 1. CINEMATIC HERO */}
+      {/* Hero Header */}
       <section className="relative w-full pt-20 md:pt-32 px-4 md:px-6 reveal active">
         <div className="relative aspect-[4/5] md:aspect-[21/9] w-full rounded-[2.5rem] md:rounded-[4.5rem] overflow-hidden shadow-2xl bg-slate-200">
           <img 
             src={resort.images[0] || 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200'} 
             alt={resort.name} 
-            className="w-full h-full object-cover scale-100 transition-transform duration-[30s] hover:scale-110" 
+            className="w-full h-full object-cover" 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
           <div className="absolute bottom-10 left-8 md:bottom-20 md:left-20 max-w-5xl">
             <span className="inline-block bg-sky-500 text-white px-6 py-2 rounded-full text-[9px] font-bold uppercase tracking-[0.6em] mb-6 shadow-xl">
               {resort.atoll}
             </span>
-            <h1 className="text-5xl md:text-8xl lg:text-[10rem] font-serif font-bold text-white tracking-tighter italic leading-[0.85] drop-shadow-2xl">
+            <h1 className="text-5xl md:text-8xl lg:text-[9rem] font-serif font-bold text-white tracking-tighter italic leading-[0.85] drop-shadow-2xl">
               {resort.name}
             </h1>
           </div>
         </div>
       </section>
 
-      {/* 2. INTRO SECTION */}
+      {/* Narrative Section */}
       <section className="max-w-[1440px] mx-auto px-6 pt-20 md:pt-40">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 xl:gap-24 items-start">
           <div className="lg:col-span-8 space-y-24 reveal">
@@ -223,7 +180,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* 3. THE RESIDENCES */}
+      {/* Residences Carousel */}
       {resort.roomTypes && resort.roomTypes.length > 0 && (
         <section className="mt-40 md:mt-64 bg-white py-32 md:py-48 overflow-hidden">
           <div className="max-w-[1440px] mx-auto px-6">
@@ -256,7 +213,7 @@ const ResortDetail: React.FC = () => {
         </section>
       )}
 
-      {/* 4. CULINARY PORTFOLIO */}
+      {/* Dining Carousel */}
       {resort.diningVenues && resort.diningVenues.length > 0 && (
         <section className="mt-40 md:mt-64 overflow-hidden">
           <div className="max-w-[1440px] mx-auto px-6">
@@ -292,7 +249,7 @@ const ResortDetail: React.FC = () => {
         </section>
       )}
 
-      {/* 5. WELLNESS SECTION */}
+      {/* Wellness Section */}
       <section className="max-w-[1440px] mx-auto px-6 mt-40 md:mt-64 reveal">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
           <div className="lg:col-span-7">
@@ -318,31 +275,6 @@ const ResortDetail: React.FC = () => {
               />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* 6. SUSTAINABILITY SECTION */}
-      <section className="mt-40 md:mt-64 relative overflow-hidden group min-h-[80vh] flex items-center">
-        <div className="absolute inset-0 z-0">
-           <img 
-             src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=80&w=1200" 
-             alt="Conservation" 
-             className="w-full h-full object-cover brightness-[0.4] transition-transform duration-[20s] group-hover:scale-110"
-           />
-        </div>
-        <div className="max-w-[1440px] mx-auto px-6 relative z-10 w-full text-center lg:text-left">
-           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-              <div className="lg:col-span-6 reveal">
-                <span className="text-[10px] font-bold text-sky-400 uppercase tracking-[1em] mb-12 block">Conservation Manifesto</span>
-                <h3 className="text-6xl md:text-[8rem] font-serif font-bold text-white italic leading-none mb-10 tracking-tighter">Infinite <br/> Legacy.</h3>
-                <p className="text-slate-300 text-lg md:text-xl leading-[2] mb-16 opacity-90 max-w-xl mx-auto lg:mx-0">
-                  Operating with a zero-waste mandate and total solar dependency, we are dedicated to the preservation of the Indian Ocean's delicate equilibrium.
-                </p>
-                <Link to="/plan" className="inline-block bg-white text-slate-950 font-bold px-12 py-6 rounded-full text-[10px] uppercase tracking-[0.6em] hover:bg-sky-500 hover:text-white transition-all duration-700">
-                  Our Sustainability Blueprint
-                </Link>
-              </div>
-           </div>
         </div>
       </section>
 
