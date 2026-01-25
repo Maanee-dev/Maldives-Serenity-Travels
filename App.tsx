@@ -9,9 +9,8 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix casing conflict: Import from lowercase filename 'offers.tsx'
+// Using lowercase paths to resolve ambiguity with duplicated files differing only in casing
 import Offers from './pages/offers';
-// Fix casing conflict: Import from lowercase filename 'experiences.tsx'
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
