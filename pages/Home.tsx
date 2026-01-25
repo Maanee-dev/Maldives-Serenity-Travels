@@ -145,15 +145,15 @@ const Home: React.FC = () => {
   };
 
   const signatureAtolls = [
-    { name: 'Noonu Atoll', image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=600', count: '12 Stays', desc: 'Untouched Blue' },
-    { name: 'Baa Atoll', image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=600', count: '18 Stays', desc: 'UNESCO Biosphere' },
-    { name: 'North Male', image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=600', count: '24 Stays', desc: 'The Epicenter' },
-    { name: 'Ari Atoll', image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=600', count: '15 Stays', desc: 'Whale Shark Paths' }
+    { name: 'Noonu Atoll', image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800', count: '12 Stays', desc: 'Untouched Blue' },
+    { name: 'Baa Atoll', image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800', count: '18 Stays', desc: 'UNESCO Biosphere' },
+    { name: 'North Male', image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800', count: '24 Stays', desc: 'The Epicenter' },
+    { name: 'Ari Atoll', image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=800', count: '15 Stays', desc: 'Whale Shark Paths' }
   ];
 
   return (
     <div className="bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
-      {/* HERO SECTION */}
+      {/* HERO SECTION - KEPT AS IS */}
       <section className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden bg-slate-950">
         <div className="absolute inset-0 z-0">
           {heroSlides.map((slide, idx) => (
@@ -184,60 +184,105 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* PHILOSOPHY SECTION */}
-      <section className="py-24 sm:py-32 md:py-48 lg:py-64 bg-white relative">
+      {/* ENHANCED PHILOSOPHY SECTION */}
+      <section className="py-20 sm:py-32 md:py-48 bg-white relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
             <div className="lg:col-span-7 reveal">
-               <div className="flex items-center gap-6 mb-12"><div className="w-12 h-[1px] bg-sky-500"></div><span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em]">The Agency</span></div>
-               <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-[7.5rem] font-serif font-bold text-slate-950 leading-[0.95] mb-16 tracking-tighter">Luxury is <br className="hidden md:block"/> No Longer <br className="hidden md:block"/> <span className="italic text-sky-500 underline decoration-sky-100 underline-offset-[1.5rem]">Optional</span>.</h2>
-               <p className="text-slate-500 text-lg md:text-2xl leading-[2] mb-16 font-medium opacity-90">We are a bespoke boutique agency crafting unrivaled journeys across the Maldivian atolls. Defined by geography and refined by hand, we curate the silence that modern living lacks.</p>
+              <div className="flex items-center gap-6 mb-12">
+                <div className="w-12 h-[1px] bg-sky-500"></div>
+                <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em]">The Agency</span>
+              </div>
+              <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-[7.5rem] font-serif font-bold text-slate-950 leading-[0.95] mb-12 tracking-tighter">
+                Luxury is <br className="hidden md:block" /> 
+                <span className="italic text-sky-500">No Longer</span> <br className="hidden md:block" /> 
+                Optional.
+              </h2>
+              <div className="max-w-2xl">
+                <p className="text-slate-500 text-lg md:text-2xl leading-[1.8] mb-12 font-medium opacity-90">
+                  We are a bespoke boutique agency crafting unrivaled journeys across the Maldivian atolls. Defined by geography and refined by hand, we curate the silence that modern living lacks.
+                </p>
+                <Link to="/stories" className="inline-flex items-center gap-4 text-[10px] font-bold text-slate-900 uppercase tracking-[0.4em] group transition-all">
+                  <span className="border-b border-slate-200 pb-1 group-hover:border-sky-500 transition-colors">Explore Our Philosophy</span>
+                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </Link>
+              </div>
             </div>
-            <div className="lg:col-span-5 relative mt-16 lg:mt-0 reveal">
-               <div className="aspect-[4/5] rounded-[4rem] lg:rounded-[5rem] overflow-hidden shadow-2xl group"><img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" alt="Local Life" /></div>
-               <div className="absolute -bottom-16 -right-8 bg-[#FCFAF7] p-12 rounded-[3rem] shadow-2xl max-w-[320px] border border-slate-100 reveal"><p className="text-slate-900 font-serif italic text-2xl">"The most profound experiences happen in the gaps between the tides."</p></div>
+            <div className="lg:col-span-5 reveal relative">
+              <div className="aspect-[4/5] rounded-[3.5rem] md:rounded-[5rem] overflow-hidden shadow-2xl group relative bg-slate-100">
+                <img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" alt="Local Life" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent"></div>
+              </div>
+              <div className="absolute -bottom-12 -left-8 md:-left-12 bg-[#FCFAF7] p-8 md:p-12 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl max-w-[280px] md:max-w-[340px] border border-slate-50 reveal delay-300">
+                <p className="text-slate-900 font-serif italic text-xl md:text-2xl leading-snug">"The most profound experiences happen in the gaps between the tides."</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ATOLLS SECTION */}
-      <section className="py-24 sm:py-32 md:py-48 bg-[#FCFAF7] border-y border-slate-100">
+      {/* ENHANCED ATOLLS SECTION */}
+      <section className="py-20 sm:py-32 md:py-40 bg-[#FCFAF7] border-y border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-32 reveal">
-            <div className="max-w-xl"><span className="text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-8 block">Regional Mastery</span><h3 className="text-4xl md:text-7xl font-serif font-bold italic leading-tight text-slate-900">Signature Atolls.</h3></div>
-            <Link to="/stays" className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.5em] border-b border-sky-500 pb-1 mb-4">Explore Geography</Link>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-24 reveal">
+            <div className="max-w-xl">
+              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-8 block">Regional Mastery</span>
+              <h3 className="text-4xl md:text-7xl font-serif font-bold italic leading-tight text-slate-900 tracking-tighter">Signature Atolls.</h3>
+            </div>
+            <Link to="/stays" className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.5em] border-b border-sky-500 pb-1 mb-4 hover:text-slate-900 hover:border-slate-900 transition-colors">Explore Geography</Link>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 reveal">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 reveal">
             {signatureAtolls.map((atoll, i) => (
-              <Link key={i} to={`/stays?q=${atoll.name}`} className={`group relative overflow-hidden rounded-[2.5rem] md:rounded-[4rem] cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-1000 ${i % 2 !== 0 ? 'mt-0' : 'mb-0'} ${i % 2 === 0 ? 'aspect-[3/5] md:aspect-[3/4]' : 'aspect-[3/4]'}`}>
-                <img src={atoll.image} className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110 grayscale-[30%] group-hover:grayscale-0" alt={atoll.name} />
+              <Link key={i} to={`/stays?q=${atoll.name}`} className={`group relative overflow-hidden rounded-[2.5rem] md:rounded-[3.5rem] cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-1000 aspect-[3/4]`}>
+                <img src={atoll.image} className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110 grayscale-[10%] group-hover:grayscale-0" alt={atoll.name} />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/10 to-transparent"></div>
-                <div className="absolute bottom-10 left-10 right-10 flex flex-col items-start"><span className="text-sky-400 text-[8px] font-bold uppercase tracking-[0.4em] mb-2">{atoll.count}</span><h4 className="text-lg md:text-3xl font-serif font-bold group-hover:italic transition-all leading-tight text-white">{atoll.name}</h4></div>
+                <div className="absolute bottom-8 left-8 right-8 flex flex-col items-start translate-y-2 group-hover:translate-y-0 transition-transform duration-700">
+                  <span className="text-sky-400 text-[8px] font-bold uppercase tracking-[0.4em] mb-2">{atoll.count}</span>
+                  <h4 className="text-2xl md:text-3xl font-serif font-bold text-white leading-tight group-hover:italic transition-all">{atoll.name}</h4>
+                  <p className="text-[8px] text-white/50 uppercase tracking-widest mt-2 opacity-0 group-hover:opacity-100 transition-opacity delay-100">{atoll.desc}</p>
+                </div>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* COLLECTION SECTION */}
-      <section className="py-24 sm:py-32 md:py-56 bg-white overflow-hidden">
+      {/* ENHANCED COLLECTION SECTION */}
+      <section className="py-20 sm:py-32 md:py-48 bg-white overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
-          <div className="mb-24 reveal"><span className="text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-8 block">Exclusive Portfolio</span><h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 tracking-tighter italic">The Collection.</h3></div>
-          <div className="reveal no-scrollbar overflow-x-auto flex gap-12 pb-12 snap-x snap-mandatory">
+          <div className="mb-20 reveal">
+            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-8 block">Exclusive Portfolio</span>
+            <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 tracking-tighter italic leading-none">The Collection.</h3>
+          </div>
+          <div className="reveal no-scrollbar overflow-x-auto flex gap-10 md:gap-16 pb-12 snap-x snap-mandatory">
             {featuredResorts.length > 0 ? featuredResorts.map((resort) => (
-              <div key={resort.id} className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[35vw] snap-start"><ResortCard resort={resort} /></div>
-            )) : <div className="py-20 text-center w-full"><p className="text-slate-400 uppercase tracking-widest text-[10px]">Loading the sanctuaries...</p></div>}
+              <div key={resort.id} className="flex-shrink-0 w-[85vw] sm:w-[50vw] lg:w-[35vw] snap-start">
+                <ResortCard resort={resort} />
+              </div>
+            )) : (
+              <div className="py-20 text-center w-full">
+                <p className="text-slate-400 uppercase tracking-widest text-[10px] animate-pulse">Consulting the archives...</p>
+              </div>
+            )}
           </div>
           <div className="mt-12 flex justify-between items-center reveal">
-            <div className="flex gap-4"><div className="w-2 h-2 rounded-full bg-slate-950"></div><div className="w-2 h-2 rounded-full bg-slate-100"></div><div className="w-2 h-2 rounded-full bg-slate-100"></div></div>
-            <Link to="/stays" className="group relative flex items-center gap-8"><span className="text-[10px] font-bold uppercase tracking-[0.5em] text-slate-950 border-b border-slate-200 group-hover:border-sky-500 transition-all pb-1">View Full Portfolio</span><div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700 shadow-sm"><svg className="w-5 h-5 text-slate-950 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div></Link>
+            <div className="flex gap-4">
+              <div className="w-2 h-2 rounded-full bg-slate-950"></div>
+              <div className="w-2 h-2 rounded-full bg-slate-100"></div>
+              <div className="w-2 h-2 rounded-full bg-slate-100"></div>
+            </div>
+            <Link to="/stays" className="group relative flex items-center gap-6">
+              <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-slate-950 border-b border-slate-200 group-hover:border-sky-500 transition-all pb-1">View Full Portfolio</span>
+              <div className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700 shadow-sm">
+                <svg className="w-4 h-4 text-slate-950 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* STORIES SECTION (Added above footer) */}
-      <section className="py-24 sm:py-32 md:py-48 bg-[#FCFAF7] border-t border-slate-100">
+      {/* ENHANCED EDITORIAL DISPATCHES SECTION */}
+      <section className="py-20 sm:py-32 md:py-40 bg-[#FCFAF7] border-t border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
           <div className="flex flex-col md:flex-row justify-between items-end mb-24 reveal">
             <div className="max-w-2xl">
@@ -247,33 +292,33 @@ const Home: React.FC = () => {
             <Link to="/stories" className="text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] border-b border-slate-950 pb-2 mb-4 hover:text-sky-500 hover:border-sky-500 transition-all">View All Dispatches</Link>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
             {recentStories.map((post, idx) => (
               <Link 
                 key={post.id} 
                 to={`/stories/${post.slug}`} 
-                className="group reveal"
+                className="group reveal bg-white rounded-[3rem] p-6 shadow-sm border border-slate-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-700"
                 style={{ transitionDelay: `${idx * 150}ms` }}
               >
-                <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl group-hover:-translate-y-2 bg-slate-100">
+                <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-8 bg-slate-50">
                   <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-slate-950/5"></div>
-                  <div className="absolute top-8 left-8">
-                    <span className="bg-white/90 backdrop-blur px-5 py-2 rounded-full text-[8px] font-bold text-slate-900 uppercase tracking-[0.3em] shadow-sm">
+                  <div className="absolute inset-0 bg-slate-950/5 group-hover:bg-transparent transition-colors"></div>
+                  <div className="absolute top-6 left-6">
+                    <span className="bg-white/95 backdrop-blur px-5 py-2 rounded-full text-[8px] font-bold text-slate-900 uppercase tracking-[0.3em] shadow-sm">
                       {post.category}
                     </span>
                   </div>
                 </div>
                 <div className="px-2">
-                  <span className="text-slate-300 font-bold text-[8px] uppercase tracking-[0.5em] mb-4 block">
+                  <span className="text-slate-300 font-bold text-[8px] uppercase tracking-[0.5em] mb-3 block">
                     {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                   </span>
                   <h4 className="text-2xl font-serif font-bold text-slate-900 mb-6 group-hover:italic group-hover:text-sky-600 transition-all duration-500 leading-tight">
                     {post.title}
                   </h4>
-                  <div className="flex items-center gap-6 group">
-                     <div className="w-8 h-px bg-slate-200 group-hover:w-16 group-hover:bg-sky-500 transition-all duration-700"></div>
-                     <span className="text-[9px] font-bold text-slate-900 uppercase tracking-[0.4em]">Read Narrative</span>
+                  <div className="flex items-center gap-4 group">
+                     <div className="w-8 h-[1px] bg-slate-100 group-hover:w-12 group-hover:bg-sky-500 transition-all duration-700"></div>
+                     <span className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.4em] group-hover:text-slate-900 transition-colors">Read Narrative</span>
                   </div>
                 </div>
               </Link>

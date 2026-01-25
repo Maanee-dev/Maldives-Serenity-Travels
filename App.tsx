@@ -10,9 +10,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Import lowercase filenames to resolve casing ambiguity with Next.js style pages and satisfy strict casing checks
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Fixed: Use PascalCase imports to match filenames and resolve casing ambiguity errors
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
