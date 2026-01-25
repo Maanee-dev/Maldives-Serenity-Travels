@@ -1,4 +1,6 @@
-import { useEffect, useState, useRef } from 'react';
+
+// Fix: Add missing React import to provide React namespace for FC and FormEvent types
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Accommodation, AccommodationType, TransferType, MealPlan, BlogPost } from '../types';

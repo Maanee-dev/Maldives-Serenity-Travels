@@ -10,9 +10,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Use lowercase imports for offers and experiences to resolve casing ambiguity with duplicate files in the directory
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Fix: Use PascalCase imports to resolve casing ambiguity with duplicate files in the directory
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

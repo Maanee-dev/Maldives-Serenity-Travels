@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Accommodation } from '../types';
@@ -14,7 +15,7 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort }) => {
 
   return (
     <Link to={`/stays/${resort.slug}`} className="group block mb-12">
-      <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-[2rem] md:rounded-[3rem] mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl group-hover:-translate-y-2 bg-slate-100">
+      <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-[2rem] md:rounded-[3rem] mb-10 shadow-md border-2 border-slate-100 transition-all duration-1000 group-hover:shadow-2xl group-hover:border-sky-200 group-hover:-translate-y-2 bg-slate-100">
         <img 
           src={displayImage} 
           alt={resort.name} 
@@ -23,9 +24,9 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort }) => {
         />
         <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700"></div>
         
-        {/* Atoll Tag */}
+        {/* Atoll Tag - Increased Contrast */}
         <div className="absolute top-8 left-8">
-          <span className="bg-white/90 backdrop-blur px-5 py-2 rounded-full text-[8px] font-bold text-slate-900 uppercase tracking-[0.3em] shadow-sm">
+          <span className="bg-slate-950/95 backdrop-blur px-6 py-2.5 rounded-full text-[10px] font-black text-white uppercase tracking-[0.4em] shadow-2xl border border-white/20">
             {resort.atoll}
           </span>
         </div>
@@ -33,26 +34,26 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort }) => {
         {/* Rating Dots */}
         <div className="absolute bottom-10 left-10 flex gap-2">
           {[...Array(resort.rating || 5)].map((_, i) => (
-            <div key={i} className="w-1.5 h-1.5 rounded-full bg-white shadow-lg"></div>
+            <div key={i} className="w-2 h-2 rounded-full bg-white shadow-xl"></div>
           ))}
         </div>
       </div>
       
       <div className="px-4 text-center md:text-left">
         <div className="flex flex-col md:flex-row md:justify-between md:items-baseline gap-4 mb-6">
-          <h3 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 group-hover:italic transition-all duration-500 leading-tight">
+          <h3 className="text-2xl md:text-3xl font-serif font-bold text-slate-950 group-hover:italic group-hover:text-sky-600 transition-all duration-500 leading-tight">
             {resort.name}
           </h3>
-          <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest px-3 py-1 rounded-full border border-amber-100 w-fit mx-auto md:mx-0">
+          <span className="text-[11px] font-black text-amber-600 uppercase tracking-widest px-4 py-1.5 rounded-full border-2 border-amber-200 w-fit mx-auto md:mx-0 bg-amber-50">
             {resort.priceRange || '$$$$'}
           </span>
         </div>
         
-        <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.4em] mb-8 line-clamp-1 opacity-90">
+        <p className="text-slate-900 text-[11px] font-black uppercase tracking-[0.4em] mb-8 line-clamp-1 opacity-100">
           {(resort.features && resort.features.length > 0) ? resort.features.join(' • ') : 'Bespoke Sanctuary • Private Island'}
         </p>
         
-        <div className="h-px w-12 bg-slate-200 mx-auto md:mx-0 group-hover:w-full group-hover:bg-sky-500 transition-all duration-700"></div>
+        <div className="h-1 w-12 bg-slate-300 mx-auto md:mx-0 group-hover:w-full group-hover:bg-sky-500 transition-all duration-700"></div>
       </div>
     </Link>
   );
