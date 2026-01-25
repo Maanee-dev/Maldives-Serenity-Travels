@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -147,7 +146,7 @@ const ChatBot: React.FC = () => {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Inquire about the atolls..."
-              className="w-full bg-slate-50 border border-slate-100 rounded-full px-6 py-4 text-xs font-medium focus:outline-none focus:border-sky-500 focus:bg-white transition-all placeholder:text-slate-300"
+              className="w-full bg-slate-50 border border-slate-100 rounded-full px-6 py-4 text-xs font-medium focus:outline-none focus:border-sky-500 focus:bg-white transition-all placeholder:text-slate-400"
             />
             <button
               onClick={handleSend}
@@ -157,7 +156,7 @@ const ChatBot: React.FC = () => {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
             </button>
           </div>
-          <p className="text-[7px] text-center text-slate-300 uppercase tracking-widest mt-4">Powered by Serenity AI Intelligence</p>
+          <p className="text-[7px] text-center text-slate-400 uppercase tracking-widest mt-4">Powered by Serenity AI Intelligence</p>
         </div>
       </div>
     </>

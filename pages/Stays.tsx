@@ -144,7 +144,7 @@ const Stays: React.FC = () => {
             {stayType === AccommodationType.RESORT ? 'Iconic Stays' : 'Island Life'}
           </h1>
           <div className="h-px w-24 bg-amber-400 mx-auto mb-16"></div>
-          <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.5em] max-w-xl mx-auto leading-loose opacity-80">
+          <p className="text-slate-500 text-[11px] font-bold uppercase tracking-[0.5em] max-w-xl mx-auto leading-loose opacity-80">
             Defining the luxury of space and the art of silence <br className="hidden md:block"/> across the turquoise archipelago.
           </p>
         </div>
@@ -154,7 +154,7 @@ const Stays: React.FC = () => {
       
       <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-24 reveal active">
         <div className="relative group max-w-4xl mx-auto">
-          <span className="absolute left-0 top-0 text-[8px] font-bold uppercase tracking-[0.8em] text-slate-300 group-focus-within:text-sky-500 transition-colors">
+          <span className="absolute left-0 top-0 text-[8px] font-bold uppercase tracking-[0.8em] text-slate-500 group-focus-within:text-sky-500 transition-colors">
             Search Sanctuaries
           </span>
           <input 
@@ -162,7 +162,7 @@ const Stays: React.FC = () => {
             value={filterQuery}
             onChange={(e) => setFilterQuery(e.target.value)}
             placeholder="PROPERTY OR REGION..."
-            className="w-full bg-transparent border-b border-slate-200 pt-10 pb-6 text-xl md:text-3xl font-serif italic text-slate-900 outline-none transition-all focus:border-slate-950 placeholder:text-slate-100"
+            className="w-full bg-transparent border-b border-slate-200 pt-10 pb-6 text-xl md:text-3xl font-serif italic text-slate-900 outline-none transition-all focus:border-slate-950 placeholder:text-slate-200"
           />
         </div>
       </div>
@@ -173,13 +173,13 @@ const Stays: React.FC = () => {
             <div className="flex gap-4 p-1.5 bg-slate-100/30 backdrop-blur-sm rounded-full border border-slate-200/50">
               <button 
                 onClick={() => setStayType(AccommodationType.RESORT)}
-                className={`px-6 md:px-10 py-3 rounded-full text-[9px] font-bold transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.RESORT ? 'bg-white text-slate-900 shadow-xl' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`px-6 md:px-10 py-3 rounded-full text-[9px] font-bold transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.RESORT ? 'bg-white text-slate-900 shadow-xl' : 'text-slate-500 hover:text-slate-700'}`}
               >
                 Resorts
               </button>
               <button 
                 onClick={() => setStayType(AccommodationType.GUEST_HOUSE)}
-                className={`px-6 md:px-10 py-3 rounded-full text-[9px] font-bold transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.GUEST_HOUSE ? 'bg-white text-slate-900 shadow-xl' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`px-6 md:px-10 py-3 rounded-full text-[9px] font-bold transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.GUEST_HOUSE ? 'bg-white text-slate-900 shadow-xl' : 'text-slate-500 hover:text-slate-700'}`}
               >
                 Local Islands
               </button>
@@ -187,7 +187,7 @@ const Stays: React.FC = () => {
 
             <div className="flex flex-wrap justify-center md:justify-end gap-10 md:gap-16 items-center">
               <div className="flex items-center gap-6">
-                <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Region</span>
+                <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Region</span>
                 <select 
                   value={selectedAtoll}
                   onChange={(e) => setSelectedAtoll(e.target.value)}
@@ -198,7 +198,7 @@ const Stays: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-6">
-                <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Arrival</span>
+                <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Arrival</span>
                 <select 
                   value={selectedTransfer}
                   onChange={(e) => setSelectedTransfer(e.target.value)}
@@ -215,7 +215,7 @@ const Stays: React.FC = () => {
             {loading ? (
               <div className="col-span-full py-40 text-center">
                 <div className="w-12 h-12 border-4 border-slate-100 border-t-sky-500 rounded-full animate-spin mx-auto mb-8"></div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.6em]">Consulting the archives...</p>
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.6em]">Consulting the archives...</p>
               </div>
             ) : currentStays.length > 0 ? (
               currentStays.map((stay, idx) => (
@@ -226,7 +226,7 @@ const Stays: React.FC = () => {
             ) : (
               <div className="col-span-full py-40 text-center reveal active">
                 <h3 className="text-4xl font-serif font-bold italic text-slate-900 mb-6">No Sanctuaries Found.</h3>
-                <p className="text-slate-400 uppercase tracking-widest text-[10px]">Adjust your boutique filters to continue the journey.</p>
+                <p className="text-slate-500 uppercase tracking-widest text-[10px]">Adjust your boutique filters to continue the journey.</p>
               </div>
             )}
           </div>
@@ -248,7 +248,7 @@ const Stays: React.FC = () => {
                     <button
                       key={page}
                       onClick={() => handlePageChange(page)}
-                      className={`text-[10px] font-bold uppercase tracking-widest w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${currentPage === page ? 'bg-slate-950 text-white shadow-xl' : 'text-slate-300 hover:text-slate-950'}`}
+                      className={`text-[10px] font-bold uppercase tracking-widest w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${currentPage === page ? 'bg-slate-950 text-white shadow-xl' : 'text-slate-400 hover:text-slate-950'}`}
                     >
                       {page}
                     </button>

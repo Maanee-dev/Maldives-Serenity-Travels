@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { OFFERS } from '../constants';
 import { Link } from 'react-router-dom';
@@ -22,7 +23,7 @@ const Offers: React.FC = () => {
             </span>
             <h1 className="text-6xl md:text-9xl font-serif font-bold mb-16 text-slate-900 tracking-tighter italic leading-none">The Privé Collection</h1>
             <div className="h-px w-24 bg-amber-400 mx-auto mb-16"></div>
-            <p className="text-slate-400 text-[11px] font-bold max-w-xl mx-auto uppercase tracking-[0.5em] leading-[2.5] opacity-80">
+            <p className="text-slate-500 text-[11px] font-bold max-w-xl mx-auto uppercase tracking-[0.5em] leading-[2.5] opacity-90">
               Negotiated rates and bespoke honeymoon packages <br className="hidden md:block"/> crafted for the global aesthetic.
             </p>
           </div>
@@ -43,16 +44,16 @@ const Offers: React.FC = () => {
                      </div>
                   </div>
                   <div className="p-16 flex-grow flex flex-col">
-                     <span className="text-slate-300 font-bold text-[8px] uppercase tracking-[0.5em] mb-6">{offer.category}</span>
+                     <span className="text-slate-500 font-bold text-[8px] uppercase tracking-[0.5em] mb-6">{offer.category}</span>
                      <h3 className="text-3xl font-serif font-bold text-slate-900 mb-6 leading-tight group-hover:italic transition-all duration-500">
                         {offer.title}
                      </h3>
-                     <p className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.4em] mb-12">At {offer.resortName}</p>
+                     <p className="text-slate-600 font-bold text-[10px] uppercase tracking-[0.4em] mb-12">At {offer.resortName}</p>
                      
                      <div className="mt-auto pt-10 border-t border-slate-50 flex items-center justify-between">
                         <div className="flex flex-col gap-2">
-                          <span className="text-[8px] text-slate-300 font-bold uppercase tracking-widest">Valid Until</span>
-                          <span className="text-slate-600 font-bold text-[10px] uppercase tracking-widest">{new Date(offer.expiryDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                          <span className="text-[8px] text-slate-400 font-bold uppercase tracking-widest">Valid Until</span>
+                          <span className="text-slate-700 font-bold text-[10px] uppercase tracking-widest">{new Date(offer.expiryDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
                         </div>
                         <Link to="/plan" className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 border-b border-slate-950 pb-2 hover:text-sky-500 hover:border-sky-500 transition-all duration-500">
                           Inquire

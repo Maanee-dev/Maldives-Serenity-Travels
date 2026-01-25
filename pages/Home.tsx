@@ -226,7 +226,7 @@ const Home: React.FC = () => {
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
           <div className="flex flex-col md:flex-row justify-between items-end mb-24 reveal">
             <div className="max-w-xl">
-              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-8 block">Regional Mastery</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[1em] mb-8 block">Regional Mastery</span>
               <h3 className="text-4xl md:text-7xl font-serif font-bold italic leading-tight text-slate-900 tracking-tighter">Signature Atolls.</h3>
             </div>
             <Link to="/stays" className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.5em] border-b border-sky-500 pb-1 mb-4 hover:text-slate-900 hover:border-slate-900 transition-colors">Explore Geography</Link>
@@ -251,7 +251,7 @@ const Home: React.FC = () => {
       <section className="py-20 sm:py-32 md:py-48 bg-white overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-20">
           <div className="mb-20 reveal">
-            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[1em] mb-8 block">Exclusive Portfolio</span>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[1em] mb-8 block">Exclusive Portfolio</span>
             <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 tracking-tighter italic leading-none">The Collection.</h3>
           </div>
           <div className="reveal no-scrollbar overflow-x-auto flex gap-10 md:gap-16 pb-12 snap-x snap-mandatory">
@@ -261,7 +261,7 @@ const Home: React.FC = () => {
               </div>
             )) : (
               <div className="py-20 text-center w-full">
-                <p className="text-slate-400 uppercase tracking-widest text-[10px] animate-pulse">Consulting the archives...</p>
+                <p className="text-slate-500 uppercase tracking-widest text-[10px] animate-pulse">Consulting the archives...</p>
               </div>
             )}
           </div>
@@ -310,15 +310,15 @@ const Home: React.FC = () => {
                   </div>
                 </div>
                 <div className="px-2">
-                  <span className="text-slate-300 font-bold text-[8px] uppercase tracking-[0.5em] mb-3 block">
+                  <span className="text-slate-500 font-bold text-[8px] uppercase tracking-[0.5em] mb-3 block">
                     {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                   </span>
                   <h4 className="text-2xl font-serif font-bold text-slate-900 mb-6 group-hover:italic group-hover:text-sky-600 transition-all duration-500 leading-tight">
                     {post.title}
                   </h4>
                   <div className="flex items-center gap-4 group">
-                     <div className="w-8 h-[1px] bg-slate-100 group-hover:w-12 group-hover:bg-sky-500 transition-all duration-700"></div>
-                     <span className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.4em] group-hover:text-slate-900 transition-colors">Read Narrative</span>
+                     <div className="w-8 h-[1px] bg-slate-200 group-hover:w-12 group-hover:bg-sky-500 transition-all duration-700"></div>
+                     <span className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.4em] group-hover:text-slate-900 transition-colors">Read Narrative</span>
                   </div>
                 </div>
               </Link>

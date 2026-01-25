@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Accommodation } from '../types';
@@ -49,7 +48,7 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort }) => {
           </span>
         </div>
         
-        <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] mb-8 line-clamp-1 opacity-80">
+        <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.4em] mb-8 line-clamp-1 opacity-90">
           {(resort.features && resort.features.length > 0) ? resort.features.join(' • ') : 'Bespoke Sanctuary • Private Island'}
         </p>
         

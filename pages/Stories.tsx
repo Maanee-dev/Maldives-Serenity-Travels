@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
@@ -70,7 +69,7 @@ const Stories: React.FC = () => {
           <span className="text-[10px] font-bold text-sky-500 mb-12 block tracking-[1em] uppercase">The Journal</span>
           <h1 className="text-6xl md:text-9xl font-serif font-bold text-slate-900 tracking-tighter italic leading-none">Perspective.</h1>
           <div className="h-px w-24 bg-amber-400 mx-auto mt-16 mb-16"></div>
-          <p className="text-slate-400 text-[11px] font-bold max-w-xl mx-auto uppercase tracking-[0.5em] leading-[2.5] opacity-80">
+          <p className="text-slate-500 text-[11px] font-bold max-w-xl mx-auto uppercase tracking-[0.5em] leading-[2.5] opacity-90">
             A dynamic editorial archive of Maldivian heritage, <br className="hidden md:block"/> luxury insights, and travel intelligence.
           </p>
         </div>
@@ -82,7 +81,7 @@ const Stories: React.FC = () => {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`text-[10px] font-bold uppercase tracking-[0.4em] transition-all pb-2 border-b-2 ${activeCategory === cat ? 'border-sky-500 text-slate-900' : 'border-transparent text-slate-300 hover:text-slate-500'}`}
+                className={`text-[10px] font-bold uppercase tracking-[0.4em] transition-all pb-2 border-b-2 ${activeCategory === cat ? 'border-sky-500 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
               >
                 {cat}s
               </button>
@@ -102,7 +101,7 @@ const Stories: React.FC = () => {
         {loading ? (
           <div className="py-40 text-center reveal active">
              <div className="w-10 h-10 border-2 border-slate-100 border-t-sky-500 rounded-full animate-spin mx-auto mb-8"></div>
-             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Accessing records...</p>
+             <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Accessing records...</p>
           </div>
         ) : filteredStories.length > 0 ? (
           <>
@@ -120,13 +119,13 @@ const Stories: React.FC = () => {
                      </div>
                   </div>
                   <div className="max-w-4xl mx-auto text-center">
-                    <span className="text-slate-300 font-bold text-[9px] uppercase tracking-[0.6em] mb-6 block">
+                    <span className="text-slate-500 font-bold text-[9px] uppercase tracking-[0.6em] mb-6 block">
                       {new Date(featuredPost.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                     </span>
                     <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-900 mb-8 group-hover:italic transition-all duration-700 leading-[1.1]">
                       {featuredPost.title}
                     </h2>
-                    <p className="text-slate-500 leading-relaxed font-medium opacity-80 mb-10 text-lg md:text-xl">
+                    <p className="text-slate-600 leading-relaxed font-medium opacity-90 mb-10 text-lg md:text-xl">
                       {featuredPost.excerpt}
                     </p>
                   </div>
@@ -152,13 +151,13 @@ const Stories: React.FC = () => {
                      </div>
                   </div>
                   <div>
-                    <span className="text-slate-300 font-bold text-[8px] uppercase tracking-[0.4em] mb-4 block">
+                    <span className="text-slate-500 font-bold text-[8px] uppercase tracking-[0.4em] mb-4 block">
                       {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </span>
                     <h2 className="text-2xl font-serif font-bold text-slate-900 mb-4 group-hover:italic transition-all duration-500 leading-tight">
                       {post.title}
                     </h2>
-                    <p className="text-slate-500 text-sm leading-relaxed font-medium opacity-80 line-clamp-2">
+                    <p className="text-slate-600 text-sm leading-relaxed font-medium opacity-90 line-clamp-2">
                       {post.excerpt}
                     </p>
                   </div>
@@ -177,12 +176,12 @@ const Stories: React.FC = () => {
       <section className="py-48 bg-white border-t border-slate-50">
          <div className="max-w-4xl mx-auto px-6 text-center reveal">
             <h2 className="text-4xl md:text-6xl font-serif font-bold text-slate-950 italic mb-12">The Archives</h2>
-            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.5em] mb-20 leading-loose">
+            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.5em] mb-20 leading-loose">
                Access our full collection of Maldivian dispatches <br className="hidden md:block"/> and photographic journals.
             </p>
             <div className="flex flex-wrap justify-center gap-10">
                {['Aesthetics', 'Heritage', 'Sustainability', 'Cuisine'].map(tag => (
-                 <button key={tag} className="text-[9px] font-bold text-slate-300 uppercase tracking-[0.4em] hover:text-slate-950 transition-colors border-b border-transparent hover:border-slate-950 pb-2">
+                 <button key={tag} className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.4em] hover:text-slate-950 transition-colors border-b border-transparent hover:border-slate-950 pb-2">
                    {tag}
                  </button>
                ))}
