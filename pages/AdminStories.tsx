@@ -24,7 +24,7 @@ const AdminStories: React.FC = () => {
 
   const fetchStories = async () => {
     const { data } = await supabase.from('stories').select('*').order('date', { ascending: false });
-    if (data) setStories(data);
+    if (data) setStories(data as BlogPost[]);
   };
 
   useEffect(() => {
@@ -35,12 +35,13 @@ const AdminStories: React.FC = () => {
     const { name, value, type } = e.target;
     const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
     
-    setFormData(prev => ({ 
-      ...prev, 
-      [name]: val,
-      // Auto-generate slug from title if slug is empty
-      slug: name === 'title' && !prev.slug ? value.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-') : prev.slug
-    }));
+    setFormData(prev => {
+      const updated = { ...prev, [name]: val };
+      if (name === 'title' && !prev.slug) {
+        updated.slug = value.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
+      }
+      return updated;
+    });
   };
 
   const saveStory = async (e: React.FormEvent) => {
@@ -81,12 +82,16 @@ const AdminStories: React.FC = () => {
   const deleteStory = async (id: string) => {
     if (!confirm('Are you sure you want to delete this story?')) return;
     const { error } = await supabase.from('stories').delete().eq('id', id);
-    if (!error) fetchStories();
+    if (!error) {
+      fetchStories();
+      setStatus('Deleted.');
+    }
   };
 
   const editStory = (story: BlogPost) => {
     setFormData(story);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setStatus(`Editing: ${story.title}`);
   };
 
   const syncLocalData = async () => {

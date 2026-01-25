@@ -21,7 +21,7 @@ const Stories: React.FC = () => {
           .order('date', { ascending: false });
         
         if (data && data.length > 0) {
-          setStories(data);
+          setStories(data as BlogPost[]);
         } else {
           // Fallback to constants if DB is empty
           setStories(BLOG_POSTS as BlogPost[]);
@@ -58,14 +58,15 @@ const Stories: React.FC = () => {
   }, [stories, activeCategory, searchQuery]);
 
   const featuredPost = useMemo(() => {
+    if (activeCategory !== 'All' || searchQuery) return null;
     return filteredStories.find(p => p.is_featured) || filteredStories[0];
-  }, [filteredStories]);
+  }, [filteredStories, activeCategory, searchQuery]);
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-48 md:py-64 lg:px-12">
         
-        <div className="text-center mb-32 md:mb-56 reveal">
+        <div className="text-center mb-32 md:mb-56 reveal active">
           <span className="text-[10px] font-bold text-sky-500 mb-12 block tracking-[1em] uppercase">The Journal</span>
           <h1 className="text-6xl md:text-9xl font-serif font-bold text-slate-900 tracking-tighter italic leading-none">Perspective.</h1>
           <div className="h-px w-24 bg-amber-400 mx-auto mt-16 mb-16"></div>
@@ -93,7 +94,7 @@ const Stories: React.FC = () => {
               placeholder="SEARCH ARCHIVES..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-transparent border-b border-slate-200 py-2 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-slate-950 placeholder:text-slate-100"
+              className="w-full bg-transparent border-b border-slate-200 py-2 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-slate-950 placeholder:text-slate-300"
             />
           </div>
         </div>
@@ -106,7 +107,7 @@ const Stories: React.FC = () => {
         ) : filteredStories.length > 0 ? (
           <>
             {/* Featured Hero Post */}
-            {featuredPost && activeCategory === 'All' && !searchQuery && (
+            {featuredPost && (
               <div className="mb-48">
                 <Link to={`/stories/${featuredPost.slug}`} className="group flex flex-col reveal active">
                   <div className="relative overflow-hidden rounded-[3rem] md:rounded-[5rem] shadow-sm group-hover:shadow-2xl transition-all duration-1000 aspect-[21/9] mb-16 bg-slate-100">
@@ -135,7 +136,7 @@ const Stories: React.FC = () => {
 
             {/* Stories Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 lg:gap-24">
-              {filteredStories.filter(p => p.id !== (activeCategory === 'All' && !searchQuery ? featuredPost?.id : null)).map((post, idx) => (
+              {filteredStories.filter(p => p.id !== (featuredPost ? featuredPost.id : null)).map((post, idx) => (
                 <Link 
                   key={post.id} 
                   to={`/stories/${post.slug}`} 
