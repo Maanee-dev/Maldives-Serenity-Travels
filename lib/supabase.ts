@@ -1,3 +1,4 @@
+
 import { createClient } from '@supabase/supabase-js';
 
 const SUPABASE_URL = 'https://zocncwchaakjtsvlscmd.supabase.co';
@@ -45,10 +46,30 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
  *   created_at timestamp with time zone default now()
  * );
  * 
+ * INQUIRIES TABLE SCHEMA (SQL):
+ * 
+ * create table inquiries (
+ *   id uuid default gen_random_uuid() primary key,
+ *   resort_id uuid references resorts(id),
+ *   resort_name text,
+ *   check_in date,
+ *   check_out date,
+ *   room_type text,
+ *   meal_plan text,
+ *   customer_name text,
+ *   customer_email text,
+ *   customer_phone text,
+ *   notes text,
+ *   status text default 'New',
+ *   created_at timestamp with time zone default now()
+ * );
+ * 
  * alter table stories enable row level security;
  * alter table resorts enable row level security;
+ * alter table inquiries enable row level security;
  * create policy "Public can view stories" on stories for select using (true);
  * create policy "Public can view resorts" on resorts for select using (true);
+ * create policy "Public can insert inquiries" on inquiries for insert with check (true);
  * create policy "Admin full access stories" on stories for all using (true);
  * create policy "Admin full access resorts" on resorts for all using (true);
  */

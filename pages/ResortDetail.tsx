@@ -9,7 +9,21 @@ const ResortDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [resort, setResort] = useState<Accommodation | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  // Quote Form State
+  const [formStep, setFormStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [quoteData, setQuoteData] = useState({
+    checkIn: '',
+    checkOut: '',
+    roomType: '',
+    mealPlan: '',
+    customerName: '',
+    customerEmail: '',
+    customerPhone: '',
+    notes: ''
+  });
 
   /**
    * ROBUST HIGHLIGHT PARSING
@@ -126,6 +140,35 @@ const ResortDetail: React.FC = () => {
     }
   }, [loading, resort]);
 
+  const handleQuoteSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!resort) return;
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('inquiries').insert({
+        resort_id: resort.id,
+        resort_name: resort.name,
+        check_in: quoteData.checkIn,
+        check_out: quoteData.checkOut,
+        room_type: quoteData.roomType,
+        meal_plan: quoteData.mealPlan,
+        customer_name: quoteData.customerName,
+        customer_email: quoteData.customerEmail,
+        customer_phone: quoteData.customerPhone,
+        notes: quoteData.notes
+      });
+
+      if (error) throw error;
+      setIsSubmitted(true);
+    } catch (err) {
+      console.error('Quote submission error:', err);
+      alert('We encountered an error processing your request. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (loading) return (
     <div className="min-h-screen bg-[#FCFAF7] flex flex-col items-center justify-center">
        <div className="w-10 h-10 border-2 border-slate-100 border-t-sky-500 rounded-full animate-spin mb-8"></div>
@@ -140,15 +183,10 @@ const ResortDetail: React.FC = () => {
     </div>
   );
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitted(true);
-  };
-
   return (
     <div className="bg-[#FCFAF7] min-h-screen selection:bg-sky-100 selection:text-sky-900 pb-20 overflow-x-hidden">
       
-      {/* Cinematic Hero - Improved Aspect Ratios and Text Contrast */}
+      {/* Cinematic Hero */}
       <section className="relative w-full pt-20 md:pt-28 lg:pt-32 px-4 md:px-6 reveal active">
         <div className="relative aspect-[4/5] md:aspect-[16/9] lg:aspect-[21/9] w-full rounded-[2rem] md:rounded-[3.5rem] lg:rounded-[4.5rem] overflow-hidden shadow-2xl bg-slate-200">
           <img 
@@ -164,7 +202,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* Manifesto Section - Refined Grid and Padding */}
+      {/* Manifesto Section */}
       <section className="py-20 md:py-32 lg:py-48 px-6 lg:px-12">
         <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-20 lg:gap-32 items-start">
           <div className="lg:col-span-7 reveal">
@@ -209,7 +247,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* The Residences - Horizontal Snap Scroller with Better Mobile Widths */}
+      {/* The Residences Section */}
       {resort.roomTypes && resort.roomTypes.length > 0 && (
         <section className="py-20 md:py-32 bg-white overflow-hidden">
           <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
@@ -236,11 +274,6 @@ const ResortDetail: React.FC = () => {
                   </div>
                   <h4 className="text-xl md:text-2xl font-serif font-bold text-slate-900 mb-3 group-hover:italic group-hover:text-sky-600 transition-all">{room.name}</h4>
                   <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 opacity-80 mb-6">{room.description}</p>
-                  <div className="flex flex-wrap gap-2 md:gap-3">
-                    {room.highlights && room.highlights.slice(0, 3).map((h, i) => (
-                      <span key={i} className="text-[8px] font-bold text-slate-400 uppercase tracking-widest border border-slate-100 px-3 py-1.5 rounded-full">{h}</span>
-                    ))}
-                  </div>
                 </div>
               ))}
             </div>
@@ -248,7 +281,7 @@ const ResortDetail: React.FC = () => {
         </section>
       )}
 
-      {/* Culinary Portfolio - Vertical Impact Mobile, Grid Layout */}
+      {/* Culinary Portfolio */}
       {resort.diningVenues && resort.diningVenues.length > 0 && (
         <section className="py-20 md:py-32 lg:py-48 px-6 lg:px-12 bg-[#FCFAF7] overflow-hidden">
           <div className="max-w-[1440px] mx-auto">
@@ -285,75 +318,230 @@ const ResortDetail: React.FC = () => {
         </section>
       )}
 
-      {/* Booking Concierge Form - Polished Mobile Experience */}
-      <section className="py-24 md:py-40 lg:py-64 bg-slate-950 relative overflow-hidden">
+      {/* BESPOKE QUOTE ENGINE SECTION */}
+      <section className="py-24 md:py-40 lg:py-64 bg-slate-950 relative overflow-hidden" id="booking">
         <div className="absolute inset-0 opacity-[0.03] flex items-center justify-center pointer-events-none">
            <h2 className="text-[40vw] font-serif italic whitespace-nowrap leading-none">Inquiry</h2>
         </div>
         
-        <div className="max-w-3xl mx-auto px-6 relative z-10">
+        <div className="max-w-4xl mx-auto px-6 relative z-10">
           {isSubmitted ? (
-            <div className="text-center py-16 md:py-24 reveal active">
-               <h3 className="text-4xl md:text-7xl font-serif font-bold text-white mb-8 md:mb-12 italic tracking-tight">Vision Received.</h3>
-               <p className="text-sky-400 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.5em] leading-[2.5] max-w-sm mx-auto">One of our experts will reach out to refine your perspective within 24 hours.</p>
+            <div className="text-center py-24 reveal active">
+               <h3 className="text-5xl md:text-8xl font-serif font-bold text-white mb-12 italic tracking-tight">Vision Received.</h3>
+               <p className="text-sky-400 text-[11px] font-bold uppercase tracking-[1em] leading-[2.5] max-w-sm mx-auto mb-16">
+                 Our specialists will refine your bespoke portfolio for {resort.name} and reach out within 24 hours.
+               </p>
                <button 
-                 onClick={() => setIsSubmitted(false)}
-                 className="mt-16 text-[10px] font-bold text-white uppercase tracking-[0.5em] border-b border-white pb-2 hover:text-sky-400 hover:border-sky-400 transition-all"
+                 onClick={() => { setIsSubmitted(false); setFormStep(1); }}
+                 className="text-[10px] font-bold text-white uppercase tracking-[0.5em] border-b border-white pb-2 hover:text-sky-400 hover:border-sky-400 transition-all"
                >
-                 Submit Another Inquiry
+                 Submit Another Request
                </button>
             </div>
           ) : (
             <>
               <div className="text-center mb-16 md:mb-24 reveal">
-                <span className="text-[10px] font-bold text-sky-400 uppercase tracking-[0.8em] mb-8 md:mb-12 block">Private Inquiries</span>
-                <h3 className="text-3xl md:text-6xl lg:text-8xl font-serif font-bold text-white italic mb-8 tracking-tighter">The Gateway.</h3>
-                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em] max-w-sm mx-auto leading-loose opacity-70">Define your dates and desires. We manage the logistics.</p>
+                <span className="text-[10px] font-bold text-sky-400 uppercase tracking-[1em] mb-12 block">BESPOKE QUOTE ENGINE</span>
+                <h3 className="text-3xl md:text-7xl font-serif font-bold text-white italic mb-12 tracking-tighter">Initiate Journey.</h3>
+                
+                {/* Step Indicator */}
+                <div className="flex justify-center items-center gap-4 mb-16">
+                   {[1, 2, 3, 4].map(i => (
+                     <div 
+                      key={i} 
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-[10px] font-bold transition-all duration-700 ${formStep === i ? 'bg-sky-500 text-white shadow-[0_0_20px_rgba(14,165,233,0.5)] scale-110' : formStep > i ? 'bg-white text-slate-950' : 'bg-white/10 text-white/30'}`}
+                     >
+                       {i}
+                     </div>
+                   ))}
+                </div>
               </div>
 
-              <form onSubmit={handleFormSubmit} className="space-y-12 md:space-y-16 reveal active">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
-                  <div className="border-b border-white/10 py-4 focus-within:border-sky-500 transition-all">
-                    <label className="block text-[8px] font-bold text-slate-500 uppercase tracking-[0.4em] mb-4">Your Name</label>
-                    <input type="text" required className="w-full bg-transparent text-white font-serif italic text-xl md:text-2xl outline-none placeholder:text-white/5" placeholder="Identity" />
-                  </div>
-                  <div className="border-b border-white/10 py-4 focus-within:border-sky-500 transition-all">
-                    <label className="block text-[8px] font-bold text-slate-500 uppercase tracking-[0.4em] mb-4">Email Signature</label>
-                    <input type="email" required className="w-full bg-transparent text-white font-serif italic text-xl md:text-2xl outline-none placeholder:text-white/5" placeholder="Digital Signature" />
-                  </div>
-                </div>
+              <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[3rem] p-8 md:p-16">
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
-                  <div className="border-b border-white/10 py-4 focus-within:border-sky-500 transition-all">
-                    <label className="block text-[8px] font-bold text-slate-500 uppercase tracking-[0.4em] mb-4">Travel Period</label>
-                    <input type="text" className="w-full bg-transparent text-white font-serif italic text-xl md:text-2xl outline-none placeholder:text-white/5" placeholder="Preferred Season" />
+                {/* STEP 1: CALENDAR */}
+                {formStep === 1 && (
+                  <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+                    <div className="flex items-center gap-4">
+                       <span className="text-[9px] font-bold text-sky-400 uppercase tracking-widest">PHASE A</span>
+                       <h4 className="text-2xl font-serif text-white italic">When will you arrive?</h4>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                       <div className="space-y-4">
+                          <label className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Check In</label>
+                          <input 
+                            type="date" 
+                            required
+                            value={quoteData.checkIn}
+                            onChange={(e) => setQuoteData(prev => ({ ...prev, checkIn: e.target.value }))}
+                            className="w-full bg-white/5 border-b border-white/10 py-6 text-white font-serif italic text-xl outline-none focus:border-sky-500 transition-all cursor-pointer" 
+                          />
+                       </div>
+                       <div className="space-y-4">
+                          <label className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Check Out</label>
+                          <input 
+                            type="date" 
+                            required
+                            value={quoteData.checkOut}
+                            onChange={(e) => setQuoteData(prev => ({ ...prev, checkOut: e.target.value }))}
+                            className="w-full bg-white/5 border-b border-white/10 py-6 text-white font-serif italic text-xl outline-none focus:border-sky-500 transition-all cursor-pointer" 
+                          />
+                       </div>
+                    </div>
+                    <button 
+                      onClick={() => quoteData.checkIn && quoteData.checkOut && setFormStep(2)}
+                      disabled={!quoteData.checkIn || !quoteData.checkOut}
+                      className="w-full bg-white text-slate-950 font-bold py-6 rounded-full text-[10px] uppercase tracking-[0.6em] hover:bg-sky-500 hover:text-white transition-all duration-700 disabled:opacity-20"
+                    >
+                      Define Residence →
+                    </button>
                   </div>
-                  <div className="border-b border-white/10 py-4 focus-within:border-sky-500 transition-all">
-                    <label className="block text-[8px] font-bold text-slate-500 uppercase tracking-[0.4em] mb-4">Party Size</label>
-                    <select className="w-full bg-transparent text-white font-serif italic text-xl md:text-2xl outline-none cursor-pointer">
-                      <option className="bg-slate-950">Solo Escape</option>
-                      <option className="bg-slate-950">Intimate Couple</option>
-                      <option className="bg-slate-950">Family Ensemble</option>
-                      <option className="bg-slate-950">Private Collective (6+)</option>
-                    </select>
+                )}
+
+                {/* STEP 2: RESIDENCE */}
+                {formStep === 2 && (
+                  <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+                    <div className="flex items-center justify-between">
+                       <div className="flex items-center gap-4">
+                          <span className="text-[9px] font-bold text-sky-400 uppercase tracking-widest">PHASE B</span>
+                          <h4 className="text-2xl font-serif text-white italic">Preferred Residence</h4>
+                       </div>
+                       <button 
+                        onClick={() => { setQuoteData(prev => ({ ...prev, roomType: 'Specialist Consultation' })); setFormStep(3); }}
+                        className="text-[9px] font-bold text-white/40 uppercase tracking-[0.2em] hover:text-sky-400 transition-colors"
+                       >
+                         Not sure? Consult a Specialist
+                       </button>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[400px] overflow-y-auto no-scrollbar pr-2">
+                       {resort.roomTypes?.map((room, i) => (
+                         <button 
+                           key={i}
+                           onClick={() => { setQuoteData(prev => ({ ...prev, roomType: room.name })); setFormStep(3); }}
+                           className={`group relative aspect-[16/10] rounded-[2rem] overflow-hidden border-2 transition-all duration-700 ${quoteData.roomType === room.name ? 'border-sky-500 scale-[0.98]' : 'border-transparent hover:border-white/20'}`}
+                         >
+                            <img src={room.image} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700" alt={room.name} />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+                            <div className="absolute bottom-6 left-6 text-left">
+                               <p className="text-[10px] font-bold text-white uppercase tracking-widest">{room.name}</p>
+                            </div>
+                            {quoteData.roomType === room.name && (
+                               <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-sky-500 flex items-center justify-center">
+                                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}><path d="M5 13l4 4L19 7" /></svg>
+                               </div>
+                            )}
+                         </button>
+                       ))}
+                    </div>
+
+                    <button 
+                      onClick={() => setFormStep(1)}
+                      className="w-full text-[9px] font-bold text-white/30 uppercase tracking-[0.5em] hover:text-white transition-colors"
+                    >
+                      ← Back to Calendar
+                    </button>
                   </div>
-                </div>
+                )}
 
-                <div className="border-b border-white/10 py-4 focus-within:border-sky-500 transition-all">
-                  <label className="block text-[8px] font-bold text-slate-500 uppercase tracking-[0.4em] mb-4">The Vision</label>
-                  <textarea rows={3} className="w-full bg-transparent text-white font-serif italic text-xl md:text-2xl outline-none placeholder:text-white/5 leading-relaxed" placeholder="Tell us about the dream..."></textarea>
-                </div>
+                {/* STEP 3: GASTRONOMY */}
+                {formStep === 3 && (
+                  <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+                    <div className="flex items-center gap-4">
+                       <span className="text-[9px] font-bold text-sky-400 uppercase tracking-widest">PHASE C</span>
+                       <h4 className="text-2xl font-serif text-white italic">Gastronomy Preferences</h4>
+                    </div>
 
-                <button type="submit" className="w-full bg-white text-slate-950 font-bold py-6 md:py-8 rounded-full text-[10px] md:text-[11px] uppercase tracking-[0.6em] hover:bg-sky-500 hover:text-white transition-all duration-700 shadow-2xl active:scale-95">
-                  Initiate Request
-                </button>
-              </form>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                       {resort.mealPlans.map((plan) => (
+                         <button
+                           key={plan}
+                           onClick={() => { setQuoteData(prev => ({ ...prev, mealPlan: plan })); setFormStep(4); }}
+                           className={`p-8 rounded-[2rem] border-2 text-left transition-all duration-500 ${quoteData.mealPlan === plan ? 'bg-sky-500 border-sky-500 text-white shadow-xl' : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'}`}
+                         >
+                            <span className="text-[10px] font-bold uppercase tracking-[0.4em]">{plan.replace(/_/g, ' ')}</span>
+                         </button>
+                       ))}
+                    </div>
+
+                    <button 
+                      onClick={() => setFormStep(2)}
+                      className="w-full text-[9px] font-bold text-white/30 uppercase tracking-[0.5em] hover:text-white transition-colors"
+                    >
+                      ← Back to Residence
+                    </button>
+                  </div>
+                )}
+
+                {/* STEP 4: IDENTITY */}
+                {formStep === 4 && (
+                  <form onSubmit={handleQuoteSubmit} className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+                    <div className="flex items-center gap-4">
+                       <span className="text-[9px] font-bold text-sky-400 uppercase tracking-widest">PHASE D</span>
+                       <h4 className="text-2xl font-serif text-white italic">Final Identity</h4>
+                    </div>
+
+                    <div className="space-y-8">
+                       <div className="border-b border-white/10 py-4 focus-within:border-sky-500 transition-all">
+                          <label className="block text-[8px] font-bold text-white/30 uppercase tracking-[0.4em] mb-4">Your Name</label>
+                          <input 
+                            type="text" 
+                            required 
+                            value={quoteData.customerName}
+                            onChange={(e) => setQuoteData(prev => ({ ...prev, customerName: e.target.value }))}
+                            className="w-full bg-transparent text-white font-serif italic text-xl md:text-2xl outline-none placeholder:text-white/5" 
+                            placeholder="Identity" 
+                          />
+                       </div>
+                       <div className="border-b border-white/10 py-4 focus-within:border-sky-500 transition-all">
+                          <label className="block text-[8px] font-bold text-white/30 uppercase tracking-[0.4em] mb-4">Email Signature</label>
+                          <input 
+                            type="email" 
+                            required 
+                            value={quoteData.customerEmail}
+                            onChange={(e) => setQuoteData(prev => ({ ...prev, customerEmail: e.target.value }))}
+                            className="w-full bg-transparent text-white font-serif italic text-xl md:text-2xl outline-none placeholder:text-white/5" 
+                            placeholder="Digital Signature" 
+                          />
+                       </div>
+                       <div className="border-b border-white/10 py-4 focus-within:border-sky-500 transition-all">
+                          <label className="block text-[8px] font-bold text-white/30 uppercase tracking-[0.4em] mb-4">Phone Number</label>
+                          <input 
+                            type="tel" 
+                            required 
+                            value={quoteData.customerPhone}
+                            onChange={(e) => setQuoteData(prev => ({ ...prev, customerPhone: e.target.value }))}
+                            className="w-full bg-transparent text-white font-serif italic text-xl md:text-2xl outline-none placeholder:text-white/5" 
+                            placeholder="+44 7000 000000" 
+                          />
+                       </div>
+                    </div>
+
+                    <button 
+                      type="submit" 
+                      disabled={isSubmitting}
+                      className="w-full bg-white text-slate-950 font-bold py-8 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-500 hover:text-white transition-all duration-700 shadow-2xl active:scale-95 disabled:opacity-50"
+                    >
+                      {isSubmitting ? 'Consulting Servers...' : 'Request Bespoke Portfolio'}
+                    </button>
+
+                    <button 
+                      type="button"
+                      onClick={() => setFormStep(3)}
+                      className="w-full text-[9px] font-bold text-white/30 uppercase tracking-[0.5em] hover:text-white transition-colors"
+                    >
+                      ← Back to Gastronomy
+                    </button>
+                  </form>
+                )}
+
+              </div>
             </>
           )}
         </div>
       </section>
 
-      {/* Suggested Stays - Polished Scroller */}
+      {/* Suggested Stays */}
       <section className="py-20 md:py-32 px-6 lg:px-12 bg-white overflow-hidden">
          <div className="max-w-[1440px] mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-24 reveal gap-8">

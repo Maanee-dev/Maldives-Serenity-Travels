@@ -10,7 +10,7 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed: Use lowercase imports to match the file system and resolve casing ambiguity errors (lines 14-15)
+// Fix: Use lowercase imports for offers and experiences to resolve casing ambiguity with duplicate files in the directory
 import Offers from './pages/offers';
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
