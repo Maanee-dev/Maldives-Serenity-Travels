@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -9,9 +8,8 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Using lowercase to resolve casing conflict with existing files in the project
+// Fixed casing conflict by using lowercase import names to match pages/offers.tsx and pages/experiences.tsx
 import Offers from './pages/offers';
-// Using lowercase to resolve casing conflict with existing files in the project
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
