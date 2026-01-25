@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { RESORTS } from '../constants';
@@ -8,6 +8,7 @@ import { Accommodation, AccommodationType, TransferType, MealPlan } from '../typ
 const ResortDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [resort, setResort] = useState<Accommodation | null>(null);
+  const [allResorts, setAllResorts] = useState<Accommodation[]>([]);
   const [loading, setLoading] = useState(true);
   
   // Quote Form State
@@ -38,19 +39,50 @@ const ResortDetail: React.FC = () => {
       return Array.isArray(parsed) ? parsed : [];
     } catch (e) {
       if (typeof item === 'string') {
-        return item
-          .split(',')
-          .map(s => s.trim().replace(/^["\[]+|["\]]+$/g, ''))
-          .filter(Boolean);
+        return item.split(',').map(s => s.trim().replace(/^["\[]+|["\]]+$/g, '')).filter(Boolean);
       }
       return [];
     }
   };
 
+  // Logic for Smart Similar Stays
+  const similarStays = useMemo(() => {
+    if (!resort || allResorts.length === 0) return [];
+    
+    // Extract potential brand name (usually first word)
+    const brandName = resort.name.split(' ')[0];
+    
+    // 1. Try to find resorts from the same brand/collection
+    let matches = allResorts.filter(r => r.slug !== slug && r.name.toLowerCase().includes(brandName.toLowerCase()));
+    
+    // 2. If no brand matches, find resorts in the same Atoll
+    if (matches.length < 2) {
+      const atollMatches = allResorts.filter(r => r.slug !== slug && r.atoll === resort.atoll && !matches.find(m => m.id === r.id));
+      matches = [...matches, ...atollMatches];
+    }
+    
+    // 3. Final fallback: Featured resorts of the same type
+    if (matches.length < 3) {
+      const typeMatches = allResorts.filter(r => r.slug !== slug && r.type === resort.type && !matches.find(m => m.id === r.id));
+      matches = [...matches, ...typeMatches];
+    }
+
+    return matches.slice(0, 4);
+  }, [resort, allResorts, slug]);
+
   useEffect(() => {
     const fetchFullDetails = async () => {
       setLoading(true);
       try {
+        // Fetch all for recommendations
+        const { data: allData } = await supabase.from('resorts').select('*');
+        if (allData) {
+           const mapped = allData.map(item => ({ ...item, priceRange: item.price_range })) as unknown as Accommodation[];
+           setAllResorts(mapped.length > 0 ? mapped : RESORTS);
+        } else {
+           setAllResorts(RESORTS);
+        }
+
         const localBackup = RESORTS.find(r => r.slug === slug);
         const { data: resData } = await supabase.from('resorts').select('*').eq('slug', slug).maybeSingle();
 
@@ -75,20 +107,12 @@ const ResortDetail: React.FC = () => {
             uvp: resData.uvp || localBackup?.uvp || 'A sanctuary defined by perspective.',
             isFeatured: resData.is_featured || false,
             roomTypes: rawRooms.map((r: any) => ({
-              name: r.name,
-              description: r.description,
-              highlights: parseHighlights(r.highlights),
-              image: r.image,
-              size: r.size,
-              capacity: r.capacity
+              ...r,
+              highlights: parseHighlights(r.highlights)
             })),
             diningVenues: rawDining.map((d: any) => ({
-              name: d.name,
-              cuisine: d.cuisine,
-              description: d.description,
-              highlights: parseHighlights(d.highlights),
-              image: d.image,
-              vibe: d.vibe
+              ...d,
+              highlights: parseHighlights(d.highlights)
             }))
           };
           setResort(mappedResort);
@@ -217,8 +241,66 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* Quote Engine - Refined Minimalist Dark UI */}
-      <section className="py-24 md:py-40 lg:py-64 bg-slate-950 relative overflow-hidden" id="booking">
+      {/* Residences Horizontal Scroller */}
+      {resort.roomTypes && resort.roomTypes.length > 0 && (
+        <section className="py-24 bg-white border-y-[1px] border-slate-50 overflow-hidden">
+          <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+             <div className="mb-16 flex flex-col md:flex-row justify-between items-end gap-8 reveal">
+                <div>
+                   <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.8em] mb-4 block">Accommodation</span>
+                   <h3 className="text-3xl md:text-5xl font-serif font-bold italic text-slate-950 tracking-tighter">The Residences.</h3>
+                </div>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Scroll to explore</p>
+             </div>
+             <div className="flex gap-8 overflow-x-auto no-scrollbar pb-8 snap-x">
+                {resort.roomTypes.map((room, i) => (
+                  <div key={i} className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[35vw] snap-start reveal" style={{ transitionDelay: `${i * 100}ms` }}>
+                    <div className="relative aspect-[16/10] rounded-[2rem] overflow-hidden mb-6 bg-slate-100">
+                      <img src={room.image || resort.images[0]} className="w-full h-full object-cover" alt={room.name} />
+                      <div className="absolute top-6 right-6 flex flex-col gap-2">
+                         {room.size && <span className="bg-white/95 backdrop-blur px-4 py-1.5 rounded-full text-[9px] font-black text-slate-950 uppercase tracking-widest">{room.size}</span>}
+                      </div>
+                    </div>
+                    <h4 className="text-xl font-serif font-bold text-slate-950 mb-3">{room.name}</h4>
+                    <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">{room.description}</p>
+                  </div>
+                ))}
+             </div>
+          </div>
+        </section>
+      )}
+
+      {/* Culinary Horizontal Scroller */}
+      {resort.diningVenues && resort.diningVenues.length > 0 && (
+        <section className="py-24 px-6 lg:px-12 overflow-hidden">
+          <div className="max-w-[1440px] mx-auto">
+             <div className="mb-16 flex flex-col md:flex-row justify-between items-end gap-8 reveal">
+                <div>
+                   <span className="text-[11px] font-black text-sky-500 uppercase tracking-[0.8em] mb-4 block">Gastronomy</span>
+                   <h3 className="text-3xl md:text-5xl font-serif font-bold italic text-slate-950 tracking-tighter">Culinary Portfolio.</h3>
+                </div>
+             </div>
+             <div className="flex gap-12 overflow-x-auto no-scrollbar pb-8 snap-x">
+                {resort.diningVenues.map((venue, i) => (
+                  <div key={i} className="flex-shrink-0 w-[80vw] md:w-[40vw] lg:w-[28vw] snap-start reveal" style={{ transitionDelay: `${i * 100}ms` }}>
+                    <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden mb-8 shadow-sm">
+                      <img src={venue.image} className="w-full h-full object-cover" alt={venue.name} />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent"></div>
+                      <div className="absolute bottom-8 left-8 right-8 text-white">
+                         <span className="text-[9px] font-black uppercase tracking-widest text-sky-400 mb-2 block">{venue.cuisine}</span>
+                         <h4 className="text-2xl font-serif font-bold italic">{venue.name}</h4>
+                      </div>
+                    </div>
+                    <p className="text-slate-800 text-base leading-relaxed font-semibold italic">"{venue.description}"</p>
+                  </div>
+                ))}
+             </div>
+          </div>
+        </section>
+      )}
+
+      {/* Minimalist Quote Engine */}
+      <section className="py-24 md:py-40 bg-slate-950 relative overflow-hidden" id="booking">
         <div className="max-w-4xl mx-auto px-6 relative z-10">
           {isSubmitted ? (
             <div className="text-center py-24 reveal active">
@@ -230,85 +312,77 @@ const ResortDetail: React.FC = () => {
             </div>
           ) : (
             <>
-              <div className="text-center mb-16 md:mb-24 reveal">
+              <div className="text-center mb-16 reveal">
                 <span className="text-[12px] font-black text-sky-400 uppercase tracking-[1em] mb-12 block">BESPOKE QUOTE ENGINE</span>
                 <h3 className="text-3xl md:text-7xl font-serif font-bold text-white italic mb-12 tracking-tighter">Initiate Journey.</h3>
                 
                 <div className="flex justify-center items-center gap-12 mb-16">
                    {[1, 2, 3, 4].map(i => (
-                     <div key={i} className="flex flex-col items-center gap-4 group">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[11px] font-black transition-all duration-700 border-[1px] ${formStep === i ? 'bg-white border-white text-slate-950 shadow-[0_0_20px_rgba(255,255,255,0.15)]' : formStep > i ? 'bg-sky-500 border-sky-500 text-white' : 'bg-transparent border-white/20 text-white/40'}`}>
+                     <div key={i} className="flex flex-col items-center gap-4">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-700 border-[1px] ${formStep === i ? 'bg-white border-white text-slate-950' : formStep > i ? 'bg-sky-500 border-sky-500 text-white' : 'bg-transparent border-white/20 text-white/40'}`}>
                           {i}
                         </div>
-                        <span className={`text-[8px] font-black uppercase tracking-widest transition-all ${formStep === i ? 'text-white' : 'text-white/20'}`}>
-                          {['Dates', 'Residence', 'Dining', 'Identity'][i-1]}
-                        </span>
                      </div>
                    ))}
                 </div>
               </div>
 
-              <div className="max-w-3xl mx-auto">
+              <div className="max-w-2xl mx-auto">
                 {formStep === 1 && (
                   <div className="space-y-16 animate-in fade-in slide-in-from-bottom-8 duration-700">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                       <div className="space-y-4 border-b-[1px] border-white/10 focus-within:border-white transition-all pb-4">
-                          <label className="text-[10px] font-black text-white/40 uppercase tracking-widest">Arrival Date</label>
+                       <div className="space-y-4 border-b-[1px] border-white/10 focus-within:border-white transition-all pb-2">
+                          <label className="text-[9px] font-black text-white/40 uppercase tracking-widest">Arrival</label>
                           <input type="date" value={quoteData.checkIn} onChange={(e) => setQuoteData(prev => ({ ...prev, checkIn: e.target.value }))} className="w-full bg-transparent text-white font-serif italic text-2xl outline-none" />
                        </div>
-                       <div className="space-y-4 border-b-[1px] border-white/10 focus-within:border-white transition-all pb-4">
-                          <label className="text-[10px] font-black text-white/40 uppercase tracking-widest">Departure Date</label>
+                       <div className="space-y-4 border-b-[1px] border-white/10 focus-within:border-white transition-all pb-2">
+                          <label className="text-[9px] font-black text-white/40 uppercase tracking-widest">Departure</label>
                           <input type="date" value={quoteData.checkOut} onChange={(e) => setQuoteData(prev => ({ ...prev, checkOut: e.target.value }))} className="w-full bg-transparent text-white font-serif italic text-2xl outline-none" />
                        </div>
                     </div>
-                    <button onClick={() => setFormStep(2)} disabled={!quoteData.checkIn || !quoteData.checkOut} className="w-full bg-white text-slate-950 font-black py-7 rounded-full text-[12px] uppercase tracking-[0.6em] hover:bg-sky-500 hover:text-white transition-all duration-700 disabled:opacity-20 shadow-xl">Define Residence →</button>
+                    <button onClick={() => setFormStep(2)} disabled={!quoteData.checkIn || !quoteData.checkOut} className="w-full bg-white text-slate-950 font-black py-6 rounded-full text-[11px] uppercase tracking-[0.5em] hover:bg-sky-500 hover:text-white transition-all duration-700 disabled:opacity-20 shadow-xl">Define Residence →</button>
                   </div>
                 )}
 
-                {/* Simplified dynamic content for steps 2-4 */}
                 {formStep === 2 && (
                    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {resort.roomTypes?.slice(0, 4).map((room, i) => (
-                          <button key={i} onClick={() => { setQuoteData(prev => ({ ...prev, roomType: room.name })); setFormStep(3); }} className={`group relative aspect-[16/10] rounded-3xl overflow-hidden border-[1px] transition-all duration-700 ${quoteData.roomType === room.name ? 'border-white scale-[0.98]' : 'border-white/10 hover:border-white/40'}`}>
-                             <img src={room.image} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700" alt={room.name} />
-                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
-                             <div className="absolute bottom-6 left-6 text-left">
-                                <p className="text-[12px] font-black text-white uppercase tracking-widest">{room.name}</p>
-                             </div>
+                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {(resort.roomTypes?.length ? resort.roomTypes : [{name: 'Specialist Consultation'}]).map((room, i) => (
+                          <button key={i} onClick={() => { setQuoteData(prev => ({ ...prev, roomType: room.name })); setFormStep(3); }} className={`p-8 rounded-2xl border-[1px] text-left transition-all duration-500 ${quoteData.roomType === room.name ? 'bg-white text-slate-950 border-white' : 'bg-transparent border-white/10 text-white/40 hover:border-white/30'}`}>
+                             <span className="text-[11px] font-black uppercase tracking-widest leading-tight">{room.name}</span>
                           </button>
                         ))}
                      </div>
-                     <button onClick={() => setFormStep(1)} className="w-full text-[10px] font-black text-white/40 uppercase tracking-[0.5em] hover:text-white transition-colors">← Back to Calendar</button>
+                     <button onClick={() => setFormStep(1)} className="w-full text-[10px] font-black text-white/40 uppercase tracking-[0.5em] hover:text-white transition-colors">← Back</button>
                    </div>
                 )}
 
                 {formStep === 3 && (
                    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
-                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {resort.mealPlans.map((plan) => (
-                          <button key={plan} onClick={() => { setQuoteData(prev => ({ ...prev, mealPlan: plan })); setFormStep(4); }} className={`p-10 rounded-3xl border-[1px] text-left transition-all duration-500 ${quoteData.mealPlan === plan ? 'bg-white text-slate-950 border-white' : 'bg-transparent border-white/10 text-white/50 hover:border-white/30'}`}>
-                             <span className="text-[12px] font-black uppercase tracking-[0.4em]">{plan.replace(/_/g, ' ')}</span>
+                          <button key={plan} onClick={() => { setQuoteData(prev => ({ ...prev, mealPlan: plan })); setFormStep(4); }} className={`p-8 rounded-2xl border-[1px] text-left transition-all duration-500 ${quoteData.mealPlan === plan ? 'bg-white text-slate-950 border-white' : 'bg-transparent border-white/10 text-white/40 hover:border-white/30'}`}>
+                             <span className="text-[11px] font-black uppercase tracking-widest leading-tight">{plan.replace(/_/g, ' ')}</span>
                           </button>
                         ))}
                      </div>
-                     <button onClick={() => setFormStep(2)} className="w-full text-[10px] font-black text-white/40 uppercase tracking-[0.5em] hover:text-white transition-colors">← Back to Residence</button>
+                     <button onClick={() => setFormStep(2)} className="w-full text-[10px] font-black text-white/40 uppercase tracking-[0.5em] hover:text-white transition-colors">← Back</button>
                    </div>
                 )}
 
                 {formStep === 4 && (
                    <form onSubmit={handleQuoteSubmit} className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
                      <div className="space-y-10">
-                        <div className="border-b-[1px] border-white/10 py-4 focus-within:border-white transition-all">
-                           <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.4em] mb-4">Identity Name</label>
-                           <input type="text" required value={quoteData.customerName} onChange={(e) => setQuoteData(prev => ({ ...prev, customerName: e.target.value }))} className="w-full bg-transparent text-white font-serif italic text-2xl md:text-3xl outline-none" placeholder="..." />
+                        <div className="border-b-[1px] border-white/10 focus-within:border-white transition-all pb-2">
+                           <label className="block text-[9px] font-black text-white/40 uppercase tracking-widest mb-2">Full Identity</label>
+                           <input type="text" required value={quoteData.customerName} onChange={(e) => setQuoteData(prev => ({ ...prev, customerName: e.target.value }))} className="w-full bg-transparent text-white font-serif italic text-2xl outline-none" placeholder="..." />
                         </div>
-                        <div className="border-b-[1px] border-white/10 py-4 focus-within:border-white transition-all">
-                           <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.4em] mb-4">Digital Signature Email</label>
-                           <input type="email" required value={quoteData.customerEmail} onChange={(e) => setQuoteData(prev => ({ ...prev, customerEmail: e.target.value }))} className="w-full bg-transparent text-white font-serif italic text-2xl md:text-3xl outline-none" placeholder="..." />
+                        <div className="border-b-[1px] border-white/10 focus-within:border-white transition-all pb-2">
+                           <label className="block text-[9px] font-black text-white/40 uppercase tracking-widest mb-2">Digital Signature Email</label>
+                           <input type="email" required value={quoteData.customerEmail} onChange={(e) => setQuoteData(prev => ({ ...prev, customerEmail: e.target.value }))} className="w-full bg-transparent text-white font-serif italic text-2xl outline-none" placeholder="..." />
                         </div>
                      </div>
-                     <button type="submit" disabled={isSubmitting} className="w-full bg-white text-slate-950 font-black py-8 rounded-full text-[13px] uppercase tracking-[0.8em] hover:bg-sky-500 hover:text-white transition-all duration-700 shadow-2xl disabled:opacity-50">{isSubmitting ? 'Consulting Servers...' : 'Request Bespoke Portfolio'}</button>
+                     <button type="submit" disabled={isSubmitting} className="w-full bg-white text-slate-950 font-black py-7 rounded-full text-[12px] uppercase tracking-[0.6em] hover:bg-sky-500 hover:text-white transition-all duration-700 shadow-2xl disabled:opacity-50">{isSubmitting ? 'Processing...' : 'Request Portfolio'}</button>
                    </form>
                 )}
               </div>
@@ -316,6 +390,34 @@ const ResortDetail: React.FC = () => {
           )}
         </div>
       </section>
+
+      {/* Smart Similar Sanctuaries Section */}
+      {similarStays.length > 0 && (
+        <section className="py-24 px-6 lg:px-12 bg-white border-t-[1px] border-slate-50">
+           <div className="max-w-[1440px] mx-auto">
+              <div className="mb-16 reveal">
+                 <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.8em] mb-4 block">Refined Selection</span>
+                 <h3 className="text-3xl md:text-5xl font-serif font-bold italic text-slate-950 tracking-tighter">Similar Sanctuaries.</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                 {similarStays.map((r, i) => (
+                   <Link key={i} to={`/stays/${r.slug}`} className="group reveal" style={{ transitionDelay: `${i * 100}ms` }}>
+                      <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-6 bg-slate-100 group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-700">
+                         <img src={r.images[0]} className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-105" alt={r.name} />
+                         <div className="absolute top-6 left-6">
+                            <span className="bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-[9px] font-black text-slate-950 uppercase tracking-widest shadow-sm">
+                               {r.atoll}
+                            </span>
+                         </div>
+                      </div>
+                      <h5 className="text-[12px] font-black text-slate-950 uppercase tracking-[0.2em] group-hover:text-sky-600 transition-colors mb-1">{r.name}</h5>
+                      <span className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em]">{r.priceRange}</span>
+                   </Link>
+                 ))}
+              </div>
+           </div>
+        </section>
+      )}
     </div>
   );
 };

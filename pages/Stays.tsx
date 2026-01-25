@@ -122,13 +122,13 @@ const Stays: React.FC = () => {
             {stayType === AccommodationType.RESORT ? 'Iconic Stays' : 'Island Life'}
           </h1>
           <div className="h-px w-24 bg-amber-400 mx-auto mb-16"></div>
-          <p className="text-slate-900 text-[13px] font-bold uppercase tracking-[0.5em] max-w-2xl mx-auto leading-loose opacity-100">
+          <p className="text-slate-900 text-[13px] font-black uppercase tracking-[0.5em] max-w-2xl mx-auto leading-loose opacity-100">
             Defining the luxury of space and the art of silence <br className="hidden md:block"/> across the turquoise archipelago.
           </p>
         </div>
       </section>
 
-      {/* MINIMALIST SEARCH - NO HEAVY BOXES */}
+      {/* Minimalist Search UI */}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-24 reveal active">
         <div className="relative group max-w-4xl mx-auto">
           <span className="absolute left-0 -top-6 text-[11px] font-black uppercase tracking-[0.8em] text-slate-900 group-focus-within:text-sky-600 transition-colors">
@@ -142,18 +142,13 @@ const Stays: React.FC = () => {
               placeholder="PROPERTY OR REGION..."
               className="w-full bg-transparent pt-8 pb-6 text-xl md:text-3xl font-serif italic text-slate-950 outline-none placeholder:text-slate-300"
             />
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-slate-950 transition-colors">
-               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-               </svg>
-            </div>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 pb-48">
         <div className="flex flex-col gap-24">
-          {/* MINIMALIST FILTER BAR */}
+          {/* Minimalist Filter Bar */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-12 border-b-[1px] border-slate-100 pb-16 reveal active">
             <div className="flex gap-1 p-1 bg-slate-100/50 rounded-full">
               <button 
@@ -176,7 +171,7 @@ const Stays: React.FC = () => {
                 <select 
                   value={selectedAtoll}
                   onChange={(e) => setSelectedAtoll(e.target.value)}
-                  className="bg-transparent text-[11px] font-black uppercase tracking-widest text-slate-950 outline-none cursor-pointer border-b-[1px] border-transparent hover:border-slate-300 focus:border-slate-900 transition-all pb-1"
+                  className="bg-transparent text-[11px] font-black uppercase tracking-widest text-slate-950 outline-none cursor-pointer border-b-[1px] border-transparent hover:border-slate-300 transition-all pb-1"
                 >
                   {atolls.map(a => <option key={a} value={a}>{a}</option>)}
                 </select>
@@ -187,7 +182,7 @@ const Stays: React.FC = () => {
                 <select 
                   value={selectedTransfer}
                   onChange={(e) => setSelectedTransfer(e.target.value)}
-                  className="bg-transparent text-[11px] font-black uppercase tracking-widest text-slate-950 outline-none cursor-pointer border-b-[1px] border-transparent hover:border-slate-300 focus:border-slate-900 transition-all pb-1"
+                  className="bg-transparent text-[11px] font-black uppercase tracking-widest text-slate-950 outline-none cursor-pointer border-b-[1px] border-transparent hover:border-slate-300 transition-all pb-1"
                 >
                   <option value="All">All Transfers</option>
                   {Object.values(TransferType).map(t => <option key={t} value={t}>{t.replace('_', ' ')}</option>)}
