@@ -10,9 +10,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Updated to use PascalCase to resolve casing conflicts in build environments
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Fix: Using lowercase imports to match the shim files and resolve casing conflicts that occur when both PascalCase and lowercase versions exist
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

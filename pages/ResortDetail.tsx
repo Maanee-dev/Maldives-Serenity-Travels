@@ -8,6 +8,23 @@ import ResortCard from '../components/ResortCard';
 
 const INQUIRY_STORAGE_KEY = 'serenity_inquiry_draft';
 
+// Simple list of countries and codes for the selector
+const COUNTRIES = [
+  { name: 'United Kingdom', code: '+44' },
+  { name: 'United States', code: '+1' },
+  { name: 'United Arab Emirates', code: '+971' },
+  { name: 'Germany', code: '+49' },
+  { name: 'Russia', code: '+7' },
+  { name: 'India', code: '+91' },
+  { name: 'China', code: '+86' },
+  { name: 'Italy', code: '+39' },
+  { name: 'France', code: '+33' },
+  { name: 'Switzerland', code: '+41' },
+  { name: 'Saudi Arabia', code: '+966' },
+  { name: 'Australia', code: '+61' },
+  { name: 'Maldives', code: '+960' }
+].sort((a, b) => a.name.localeCompare(b.name));
+
 const ResortDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [resort, setResort] = useState<Accommodation | null>(null);
@@ -26,6 +43,8 @@ const ResortDetail: React.FC = () => {
     mealPlan: '',
     customerName: '',
     customerEmail: '',
+    country: 'United Kingdom',
+    countryCode: '+44',
     customerPhone: '',
     notes: ''
   });
@@ -43,7 +62,9 @@ const ResortDetail: React.FC = () => {
           ...prev,
           customerName: parsed.customerName || '',
           customerEmail: parsed.customerEmail || '',
-          customerPhone: parsed.customerPhone || ''
+          customerPhone: parsed.customerPhone || '',
+          country: parsed.country || 'United Kingdom',
+          countryCode: parsed.countryCode || '+44'
         }));
       } catch (e) {
         console.error("Failed to load inquiry draft:", e);
@@ -56,10 +77,12 @@ const ResortDetail: React.FC = () => {
     const dataToSave = {
       customerName: quoteData.customerName,
       customerEmail: quoteData.customerEmail,
-      customerPhone: quoteData.customerPhone
+      customerPhone: quoteData.customerPhone,
+      country: quoteData.country,
+      countryCode: quoteData.countryCode
     };
     localStorage.setItem(INQUIRY_STORAGE_KEY, JSON.stringify(dataToSave));
-  }, [quoteData.customerName, quoteData.customerEmail, quoteData.customerPhone]);
+  }, [quoteData.customerName, quoteData.customerEmail, quoteData.customerPhone, quoteData.country, quoteData.countryCode]);
 
   const parseHighlights = (item: any): string[] => {
     if (Array.isArray(item)) return item;
@@ -186,6 +209,7 @@ const ResortDetail: React.FC = () => {
     if (!resort) return;
     setIsSubmitting(true);
     try {
+      const fullPhone = `${quoteData.countryCode} ${quoteData.customerPhone}`;
       const { error } = await supabase.from('inquiries').insert({
         resort_id: resort.id,
         resort_name: resort.name,
@@ -195,7 +219,8 @@ const ResortDetail: React.FC = () => {
         meal_plan: quoteData.mealPlan,
         customer_name: quoteData.customerName,
         customer_email: quoteData.customerEmail,
-        customer_phone: quoteData.customerPhone,
+        customer_phone: fullPhone,
+        country: quoteData.country,
         notes: quoteData.notes
       });
       if (error) throw error;
@@ -208,7 +233,7 @@ const ResortDetail: React.FC = () => {
   };
 
   const nextStep = () => {
-    if (formStep === 1 && (!quoteData.customerName || !quoteData.customerEmail)) return;
+    if (formStep === 1 && (!quoteData.customerName || !quoteData.customerEmail || !quoteData.customerPhone)) return;
     if (formStep === 2 && (!quoteData.checkIn || !quoteData.checkOut)) return;
     setFormStep(s => s + 1);
   };
@@ -443,18 +468,18 @@ const ResortDetail: React.FC = () => {
       )}
 
       {/* Multi-step Inquiry Form Section */}
-      <section id="inquiry-form" className="py-32 md:py-48 bg-slate-950 text-white relative overflow-hidden">
+      <section id="inquiry-form" className="py-24 md:py-48 bg-slate-950 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
           <h2 className="text-[30vw] font-serif italic whitespace-nowrap -rotate-12">Serenity</h2>
         </div>
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-20 items-start relative z-10">
-           <div className="reveal sticky top-32">
-              <span className="text-[11px] font-black text-sky-400 uppercase tracking-[1em] mb-12 block">Secure Your Stay</span>
-              <h3 className="text-5xl md:text-8xl font-serif font-bold italic mb-12 tracking-tighter leading-tight">Initiate Inquiry.</h3>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-start relative z-10">
+           <div className="reveal">
+              <span className="text-[11px] font-black text-sky-400 uppercase tracking-[1em] mb-8 md:mb-12 block">Secure Your Stay</span>
+              <h3 className="text-5xl md:text-8xl font-serif font-bold italic mb-10 md:mb-12 tracking-tighter leading-tight">Send an Inquiry.</h3>
               
               {/* Progress Stepper */}
               {!isSubmitted && (
-                <div className="flex items-center gap-4 mb-16">
+                <div className="flex items-center gap-4 mb-12">
                   {[1, 2, 3].map(s => (
                     <React.Fragment key={s}>
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-700 ${formStep === s ? 'bg-sky-500 text-white shadow-[0_0_20px_rgba(56,189,248,0.4)] scale-110' : formStep > s ? 'bg-slate-800 text-sky-500' : 'bg-slate-900 text-slate-600'}`}>
@@ -467,53 +492,68 @@ const ResortDetail: React.FC = () => {
               )}
 
               <p className="text-slate-400 text-lg md:text-xl leading-relaxed opacity-80 uppercase tracking-widest font-medium">
-                {formStep === 1 ? "Identify yourself to our planning team." : formStep === 2 ? "Select your temporal coordinates." : "Finalize your sanctuary requirements."}
+                {formStep === 1 ? "Tell us about yourself." : formStep === 2 ? "When would you like to visit?" : "Choose your stay preferences."}
               </p>
            </div>
            
            <div className="reveal delay-300">
              {isSubmitted ? (
                <div className="bg-white text-slate-950 p-12 md:p-20 rounded-[3.5rem] text-center shadow-2xl animate-in zoom-in-95 duration-700">
-                  <span className="text-[10px] font-black text-sky-500 uppercase tracking-[0.8em] mb-10 block">Success</span>
-                  <h4 className="text-4xl font-serif font-bold italic mb-8">Dispatch Received</h4>
-                  <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] leading-[2.5] mb-12">We are currently consulting the atolls for your request.</p>
+                  <span className="text-[10px] font-black text-sky-500 uppercase tracking-[0.8em] mb-10 block">Sent</span>
+                  <h4 className="text-4xl font-serif font-bold italic mb-8">Thank You.</h4>
+                  <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] leading-[2.5] mb-12">Our travel experts will contact you within 24 hours.</p>
                   <button onClick={() => { setIsSubmitted(false); setFormStep(1); }} className="text-[10px] font-black text-slate-950 uppercase tracking-[0.6em] border-b-[1px] border-slate-950 pb-2 hover:text-sky-600 hover:border-sky-600 transition-colors">Submit Another</button>
                </div>
              ) : (
-               <div className="bg-white/5 backdrop-blur-3xl p-8 md:p-16 rounded-[3.5rem] border border-white/10 shadow-2xl">
-                  {/* STEP 1: IDENTITY */}
+               <div className="bg-white/5 backdrop-blur-3xl p-6 md:p-16 rounded-[3.5rem] border border-white/10 shadow-2xl">
+                  {/* STEP 1: IDENTITY (Simple Details) */}
                   {formStep === 1 && (
-                    <div className="space-y-10 animate-in fade-in slide-in-from-right-10 duration-700">
-                      <div className="space-y-8">
-                        <div className="space-y-3">
-                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Full Identity</label>
-                           <input type="text" placeholder="NAME" className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerName} onChange={e => setQuoteData({...quoteData, customerName: e.target.value})} />
+                    <div className="space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
+                      <div className="space-y-6">
+                        <div className="space-y-2">
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Full Name</label>
+                           <input type="text" placeholder="YOUR NAME" className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerName} onChange={e => setQuoteData({...quoteData, customerName: e.target.value})} />
                         </div>
-                        <div className="space-y-3">
-                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Digital Signature</label>
-                           <input type="email" placeholder="EMAIL" className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerEmail} onChange={e => setQuoteData({...quoteData, customerEmail: e.target.value})} />
+                        <div className="space-y-2">
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Email Address</label>
+                           <input type="email" placeholder="YOUR EMAIL" className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerEmail} onChange={e => setQuoteData({...quoteData, customerEmail: e.target.value})} />
                         </div>
-                        <div className="space-y-3">
-                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Communication Line</label>
-                           <input type="tel" placeholder="PHONE" className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerPhone} onChange={e => setQuoteData({...quoteData, customerPhone: e.target.value})} />
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                             <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Where do you live?</label>
+                             <select className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.country} onChange={e => {
+                               const selected = COUNTRIES.find(c => c.name === e.target.value);
+                               setQuoteData({...quoteData, country: e.target.value, countryCode: selected?.code || '+44'});
+                             }}>
+                                {COUNTRIES.map(c => <option key={c.name} value={c.name} className="bg-slate-900">{c.name}</option>)}
+                             </select>
+                          </div>
+                          <div className="space-y-2">
+                             <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Phone Number</label>
+                             <div className="flex gap-2">
+                                <div className="bg-white/5 border border-white/10 rounded-full px-4 py-5 text-[10px] font-bold text-white/60 min-w-[70px] text-center">{quoteData.countryCode}</div>
+                                <input type="tel" placeholder="NUMBER" className="flex-1 bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerPhone} onChange={e => setQuoteData({...quoteData, customerPhone: e.target.value})} />
+                             </div>
+                          </div>
                         </div>
                       </div>
                       <button onClick={nextStep} className="w-full bg-white text-slate-950 font-black py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl active:scale-[0.98]">
-                        PROCEED TO DATES
+                        NEXT: CHOOSE DATES
                       </button>
                     </div>
                   )}
 
-                  {/* STEP 2: DATES (CUSTOM CALENDAR) */}
+                  {/* STEP 2: DATES (Custom Calendar) */}
                   {formStep === 2 && (
-                    <div className="space-y-10 animate-in fade-in slide-in-from-right-10 duration-700">
-                       <div className="bg-white/5 rounded-[2rem] p-6">
-                          <div className="flex justify-between items-center mb-8 px-2">
-                             <button onClick={() => changeMonth(-1)} className="text-white/40 hover:text-white transition-colors">&larr;</button>
+                    <div className="space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
+                       <div className="bg-white/5 rounded-[2rem] p-4 md:p-6">
+                          <div className="flex justify-between items-center mb-6 px-2">
+                             <button onClick={() => changeMonth(-1)} className="text-white/40 hover:text-white transition-colors p-2">&larr;</button>
                              <h4 className="text-[10px] font-black uppercase tracking-[0.4em]">{currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</h4>
-                             <button onClick={() => changeMonth(1)} className="text-white/40 hover:text-white transition-colors">&rarr;</button>
+                             <button onClick={() => changeMonth(1)} className="text-white/40 hover:text-white transition-colors p-2">&rarr;</button>
                           </div>
-                          <div className="grid grid-cols-7 gap-2 mb-4">
+                          <div className="grid grid-cols-7 gap-1 md:gap-2 mb-4">
                              {['S','M','T','W','T','F','S'].map(d => (
                                <div key={d} className="text-center text-[8px] font-black text-white/20">{d}</div>
                              ))}
@@ -531,32 +571,32 @@ const ResortDetail: React.FC = () => {
                              ))}
                           </div>
                        </div>
-                       <div className="grid grid-cols-2 gap-4">
-                          <div className="bg-white/5 p-4 rounded-2xl">
-                             <span className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-2">Arrival</span>
-                             <p className="text-[10px] font-bold tracking-widest">{quoteData.checkIn || 'PENDING'}</p>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="bg-white/5 p-4 rounded-2xl flex flex-col justify-center">
+                             <span className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-1">Arrival</span>
+                             <p className="text-[10px] font-bold tracking-widest">{quoteData.checkIn || 'NOT SET'}</p>
                           </div>
-                          <div className="bg-white/5 p-4 rounded-2xl">
-                             <span className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-2">Departure</span>
-                             <p className="text-[10px] font-bold tracking-widest">{quoteData.checkOut || 'PENDING'}</p>
+                          <div className="bg-white/5 p-4 rounded-2xl flex flex-col justify-center">
+                             <span className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-1">Departure</span>
+                             <p className="text-[10px] font-bold tracking-widest">{quoteData.checkOut || 'NOT SET'}</p>
                           </div>
                        </div>
                        <div className="flex gap-4">
-                          <button onClick={prevStep} className="flex-1 border border-white/10 text-white font-black py-7 rounded-full text-[11px] uppercase tracking-[0.4em] hover:bg-white/10 transition-all">BACK</button>
-                          <button onClick={nextStep} disabled={!quoteData.checkIn || !quoteData.checkOut} className="flex-[2] bg-white text-slate-950 font-black py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all disabled:opacity-20">PROCEED</button>
+                          <button onClick={prevStep} className="flex-1 border border-white/10 text-white font-black py-7 rounded-full text-[10px] uppercase tracking-[0.4em] hover:bg-white/10 transition-all">BACK</button>
+                          <button onClick={nextStep} disabled={!quoteData.checkIn || !quoteData.checkOut} className="flex-[2] bg-white text-slate-950 font-black py-7 rounded-full text-[10px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all disabled:opacity-20">NEXT STEP</button>
                        </div>
                     </div>
                   )}
 
-                  {/* STEP 3: SANCTUARY DETAILS */}
+                  {/* STEP 3: SANCTUARY DETAILS (Rooms & Food) */}
                   {formStep === 3 && (
                     <div className="space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
                       <div className="space-y-6">
-                        <div className="space-y-3">
-                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Preferred Residence</label>
+                        <div className="space-y-2">
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Which room would you like?</label>
                            <div className="relative">
                              <select className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.roomType} onChange={e => setQuoteData({...quoteData, roomType: e.target.value})}>
-                                <option value="" className="bg-slate-900">SELECT RESIDENCE</option>
+                                <option value="" className="bg-slate-900">SELECT A ROOM</option>
                                 {resort.roomTypes?.map((r, i) => (
                                   <option key={i} value={r.name} className="bg-slate-900">{r.name}</option>
                                 ))}
@@ -564,8 +604,8 @@ const ResortDetail: React.FC = () => {
                              <div className="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none text-white/40 font-bold">&darr;</div>
                            </div>
                         </div>
-                        <div className="space-y-3">
-                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Meal Plan</label>
+                        <div className="space-y-2">
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">What meal plan do you prefer?</label>
                            <div className="relative">
                              <select className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.mealPlan} onChange={e => setQuoteData({...quoteData, mealPlan: e.target.value})}>
                                 <option value="" className="bg-slate-900">SELECT MEAL PLAN</option>
@@ -576,15 +616,15 @@ const ResortDetail: React.FC = () => {
                              <div className="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none text-white/40 font-bold">&darr;</div>
                            </div>
                         </div>
-                        <div className="space-y-3">
-                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Vision & Requests</label>
-                           <textarea rows={4} placeholder="SHARE YOUR UNIQUE PERSPECTIVE..." className="w-full bg-white/5 border border-white/10 rounded-[2.5rem] px-8 py-6 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20 resize-none" value={quoteData.notes} onChange={e => setQuoteData({...quoteData, notes: e.target.value})}></textarea>
+                        <div className="space-y-2">
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Any special requests?</label>
+                           <textarea rows={4} placeholder="TELL US MORE ABOUT YOUR TRIP..." className="w-full bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20 resize-none" value={quoteData.notes} onChange={e => setQuoteData({...quoteData, notes: e.target.value})}></textarea>
                         </div>
                       </div>
                       <div className="flex gap-4">
-                        <button onClick={prevStep} className="flex-1 border border-white/10 text-white font-black py-7 rounded-full text-[11px] uppercase tracking-[0.4em] hover:bg-white/10 transition-all">BACK</button>
-                        <button onClick={handleQuoteSubmit} disabled={isSubmitting} className="flex-[2] bg-white text-slate-950 font-black py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl active:scale-[0.98] disabled:opacity-50">
-                          {isSubmitting ? 'INITIATING...' : 'REQUEST QUOTATION'}
+                        <button onClick={prevStep} className="flex-1 border border-white/10 text-white font-black py-7 rounded-full text-[10px] uppercase tracking-[0.4em] hover:bg-white/10 transition-all">BACK</button>
+                        <button onClick={handleQuoteSubmit} disabled={isSubmitting} className="flex-[2] bg-white text-slate-950 font-black py-7 rounded-full text-[10px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl active:scale-[0.98] disabled:opacity-50">
+                          {isSubmitting ? 'SENDING...' : 'SEND INQUIRY'}
                         </button>
                       </div>
                     </div>
