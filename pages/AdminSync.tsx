@@ -8,6 +8,7 @@ const AdminSync: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [log, setLog] = useState<string[]>([]);
+  const [rlsError, setRlsError] = useState(false);
 
   const addLog = (msg: string) => {
     setLog(prev => [msg, ...prev].slice(0, 50));
@@ -17,6 +18,7 @@ const AdminSync: React.FC = () => {
     setLoading(true);
     setLog([]);
     setProgress(0);
+    setRlsError(false);
     setStatus('Syncing Portfolio, Editorial & Offers...');
     
     try {
@@ -47,7 +49,10 @@ const AdminSync: React.FC = () => {
           dining_venues: resort.diningVenues || []
         }, { onConflict: 'id' });
 
-        if (error) throw new Error(`Resort ${resort.name}: ${error.message}`);
+        if (error) {
+          if (error.message.includes('row-level security policy')) setRlsError(true);
+          throw new Error(`Resort ${resort.name}: ${error.message}`);
+        }
         completed++;
         setProgress(Math.round((completed / totalSteps) * 100));
       }
@@ -69,7 +74,10 @@ const AdminSync: React.FC = () => {
           is_featured: post.is_featured || false
         }, { onConflict: 'id' });
 
-        if (error) throw new Error(`Story ${post.title}: ${error.message}`);
+        if (error) {
+          if (error.message.includes('row-level security policy')) setRlsError(true);
+          throw new Error(`Story ${post.title}: ${error.message}`);
+        }
         completed++;
         setProgress(Math.round((completed / totalSteps) * 100));
       }
@@ -89,7 +97,10 @@ const AdminSync: React.FC = () => {
           category: offer.category
         }, { onConflict: 'id' });
 
-        if (error) throw new Error(`Offer ${offer.title}: ${error.message}`);
+        if (error) {
+          if (error.message.includes('row-level security policy')) setRlsError(true);
+          throw new Error(`Offer ${offer.title}: ${error.message}`);
+        }
         completed++;
         setProgress(Math.round((completed / totalSteps) * 100));
       }
@@ -106,8 +117,8 @@ const AdminSync: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FCFAF7] flex items-center justify-center p-6">
-      <div className="max-w-3xl w-full bg-white rounded-[4rem] p-16 shadow-2xl border border-slate-50 relative overflow-hidden">
+    <div className="min-h-screen bg-[#FCFAF7] flex items-center justify-center p-6 pt-32 pb-20">
+      <div className="max-w-3xl w-full bg-white rounded-[4rem] p-8 md:p-16 shadow-2xl border border-slate-50 relative overflow-hidden">
         <div className="relative z-10 text-center">
             <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1.2em] mb-12 block">Cloud Infrastructure</span>
             <h1 className="text-5xl font-serif font-bold italic mb-10 tracking-tight">Master Synchronizer</h1>
@@ -116,16 +127,33 @@ const AdminSync: React.FC = () => {
               Deployment targeting {RESORTS.length} Properties, {BLOG_POSTS.length} Editorial Dispatches, and {OFFERS.length} Bespoke Offers.
             </p>
             
+            {rlsError && (
+              <div className="bg-red-50 border border-red-100 rounded-[2rem] p-8 mb-12 text-left animate-in fade-in slide-in-from-top-4 duration-500">
+                <h3 className="text-red-900 font-serif font-bold italic text-xl mb-4">Security Policy Violation Detected</h3>
+                <p className="text-red-700 text-[11px] leading-relaxed mb-6 font-medium">
+                  Supabase Row-Level Security (RLS) is blocking this sync. To fix this, run the following SQL in your Supabase Dashboard:
+                </p>
+                <div className="bg-slate-900 text-sky-400 p-6 rounded-xl text-[10px] font-mono whitespace-pre overflow-x-auto shadow-inner">
+{`ALTER TABLE resorts DISABLE ROW LEVEL SECURITY;
+ALTER TABLE offers DISABLE ROW LEVEL SECURITY;
+ALTER TABLE stories DISABLE ROW LEVEL SECURITY;`}
+                </div>
+                <p className="text-red-700 text-[9px] mt-6 italic">
+                  * Note: For production environments, you should create specific write policies instead of disabling RLS.
+                </p>
+              </div>
+            )}
+
             <div className="bg-slate-50 p-10 rounded-[2.5rem] mb-12 border border-slate-100">
                <div className="flex justify-between items-center mb-6">
-                  <span className={`text-[9px] font-bold uppercase tracking-widest ${loading ? 'animate-pulse text-sky-500' : 'text-slate-900'}`}>
+                  <span className={`text-[9px] font-bold uppercase tracking-widest ${loading ? 'animate-pulse text-sky-500' : rlsError ? 'text-red-600' : 'text-slate-900'}`}>
                     {status}
                   </span>
                   <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">{progress}%</span>
                </div>
                <div className="w-full bg-slate-200 h-1 rounded-full overflow-hidden">
                   <div 
-                    className="bg-sky-500 h-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(14,165,233,0.5)]" 
+                    className={`h-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(14,165,233,0.5)] ${rlsError ? 'bg-red-500' : 'bg-sky-500'}`} 
                     style={{ width: `${progress}%` }}
                   ></div>
                </div>
@@ -143,7 +171,7 @@ const AdminSync: React.FC = () => {
 
             <div className="mt-12 text-left h-48 overflow-y-auto no-scrollbar border-t border-slate-50 pt-8">
               {log.map((entry, i) => (
-                <p key={i} className="text-[9px] font-mono text-slate-400 mb-2 uppercase tracking-tighter">{entry}</p>
+                <p key={i} className={`text-[9px] font-mono mb-2 uppercase tracking-tighter ${entry.includes('‼️') ? 'text-red-500' : 'text-slate-400'}`}>{entry}</p>
               ))}
             </div>
         </div>
