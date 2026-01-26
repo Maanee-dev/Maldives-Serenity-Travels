@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { RESORTS, BLOG_POSTS, OFFERS } from '../constants';
+import { BLOG_POSTS, OFFERS, RESORTS } from '../constants';
 
 const AdminSync: React.FC = () => {
   const [status, setStatus] = useState<string>('Ready for deployment');
@@ -19,45 +19,14 @@ const AdminSync: React.FC = () => {
     setLog([]);
     setProgress(0);
     setRlsError(false);
-    setStatus('Syncing Portfolio, Editorial & Offers...');
+    setStatus('Syncing Editorial & Offers...');
     
     try {
-      const totalSteps = RESORTS.length + BLOG_POSTS.length + OFFERS.length;
+      // Total steps now only includes Stories and Offers (Resorts excluded per request)
+      const totalSteps = BLOG_POSTS.length + OFFERS.length;
       let completed = 0;
 
-      // 1. SYNC RESORTS
-      addLog('--- INITIATING RESORT MIGRATION ---');
-      for (const resort of RESORTS) {
-        addLog(`Pushing Property: ${resort.name}`);
-        const { error } = await supabase.from('resorts').upsert({
-          id: resort.id,
-          name: resort.name,
-          slug: resort.slug,
-          type: resort.type,
-          atoll: resort.atoll,
-          price_range: resort.priceRange,
-          rating: resort.rating,
-          description: resort.description,
-          short_description: resort.shortDescription,
-          images: resort.images,
-          features: resort.features,
-          transfers: resort.transfers,
-          meal_plans: resort.mealPlans,
-          uvp: resort.uvp,
-          is_featured: resort.isFeatured || false,
-          room_types: resort.roomTypes || [],
-          dining_venues: resort.diningVenues || []
-        }, { onConflict: 'id' });
-
-        if (error) {
-          if (error.message.includes('row-level security policy')) setRlsError(true);
-          throw new Error(`Resort ${resort.name}: ${error.message}`);
-        }
-        completed++;
-        setProgress(Math.round((completed / totalSteps) * 100));
-      }
-
-      // 2. SYNC STORIES
+      // 1. SYNC STORIES
       addLog('--- INITIATING EDITORIAL MIGRATION ---');
       for (const post of BLOG_POSTS) {
         addLog(`Pushing Dispatch: ${post.title}`);
@@ -82,7 +51,7 @@ const AdminSync: React.FC = () => {
         setProgress(Math.round((completed / totalSteps) * 100));
       }
 
-      // 3. SYNC OFFERS
+      // 2. SYNC OFFERS
       addLog('--- INITIATING OFFERS MIGRATION ---');
       for (const offer of OFFERS) {
         addLog(`Pushing Offer: ${offer.title} for ${offer.resortName}`);
@@ -106,7 +75,8 @@ const AdminSync: React.FC = () => {
       }
 
       setStatus('Operational Success. Cloud Archive Updated.');
-      addLog('✅ ALL SYSTEMS SYNCHRONIZED');
+      addLog('✅ EDITORIAL & OFFERS SYNCHRONIZED');
+      addLog('(Resort records maintained in Cloud Database only)');
     } catch (err: any) {
       console.error("Migration Critical Failure:", err);
       setStatus('Operational Failure');
@@ -124,7 +94,9 @@ const AdminSync: React.FC = () => {
             <h1 className="text-5xl font-serif font-bold italic mb-10 tracking-tight">Master Synchronizer</h1>
             
             <p className="text-slate-400 text-[10px] mb-16 uppercase tracking-[0.4em] leading-loose max-w-lg mx-auto">
-              Deployment targeting {RESORTS.length} Properties, {BLOG_POSTS.length} Editorial Dispatches, and {OFFERS.length} Bespoke Offers.
+              Deployment targeting {BLOG_POSTS.length} Editorial Dispatches and {OFFERS.length} Bespoke Offers.
+              <br/>
+              <span className="text-amber-500/60 mt-2 block">Note: Resort constant data is excluded from sync to preserve database integrity.</span>
             </p>
             
             {rlsError && (
@@ -134,13 +106,9 @@ const AdminSync: React.FC = () => {
                   Supabase Row-Level Security (RLS) is blocking this sync. To fix this, run the following SQL in your Supabase Dashboard:
                 </p>
                 <div className="bg-slate-900 text-sky-400 p-6 rounded-xl text-[10px] font-mono whitespace-pre overflow-x-auto shadow-inner">
-{`ALTER TABLE resorts DISABLE ROW LEVEL SECURITY;
-ALTER TABLE offers DISABLE ROW LEVEL SECURITY;
+{`ALTER TABLE offers DISABLE ROW LEVEL SECURITY;
 ALTER TABLE stories DISABLE ROW LEVEL SECURITY;`}
                 </div>
-                <p className="text-red-700 text-[9px] mt-6 italic">
-                  * Note: For production environments, you should create specific write policies instead of disabling RLS.
-                </p>
               </div>
             )}
 
@@ -165,7 +133,7 @@ ALTER TABLE stories DISABLE ROW LEVEL SECURITY;`}
                 disabled={loading}
                 className="w-full bg-slate-950 text-white font-bold py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-500 transition-all duration-700 shadow-xl disabled:opacity-50"
               >
-                {loading ? 'ARCHIVING...' : 'FORCE CLOUD SYNC'}
+                {loading ? 'ARCHIVING...' : 'SYNC STORIES & OFFERS'}
               </button>
             </div>
 
