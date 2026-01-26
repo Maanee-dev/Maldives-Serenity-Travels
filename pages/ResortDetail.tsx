@@ -1,9 +1,12 @@
+
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { RESORTS, OFFERS } from '../constants';
 import { Accommodation, AccommodationType, TransferType, MealPlan, Offer } from '../types';
 import ResortCard from '../components/ResortCard';
+
+const INQUIRY_STORAGE_KEY = 'serenity_inquiry_draft';
 
 const ResortDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -25,6 +28,36 @@ const ResortDetail: React.FC = () => {
     customerPhone: '',
     notes: ''
   });
+
+  // Load draft on mount
+  useEffect(() => {
+    const saved = localStorage.getItem(INQUIRY_STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setQuoteData(prev => ({
+          ...prev,
+          customerName: parsed.customerName || '',
+          customerEmail: parsed.customerEmail || '',
+          customerPhone: parsed.customerPhone || ''
+          // Note: We don't necessarily want to persist dates/notes across different resorts 
+          // as they are resort-specific, but name/email/phone is very helpful to persist.
+        }));
+      } catch (e) {
+        console.error("Failed to load inquiry draft:", e);
+      }
+    }
+  }, []);
+
+  // Save contact details to localStorage
+  useEffect(() => {
+    const dataToSave = {
+      customerName: quoteData.customerName,
+      customerEmail: quoteData.customerEmail,
+      customerPhone: quoteData.customerPhone
+    };
+    localStorage.setItem(INQUIRY_STORAGE_KEY, JSON.stringify(dataToSave));
+  }, [quoteData.customerName, quoteData.customerEmail, quoteData.customerPhone]);
 
   const parseHighlights = (item: any): string[] => {
     if (Array.isArray(item)) return item;
@@ -182,6 +215,7 @@ const ResortDetail: React.FC = () => {
       });
       if (error) throw error;
       setIsSubmitted(true);
+      // We don't clear contact info draft on inquiry so they can easily inquire at another resort
     } catch (err) {
       alert('We encountered an error processing your request.');
     } finally {

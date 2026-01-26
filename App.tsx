@@ -10,9 +10,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Use lowercase imports to match the filenames 'pages/offers.tsx' and 'pages/experiences.tsx' to resolve casing conflicts.
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Standardize on PascalCase imports for consistency with component filenames and to resolve casing conflicts.
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

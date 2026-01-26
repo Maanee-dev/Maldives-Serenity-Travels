@@ -1,6 +1,9 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { RESORTS } from '../constants';
 import { Link } from 'react-router-dom';
+
+const STORAGE_KEY = 'serenity_planning_draft';
 
 const PlanMyTrip: React.FC = () => {
   const [step, setStep] = useState(1);
@@ -28,6 +31,37 @@ const PlanMyTrip: React.FC = () => {
     budget: '',
     budgetType: 'Total'
   });
+
+  // Load state from localStorage on mount
+  useEffect(() => {
+    const savedData = localStorage.getItem(STORAGE_KEY);
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        if (parsed.step) setStep(parsed.step);
+        if (parsed.purpose) setPurpose(parsed.purpose);
+        if (parsed.selectedExperiences) setSelectedExperiences(parsed.selectedExperiences || []);
+        if (parsed.preferences) setPreferences(parsed.preferences);
+        if (parsed.selectedResorts) setSelectedResorts(parsed.selectedResorts || []);
+        if (parsed.finalDetails) setFinalDetails(parsed.finalDetails);
+      } catch (e) {
+        console.error("Failed to load draft:", e);
+      }
+    }
+  }, []);
+
+  // Save state to localStorage whenever any relevant data changes
+  useEffect(() => {
+    const dataToSave = {
+      step,
+      purpose,
+      selectedExperiences,
+      preferences,
+      selectedResorts,
+      finalDetails
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+  }, [step, purpose, selectedExperiences, preferences, selectedResorts, finalDetails]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -66,6 +100,8 @@ const PlanMyTrip: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+    // Clear storage on successful submission
+    localStorage.removeItem(STORAGE_KEY);
   };
 
   if (submitted) {
@@ -167,7 +203,7 @@ const PlanMyTrip: React.FC = () => {
               <div className="text-center">
                 <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em] mb-6 block">ISLANDS</span>
                 <h3 className="text-3xl md:text-5xl font-serif font-bold text-slate-900">What do you prefer?</h3>
-                <p className="text-slate-400 text-[10px] uppercase tracking-[0.4em] mt-8">Click the "No Preferences" button below if you would like to skip this step.</p>
+                <p className="text-slate-400 text-[10px] uppercase tracking-[0.4em] mt-8">Choose your preferences for the perfect sanctuary.</p>
               </div>
               <div className="space-y-12 max-w-2xl mx-auto">
                 {[
@@ -285,7 +321,6 @@ const PlanMyTrip: React.FC = () => {
 
               <form onSubmit={handleSubmit} className="space-y-10 max-w-4xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-                  {/* A: Name */}
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
                       <span className="w-6 h-6 bg-slate-950 text-white text-[9px] font-bold flex items-center justify-center rounded-lg">A</span>
@@ -294,7 +329,6 @@ const PlanMyTrip: React.FC = () => {
                     <input type="text" required value={finalDetails.fullName} onChange={e => setFinalDetails(prev => ({...prev, fullName: e.target.value}))} className="w-full bg-slate-50 border-b border-slate-100 rounded-2xl px-8 py-5 text-[12px] font-bold uppercase tracking-widest focus:bg-white outline-none focus:border-sky-300 transition-all" placeholder="IDENTITY" />
                   </div>
                   
-                  {/* B: Phone */}
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
                       <span className="w-6 h-6 bg-slate-950 text-white text-[9px] font-bold flex items-center justify-center rounded-lg">B</span>
@@ -303,7 +337,6 @@ const PlanMyTrip: React.FC = () => {
                     <input type="tel" required value={finalDetails.phone} onChange={e => setFinalDetails(prev => ({...prev, phone: e.target.value}))} className="w-full bg-slate-50 border-b border-slate-100 rounded-2xl px-8 py-5 text-[12px] font-bold uppercase tracking-widest focus:bg-white outline-none focus:border-sky-300 transition-all" placeholder="07700 900000" />
                   </div>
 
-                  {/* C: Email */}
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
                       <span className="w-6 h-6 bg-slate-950 text-white text-[9px] font-bold flex items-center justify-center rounded-lg">C</span>
@@ -312,7 +345,6 @@ const PlanMyTrip: React.FC = () => {
                     <input type="email" required value={finalDetails.email} onChange={e => setFinalDetails(prev => ({...prev, email: e.target.value}))} className="w-full bg-slate-50 border-b border-slate-100 rounded-2xl px-8 py-5 text-[12px] font-bold uppercase tracking-widest focus:bg-white outline-none focus:border-sky-300 transition-all" placeholder="DIGITAL SIGNATURE" />
                   </div>
 
-                  {/* D: Dates */}
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
                       <span className="w-6 h-6 bg-slate-950 text-white text-[9px] font-bold flex items-center justify-center rounded-lg">D</span>
@@ -321,7 +353,6 @@ const PlanMyTrip: React.FC = () => {
                     <input type="text" value={finalDetails.dates} onChange={e => setFinalDetails(prev => ({...prev, dates: e.target.value}))} className="w-full bg-slate-50 border-b border-slate-100 rounded-2xl px-8 py-5 text-[12px] font-bold uppercase tracking-widest focus:bg-white outline-none focus:border-sky-300 transition-all" placeholder="E.G. OCTOBER 2024" />
                   </div>
 
-                  {/* E: Guests */}
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
                       <span className="w-6 h-6 bg-slate-950 text-white text-[9px] font-bold flex items-center justify-center rounded-lg">E</span>
@@ -330,7 +361,6 @@ const PlanMyTrip: React.FC = () => {
                     <input type="number" min="1" value={finalDetails.guests} onChange={e => setFinalDetails(prev => ({...prev, guests: e.target.value}))} className="w-full bg-slate-50 border-b border-slate-100 rounded-2xl px-8 py-5 text-[12px] font-bold uppercase tracking-widest focus:bg-white outline-none focus:border-sky-300 transition-all" />
                   </div>
 
-                  {/* F: Meal Plan */}
                   <div className="space-y-4">
                     <div className="flex items-center gap-4">
                       <span className="w-6 h-6 bg-slate-950 text-white text-[9px] font-bold flex items-center justify-center rounded-lg">F</span>
@@ -343,37 +373,17 @@ const PlanMyTrip: React.FC = () => {
                       <option>ALL INCLUSIVE</option>
                     </select>
                   </div>
-
-                  {/* G: Budget */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4">
-                      <span className="w-6 h-6 bg-slate-950 text-white text-[9px] font-bold flex items-center justify-center rounded-lg">G</span>
-                      <label className="text-[9px] font-bold uppercase tracking-widest text-slate-400">Budget (USD)</label>
-                    </div>
-                    <input type="text" value={finalDetails.budget} onChange={e => setFinalDetails(prev => ({...prev, budget: e.target.value}))} className="w-full bg-slate-50 border-b border-slate-100 rounded-2xl px-8 py-5 text-[12px] font-bold uppercase tracking-widest focus:bg-white outline-none focus:border-sky-300 transition-all" placeholder="AMOUNT" />
-                  </div>
-
-                  {/* H: Budget Type */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4">
-                      <span className="w-6 h-6 bg-slate-950 text-white text-[9px] font-bold flex items-center justify-center rounded-lg">H</span>
-                      <label className="text-[9px] font-bold uppercase tracking-widest text-slate-400">Budget Scope</label>
-                    </div>
-                    <select value={finalDetails.budgetType} onChange={e => setFinalDetails(prev => ({...prev, budgetType: e.target.value}))} className="w-full bg-slate-50 border-b border-slate-100 rounded-2xl px-8 py-5 text-[12px] font-bold uppercase tracking-widest focus:bg-white outline-none focus:border-sky-300 transition-all appearance-none">
-                      <option value="Total">Total Portfolio</option>
-                      <option value="Per Night">Per Night Rate</option>
-                    </select>
-                  </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-10 pt-16">
-                   <button type="submit" className="w-full bg-slate-950 text-white font-bold py-8 rounded-full text-[12px] uppercase tracking-[0.8em] hover:bg-sky-500 transition-all shadow-2xl active:scale-[0.98]">Request My Custom Quote</button>
-                   <button type="button" onClick={prevStep} className="text-slate-300 font-bold uppercase tracking-widest text-[9px] hover:text-slate-950 transition-colors">← Back to Portfolio</button>
+                <div className="pt-12 flex flex-col items-center gap-8">
+                  <button type="submit" className="w-full bg-slate-950 text-white font-bold py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-500 transition-all duration-700 shadow-2xl">
+                    Submit Inquiry
+                  </button>
+                  <button type="button" onClick={prevStep} className="text-slate-300 font-bold uppercase tracking-widest text-[9px] hover:text-slate-950 transition-colors">← Back</button>
                 </div>
               </form>
             </div>
           )}
-
         </div>
       </div>
     </div>
