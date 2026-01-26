@@ -1,7 +1,8 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+// Fix: Import mapOffer helper from lib/supabase to correctly map database responses to the Offer interface.
+import { supabase, mapOffer } from '../lib/supabase';
 import { RESORTS, OFFERS } from '../constants';
 import { Accommodation, AccommodationType, TransferType, MealPlan, Offer } from '../types';
 import ResortCard from '../components/ResortCard';
@@ -155,16 +156,8 @@ const ResortDetail: React.FC = () => {
           // Fetch offers for this specific resort
           const { data: offersData } = await supabase.from('offers').select('*').eq('resort_id', resData.id);
           if (offersData && offersData.length > 0) {
-            setResortOffers(offersData.map(o => ({
-              id: o.id,
-              resortId: o.resort_id,
-              title: o.title,
-              discount: o.discount,
-              resortName: o.resort_name,
-              expiryDate: o.expiry_date,
-              image: o.image,
-              category: o.category
-            })));
+            // Fix: Use the mapOffer helper to ensure all mandatory properties of the Offer interface (nights, price, etc.) are properly mapped from database rows.
+            setResortOffers(offersData.map(mapOffer));
           } else {
             // Fallback to local offers matching by ID or name
             const local = OFFERS.filter(o => o.resortId === resData.id || o.resortName === resData.name);

@@ -10,7 +10,7 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Casing fix: ensures all page imports use lowercase to match consolidation files and resolve casing conflicts in the build environment.
+// Fix: Use lowercase imports to match the proxy files in the pages directory and resolve casing conflicts in the compilation program.
 import Offers from './pages/offers';
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
