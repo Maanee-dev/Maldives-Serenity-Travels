@@ -34,19 +34,21 @@ export const mapResort = (item: any): Accommodation => {
 
 /**
  * HELPER: Robust mapping from Supabase Row to Offer Interface
- * Fix: Added missing mandatory properties from the Offer interface (nights, roomCategory, price, priceSubtext, rating)
  */
 export const mapOffer = (o: any): Offer => {
+  // If the query included a join with resorts, extract the slug
+  const resortSlug = o.resorts?.slug || o.resort_slug || 'unknown';
+  
   return {
     id: o.id,
     resortId: o.resort_id,
+    resortSlug: resortSlug,
     title: o.title,
     discount: o.discount,
     resortName: o.resort_name,
     expiryDate: o.expiry_date,
     image: o.image,
     category: o.category,
-    // Add missing properties required by the Offer interface to satisfy TypeScript constraints
     nights: o.nights || 7,
     roomCategory: o.room_category || 'Luxury Villa',
     price: o.price || 5000,
@@ -54,57 +56,3 @@ export const mapOffer = (o: any): Offer => {
     rating: o.rating || 5
   };
 };
-
-/**
- * DATABASE SCHEMA REFERENCE
- * 
- * --- OFFERS TABLE ---
- * create table offers (
- *   id uuid default gen_random_uuid() primary key,
- *   resort_id uuid references resorts(id) on delete cascade,
- *   title text not null,
- *   discount text,
- *   resort_name text,
- *   expiry_date date,
- *   image text,
- *   category text check (category in ('Early Bird', 'Last Minute', 'Honeymoon')),
- *   created_at timestamp with time zone default now()
- * );
- * 
- * --- STORIES TABLE ---
- * create table stories (
- *   id uuid default gen_random_uuid() primary key,
- *   title text not null,
- *   slug text unique not null,
- *   excerpt text,
- *   content text,
- *   image text,
- *   date date default now(),
- *   author text default 'Elena Rossi',
- *   category text check (category in ('Dispatch', 'Guide', 'Update', 'Tip')),
- *   is_featured boolean default false,
- *   created_at timestamp with time zone default now()
- * );
- * 
- * --- RESORTS TABLE ---
- * create table resorts (
- *   id uuid primary key,
- *   name text not null,
- *   slug text unique not null,
- *   type text,
- *   atoll text,
- *   price_range text,
- *   rating integer,
- *   description text,
- *   short_description text,
- *   images jsonb,
- *   features jsonb,
- *   transfers jsonb,
- *   meal_plans jsonb,
- *   uvp text,
- *   is_featured boolean default false,
- *   room_types jsonb default '[]'::jsonb,
- *   dining_venues jsonb default '[]'::jsonb,
- *   created_at timestamp with time zone default now()
- * );
- */

@@ -1,9 +1,11 @@
+
 import { Accommodation, AccommodationType, TransferType, MealPlan, Offer, Experience, BlogPost } from './types';
 
 export const OFFERS: Offer[] = [
   {
     id: 'off-1',
     resortId: '739a8c14-2391-4d32-8456-789012345678',
+    resortSlug: 'adaaran-prestige-vadoo',
     resortName: 'Villa Park Maldives Resort',
     roomCategory: 'Sunset Deluxe Beach Villa',
     title: 'Romance and Relaxation | 25% off | All-Inclusive',
@@ -19,6 +21,7 @@ export const OFFERS: Offer[] = [
   {
     id: 'off-2',
     resortId: 'res-nautica',
+    resortSlug: 'villa-nautica',
     resortName: 'Villa Nautica',
     roomCategory: 'Deluxe Beach Pool Villa',
     title: 'Easter Holiday at Villa Nautica with All-Inclusive Infinity & Transfer Included',
@@ -34,6 +37,7 @@ export const OFFERS: Offer[] = [
   {
     id: 'off-3',
     resortId: 'res-intercon',
+    resortSlug: 'intercontinental-maldives',
     resortName: 'InterContinental Maldives Maamunagau Resort',
     roomCategory: 'One Bedroom Lagoon Pool Villa',
     title: "Valentine's Deal | 40% off | InterContinental Maldives | All-Inclusive | with seaplane transfers",
@@ -49,6 +53,7 @@ export const OFFERS: Offer[] = [
   {
     id: 'off-4',
     resortId: 'res-finolhu',
+    resortSlug: 'seaside-finolhu',
     resortName: 'Seaside Finolhu Baa Atoll Maldives',
     roomCategory: 'Lagoon Villa',
     title: 'New Year Sale | May - September 2026 | 35% Discount and Free Half Board | Finolhu, A Seaside Collection Resort',
