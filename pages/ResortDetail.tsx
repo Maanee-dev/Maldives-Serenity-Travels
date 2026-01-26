@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-// Fix: Import mapOffer helper from lib/supabase to correctly map database responses to the Offer interface.
 import { supabase, mapOffer } from '../lib/supabase';
 import { RESORTS, OFFERS } from '../constants';
 import { Accommodation, AccommodationType, TransferType, MealPlan, Offer } from '../types';
@@ -16,7 +15,8 @@ const ResortDetail: React.FC = () => {
   const [resortOffers, setResortOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Quote Form State
+  // Multi-step Form State
+  const [formStep, setFormStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [quoteData, setQuoteData] = useState({
@@ -30,6 +30,9 @@ const ResortDetail: React.FC = () => {
     notes: ''
   });
 
+  // Calendar State
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
   // Load draft on mount
   useEffect(() => {
     const saved = localStorage.getItem(INQUIRY_STORAGE_KEY);
@@ -41,8 +44,6 @@ const ResortDetail: React.FC = () => {
           customerName: parsed.customerName || '',
           customerEmail: parsed.customerEmail || '',
           customerPhone: parsed.customerPhone || ''
-          // Note: We don't necessarily want to persist dates/notes across different resorts 
-          // as they are resort-specific, but name/email/phone is very helpful to persist.
         }));
       } catch (e) {
         console.error("Failed to load inquiry draft:", e);
@@ -79,23 +80,18 @@ const ResortDetail: React.FC = () => {
     }
   };
 
-  // Logic for Smart Similar Stays
   const similarStays = useMemo(() => {
     if (!resort || allResorts.length === 0) return [];
-    
     const brandName = resort.name.split(' ')[0];
     let matches = allResorts.filter(r => r.slug !== slug && r.name.toLowerCase().includes(brandName.toLowerCase()));
-    
     if (matches.length < 2) {
       const atollMatches = allResorts.filter(r => r.slug !== slug && r.atoll === resort.atoll && !matches.find(m => m.id === r.id));
       matches = [...matches, ...atollMatches];
     }
-    
     if (matches.length < 3) {
       const typeMatches = allResorts.filter(r => r.slug !== slug && r.type === resort.type && !matches.find(m => m.id === r.id));
       matches = [...matches, ...typeMatches];
     }
-
     return matches.slice(0, 6);
   }, [resort, allResorts, slug]);
 
@@ -152,14 +148,10 @@ const ResortDetail: React.FC = () => {
             }))
           };
           setResort(mappedResort);
-          
-          // Fetch offers for this specific resort
           const { data: offersData } = await supabase.from('offers').select('*').eq('resort_id', resData.id);
           if (offersData && offersData.length > 0) {
-            // Fix: Use the mapOffer helper to ensure all mandatory properties of the Offer interface (nights, price, etc.) are properly mapped from database rows.
             setResortOffers(offersData.map(mapOffer));
           } else {
-            // Fallback to local offers matching by ID or name
             const local = OFFERS.filter(o => o.resortId === resData.id || o.resortName === resData.name);
             setResortOffers(local);
           }
@@ -208,12 +200,61 @@ const ResortDetail: React.FC = () => {
       });
       if (error) throw error;
       setIsSubmitted(true);
-      // We don't clear contact info draft on inquiry so they can easily inquire at another resort
     } catch (err) {
       alert('We encountered an error processing your request.');
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const nextStep = () => {
+    if (formStep === 1 && (!quoteData.customerName || !quoteData.customerEmail)) return;
+    if (formStep === 2 && (!quoteData.checkIn || !quoteData.checkOut)) return;
+    setFormStep(s => s + 1);
+  };
+
+  const prevStep = () => setFormStep(s => s - 1);
+
+  // Calendar Helpers
+  const generateCalendarDays = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const days = [];
+    for (let i = 0; i < firstDay; i++) days.push(null);
+    for (let i = 1; i <= daysInMonth; i++) days.push(new Date(year, month, i));
+    return days;
+  };
+
+  const isDateSelected = (date: Date) => {
+    if (!date) return false;
+    const dStr = date.toISOString().split('T')[0];
+    return dStr === quoteData.checkIn || dStr === quoteData.checkOut;
+  };
+
+  const isDateInRange = (date: Date) => {
+    if (!date || !quoteData.checkIn || !quoteData.checkOut) return false;
+    const dStr = date.toISOString().split('T')[0];
+    return dStr > quoteData.checkIn && dStr < quoteData.checkOut;
+  };
+
+  const handleDateClick = (date: Date) => {
+    if (!date) return;
+    const dStr = date.toISOString().split('T')[0];
+    if (!quoteData.checkIn || (quoteData.checkIn && quoteData.checkOut)) {
+      setQuoteData({ ...quoteData, checkIn: dStr, checkOut: '' });
+    } else {
+      if (dStr < quoteData.checkIn) {
+        setQuoteData({ ...quoteData, checkIn: dStr, checkOut: quoteData.checkIn });
+      } else {
+        setQuoteData({ ...quoteData, checkOut: dStr });
+      }
+    }
+  };
+
+  const changeMonth = (offset: number) => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + offset, 1));
   };
 
   if (loading) return (
@@ -401,17 +442,32 @@ const ResortDetail: React.FC = () => {
         </section>
       )}
 
-      {/* Inquiry Form Section */}
+      {/* Multi-step Inquiry Form Section */}
       <section id="inquiry-form" className="py-32 md:py-48 bg-slate-950 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
           <h2 className="text-[30vw] font-serif italic whitespace-nowrap -rotate-12">Serenity</h2>
         </div>
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
-           <div className="reveal">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-20 items-start relative z-10">
+           <div className="reveal sticky top-32">
               <span className="text-[11px] font-black text-sky-400 uppercase tracking-[1em] mb-12 block">Secure Your Stay</span>
               <h3 className="text-5xl md:text-8xl font-serif font-bold italic mb-12 tracking-tighter leading-tight">Initiate Inquiry.</h3>
-              <p className="text-slate-400 text-lg md:text-xl leading-relaxed mb-16 opacity-80 uppercase tracking-widest font-medium">
-                Our bespoke planning team will curate a tailored itinerary for your Maldivian journey. Expect a dispatch within 24 hours.
+              
+              {/* Progress Stepper */}
+              {!isSubmitted && (
+                <div className="flex items-center gap-4 mb-16">
+                  {[1, 2, 3].map(s => (
+                    <React.Fragment key={s}>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-700 ${formStep === s ? 'bg-sky-500 text-white shadow-[0_0_20px_rgba(56,189,248,0.4)] scale-110' : formStep > s ? 'bg-slate-800 text-sky-500' : 'bg-slate-900 text-slate-600'}`}>
+                        {s}
+                      </div>
+                      {s < 3 && <div className="w-8 h-px bg-slate-800"></div>}
+                    </React.Fragment>
+                  ))}
+                </div>
+              )}
+
+              <p className="text-slate-400 text-lg md:text-xl leading-relaxed opacity-80 uppercase tracking-widest font-medium">
+                {formStep === 1 ? "Identify yourself to our planning team." : formStep === 2 ? "Select your temporal coordinates." : "Finalize your sanctuary requirements."}
               </p>
            </div>
            
@@ -421,38 +477,119 @@ const ResortDetail: React.FC = () => {
                   <span className="text-[10px] font-black text-sky-500 uppercase tracking-[0.8em] mb-10 block">Success</span>
                   <h4 className="text-4xl font-serif font-bold italic mb-8">Dispatch Received</h4>
                   <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] leading-[2.5] mb-12">We are currently consulting the atolls for your request.</p>
-                  <button onClick={() => setIsSubmitted(false)} className="text-[10px] font-black text-slate-950 uppercase tracking-[0.6em] border-b-[1px] border-slate-950 pb-2 hover:text-sky-600 hover:border-sky-600 transition-colors">Submit Another</button>
+                  <button onClick={() => { setIsSubmitted(false); setFormStep(1); }} className="text-[10px] font-black text-slate-950 uppercase tracking-[0.6em] border-b-[1px] border-slate-950 pb-2 hover:text-sky-600 hover:border-sky-600 transition-colors">Submit Another</button>
                </div>
              ) : (
-               <form onSubmit={handleQuoteSubmit} className="space-y-6 md:space-y-8 bg-white/5 backdrop-blur-3xl p-8 md:p-16 rounded-[3.5rem] border border-white/10 shadow-2xl">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                     <div className="space-y-3">
-                        <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Full Identity</label>
-                        <input type="text" required placeholder="NAME" className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerName} onChange={e => setQuoteData({...quoteData, customerName: e.target.value})} />
-                     </div>
-                     <div className="space-y-3">
-                        <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Digital Signature</label>
-                        <input type="email" required placeholder="EMAIL" className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerEmail} onChange={e => setQuoteData({...quoteData, customerEmail: e.target.value})} />
-                     </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                     <div className="space-y-3">
-                        <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Check-In</label>
-                        <input type="date" required className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white" value={quoteData.checkIn} onChange={e => setQuoteData({...quoteData, checkIn: e.target.value})} />
-                     </div>
-                     <div className="space-y-3">
-                        <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Check-Out</label>
-                        <input type="date" required className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white" value={quoteData.checkOut} onChange={e => setQuoteData({...quoteData, checkOut: e.target.value})} />
-                     </div>
-                  </div>
-                  <div className="space-y-3">
-                     <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Vision & Requests</label>
-                     <textarea rows={4} placeholder="SHARE YOUR UNIQUE PERSPECTIVE..." className="w-full bg-white/5 border border-white/10 rounded-[2.5rem] px-8 py-6 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20 resize-none" value={quoteData.notes} onChange={e => setQuoteData({...quoteData, notes: e.target.value})}></textarea>
-                  </div>
-                  <button type="submit" disabled={isSubmitting} className="w-full bg-white text-slate-950 font-black py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl active:scale-[0.98] disabled:opacity-50">
-                    {isSubmitting ? 'INITIATING...' : 'REQUEST QUOTATION'}
-                  </button>
-               </form>
+               <div className="bg-white/5 backdrop-blur-3xl p-8 md:p-16 rounded-[3.5rem] border border-white/10 shadow-2xl">
+                  {/* STEP 1: IDENTITY */}
+                  {formStep === 1 && (
+                    <div className="space-y-10 animate-in fade-in slide-in-from-right-10 duration-700">
+                      <div className="space-y-8">
+                        <div className="space-y-3">
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Full Identity</label>
+                           <input type="text" placeholder="NAME" className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerName} onChange={e => setQuoteData({...quoteData, customerName: e.target.value})} />
+                        </div>
+                        <div className="space-y-3">
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Digital Signature</label>
+                           <input type="email" placeholder="EMAIL" className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerEmail} onChange={e => setQuoteData({...quoteData, customerEmail: e.target.value})} />
+                        </div>
+                        <div className="space-y-3">
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Communication Line</label>
+                           <input type="tel" placeholder="PHONE" className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerPhone} onChange={e => setQuoteData({...quoteData, customerPhone: e.target.value})} />
+                        </div>
+                      </div>
+                      <button onClick={nextStep} className="w-full bg-white text-slate-950 font-black py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl active:scale-[0.98]">
+                        PROCEED TO DATES
+                      </button>
+                    </div>
+                  )}
+
+                  {/* STEP 2: DATES (CUSTOM CALENDAR) */}
+                  {formStep === 2 && (
+                    <div className="space-y-10 animate-in fade-in slide-in-from-right-10 duration-700">
+                       <div className="bg-white/5 rounded-[2rem] p-6">
+                          <div className="flex justify-between items-center mb-8 px-2">
+                             <button onClick={() => changeMonth(-1)} className="text-white/40 hover:text-white transition-colors">&larr;</button>
+                             <h4 className="text-[10px] font-black uppercase tracking-[0.4em]">{currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</h4>
+                             <button onClick={() => changeMonth(1)} className="text-white/40 hover:text-white transition-colors">&rarr;</button>
+                          </div>
+                          <div className="grid grid-cols-7 gap-2 mb-4">
+                             {['S','M','T','W','T','F','S'].map(d => (
+                               <div key={d} className="text-center text-[8px] font-black text-white/20">{d}</div>
+                             ))}
+                          </div>
+                          <div className="grid grid-cols-7 gap-1">
+                             {generateCalendarDays(currentMonth).map((day, i) => (
+                               <button 
+                                 key={i} 
+                                 disabled={!day || (day < new Date())}
+                                 onClick={() => day && handleDateClick(day)}
+                                 className={`aspect-square flex items-center justify-center rounded-full text-[9px] font-bold transition-all ${!day ? 'invisible' : (day < new Date() ? 'text-white/10' : (isDateSelected(day) ? 'bg-sky-500 text-white shadow-lg scale-110' : (isDateInRange(day) ? 'bg-sky-500/20 text-sky-400' : 'text-white/60 hover:bg-white/10')))}`}
+                               >
+                                 {day?.getDate()}
+                               </button>
+                             ))}
+                          </div>
+                       </div>
+                       <div className="grid grid-cols-2 gap-4">
+                          <div className="bg-white/5 p-4 rounded-2xl">
+                             <span className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-2">Arrival</span>
+                             <p className="text-[10px] font-bold tracking-widest">{quoteData.checkIn || 'PENDING'}</p>
+                          </div>
+                          <div className="bg-white/5 p-4 rounded-2xl">
+                             <span className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-2">Departure</span>
+                             <p className="text-[10px] font-bold tracking-widest">{quoteData.checkOut || 'PENDING'}</p>
+                          </div>
+                       </div>
+                       <div className="flex gap-4">
+                          <button onClick={prevStep} className="flex-1 border border-white/10 text-white font-black py-7 rounded-full text-[11px] uppercase tracking-[0.4em] hover:bg-white/10 transition-all">BACK</button>
+                          <button onClick={nextStep} disabled={!quoteData.checkIn || !quoteData.checkOut} className="flex-[2] bg-white text-slate-950 font-black py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all disabled:opacity-20">PROCEED</button>
+                       </div>
+                    </div>
+                  )}
+
+                  {/* STEP 3: SANCTUARY DETAILS */}
+                  {formStep === 3 && (
+                    <div className="space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
+                      <div className="space-y-6">
+                        <div className="space-y-3">
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Preferred Residence</label>
+                           <div className="relative">
+                             <select className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.roomType} onChange={e => setQuoteData({...quoteData, roomType: e.target.value})}>
+                                <option value="" className="bg-slate-900">SELECT RESIDENCE</option>
+                                {resort.roomTypes?.map((r, i) => (
+                                  <option key={i} value={r.name} className="bg-slate-900">{r.name}</option>
+                                ))}
+                             </select>
+                             <div className="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none text-white/40 font-bold">&darr;</div>
+                           </div>
+                        </div>
+                        <div className="space-y-3">
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Meal Plan</label>
+                           <div className="relative">
+                             <select className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.mealPlan} onChange={e => setQuoteData({...quoteData, mealPlan: e.target.value})}>
+                                <option value="" className="bg-slate-900">SELECT MEAL PLAN</option>
+                                {resort.mealPlans?.map((m, i) => (
+                                  <option key={i} value={m} className="bg-slate-900">{m.replace(/_/g, ' ')}</option>
+                                ))}
+                             </select>
+                             <div className="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none text-white/40 font-bold">&darr;</div>
+                           </div>
+                        </div>
+                        <div className="space-y-3">
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Vision & Requests</label>
+                           <textarea rows={4} placeholder="SHARE YOUR UNIQUE PERSPECTIVE..." className="w-full bg-white/5 border border-white/10 rounded-[2.5rem] px-8 py-6 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20 resize-none" value={quoteData.notes} onChange={e => setQuoteData({...quoteData, notes: e.target.value})}></textarea>
+                        </div>
+                      </div>
+                      <div className="flex gap-4">
+                        <button onClick={prevStep} className="flex-1 border border-white/10 text-white font-black py-7 rounded-full text-[11px] uppercase tracking-[0.4em] hover:bg-white/10 transition-all">BACK</button>
+                        <button onClick={handleQuoteSubmit} disabled={isSubmitting} className="flex-[2] bg-white text-slate-950 font-black py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl active:scale-[0.98] disabled:opacity-50">
+                          {isSubmitting ? 'INITIATING...' : 'REQUEST QUOTATION'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+               </div>
              )}
            </div>
         </div>
@@ -473,7 +610,6 @@ const ResortDetail: React.FC = () => {
                   <ResortCard resort={s} />
                 </div>
               ))}
-              {/* Final Explore All Card */}
               <div className="flex-shrink-0 w-[80vw] md:w-[45vw] lg:w-[30vw] snap-start reveal flex items-center justify-center" style={{ transitionDelay: `${similarStays.length * 100}ms` }}>
                 <Link to="/stays" className="group w-full aspect-[4/5] rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-center hover:bg-slate-950 transition-all duration-1000">
                   <span className="text-[10px] font-bold text-slate-400 group-hover:text-sky-400 uppercase tracking-[1em] mb-8 block">Explore All</span>
