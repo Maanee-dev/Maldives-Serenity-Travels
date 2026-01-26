@@ -1,10 +1,9 @@
 
-// Fix: Add missing React import to provide React namespace for FC and FormEvent types
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import { Accommodation, AccommodationType, TransferType, MealPlan, BlogPost } from '../types';
-import { BLOG_POSTS } from '../constants';
+import { supabase, mapResort } from '../lib/supabase';
+import { Accommodation, BlogPost } from '../types';
+import { BLOG_POSTS, RESORTS } from '../constants';
 import ResortCard from '../components/ResortCard';
 
 const Home: React.FC = () => {
@@ -21,47 +20,41 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Fetch Resorts
-      const { data: resortsData } = await supabase
-        .from('resorts')
-        .select('*')
-        .limit(6);
-      
-      if (resortsData) {
-        const mappedResorts: Accommodation[] = resortsData.map(item => ({
-          id: item.id,
-          name: item.name,
-          slug: item.slug,
-          type: item.type as AccommodationType,
-          atoll: item.atoll,
-          priceRange: item.price_range,
-          rating: item.rating,
-          description: item.description,
-          shortDescription: item.short_description,
-          images: item.images || [],
-          features: item.features || [],
-          transfers: item.transfers as TransferType[],
-          mealPlans: item.meal_plans as MealPlan[],
-          uvp: item.uvp,
-          isFeatured: item.is_featured,
-          roomTypes: item.room_types || [],
-          diningVenues: item.dining_venues || []
-        }));
-        setFeaturedResorts(mappedResorts);
-      } else {
-        setFeaturedResorts([]);
-      }
+      try {
+        // Fetch Resorts
+        const { data: resortsData, error: resortError } = await supabase
+          .from('resorts')
+          .select('*')
+          .limit(6);
+        
+        if (resortError) throw resortError;
 
-      // Fetch Stories
-      const { data: storiesData } = await supabase
-        .from('stories')
-        .select('*')
-        .order('date', { ascending: false })
-        .limit(3);
+        if (resortsData && resortsData.length > 0) {
+          console.log("Supabase: Found resorts", resortsData.length);
+          const mappedResorts = resortsData.map(mapResort);
+          setFeaturedResorts(mappedResorts);
+        } else {
+          console.warn("Supabase: No resorts found, falling back to local constants.");
+          setFeaturedResorts(RESORTS.slice(0, 6));
+        }
 
-      if (storiesData && storiesData.length > 0) {
-        setRecentStories(storiesData as BlogPost[]);
-      } else {
+        // Fetch Stories
+        const { data: storiesData, error: storyError } = await supabase
+          .from('stories')
+          .select('*')
+          .order('date', { ascending: false })
+          .limit(3);
+
+        if (storyError) throw storyError;
+
+        if (storiesData && storiesData.length > 0) {
+          setRecentStories(storiesData as BlogPost[]);
+        } else {
+          setRecentStories(BLOG_POSTS.slice(0, 3));
+        }
+      } catch (err) {
+        console.error("Supabase connection error:", err);
+        setFeaturedResorts(RESORTS.slice(0, 6));
         setRecentStories(BLOG_POSTS.slice(0, 3));
       }
     };
@@ -157,7 +150,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
-      {/* HERO SECTION - KEPT AS IS PER REQUEST */}
+      {/* HERO SECTION */}
       <section className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden bg-slate-950">
         <div className="absolute inset-0 z-0">
           {heroSlides.map((slide, idx) => (
@@ -188,17 +181,15 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* REFINED PHILOSOPHY SECTION - ASYMMETRICAL EDITORIAL */}
+      {/* PHILOSOPHY SECTION */}
       <section className="py-24 md:py-48 bg-white relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="flex flex-col lg:flex-row gap-16 lg:gap-32 items-center">
-            {/* Image Stack */}
             <div className="lg:w-1/2 relative order-2 lg:order-1 reveal">
               <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl z-10 group bg-slate-100">
                 <img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" alt="Island Culture" />
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
               </div>
-              {/* Overlapping floating card */}
               <div className="absolute -bottom-10 -right-4 md:-bottom-16 md:-right-16 bg-[#FCFAF7] p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl z-20 max-w-[280px] md:max-w-[380px] border border-slate-50 reveal delay-500">
                 <p className="text-slate-900 font-serif italic text-xl md:text-3xl leading-[1.4]">"The profound happens in the gaps between the tides."</p>
                 <div className="mt-8 flex items-center gap-4">
@@ -208,7 +199,6 @@ const Home: React.FC = () => {
               </div>
             </div>
 
-            {/* Text Content */}
             <div className="lg:w-1/2 order-1 lg:order-2 reveal">
               <div className="flex items-center gap-6 mb-12">
                 <div className="w-12 h-[1px] bg-sky-500"></div>
@@ -238,7 +228,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* REFINED SIGNATURE ATOLLS - 2x2 GRID ON MOBILE */}
+      {/* SIGNATURE ATOLLS */}
       <section className="py-24 md:py-40 bg-[#FCFAF7] border-y border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="flex flex-col md:flex-row justify-between items-end mb-20 md:mb-28 reveal">
@@ -248,8 +238,6 @@ const Home: React.FC = () => {
             </div>
             <Link to="/stays" className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.5em] border-b border-sky-500 pb-1 mb-4 hover:text-slate-900 hover:border-slate-900 transition-colors hidden md:block">Explore Geography</Link>
           </div>
-          
-          {/* Mobile: 2 columns | Desktop: 4 columns */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 reveal">
             {signatureAtolls.map((atoll, i) => (
               <Link key={i} to={`/stays?q=${atoll.name}`} className="group relative overflow-hidden rounded-[1.5rem] md:rounded-[3.5rem] cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-1000 aspect-[3/4]">
@@ -263,14 +251,10 @@ const Home: React.FC = () => {
               </Link>
             ))}
           </div>
-          
-          <div className="mt-12 text-center md:hidden">
-             <Link to="/stays" className="inline-block text-[10px] font-bold text-sky-500 uppercase tracking-[0.4em] border-b border-sky-500 pb-1">View Full Geography</Link>
-          </div>
         </div>
       </section>
 
-      {/* REFINED COLLECTION SECTION - FILM STRIP WITH BREATHING ROOM */}
+      {/* THE COLLECTION */}
       <section className="py-24 md:py-48 bg-white overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="mb-20 md:mb-32 reveal flex flex-col md:flex-row justify-between items-end gap-10">
@@ -280,32 +264,23 @@ const Home: React.FC = () => {
             </div>
             <div className="w-24 h-[1px] bg-amber-400 mb-4 hidden md:block"></div>
           </div>
-          
           <div className="reveal no-scrollbar overflow-x-auto flex gap-8 md:gap-16 pb-12 snap-x snap-mandatory">
-            {featuredResorts.length > 0 ? featuredResorts.map((resort) => (
+            {featuredResorts.map((resort) => (
               <div key={resort.id} className="flex-shrink-0 w-[85vw] sm:w-[55vw] lg:w-[35vw] snap-start">
                 <ResortCard resort={resort} />
               </div>
-            )) : (
-              <div className="py-20 text-center w-full">
-                <p className="text-slate-500 uppercase tracking-widest text-[10px] animate-pulse">Consulting the archives...</p>
-              </div>
-            )}
-            {/* CTA Final Card in Scroller */}
+            ))}
             <div className="flex-shrink-0 w-[85vw] sm:w-[55vw] lg:w-[35vw] snap-start flex items-center justify-center">
               <Link to="/stays" className="group w-full aspect-[4/5] rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-center hover:bg-slate-950 transition-all duration-1000">
                 <span className="text-[10px] font-bold text-slate-400 group-hover:text-sky-400 uppercase tracking-[1em] mb-8 block">Explore All</span>
                 <h4 className="text-2xl md:text-4xl font-serif font-bold text-slate-900 group-hover:text-white leading-tight italic">Find your <br /> sanctuary.</h4>
-                <div className="mt-12 w-16 h-16 rounded-full border border-slate-200 group-hover:border-sky-500 flex items-center justify-center transition-all duration-700">
-                  <svg className="w-6 h-6 text-slate-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                </div>
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* REFINED EDITORIAL DISPATCHES - DYNAMIC GRID */}
+      {/* THE JOURNAL */}
       <section className="py-24 md:py-48 bg-[#FCFAF7] border-t border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-24 md:mb-40 reveal">
@@ -315,9 +290,7 @@ const Home: React.FC = () => {
             </div>
             <Link to="/stories" className="text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] border-b border-slate-950 pb-2 mb-4 hover:text-sky-500 hover:border-sky-500 transition-all hidden md:block">View All Dispatches</Link>
           </div>
-          
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
-            {/* Primary Featured Story */}
             {recentStories[0] && (
               <div className="lg:col-span-7 reveal">
                 <Link to={`/stories/${recentStories[0].slug}`} className="group block relative rounded-[3.5rem] overflow-hidden shadow-2xl bg-white p-8 md:p-16 hover:shadow-sky-100 transition-all duration-1000">
@@ -334,46 +307,28 @@ const Home: React.FC = () => {
                       <h4 className="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-8 group-hover:italic transition-all leading-tight tracking-tight">{recentStories[0].title}</h4>
                       <p className="text-slate-500 text-base md:text-xl leading-relaxed line-clamp-2 italic opacity-80">{recentStories[0].excerpt}</p>
                     </div>
-                    <div className="w-16 h-16 rounded-full border border-slate-100 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700 flex-shrink-0">
-                      <svg className="w-6 h-6 text-slate-900 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                    </div>
                   </div>
                 </Link>
               </div>
             )}
-
-            {/* Smaller Stories Stack */}
             <div className="lg:col-span-5 flex flex-col gap-10">
               {recentStories.slice(1).map((post, idx) => (
-                <Link 
-                  key={post.id} 
-                  to={`/stories/${post.slug}`} 
-                  className="group flex gap-6 md:gap-10 items-center p-6 md:p-10 bg-white rounded-[2.5rem] shadow-sm border border-slate-50 hover:shadow-xl transition-all duration-700 reveal"
-                  style={{ transitionDelay: `${idx * 150}ms` }}
-                >
+                <Link key={post.id} to={`/stories/${post.slug}`} className="group flex gap-6 md:gap-10 items-center p-6 md:p-10 bg-white rounded-[2.5rem] shadow-sm border border-slate-50 hover:shadow-xl transition-all duration-700 reveal" style={{ transitionDelay: `${idx * 150}ms` }}>
                   <div className="w-24 h-24 md:w-36 md:h-36 rounded-[2rem] overflow-hidden flex-shrink-0 bg-slate-100">
                     <img src={post.image} className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110" alt={post.title} />
                   </div>
                   <div className="flex-grow">
                     <span className="text-sky-500 font-bold text-[9px] uppercase tracking-widest mb-3 block">{post.category}</span>
                     <h5 className="text-xl md:text-2xl font-serif font-bold text-slate-900 mb-4 group-hover:italic transition-all leading-tight">{post.title}</h5>
-                    <div className="flex items-center gap-4">
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-slate-900 transition-colors">Read More</span>
-                      <svg className="w-4 h-4 text-slate-300 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                    </div>
                   </div>
                 </Link>
               ))}
-              
-              <Link to="/stories" className="md:hidden text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] text-center border-b border-slate-950 pb-2 mt-8 mx-auto w-fit">
-                Explore Archives
-              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* REFINED FINAL CTA */}
+      {/* FINAL CTA */}
       <section className="py-24 md:py-48 bg-slate-950 relative overflow-hidden text-center text-white">
         <div className="absolute inset-0 opacity-[0.05] flex items-center justify-center pointer-events-none">
           <h2 className="text-[35vw] font-serif italic whitespace-nowrap -rotate-12 translate-y-1/2">Serenity</h2>
@@ -384,9 +339,6 @@ const Home: React.FC = () => {
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
             <Link to="/plan" className="w-full md:w-auto bg-white text-slate-950 font-bold px-16 py-7 rounded-full hover:bg-sky-400 hover:text-white transition-all duration-700 uppercase tracking-[0.5em] text-[11px] shadow-2xl">
               Initiate Inquiry
-            </Link>
-            <Link to="/stays" className="text-[11px] font-bold text-white uppercase tracking-[0.6em] border-b border-white/30 pb-2 hover:border-sky-400 transition-all">
-              Browse Portfolio
             </Link>
           </div>
         </div>

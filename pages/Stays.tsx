@@ -1,8 +1,9 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { supabase, mapResort, mapOffer } from '../lib/supabase';
 import { RESORTS, OFFERS } from '../constants';
-import { AccommodationType, TransferType, Accommodation, MealPlan, Offer } from '../types';
+import { AccommodationType, TransferType, Accommodation, Offer } from '../types';
 import ResortCard from '../components/ResortCard';
 
 const Stays: React.FC = () => {
@@ -25,53 +26,35 @@ const Stays: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const { data: resortsData } = await supabase.from('resorts').select('*').order('name', { ascending: true });
-        const { data: offersData } = await supabase.from('offers').select('*');
+        console.log("Fetching Stays from Supabase...");
+        const { data: resortsData, error: resortError } = await supabase.from('resorts').select('*').order('name', { ascending: true });
+        const { data: offersData, error: offerError } = await supabase.from('offers').select('*');
+
+        if (resortError) throw resortError;
 
         let finalResorts: Accommodation[] = [];
         if (resortsData && resortsData.length > 0) {
-          finalResorts = resortsData.map(item => ({
-            id: item.id,
-            name: item.name,
-            slug: item.slug,
-            type: (item.type || 'RESORT') as AccommodationType,
-            atoll: item.atoll || 'Unknown',
-            priceRange: item.price_range || '$$$$',
-            rating: item.rating || 5,
-            description: item.description || '',
-            shortDescription: item.short_description || '',
-            images: item.images || [],
-            features: item.features || [],
-            transfers: (item.transfers || []) as TransferType[],
-            mealPlans: (item.meal_plans || []) as MealPlan[],
-            uvp: item.uvp || 'Defined by perspective.',
-            isFeatured: item.is_featured || false,
-            roomTypes: item.room_types || [],
-            diningVenues: item.dining_venues || []
-          }));
+          console.log(`Supabase: Loaded ${resortsData.length} resorts.`);
+          finalResorts = resortsData.map(mapResort);
+        } else {
+          console.warn("Supabase: Resorts table is empty. Showing local constants.");
+          finalResorts = [];
         }
 
+        // Merge with local fallbacks to ensure the UI is never empty during development
         const dbSlugs = new Set(finalResorts.map(r => r.slug));
         const localFallbacks = RESORTS.filter(r => !dbSlugs.has(r.slug));
         setResorts([...finalResorts, ...localFallbacks]);
         
         if (offersData && offersData.length > 0) {
-          const mappedOffers: Offer[] = offersData.map(o => ({
-            id: o.id,
-            resortId: o.resort_id,
-            title: o.title,
-            discount: o.discount,
-            resortName: o.resort_name,
-            expiryDate: o.expiry_date,
-            image: o.image,
-            category: o.category
-          }));
-          setOffers(mappedOffers);
+          console.log(`Supabase: Loaded ${offersData.length} active offers.`);
+          setOffers(offersData.map(mapOffer));
         } else {
           setOffers(OFFERS);
         }
 
       } catch (err) {
+        console.error("Critical Fetch Error:", err);
         setResorts(RESORTS);
         setOffers(OFFERS);
       } finally {
