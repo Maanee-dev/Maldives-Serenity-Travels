@@ -7,8 +7,22 @@ const SUPABASE_ANON_KEY = 'sb_publishable_Ot34P55l4JGe2RjZywLovA_UokWsJ0I';
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /**
- * STORIES TABLE SCHEMA (SQL):
+ * DATABASE SCHEMA REFERENCE
  * 
+ * --- OFFERS TABLE ---
+ * create table offers (
+ *   id uuid default gen_random_uuid() primary key,
+ *   resort_id uuid references resorts(id) on delete cascade,
+ *   title text not null,
+ *   discount text,
+ *   resort_name text,
+ *   expiry_date date,
+ *   image text,
+ *   category text check (category in ('Early Bird', 'Last Minute', 'Honeymoon')),
+ *   created_at timestamp with time zone default now()
+ * );
+ * 
+ * --- STORIES TABLE ---
  * create table stories (
  *   id uuid default gen_random_uuid() primary key,
  *   title text not null,
@@ -23,8 +37,7 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
  *   created_at timestamp with time zone default now()
  * );
  * 
- * RESORTS TABLE SCHEMA (SQL):
- * 
+ * --- RESORTS TABLE ---
  * create table resorts (
  *   id uuid primary key,
  *   name text not null,
@@ -45,31 +58,4 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
  *   dining_venues jsonb default '[]'::jsonb,
  *   created_at timestamp with time zone default now()
  * );
- * 
- * INQUIRIES TABLE SCHEMA (SQL):
- * 
- * create table inquiries (
- *   id uuid default gen_random_uuid() primary key,
- *   resort_id uuid references resorts(id),
- *   resort_name text,
- *   check_in date,
- *   check_out date,
- *   room_type text,
- *   meal_plan text,
- *   customer_name text,
- *   customer_email text,
- *   customer_phone text,
- *   notes text,
- *   status text default 'New',
- *   created_at timestamp with time zone default now()
- * );
- * 
- * alter table stories enable row level security;
- * alter table resorts enable row level security;
- * alter table inquiries enable row level security;
- * create policy "Public can view stories" on stories for select using (true);
- * create policy "Public can view resorts" on resorts for select using (true);
- * create policy "Public can insert inquiries" on inquiries for insert with check (true);
- * create policy "Admin full access stories" on stories for all using (true);
- * create policy "Admin full access resorts" on resorts for all using (true);
  */

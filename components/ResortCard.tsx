@@ -1,13 +1,13 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Accommodation } from '../types';
 
 interface ResortCardProps {
   resort: Accommodation;
+  hasOffer?: boolean;
 }
 
-const ResortCard: React.FC<ResortCardProps> = ({ resort }) => {
+const ResortCard: React.FC<ResortCardProps> = ({ resort, hasOffer }) => {
   const displayImage = resort.images && resort.images.length > 0 
     ? resort.images[0] 
     : 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200';
@@ -22,11 +22,16 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort }) => {
           className="w-full h-full object-cover transition-transform duration-[3s] ease-out group-hover:scale-105"
         />
         
-        {/* Minimalist Atoll Tag */}
-        <div className="absolute top-8 left-8">
-          <span className="bg-white/95 backdrop-blur-md px-5 py-2 rounded-full text-[10px] font-black text-slate-950 uppercase tracking-[0.4em] shadow-sm border-[1px] border-slate-50">
+        {/* Floating Metadata */}
+        <div className="absolute top-8 left-8 flex flex-col gap-3">
+          <span className="bg-white/95 backdrop-blur-md px-5 py-2 rounded-full text-[10px] font-black text-slate-950 uppercase tracking-[0.4em] shadow-sm border-[1px] border-slate-50 w-fit">
             {resort.atoll}
           </span>
+          {hasOffer && (
+            <span className="bg-amber-400 text-white px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.3em] shadow-lg animate-pulse w-fit">
+              Bespoke Offer
+            </span>
+          )}
         </div>
         
         <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700"></div>

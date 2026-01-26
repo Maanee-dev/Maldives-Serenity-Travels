@@ -1,9 +1,8 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { RESORTS } from '../constants';
-import { AccommodationType, TransferType, Accommodation, MealPlan } from '../types';
+import { RESORTS, OFFERS } from '../constants';
+import { AccommodationType, TransferType, Accommodation, MealPlan, Offer } from '../types';
 import ResortCard from '../components/ResortCard';
 
 const Stays: React.FC = () => {
@@ -12,6 +11,7 @@ const Stays: React.FC = () => {
   const initialQuery = searchParams.get('q') || '';
   
   const [resorts, setResorts] = useState<Accommodation[]>([]);
+  const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterQuery, setFilterQuery] = useState(initialQuery);
   const [stayType, setStayType] = useState<AccommodationType>(AccommodationType.RESORT);
@@ -20,6 +20,66 @@ const Stays: React.FC = () => {
   
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const { data: resortsData } = await supabase.from('resorts').select('*').order('name', { ascending: true });
+        const { data: offersData } = await supabase.from('offers').select('*');
+
+        let finalResorts: Accommodation[] = [];
+        if (resortsData && resortsData.length > 0) {
+          finalResorts = resortsData.map(item => ({
+            id: item.id,
+            name: item.name,
+            slug: item.slug,
+            type: (item.type || 'RESORT') as AccommodationType,
+            atoll: item.atoll || 'Unknown',
+            priceRange: item.price_range || '$$$$',
+            rating: item.rating || 5,
+            description: item.description || '',
+            shortDescription: item.short_description || '',
+            images: item.images || [],
+            features: item.features || [],
+            transfers: (item.transfers || []) as TransferType[],
+            mealPlans: (item.meal_plans || []) as MealPlan[],
+            uvp: item.uvp || 'Defined by perspective.',
+            isFeatured: item.is_featured || false,
+            roomTypes: item.room_types || [],
+            diningVenues: item.dining_venues || []
+          }));
+        }
+
+        const dbSlugs = new Set(finalResorts.map(r => r.slug));
+        const localFallbacks = RESORTS.filter(r => !dbSlugs.has(r.slug));
+        setResorts([...finalResorts, ...localFallbacks]);
+        
+        if (offersData && offersData.length > 0) {
+          const mappedOffers: Offer[] = offersData.map(o => ({
+            id: o.id,
+            resortId: o.resort_id,
+            title: o.title,
+            discount: o.discount,
+            resortName: o.resort_name,
+            expiryDate: o.expiry_date,
+            image: o.image,
+            category: o.category
+          }));
+          setOffers(mappedOffers);
+        } else {
+          setOffers(OFFERS);
+        }
+
+      } catch (err) {
+        setResorts(RESORTS);
+        setOffers(OFFERS);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const atolls = useMemo(() => {
     const set = new Set(resorts.filter(r => r.type === stayType).map(r => r.atoll));
@@ -45,65 +105,14 @@ const Stays: React.FC = () => {
   }, [filteredStays, currentPage]);
 
   useEffect(() => {
-    const fetchResorts = async () => {
-      setLoading(true);
-      try {
-        const { data } = await supabase.from('resorts').select('*').order('name', { ascending: true });
-        let finalData: Accommodation[] = [];
-        if (data && data.length > 0) {
-          finalData = data.map(item => ({
-            id: item.id,
-            name: item.name,
-            slug: item.slug,
-            type: (item.type || 'RESORT') as AccommodationType,
-            atoll: item.atoll || 'Unknown',
-            priceRange: item.price_range || '$$$$',
-            rating: item.rating || 5,
-            description: item.description || '',
-            shortDescription: item.short_description || '',
-            images: item.images || [],
-            features: item.features || [],
-            transfers: (item.transfers || []) as TransferType[],
-            mealPlans: (item.meal_plans || []) as MealPlan[],
-            uvp: item.uvp || 'Defined by perspective.',
-            isFeatured: item.is_featured || false,
-            roomTypes: item.room_types || [],
-            diningVenues: item.dining_venues || []
-          }));
-        }
-        const dbSlugs = new Set(finalData.map(r => r.slug));
-        const localFallbacks = RESORTS.filter(r => !dbSlugs.has(r.slug));
-        setResorts([...finalData, ...localFallbacks]);
-      } catch (err) {
-        setResorts(RESORTS); 
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchResorts();
-  }, []);
-
-  useEffect(() => {
-    const q = searchParams.get('q');
-    if (q) setFilterQuery(q);
-  }, [location.search]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filterQuery, stayType, selectedAtoll, selectedTransfer]);
-
-  useEffect(() => {
     if (!loading) {
-      const timeoutId = setTimeout(() => {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('active');
-          });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        return () => observer.disconnect();
-      }, 50);
-      return () => clearTimeout(timeoutId);
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      return () => observer.disconnect();
     }
   }, [currentStays, loading]);
 
@@ -128,7 +137,6 @@ const Stays: React.FC = () => {
         </div>
       </section>
 
-      {/* Minimalist Search UI */}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-24 reveal active">
         <div className="relative group max-w-4xl mx-auto">
           <span className="absolute left-0 -top-6 text-[11px] font-black uppercase tracking-[0.8em] text-slate-900 group-focus-within:text-sky-600 transition-colors">
@@ -148,42 +156,21 @@ const Stays: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 pb-48">
         <div className="flex flex-col gap-24">
-          {/* Minimalist Filter Bar */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-12 border-b-[1px] border-slate-100 pb-16 reveal active">
             <div className="flex gap-1 p-1 bg-slate-100/50 rounded-full">
-              <button 
-                onClick={() => setStayType(AccommodationType.RESORT)}
-                className={`px-8 md:px-12 py-3 rounded-full text-[11px] font-black transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.RESORT ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-400 hover:text-slate-950'}`}
-              >
-                Resorts
-              </button>
-              <button 
-                onClick={() => setStayType(AccommodationType.GUEST_HOUSE)}
-                className={`px-8 md:px-12 py-3 rounded-full text-[11px] font-black transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.GUEST_HOUSE ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-400 hover:text-slate-950'}`}
-              >
-                Local Islands
-              </button>
+              <button onClick={() => setStayType(AccommodationType.RESORT)} className={`px-8 md:px-12 py-3 rounded-full text-[11px] font-black transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.RESORT ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-400 hover:text-slate-950'}`}>Resorts</button>
+              <button onClick={() => setStayType(AccommodationType.GUEST_HOUSE)} className={`px-8 md:px-12 py-3 rounded-full text-[11px] font-black transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.GUEST_HOUSE ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-400 hover:text-slate-950'}`}>Local Islands</button>
             </div>
-
             <div className="flex flex-wrap justify-center md:justify-end gap-10 md:gap-16 items-center">
               <div className="flex flex-col gap-2">
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Region</span>
-                <select 
-                  value={selectedAtoll}
-                  onChange={(e) => setSelectedAtoll(e.target.value)}
-                  className="bg-transparent text-[11px] font-black uppercase tracking-widest text-slate-950 outline-none cursor-pointer border-b-[1px] border-transparent hover:border-slate-300 transition-all pb-1"
-                >
+                <select value={selectedAtoll} onChange={(e) => setSelectedAtoll(e.target.value)} className="bg-transparent text-[11px] font-black uppercase tracking-widest text-slate-950 outline-none cursor-pointer border-b-[1px] border-transparent hover:border-slate-300 transition-all pb-1">
                   {atolls.map(a => <option key={a} value={a}>{a}</option>)}
                 </select>
               </div>
-
               <div className="flex flex-col gap-2">
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Arrival</span>
-                <select 
-                  value={selectedTransfer}
-                  onChange={(e) => setSelectedTransfer(e.target.value)}
-                  className="bg-transparent text-[11px] font-black uppercase tracking-widest text-slate-950 outline-none cursor-pointer border-b-[1px] border-transparent hover:border-slate-300 transition-all pb-1"
-                >
+                <select value={selectedTransfer} onChange={(e) => setSelectedTransfer(e.target.value)} className="bg-transparent text-[11px] font-black uppercase tracking-widest text-slate-950 outline-none cursor-pointer border-b-[1px] border-transparent hover:border-slate-300 transition-all pb-1">
                   <option value="All">All Transfers</option>
                   {Object.values(TransferType).map(t => <option key={t} value={t}>{t.replace('_', ' ')}</option>)}
                 </select>
@@ -195,61 +182,29 @@ const Stays: React.FC = () => {
             {loading ? (
               <div className="col-span-full py-40 text-center">
                 <div className="w-8 h-8 border-[1px] border-slate-200 border-t-sky-600 rounded-full animate-spin mx-auto mb-8"></div>
-                <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.6em]">Consulting the archives...</p>
+                <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Accessing records...</p>
               </div>
             ) : currentStays.length > 0 ? (
-              currentStays.map((stay, idx) => (
-                <div key={stay.id} className="reveal active" style={{ transitionDelay: `${idx * 50}ms` }}>
-                  <ResortCard resort={stay} />
-                </div>
+              currentStays.map(stay => (
+                <ResortCard 
+                  key={stay.id} 
+                  resort={stay} 
+                  hasOffer={offers.some(o => o.resortId === stay.id)} 
+                />
               ))
             ) : (
-              <div className="col-span-full py-40 text-center reveal active">
-                <h3 className="text-3xl font-serif font-bold italic text-slate-900 mb-6">No Sanctuaries Found.</h3>
-                <p className="text-slate-400 uppercase tracking-widest text-[11px] font-black">Adjust your boutique filters to continue the journey.</p>
+              <div className="col-span-full py-40 text-center border-2 border-dashed border-slate-100 rounded-[4rem]">
+                <h3 className="text-4xl font-serif font-bold italic text-slate-900 mb-6">No Sanctuaries Found.</h3>
+                <button onClick={() => {setFilterQuery(''); setSelectedAtoll('All'); setSelectedTransfer('All');}} className="text-sky-500 font-black uppercase tracking-widest text-[11px] border-b border-sky-200">Reset Search</button>
               </div>
             )}
           </div>
 
-          {!loading && totalPages > 1 && (
-            <div className="mt-12 flex flex-col items-center gap-10 reveal active border-t-[1px] border-slate-100 pt-16">
-              <div className="flex items-center justify-between w-full max-w-sm md:max-w-none md:gap-16">
-                <button 
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.4em] transition-all duration-500 ${currentPage === 1 ? 'opacity-20' : 'text-slate-950 hover:text-sky-600'}`}
-                >
-                  <span className="text-lg">←</span>
-                  <span className="hidden sm:inline">Previous</span>
-                </button>
-
-                <div className="hidden md:flex items-center gap-4 md:gap-8">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`text-[11px] font-black uppercase tracking-widest transition-all duration-500 ${currentPage === page ? 'text-slate-950 border-b-2 border-slate-900' : 'text-slate-300 hover:text-slate-950'}`}
-                    >
-                      {String(page).padStart(2, '0')}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="md:hidden flex flex-col items-center">
-                  <span className="text-[11px] font-black text-slate-950 uppercase tracking-widest">
-                    {currentPage} / {totalPages}
-                  </span>
-                </div>
-
-                <button 
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.4em] transition-all duration-500 ${currentPage === totalPages ? 'opacity-20' : 'text-slate-950 hover:text-sky-600'}`}
-                >
-                  <span className="hidden sm:inline">Next</span>
-                  <span className="text-lg">→</span>
-                </button>
-              </div>
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-12 pt-20 reveal">
+               <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="text-[11px] font-black uppercase tracking-widest text-slate-950 disabled:opacity-20 flex items-center gap-4">← Previous</button>
+               <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{currentPage} of {totalPages}</span>
+               <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="text-[11px] font-black uppercase tracking-widest text-slate-950 disabled:opacity-20 flex items-center gap-4">Next →</button>
             </div>
           )}
         </div>

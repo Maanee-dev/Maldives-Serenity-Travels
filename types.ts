@@ -1,4 +1,3 @@
-
 export enum AccommodationType {
   RESORT = 'RESORT',
   GUEST_HOUSE = 'GUEST_HOUSE'
@@ -57,6 +56,7 @@ export interface Accommodation {
 
 export interface Offer {
   id: string;
+  resortId: string;
   title: string;
   discount: string;
   resortName: string;

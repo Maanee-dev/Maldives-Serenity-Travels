@@ -1,3 +1,4 @@
+
 import { Accommodation, AccommodationType, TransferType, MealPlan, Offer, Experience, BlogPost } from './types';
 
 /**
@@ -101,6 +102,7 @@ export const RESORTS: Accommodation[] = [
 export const OFFERS: Offer[] = [
   {
     id: 'early-bird-vadoo',
+    resortId: '739a8c14-2391-4d32-8456-789012345678',
     title: 'Early Bird Privilege',
     discount: '25% OFF',
     resortName: 'Adaaran Prestige Vadoo',
@@ -110,6 +112,7 @@ export const OFFERS: Offer[] = [
   },
   {
     id: 'honeymoon-serenity',
+    resortId: '839a8c14-2391-4d32-8456-789012345679',
     title: 'Honeymoon Serenity',
     discount: '30% OFF',
     resortName: 'Adaaran Prestige Water Villas',
@@ -119,6 +122,7 @@ export const OFFERS: Offer[] = [
   },
   {
     id: 'last-minute-meedhupparu',
+    resortId: '039a8c14-2391-4d32-8456-789012345681',
     title: 'Tropical Last Minute',
     discount: '20% OFF',
     resortName: 'Adaaran Select Meedhupparu',
@@ -167,94 +171,6 @@ export const BLOG_POSTS: BlogPost[] = [
     image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200',
     date: '2026-04-10',
     author: 'Markus Weber',
-    category: 'Guide'
-  },
-  {
-    id: '63d040a4-3158-4562-95f7-64098935c17d',
-    title: 'Michelin Stars Over the Indian Ocean',
-    slug: 'michelin-stars-maldives',
-    excerpt: 'The Maldives is becoming a global culinary hotspot, attracting the world\'s most decorated chefs for seasonal residencies.',
-    content: 'From underwater dining rooms to treehouse bistros, the culinary scene in the Maldives has reached new heights. In 2024, several resorts have announced partnerships with Michelin-starred chefs, bringing refined gastronomy to the remote atolls.',
-    image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=1200',
-    date: '2026-03-22',
-    author: 'Elena Rossi',
-    category: 'Dispatch'
-  },
-  {
-    id: 'a0504543-7845-4221-8208-161048679545',
-    title: 'Seaplane Network Expansion for 2026',
-    slug: 'seaplane-network-expansion',
-    excerpt: 'New routes and modern fleets make reaching remote atolls faster and more comfortable than ever.',
-    content: 'Trans Maldivian Airways and Manta Air have announced a joint expansion project to include 15 new floating platforms in the southern atolls, significantly reducing transit times for luxury travelers heading to the most secluded retreats.',
-    image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=1200',
-    date: '2026-02-15',
-    author: 'Admin',
-    category: 'Update'
-  },
-  {
-    id: 'f8439045-3123-4567-8901-234567890123',
-    title: 'The Art of the Sandbank Soirée',
-    slug: 'art-of-sandbank-soiree',
-    excerpt: 'The definitive Maldivian experience: a private dinner on a ribbon of sand, appearing only at low tide.',
-    content: 'There is no setting more romantic or exclusive than a private sandbank. As the tide recedes, a temporary stage is set for a dining experience like no other. We explore the logistics and the magic behind these bespoke events.',
-    image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=1200',
-    date: '2026-01-05',
-    author: 'Markus Weber',
-    category: 'Dispatch'
-  },
-  {
-    id: 'e1439045-3123-4567-8901-234567890124',
-    title: 'Maldives Architecture: Circularity and Sea',
-    slug: 'maldives-architecture-circularity',
-    excerpt: 'How the latest resorts are blending traditional Maldivian craftsmanship with futuristic circular design.',
-    content: 'Modern Maldivian architecture is moving away from the traditional rustic look towards a sleek, minimalist aesthetic that emphasizes circularity and integration with the reef. Projects like the Ritz-Carlton Fari Islands are leading the way.',
-    image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
-    date: '2025-12-12',
-    author: 'Elena Rossi',
-    category: 'Guide'
-  },
-  {
-    id: 'd1439045-3123-4567-8901-234567890125',
-    title: 'Packing for the Atolls: A Curated Edit',
-    slug: 'packing-for-the-atolls',
-    excerpt: 'The "Barefoot Luxury" dress code explained, along with the essential kit for a Maldivian escape.',
-    content: 'Less is more when visiting the Maldives. We provide a curated list of essentials, focusing on sustainable fabrics, high-quality swimwear, and why you should leave your shoes in the suitcase.',
-    image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1200',
-    date: '2025-11-20',
-    author: 'Elena Rossi',
-    category: 'Tip'
-  },
-  {
-    id: 'c1439045-3123-4567-8901-234567890126',
-    title: 'Diving with Gentle Giants: Baa Atoll',
-    slug: 'diving-gentle-giants-baa-atoll',
-    excerpt: 'A firsthand account of the annual Manta Ray aggregation in the UNESCO Biosphere Reserve.',
-    content: 'Hanifaru Bay remains the world\'s premiere destination for Manta Ray encounters. Our team spent a week documenting the feeding frenzies that occur during the lunar tides of the monsoon season.',
-    image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200',
-    date: '2025-10-30',
-    author: 'Markus Weber',
-    category: 'Dispatch'
-  },
-  {
-    id: 'b1439045-3123-4567-8901-234567890127',
-    title: 'The Wellness Retreats of 2026',
-    slug: 'wellness-retreats-2026',
-    excerpt: 'Holistic healing meets island seclusion in the newest wave of Maldivian wellness sanctuaries.',
-    content: 'From bio-hacking labs to ancient Ayurvedic practices, Maldivian resorts are redefining what it means to go on a wellness retreat. We visit three islands that offer bespoke health protocols for the modern traveler.',
-    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200',
-    date: '2025-09-15',
-    author: 'Elena Rossi',
-    category: 'Dispatch'
-  },
-  {
-    id: 'a1439045-3123-4567-8901-234567890128',
-    title: 'Sustainable Surfing in the North Male Atoll',
-    slug: 'sustainable-surfing-north-male',
-    excerpt: 'Chasing the perfect left at Lohis and how surf tourism is supporting local reef health.',
-    content: 'The Maldives is a surfer\'s paradise, but the impact on the environment is a growing concern. We look at how resorts like Hudhuran Fushi are leading the way in sustainable surf tourism.',
-    image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200',
-    date: '2025-08-05',
-    author: 'Admin',
     category: 'Guide'
   }
 ];

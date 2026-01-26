@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { RESORTS } from '../constants';
-import { Accommodation, AccommodationType, TransferType, MealPlan } from '../types';
+import { RESORTS, OFFERS } from '../constants';
+import { Accommodation, AccommodationType, TransferType, MealPlan, Offer } from '../types';
 import ResortCard from '../components/ResortCard';
 
 const ResortDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [resort, setResort] = useState<Accommodation | null>(null);
   const [allResorts, setAllResorts] = useState<Accommodation[]>([]);
+  const [resortOffers, setResortOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   
   // Quote Form State
@@ -117,8 +118,28 @@ const ResortDetail: React.FC = () => {
             }))
           };
           setResort(mappedResort);
+          
+          // Fetch offers for this specific resort
+          const { data: offersData } = await supabase.from('offers').select('*').eq('resort_id', resData.id);
+          if (offersData && offersData.length > 0) {
+            setResortOffers(offersData.map(o => ({
+              id: o.id,
+              resortId: o.resort_id,
+              title: o.title,
+              discount: o.discount,
+              resortName: o.resort_name,
+              expiryDate: o.expiry_date,
+              image: o.image,
+              category: o.category
+            })));
+          } else {
+            // Fallback to local offers matching by ID or name
+            const local = OFFERS.filter(o => o.resortId === resData.id || o.resortName === resData.name);
+            setResortOffers(local);
+          }
         } else if (localBackup) {
           setResort(localBackup);
+          setResortOffers(OFFERS.filter(o => o.resortId === localBackup.id));
         }
       } catch (error) {
         console.error('Data acquisition error:', error);
@@ -242,6 +263,39 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
+      {/* Offers Section */}
+      {resortOffers.length > 0 && (
+        <section className="py-24 bg-amber-50/30 border-y-[1px] border-amber-100/50">
+          <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+            <div className="text-center mb-16 reveal">
+              <span className="text-[11px] font-black text-amber-500 uppercase tracking-[1em] mb-6 block">Limited Engagements</span>
+              <h3 className="text-4xl md:text-6xl font-serif font-bold italic text-slate-900 tracking-tighter">Bespoke Privileges.</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+              {resortOffers.map((offer, idx) => (
+                <div key={offer.id} className="reveal bg-white rounded-[3rem] p-10 md:p-16 shadow-xl border border-amber-50 flex flex-col md:flex-row gap-10 items-center">
+                   <div className="w-full md:w-1/3 aspect-square rounded-[2rem] overflow-hidden">
+                      <img src={offer.image} className="w-full h-full object-cover" alt={offer.title} />
+                   </div>
+                   <div className="flex-1">
+                      <div className="flex items-center gap-4 mb-4">
+                         <span className="bg-amber-100 text-amber-600 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">{offer.discount}</span>
+                         <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{offer.category}</span>
+                      </div>
+                      <h4 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-6">{offer.title}</h4>
+                      <p className="text-slate-500 text-[11px] font-black uppercase tracking-[0.4em] mb-8 leading-loose">Experience the archipelago with negotiated rates curated for your vision.</p>
+                      <button onClick={() => {
+                        const form = document.getElementById('inquiry-form');
+                        form?.scrollIntoView({ behavior: 'smooth' });
+                      }} className="text-[10px] font-black text-slate-950 border-b border-slate-950 pb-1 hover:text-amber-500 hover:border-amber-500 transition-all uppercase tracking-widest">Secure This Offer</button>
+                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Residences Horizontal Scroller */}
       {resort.roomTypes && resort.roomTypes.length > 0 && (
         <section className="py-24 bg-white border-y-[1px] border-slate-50 overflow-hidden">
@@ -321,7 +375,7 @@ const ResortDetail: React.FC = () => {
       )}
 
       {/* Inquiry Form Section */}
-      <section className="py-32 md:py-48 bg-slate-950 text-white relative overflow-hidden">
+      <section id="inquiry-form" className="py-32 md:py-48 bg-slate-950 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
           <h2 className="text-[30vw] font-serif italic whitespace-nowrap -rotate-12">Serenity</h2>
         </div>
