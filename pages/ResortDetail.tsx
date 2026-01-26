@@ -8,7 +8,6 @@ import ResortCard from '../components/ResortCard';
 
 const INQUIRY_STORAGE_KEY = 'serenity_inquiry_draft';
 
-// Simple list of countries and codes for the selector
 const COUNTRIES = [
   { name: 'United Kingdom', code: '+44' },
   { name: 'United States', code: '+1' },
@@ -49,10 +48,8 @@ const ResortDetail: React.FC = () => {
     notes: ''
   });
 
-  // Calendar State
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  // Load draft on mount
   useEffect(() => {
     const saved = localStorage.getItem(INQUIRY_STORAGE_KEY);
     if (saved) {
@@ -72,7 +69,6 @@ const ResortDetail: React.FC = () => {
     }
   }, []);
 
-  // Save contact details to localStorage
   useEffect(() => {
     const dataToSave = {
       customerName: quoteData.customerName,
@@ -240,7 +236,6 @@ const ResortDetail: React.FC = () => {
 
   const prevStep = () => setFormStep(s => s - 1);
 
-  // Calendar Helpers
   const generateCalendarDays = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -467,62 +462,61 @@ const ResortDetail: React.FC = () => {
         </section>
       )}
 
-      {/* Multi-step Inquiry Form Section */}
-      <section id="inquiry-form" className="py-24 md:py-48 bg-slate-950 text-white relative overflow-hidden">
+      {/* Inquiry Form Section */}
+      <section id="inquiry-form" className="py-16 md:py-32 lg:py-48 bg-slate-950 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
           <h2 className="text-[30vw] font-serif italic whitespace-nowrap -rotate-12">Serenity</h2>
         </div>
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-start relative z-10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-24 items-start relative z-10">
            <div className="reveal">
               <span className="text-[11px] font-black text-sky-400 uppercase tracking-[1em] mb-8 md:mb-12 block">Secure Your Stay</span>
-              <h3 className="text-5xl md:text-8xl font-serif font-bold italic mb-10 md:mb-12 tracking-tighter leading-tight">Send an Inquiry.</h3>
+              <h3 className="text-4xl md:text-8xl font-serif font-bold italic mb-6 md:mb-10 tracking-tighter leading-tight">Send an Inquiry.</h3>
               
-              {/* Progress Stepper */}
               {!isSubmitted && (
-                <div className="flex items-center gap-4 mb-12">
+                <div className="flex items-center gap-3 md:gap-4 mb-8 md:mb-12">
                   {[1, 2, 3].map(s => (
                     <React.Fragment key={s}>
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-700 ${formStep === s ? 'bg-sky-500 text-white shadow-[0_0_20px_rgba(56,189,248,0.4)] scale-110' : formStep > s ? 'bg-slate-800 text-sky-500' : 'bg-slate-900 text-slate-600'}`}>
+                      <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-700 ${formStep === s ? 'bg-sky-500 text-white shadow-[0_0_20px_rgba(56,189,248,0.4)] scale-110' : formStep > s ? 'bg-slate-800 text-sky-500' : 'bg-slate-900 text-slate-600'}`}>
                         {s}
                       </div>
-                      {s < 3 && <div className="w-8 h-px bg-slate-800"></div>}
+                      {s < 3 && <div className="w-6 md:w-8 h-px bg-slate-800"></div>}
                     </React.Fragment>
                   ))}
                 </div>
               )}
 
-              <p className="text-slate-400 text-lg md:text-xl leading-relaxed opacity-80 uppercase tracking-widest font-medium">
+              <p className="text-slate-400 text-lg md:text-xl leading-relaxed opacity-80 uppercase tracking-widest font-medium max-w-md">
                 {formStep === 1 ? "Tell us about yourself." : formStep === 2 ? "When would you like to visit?" : "Choose your stay preferences."}
               </p>
            </div>
            
            <div className="reveal delay-300">
              {isSubmitted ? (
-               <div className="bg-white text-slate-950 p-12 md:p-20 rounded-[3.5rem] text-center shadow-2xl animate-in zoom-in-95 duration-700">
+               <div className="bg-white text-slate-950 p-10 md:p-20 rounded-[3rem] text-center shadow-2xl animate-in zoom-in-95 duration-700">
                   <span className="text-[10px] font-black text-sky-500 uppercase tracking-[0.8em] mb-10 block">Sent</span>
-                  <h4 className="text-4xl font-serif font-bold italic mb-8">Thank You.</h4>
+                  <h4 className="text-3xl md:text-4xl font-serif font-bold italic mb-8">Thank You.</h4>
                   <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.4em] leading-[2.5] mb-12">Our travel experts will contact you within 24 hours.</p>
                   <button onClick={() => { setIsSubmitted(false); setFormStep(1); }} className="text-[10px] font-black text-slate-950 uppercase tracking-[0.6em] border-b-[1px] border-slate-950 pb-2 hover:text-sky-600 hover:border-sky-600 transition-colors">Submit Another</button>
                </div>
              ) : (
-               <div className="bg-white/5 backdrop-blur-3xl p-6 md:p-16 rounded-[3.5rem] border border-white/10 shadow-2xl">
-                  {/* STEP 1: IDENTITY (Simple Details) */}
+               <div className="bg-white/5 backdrop-blur-3xl p-6 md:p-12 lg:p-16 rounded-[2.5rem] md:rounded-[3.5rem] border border-white/10 shadow-2xl">
+                  {/* STEP 1: IDENTITY */}
                   {formStep === 1 && (
-                    <div className="space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
-                      <div className="space-y-6">
+                    <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
+                      <div className="space-y-5">
                         <div className="space-y-2">
                            <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Full Name</label>
-                           <input type="text" placeholder="YOUR NAME" className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerName} onChange={e => setQuoteData({...quoteData, customerName: e.target.value})} />
+                           <input type="text" placeholder="YOUR NAME" className="w-full bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerName} onChange={e => setQuoteData({...quoteData, customerName: e.target.value})} />
                         </div>
                         <div className="space-y-2">
                            <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Email Address</label>
-                           <input type="email" placeholder="YOUR EMAIL" className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerEmail} onChange={e => setQuoteData({...quoteData, customerEmail: e.target.value})} />
+                           <input type="email" placeholder="YOUR EMAIL" className="w-full bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerEmail} onChange={e => setQuoteData({...quoteData, customerEmail: e.target.value})} />
                         </div>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                           <div className="space-y-2">
                              <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Where do you live?</label>
-                             <select className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.country} onChange={e => {
+                             <select className="w-full bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.country} onChange={e => {
                                const selected = COUNTRIES.find(c => c.name === e.target.value);
                                setQuoteData({...quoteData, country: e.target.value, countryCode: selected?.code || '+44'});
                              }}>
@@ -532,23 +526,23 @@ const ResortDetail: React.FC = () => {
                           <div className="space-y-2">
                              <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Phone Number</label>
                              <div className="flex gap-2">
-                                <div className="bg-white/5 border border-white/10 rounded-full px-4 py-5 text-[10px] font-bold text-white/60 min-w-[70px] text-center">{quoteData.countryCode}</div>
-                                <input type="tel" placeholder="NUMBER" className="flex-1 bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerPhone} onChange={e => setQuoteData({...quoteData, customerPhone: e.target.value})} />
+                                <div className="bg-white/5 border border-white/10 rounded-full px-4 py-4 md:py-5 text-[10px] font-bold text-white/60 min-w-[60px] md:min-w-[70px] text-center flex items-center justify-center">{quoteData.countryCode}</div>
+                                <input type="tel" placeholder="NUMBER" className="flex-1 bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerPhone} onChange={e => setQuoteData({...quoteData, customerPhone: e.target.value})} />
                              </div>
                           </div>
                         </div>
                       </div>
-                      <button onClick={nextStep} className="w-full bg-white text-slate-950 font-black py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl active:scale-[0.98]">
+                      <button onClick={nextStep} className="w-full bg-white text-slate-950 font-black py-5 md:py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl active:scale-[0.98]">
                         NEXT: CHOOSE DATES
                       </button>
                     </div>
                   )}
 
-                  {/* STEP 2: DATES (Custom Calendar) */}
+                  {/* STEP 2: DATES */}
                   {formStep === 2 && (
-                    <div className="space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
-                       <div className="bg-white/5 rounded-[2rem] p-4 md:p-6">
-                          <div className="flex justify-between items-center mb-6 px-2">
+                    <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
+                       <div className="bg-white/5 rounded-[1.5rem] md:rounded-[2rem] p-4 md:p-6">
+                          <div className="flex justify-between items-center mb-6 px-1 md:px-2">
                              <button onClick={() => changeMonth(-1)} className="text-white/40 hover:text-white transition-colors p-2">&larr;</button>
                              <h4 className="text-[10px] font-black uppercase tracking-[0.4em]">{currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</h4>
                              <button onClick={() => changeMonth(1)} className="text-white/40 hover:text-white transition-colors p-2">&rarr;</button>
@@ -558,72 +552,72 @@ const ResortDetail: React.FC = () => {
                                <div key={d} className="text-center text-[8px] font-black text-white/20">{d}</div>
                              ))}
                           </div>
-                          <div className="grid grid-cols-7 gap-1">
+                          <div className="grid grid-cols-7 gap-0.5 md:gap-1">
                              {generateCalendarDays(currentMonth).map((day, i) => (
                                <button 
                                  key={i} 
                                  disabled={!day || (day < new Date())}
                                  onClick={() => day && handleDateClick(day)}
-                                 className={`aspect-square flex items-center justify-center rounded-full text-[9px] font-bold transition-all ${!day ? 'invisible' : (day < new Date() ? 'text-white/10' : (isDateSelected(day) ? 'bg-sky-500 text-white shadow-lg scale-110' : (isDateInRange(day) ? 'bg-sky-500/20 text-sky-400' : 'text-white/60 hover:bg-white/10')))}`}
+                                 className={`aspect-square flex items-center justify-center rounded-full text-[8px] md:text-[9px] font-bold transition-all ${!day ? 'invisible' : (day < new Date() ? 'text-white/10' : (isDateSelected(day) ? 'bg-sky-500 text-white shadow-lg scale-110' : (isDateInRange(day) ? 'bg-sky-500/20 text-sky-400' : 'text-white/60 hover:bg-white/10')))}`}
                                >
                                  {day?.getDate()}
                                </button>
                              ))}
                           </div>
                        </div>
-                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="bg-white/5 p-4 rounded-2xl flex flex-col justify-center">
+                       <div className="grid grid-cols-2 gap-3 md:gap-4">
+                          <div className="bg-white/5 p-4 rounded-2xl flex flex-col justify-center text-center sm:text-left">
                              <span className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-1">Arrival</span>
-                             <p className="text-[10px] font-bold tracking-widest">{quoteData.checkIn || 'NOT SET'}</p>
+                             <p className="text-[9px] md:text-[10px] font-bold tracking-widest">{quoteData.checkIn || 'NOT SET'}</p>
                           </div>
-                          <div className="bg-white/5 p-4 rounded-2xl flex flex-col justify-center">
+                          <div className="bg-white/5 p-4 rounded-2xl flex flex-col justify-center text-center sm:text-left">
                              <span className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-1">Departure</span>
-                             <p className="text-[10px] font-bold tracking-widest">{quoteData.checkOut || 'NOT SET'}</p>
+                             <p className="text-[9px] md:text-[10px] font-bold tracking-widest">{quoteData.checkOut || 'NOT SET'}</p>
                           </div>
                        </div>
-                       <div className="flex gap-4">
-                          <button onClick={prevStep} className="flex-1 border border-white/10 text-white font-black py-7 rounded-full text-[10px] uppercase tracking-[0.4em] hover:bg-white/10 transition-all">BACK</button>
-                          <button onClick={nextStep} disabled={!quoteData.checkIn || !quoteData.checkOut} className="flex-[2] bg-white text-slate-950 font-black py-7 rounded-full text-[10px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all disabled:opacity-20">NEXT STEP</button>
+                       <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                          <button onClick={prevStep} className="flex-1 border border-white/10 text-white font-black py-5 md:py-7 rounded-full text-[10px] uppercase tracking-[0.4em] hover:bg-white/10 transition-all">BACK</button>
+                          <button onClick={nextStep} disabled={!quoteData.checkIn || !quoteData.checkOut} className="flex-[2] bg-white text-slate-950 font-black py-5 md:py-7 rounded-full text-[10px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all disabled:opacity-20">NEXT STEP</button>
                        </div>
                     </div>
                   )}
 
-                  {/* STEP 3: SANCTUARY DETAILS (Rooms & Food) */}
+                  {/* STEP 3: PREFERENCES */}
                   {formStep === 3 && (
-                    <div className="space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
-                      <div className="space-y-6">
+                    <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
+                      <div className="space-y-5">
                         <div className="space-y-2">
-                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Which room would you like?</label>
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Preferred residence?</label>
                            <div className="relative">
-                             <select className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.roomType} onChange={e => setQuoteData({...quoteData, roomType: e.target.value})}>
+                             <select className="w-full bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.roomType} onChange={e => setQuoteData({...quoteData, roomType: e.target.value})}>
                                 <option value="" className="bg-slate-900">SELECT A ROOM</option>
                                 {resort.roomTypes?.map((r, i) => (
                                   <option key={i} value={r.name} className="bg-slate-900">{r.name}</option>
                                 ))}
                              </select>
-                             <div className="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none text-white/40 font-bold">&darr;</div>
+                             <div className="absolute right-6 md:right-8 top-1/2 -translate-y-1/2 pointer-events-none text-white/40 font-bold">&darr;</div>
                            </div>
                         </div>
                         <div className="space-y-2">
-                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">What meal plan do you prefer?</label>
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Meal plan?</label>
                            <div className="relative">
-                             <select className="w-full bg-white/5 border border-white/10 rounded-full px-8 py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.mealPlan} onChange={e => setQuoteData({...quoteData, mealPlan: e.target.value})}>
+                             <select className="w-full bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.mealPlan} onChange={e => setQuoteData({...quoteData, mealPlan: e.target.value})}>
                                 <option value="" className="bg-slate-900">SELECT MEAL PLAN</option>
                                 {resort.mealPlans?.map((m, i) => (
                                   <option key={i} value={m} className="bg-slate-900">{m.replace(/_/g, ' ')}</option>
                                 ))}
                              </select>
-                             <div className="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none text-white/40 font-bold">&darr;</div>
+                             <div className="absolute right-6 md:right-8 top-1/2 -translate-y-1/2 pointer-events-none text-white/40 font-bold">&darr;</div>
                            </div>
                         </div>
                         <div className="space-y-2">
-                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Any special requests?</label>
-                           <textarea rows={4} placeholder="TELL US MORE ABOUT YOUR TRIP..." className="w-full bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20 resize-none" value={quoteData.notes} onChange={e => setQuoteData({...quoteData, notes: e.target.value})}></textarea>
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Special requests?</label>
+                           <textarea rows={4} placeholder="TELL US MORE..." className="w-full bg-white/5 border border-white/10 rounded-[1.5rem] md:rounded-[2rem] px-6 md:px-8 py-4 md:py-6 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20 resize-none" value={quoteData.notes} onChange={e => setQuoteData({...quoteData, notes: e.target.value})}></textarea>
                         </div>
                       </div>
-                      <div className="flex gap-4">
-                        <button onClick={prevStep} className="flex-1 border border-white/10 text-white font-black py-7 rounded-full text-[10px] uppercase tracking-[0.4em] hover:bg-white/10 transition-all">BACK</button>
-                        <button onClick={handleQuoteSubmit} disabled={isSubmitting} className="flex-[2] bg-white text-slate-950 font-black py-7 rounded-full text-[10px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl active:scale-[0.98] disabled:opacity-50">
+                      <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                        <button onClick={prevStep} className="flex-1 border border-white/10 text-white font-black py-5 md:py-7 rounded-full text-[10px] uppercase tracking-[0.4em] hover:bg-white/10 transition-all">BACK</button>
+                        <button onClick={handleQuoteSubmit} disabled={isSubmitting} className="flex-[2] bg-white text-slate-950 font-black py-5 md:py-7 rounded-full text-[10px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl active:scale-[0.98] disabled:opacity-50">
                           {isSubmitting ? 'SENDING...' : 'SEND INQUIRY'}
                         </button>
                       </div>
@@ -635,7 +629,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* Similar Sanctuaries Horizontal Scroller */}
+      {/* Similar Sanctuaries */}
       {similarStays.length > 0 && (
         <section className="py-24 md:py-48 bg-[#FCFAF7] border-t-[1px] border-slate-50">
           <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
@@ -664,7 +658,7 @@ const ResortDetail: React.FC = () => {
         </section>
       )}
 
-      {/* Breadcrumb / Return Navigation */}
+      {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-6 py-20 border-t border-slate-50 flex justify-between items-center reveal">
          <Link to="/stays" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.6em] hover:text-slate-950 transition-colors flex items-center gap-4">
            <span className="text-lg">←</span> Return to Portfolio
