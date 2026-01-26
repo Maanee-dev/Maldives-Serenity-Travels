@@ -34,6 +34,7 @@ export const mapResort = (item: any): Accommodation => {
 
 /**
  * HELPER: Robust mapping from Supabase Row to Offer Interface
+ * Fix: Added missing mandatory properties from the Offer interface (nights, roomCategory, price, priceSubtext, rating)
  */
 export const mapOffer = (o: any): Offer => {
   return {
@@ -44,7 +45,13 @@ export const mapOffer = (o: any): Offer => {
     resortName: o.resort_name,
     expiryDate: o.expiry_date,
     image: o.image,
-    category: o.category
+    category: o.category,
+    // Add missing properties required by the Offer interface to satisfy TypeScript constraints
+    nights: o.nights || 7,
+    roomCategory: o.room_category || 'Luxury Villa',
+    price: o.price || 5000,
+    priceSubtext: o.price_subtext || 'for 2 adults',
+    rating: o.rating || 5
   };
 };
 

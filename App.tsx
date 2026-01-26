@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -9,9 +10,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Casing fix: ensures all page imports use PascalCase to match canonical component files and resolve casing conflicts in the build environment.
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Casing fix: ensures all page imports use lowercase to match consolidation files and resolve casing conflicts in the build environment.
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

@@ -63,6 +63,12 @@ export interface Offer {
   expiryDate: string;
   image: string;
   category: 'Early Bird' | 'Last Minute' | 'Honeymoon';
+  // Enhanced UI fields
+  nights: number;
+  roomCategory: string;
+  price: number;
+  priceSubtext: string;
+  rating: number;
 }
 
 export interface Experience {
