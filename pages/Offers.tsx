@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useMemo } from 'react';
 import { OFFERS } from '../constants';
 import { Link } from 'react-router-dom';
@@ -12,8 +13,16 @@ const Offers: React.FC = () => {
         if (entry.isIntersecting) entry.target.classList.add('active');
       });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+    
+    // Slight delay to ensure DOM is ready for entrance animations
+    const timer = setTimeout(() => {
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }, 100);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+    };
   }, [activeCategory]);
 
   const categories = ['All', 'Honeymoon', 'Early Bird', 'Last Minute'];
@@ -112,7 +121,7 @@ const Offers: React.FC = () => {
                      
                      <div className="mt-auto pt-10 border-t border-slate-50 flex items-center justify-between">
                         <div className="flex flex-col gap-2">
-                          <span className="text-[9px] text-slate-300 font-bold uppercase tracking-widest">Final Dispatch</span>
+                          <span className="text-[9px] text-slate-300 font-bold uppercase tracking-widest text-center">Final Dispatch</span>
                           <span className="text-slate-900 font-black text-[11px] uppercase tracking-widest">
                             {new Date(offer.expiryDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                           </span>
