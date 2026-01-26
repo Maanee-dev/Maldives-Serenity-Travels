@@ -10,9 +10,10 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Standardize on PascalCase imports for consistency with component filenames and to resolve casing conflicts.
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Match filenames to resolve casing conflicts ('Offers' -> 'offers', 'Experiences' -> 'experiences')
+// as the compiler has already included the lowercase versions in the program.
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
