@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -9,7 +10,7 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Updated: Using lowercase to match re-export files and resolve casing collisions
+// Fixed casing inconsistency: using lowercase imports to match the canonical filenames detected by the compiler
 import Offers from './pages/offers';
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase, mapOffer } from '../lib/supabase';
@@ -393,12 +392,12 @@ const ResortDetail: React.FC = () => {
                    <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.8em] mb-4 block">Accommodation</span>
                    <h3 className="text-3xl md:text-5xl font-serif font-bold italic text-slate-950 tracking-tighter">The Residences.</h3>
                 </div>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Explore the collection</p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Slide to explore</p>
              </div>
              <div className="flex gap-8 overflow-x-auto no-scrollbar pb-8 snap-x snap-mandatory">
                 {resort.roomTypes.map((room, i) => (
-                  <div key={i} className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[35vw] snap-start reveal" style={{ transitionDelay: `${i * 100}ms` }}>
-                    <div className="relative aspect-[16/10] rounded-[2.5rem] overflow-hidden mb-8 group">
+                  <div key={i} className="flex-shrink-0 w-[85vw] md:w-[450px] snap-start reveal" style={{ transitionDelay: `${i * 100}ms` }}>
+                    <div className="relative aspect-[16/10] rounded-[2.5rem] overflow-hidden mb-8 group shadow-md">
                        <img src={room.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={room.name} />
                        <div className="absolute top-6 left-6 flex gap-2">
                           {room.size && <span className="bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-slate-900 shadow-sm">{room.size}</span>}
@@ -422,35 +421,38 @@ const ResortDetail: React.FC = () => {
         </section>
       )}
 
-      {/* Gastronomy Section */}
+      {/* Gastronomy Horizontal Scroller */}
       {resort.diningVenues && resort.diningVenues.length > 0 && (
-        <section className="py-32 md:py-48 px-6 lg:px-12 bg-[#FCFAF7]">
-           <div className="max-w-[1440px] mx-auto">
-              <div className="text-center mb-24 reveal">
-                 <span className="text-[11px] font-black text-sky-500 uppercase tracking-[1em] mb-6 block">Gastronomy</span>
-                 <h3 className="text-4xl md:text-7xl font-serif font-bold italic text-slate-900 tracking-tighter leading-none">The Atoll Table.</h3>
+        <section className="py-24 bg-[#FCFAF7] border-b-[1px] border-slate-50 overflow-hidden">
+          <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+              <div className="mb-16 flex flex-col md:flex-row justify-between items-end gap-8 reveal">
+                <div>
+                  <span className="text-[11px] font-black text-sky-500 uppercase tracking-[1em] mb-4 block">Gastronomy</span>
+                  <h3 className="text-3xl md:text-5xl font-serif font-bold italic text-slate-950 tracking-tighter">The Atoll Table.</h3>
+                </div>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Slide to explore</p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+              <div className="flex gap-8 overflow-x-auto no-scrollbar pb-8 snap-x snap-mandatory">
                  {resort.diningVenues.map((venue, i) => (
-                    <div key={i} className={`flex flex-col reveal ${i % 2 !== 0 ? 'md:mt-32' : ''}`} style={{ transitionDelay: `${i * 150}ms` }}>
-                       <div className="relative aspect-[4/3] rounded-[3rem] overflow-hidden mb-12 shadow-xl group">
+                    <div key={i} className="flex-shrink-0 w-[85vw] md:w-[480px] snap-start reveal" style={{ transitionDelay: `${i * 100}ms` }}>
+                       <div className="relative aspect-[4/3] rounded-[2.5rem] overflow-hidden mb-8 shadow-md group">
                           <img src={venue.image} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-105" alt={venue.name} />
                           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent"></div>
-                          <div className="absolute bottom-10 left-10">
+                          <div className="absolute bottom-6 left-6">
                              <span className="text-white text-[10px] font-black uppercase tracking-[0.5em]">{venue.cuisine}</span>
                           </div>
                        </div>
-                       <div className="px-4">
+                       <div className="px-2">
                           <div className="flex items-center gap-4 mb-4">
                              <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest bg-amber-50 px-3 py-1 rounded-full">{venue.vibe}</span>
                           </div>
-                          <h4 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 mb-6">{venue.name}</h4>
-                          <p className="text-slate-500 text-base md:text-lg leading-relaxed mb-8 font-medium italic opacity-85">{venue.description}</p>
-                          <div className="space-y-3">
-                             {venue.highlights.map((h, j) => (
-                               <div key={j} className="flex items-center gap-4">
-                                 <div className="w-6 h-px bg-slate-200"></div>
-                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{h}</span>
+                          <h4 className="text-2xl font-serif font-bold text-slate-900 mb-4">{venue.name}</h4>
+                          <p className="text-slate-500 text-[13px] leading-relaxed mb-6 font-medium line-clamp-2 italic">{venue.description}</p>
+                          <div className="space-y-2">
+                             {venue.highlights.slice(0, 3).map((h, j) => (
+                               <div key={j} className="flex items-center gap-3">
+                                 <div className="w-4 h-px bg-slate-200"></div>
+                                 <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{h}</span>
                                </div>
                              ))}
                           </div>
@@ -458,11 +460,11 @@ const ResortDetail: React.FC = () => {
                     </div>
                  ))}
               </div>
-           </div>
+          </div>
         </section>
       )}
 
-      {/* Inquiry Form Section */}
+      {/* Inquiry Form Section - Refined for Responsiveness */}
       <section id="inquiry-form" className="py-16 md:py-32 lg:py-48 bg-slate-950 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
           <h2 className="text-[30vw] font-serif italic whitespace-nowrap -rotate-12">Serenity</h2>
@@ -471,7 +473,6 @@ const ResortDetail: React.FC = () => {
            <div className="reveal">
               <span className="text-[11px] font-black text-sky-400 uppercase tracking-[1em] mb-8 md:mb-12 block">Secure Your Stay</span>
               <h3 className="text-4xl md:text-8xl font-serif font-bold italic mb-6 md:mb-10 tracking-tighter leading-tight">Send an Inquiry.</h3>
-              
               {!isSubmitted && (
                 <div className="flex items-center gap-3 md:gap-4 mb-8 md:mb-12">
                   {[1, 2, 3].map(s => (
@@ -484,7 +485,6 @@ const ResortDetail: React.FC = () => {
                   ))}
                 </div>
               )}
-
               <p className="text-slate-400 text-lg md:text-xl leading-relaxed opacity-80 uppercase tracking-widest font-medium max-w-md">
                 {formStep === 1 ? "Tell us about yourself." : formStep === 2 ? "When would you like to visit?" : "Choose your stay preferences."}
               </p>
@@ -499,7 +499,7 @@ const ResortDetail: React.FC = () => {
                   <button onClick={() => { setIsSubmitted(false); setFormStep(1); }} className="text-[10px] font-black text-slate-950 uppercase tracking-[0.6em] border-b-[1px] border-slate-950 pb-2 hover:text-sky-600 hover:border-sky-600 transition-colors">Submit Another</button>
                </div>
              ) : (
-               <div className="bg-white/5 backdrop-blur-3xl p-6 md:p-12 lg:p-16 rounded-[2.5rem] md:rounded-[3.5rem] border border-white/10 shadow-2xl">
+               <div className="bg-white/5 backdrop-blur-3xl p-8 md:p-12 lg:p-16 rounded-[2.5rem] md:rounded-[3.5rem] border border-white/10 shadow-2xl">
                   {/* STEP 1: IDENTITY */}
                   {formStep === 1 && (
                     <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
@@ -512,10 +512,9 @@ const ResortDetail: React.FC = () => {
                            <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Email Address</label>
                            <input type="email" placeholder="YOUR EMAIL" className="w-full bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20" value={quoteData.customerEmail} onChange={e => setQuoteData({...quoteData, customerEmail: e.target.value})} />
                         </div>
-                        
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                           <div className="space-y-2">
-                             <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Where do you live?</label>
+                             <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Country</label>
                              <select className="w-full bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.country} onChange={e => {
                                const selected = COUNTRIES.find(c => c.name === e.target.value);
                                setQuoteData({...quoteData, country: e.target.value, countryCode: selected?.code || '+44'});
@@ -532,9 +531,7 @@ const ResortDetail: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      <button onClick={nextStep} className="w-full bg-white text-slate-950 font-black py-5 md:py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl active:scale-[0.98]">
-                        NEXT: CHOOSE DATES
-                      </button>
+                      <button onClick={nextStep} className="w-full bg-white text-slate-950 font-black py-5 md:py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl">NEXT: CHOOSE DATES</button>
                     </div>
                   )}
 
@@ -566,12 +563,12 @@ const ResortDetail: React.FC = () => {
                           </div>
                        </div>
                        <div className="grid grid-cols-2 gap-3 md:gap-4">
-                          <div className="bg-white/5 p-4 rounded-2xl flex flex-col justify-center text-center sm:text-left">
-                             <span className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-1">Arrival</span>
+                          <div className="bg-white/5 p-4 rounded-2xl">
+                             <span className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-1">Check In</span>
                              <p className="text-[9px] md:text-[10px] font-bold tracking-widest">{quoteData.checkIn || 'NOT SET'}</p>
                           </div>
-                          <div className="bg-white/5 p-4 rounded-2xl flex flex-col justify-center text-center sm:text-left">
-                             <span className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-1">Departure</span>
+                          <div className="bg-white/5 p-4 rounded-2xl">
+                             <span className="text-[8px] font-black text-white/30 uppercase tracking-widest block mb-1">Check Out</span>
                              <p className="text-[9px] md:text-[10px] font-bold tracking-widest">{quoteData.checkOut || 'NOT SET'}</p>
                           </div>
                        </div>
@@ -587,37 +584,31 @@ const ResortDetail: React.FC = () => {
                     <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
                       <div className="space-y-5">
                         <div className="space-y-2">
-                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Preferred residence?</label>
-                           <div className="relative">
-                             <select className="w-full bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.roomType} onChange={e => setQuoteData({...quoteData, roomType: e.target.value})}>
-                                <option value="" className="bg-slate-900">SELECT A ROOM</option>
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Preferred Residence?</label>
+                           <select className="w-full bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.roomType} onChange={e => setQuoteData({...quoteData, roomType: e.target.value})}>
+                                <option value="" className="bg-slate-900 text-white">SELECT A ROOM</option>
                                 {resort.roomTypes?.map((r, i) => (
-                                  <option key={i} value={r.name} className="bg-slate-900">{r.name}</option>
+                                  <option key={i} value={r.name} className="bg-slate-900 text-white">{r.name}</option>
                                 ))}
-                             </select>
-                             <div className="absolute right-6 md:right-8 top-1/2 -translate-y-1/2 pointer-events-none text-white/40 font-bold">&darr;</div>
-                           </div>
+                           </select>
                         </div>
                         <div className="space-y-2">
-                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Meal plan?</label>
-                           <div className="relative">
-                             <select className="w-full bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.mealPlan} onChange={e => setQuoteData({...quoteData, mealPlan: e.target.value})}>
-                                <option value="" className="bg-slate-900">SELECT MEAL PLAN</option>
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Meal Plan?</label>
+                           <select className="w-full bg-white/5 border border-white/10 rounded-full px-6 md:px-8 py-4 md:py-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white appearance-none cursor-pointer" value={quoteData.mealPlan} onChange={e => setQuoteData({...quoteData, mealPlan: e.target.value})}>
+                                <option value="" className="bg-slate-900 text-white">SELECT MEAL PLAN</option>
                                 {resort.mealPlans?.map((m, i) => (
-                                  <option key={i} value={m} className="bg-slate-900">{m.replace(/_/g, ' ')}</option>
+                                  <option key={i} value={m} className="bg-slate-900 text-white">{m.replace(/_/g, ' ')}</option>
                                 ))}
-                             </select>
-                             <div className="absolute right-6 md:right-8 top-1/2 -translate-y-1/2 pointer-events-none text-white/40 font-bold">&darr;</div>
-                           </div>
+                           </select>
                         </div>
                         <div className="space-y-2">
-                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Special requests?</label>
+                           <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Special Requests?</label>
                            <textarea rows={4} placeholder="TELL US MORE..." className="w-full bg-white/5 border border-white/10 rounded-[1.5rem] md:rounded-[2rem] px-6 md:px-8 py-4 md:py-6 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all text-white placeholder:text-white/20 resize-none" value={quoteData.notes} onChange={e => setQuoteData({...quoteData, notes: e.target.value})}></textarea>
                         </div>
                       </div>
                       <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                         <button onClick={prevStep} className="flex-1 border border-white/10 text-white font-black py-5 md:py-7 rounded-full text-[10px] uppercase tracking-[0.4em] hover:bg-white/10 transition-all">BACK</button>
-                        <button onClick={handleQuoteSubmit} disabled={isSubmitting} className="flex-[2] bg-white text-slate-950 font-black py-5 md:py-7 rounded-full text-[10px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl active:scale-[0.98] disabled:opacity-50">
+                        <button onClick={handleQuoteSubmit} disabled={isSubmitting} className="flex-[2] bg-white text-slate-950 font-black py-5 md:py-7 rounded-full text-[10px] uppercase tracking-[0.8em] hover:bg-sky-400 hover:text-white transition-all duration-700 shadow-2xl disabled:opacity-50">
                           {isSubmitting ? 'SENDING...' : 'SEND INQUIRY'}
                         </button>
                       </div>
@@ -648,9 +639,6 @@ const ResortDetail: React.FC = () => {
                 <Link to="/stays" className="group w-full aspect-[4/5] rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-center hover:bg-slate-950 transition-all duration-1000">
                   <span className="text-[10px] font-bold text-slate-400 group-hover:text-sky-400 uppercase tracking-[1em] mb-8 block">Explore All</span>
                   <h4 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 group-hover:text-white leading-tight italic">Find your <br /> sanctuary.</h4>
-                  <div className="mt-10 w-16 h-16 rounded-full border border-slate-200 group-hover:border-sky-500 flex items-center justify-center transition-all duration-700">
-                    <svg className="w-6 h-6 text-slate-400 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                  </div>
                 </Link>
               </div>
             </div>
