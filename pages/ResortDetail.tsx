@@ -1,1 +1,0 @@
-// DELETED: Migrated to app/stays/[slug]/page.tsx

@@ -1,1 +1,0 @@
-// DELETED: Logic moved to app/layout.tsx
