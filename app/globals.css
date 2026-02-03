@@ -8,16 +8,19 @@
   --atoll-blue: #0ea5e9;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
+html, body {
   background-color: var(--bg-parchment);
   color: var(--text-charcoal);
   font-family: 'Plus Jakarta Sans', sans-serif;
   margin: 0;
   padding: 0;
+  min-height: 100%;
+}
+
+/* Ensure main content area is visible */
+main {
+  min-height: 100vh;
+  display: block;
 }
 
 .font-serif {
@@ -30,16 +33,24 @@ body {
   -webkit-backdrop-filter: blur(20px);
 }
 
-/* Updated Reveal Logic: Start slightly visible or handle better */
+/* 
+   Improved Reveal Logic: 
+   Content is visible by default to prevent "White Page" issues.
+   Animation only triggers if the 'active' class is handled by JS.
+*/
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
-              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform, opacity;
+  transform: translateY(15px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
 .reveal.active {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Fallback for safety */
+.reveal-loaded .reveal {
   opacity: 1;
   transform: translateY(0);
 }
@@ -53,8 +64,8 @@ body {
   scrollbar-width: none;
 }
 
-/* Ensure images don't cause layout shift */
 img {
   max-width: 100%;
   height: auto;
+  display: block;
 }

@@ -13,6 +13,7 @@ interface HomeClientProps {
 
 const HomeClient: React.FC<HomeClientProps> = ({ featuredResorts, recentStories }) => {
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
   const [heroIndex, setHeroIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [typedPlaceholder, setTypedPlaceholder] = useState("");
@@ -53,8 +54,13 @@ const HomeClient: React.FC<HomeClientProps> = ({ featuredResorts, recentStories 
     "Bespoke Escapes..."
   ];
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // Typing effect
   useEffect(() => {
+    if (!isMounted) return;
     let timer: number;
     const handleTyping = () => {
       const currentWord = searchKeywords[typingIdx.current];
@@ -78,18 +84,21 @@ const HomeClient: React.FC<HomeClientProps> = ({ featuredResorts, recentStories 
     };
     timer = window.setTimeout(handleTyping, 1000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [isMounted]);
 
   // Hero Carousel
   useEffect(() => {
+    if (!isMounted) return;
     const interval = setInterval(() => {
       setHeroIndex((prev) => (prev + 1) % heroSlides.length);
     }, 8000);
     return () => clearInterval(interval);
-  }, [heroSlides.length]);
+  }, [isMounted, heroSlides.length]);
 
   // Intersection Observer for Reveal Animations
   useEffect(() => {
+    if (!isMounted) return;
+    
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -98,19 +107,24 @@ const HomeClient: React.FC<HomeClientProps> = ({ featuredResorts, recentStories 
       });
     }, { 
       threshold: 0.05,
-      rootMargin: '50px' // Start revealing slightly before they enter the screen
+      rootMargin: '0px 0px 50px 0px'
     });
 
-    // We add a small delay to ensure DOM is fully ready
-    const timer = setTimeout(() => {
-      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    }, 100);
+    const elements = document.querySelectorAll('.reveal');
+    elements.forEach(el => observer.observe(el));
 
-    return () => {
-      clearTimeout(timer);
-      observer.disconnect();
-    };
-  }, [featuredResorts, recentStories]);
+    // Force active state for elements already in view
+    setTimeout(() => {
+      elements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+          el.classList.add('active');
+        }
+      });
+    }, 500);
+
+    return () => observer.disconnect();
+  }, [isMounted, featuredResorts, recentStories]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -124,8 +138,9 @@ const HomeClient: React.FC<HomeClientProps> = ({ featuredResorts, recentStories 
     { name: 'Ari Atoll', image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=800', count: '15 Stays', desc: 'Whale Shark Paths' }
   ];
 
+  // If not mounted yet, we still return the structure but with initial 'active' states for the hero
   return (
-    <div className="bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
+    <div className={`bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden ${isMounted ? 'mounted' : ''}`}>
       {/* HERO SECTION */}
       <section className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden bg-slate-950">
         <div className="absolute inset-0 z-0">
