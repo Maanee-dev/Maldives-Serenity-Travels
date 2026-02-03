@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Metadata } from 'next';
-import PlanMyTrip from '@/pages/PlanMyTrip';
+import PlanMyTrip from '@/components/PlanMyTrip';
 
 export const metadata: Metadata = {
   title: "Plan Your Escape | Serenity Maldives",
@@ -9,6 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function PlanPage() {
-  // Wrapping the existing PlanMyTrip logic or creating a specialized Client component for it
   return <PlanMyTrip />;
 }
