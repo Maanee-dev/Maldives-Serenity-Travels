@@ -1,112 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serenity Maldives | Defined by Perspective</title>
-    <meta name="description" content="A bespoke boutique agency crafting unrivaled journeys across the Maldivian atolls.">
-    
-    <base href="/">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-parchment: #FCFAF7;
-            --text-charcoal: #0F172A;
-            --atoll-blue: #0ea5e9;
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --font-serif: 'Playfair Display', serif;
-        }
-
-        body { 
-            font-family: var(--font-main); 
-            background-color: var(--bg-parchment);
-            color: var(--text-charcoal);
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        .font-serif { font-family: var(--font-serif); }
-
-        /* Sophisticated Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: var(--bg-parchment); }
-        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--atoll-blue); }
-
-        /* Reveal Animation System */
-        .reveal { 
-            opacity: 0; 
-            transform: translateY(40px); 
-            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); 
-        }
-        .reveal.active { 
-            opacity: 1; 
-            transform: translateY(0); 
-        }
-
-        .glass-nav {
-            background: rgba(252, 250, 247, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        .img-editorial {
-            overflow: hidden;
-            position: relative;
-        }
-        .img-editorial img {
-            transition: transform 2.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .img-editorial:hover img {
-            transform: scale(1.08);
-        }
-
-        /* Luxury Inputs */
-        input, select, textarea {
-            font-family: var(--font-main);
-        }
-
-        ::selection {
-            background: rgba(14, 165, 233, 0.15);
-            color: var(--atoll-blue);
-        }
-        
-        .letter-spacing-vogue {
-            letter-spacing: 0.4em;
-        }
-        
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
-
-    <script type="importmap">
+<script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "react-router-dom": "https://esm.sh/react-router-dom@7.1.5?deps=react@19.0.0,react-dom@19.0.0",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "next/": "https://esm.sh/next@^16.1.4/",
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.7",
-    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
-    "next": "https://esm.sh/next@^16.1.6"
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.93.3",
+    "@google/genai": "https://esm.sh/@google/genai@^1.39.0",
+    "next": "https://esm.sh/next@^16.1.6",
+    "next/": "https://esm.sh/next@^16.1.6/"
   }
 }
 </script>
-</head>
-<body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-</body>
-</html>
+<!-- DEACTIVATED: Next.js uses app/layout.tsx and app/page.tsx -->

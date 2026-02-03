@@ -1,2 +1,1 @@
-// Deprecated: Migrated to app/plan/page.tsx
-export default function LegacyPage() { return null; }
+// DELETED: Migrated to app/plan/page.tsx
