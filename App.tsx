@@ -9,9 +9,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Using lowercase paths for page imports to match the specific file versions and resolve casing conflicts
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Standardized imports to PascalCase to match React conventions and resolve casing conflicts on case-insensitive systems
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

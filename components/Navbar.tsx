@@ -1,12 +1,14 @@
 
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
-  const pathname = location.pathname;
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -16,13 +18,17 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     setIsOpen(false);
-    document.body.style.overflow = 'auto';
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = 'auto';
+    }
   }, [pathname]);
 
   const toggleMenu = () => {
     const nextState = !isOpen;
     setIsOpen(nextState);
-    document.body.style.overflow = nextState ? 'hidden' : 'auto';
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = nextState ? 'hidden' : 'auto';
+    }
   };
 
   const navLinks = [
@@ -53,7 +59,7 @@ const Navbar: React.FC = () => {
             </button>
           </div>
 
-          <Link href="/" to="/" className="flex flex-col items-center group relative z-10">
+          <Link href="/" className="flex flex-col items-center group relative z-10">
             <svg viewBox="0 0 600 600" className={`w-32 h-32 md:w-40 md:h-40 lg:w-56 lg:h-56 -my-10 md:-my-12 lg:-my-20 transition-all duration-1000 ${fillClass}`}>
               <g transform="translate(0.000000,600.000000) scale(0.100000,-0.100000)" stroke="none">
                 <path d="M3116 3398 c-10 -14 -16 -44 -16 -81 0 -63 -18 -108 -67 -166 -27 -32 -33 -34 -100 -37 -159 -6 -255 -146 -123 -179 75 -18 277 140 338 266 38 77 59 183 41 205 -17 21 -56 17 -73 -8z"/>
@@ -64,7 +70,7 @@ const Navbar: React.FC = () => {
           </Link>
 
           <div className="flex-1 flex justify-end">
-            <Link to="/plan" className={`group relative flex items-center justify-center transition-all duration-700 ${textColorClass}`}>
+            <Link href="/plan" className={`group relative flex items-center justify-center transition-all duration-700 ${textColorClass}`}>
               <span className="text-[10px] font-bold uppercase tracking-[0.4em]">Plan Trip</span>
             </Link>
           </div>
@@ -74,7 +80,7 @@ const Navbar: React.FC = () => {
       <div className={`fixed inset-0 z-[250] bg-white transition-all duration-1000 ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
         <div className="h-full w-full flex flex-col items-center justify-center space-y-8">
            {navLinks.map((link) => (
-             <Link key={link.name} to={link.path} className="text-4xl md:text-6xl font-serif font-bold italic text-slate-900 hover:text-sky-500 transition-all">
+             <Link key={link.name} href={link.path} className="text-4xl md:text-6xl font-serif font-bold italic text-slate-900 hover:text-sky-500 transition-all">
                {link.name}.
              </Link>
            ))}

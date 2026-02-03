@@ -4,7 +4,6 @@ import { supabase, mapResort } from '@/lib/supabase';
 import { BLOG_POSTS, RESORTS } from '@/constants';
 import HomeClient from '@/components/HomeClient';
 
-// This is a Server Component - Google sees this immediately
 export default async function HomePage() {
   let featuredResorts = RESORTS.slice(0, 6);
   let recentStories = BLOG_POSTS.slice(0, 3);

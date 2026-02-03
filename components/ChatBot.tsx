@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -31,7 +30,9 @@ const ChatBot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      // Create a new GoogleGenAI instance right before making an API call to ensure it uses the current key
+      // The API key must be obtained exclusively and directly from process.env.API_KEY
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const history = newMessages.map(m => ({
         role: m.role,
@@ -46,6 +47,7 @@ const ChatBot: React.FC = () => {
         }
       });
 
+      // Directly access the .text property from GenerateContentResponse as per SDK guidelines
       const modelText = response.text || "I apologize, I'm having trouble connecting right now. Please reach out to our experts directly.";
       setMessages(prev => [...prev, { role: 'model', text: modelText }]);
     } catch (error) {

@@ -1,6 +1,8 @@
 
+'use client';
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Accommodation } from '../types';
 
 interface ResortCardProps {
@@ -14,7 +16,7 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort, hasOffer }) => {
     : 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200';
 
   return (
-    <Link to={`/stays/${resort.slug}`} className="group block mb-12">
+    <Link href={`/stays/${resort.slug}`} className="group block mb-12">
       <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-[2.5rem] mb-10 transition-all duration-1000 bg-slate-100 group-hover:shadow-2xl group-hover:-translate-y-1">
         <img 
           src={displayImage} 
