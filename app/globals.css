@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 :root {
   --bg-parchment: #FCFAF7;
   --text-charcoal: #0F172A;
@@ -14,13 +16,17 @@ html, body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   margin: 0;
   padding: 0;
-  min-height: 100%;
+  min-height: 100vh;
 }
 
-/* Ensure main content area is visible */
+/* Base visibility to prevent blank screens */
+body {
+  opacity: 1 !important;
+  display: block !important;
+}
+
 main {
   min-height: 100vh;
-  display: block;
 }
 
 .font-serif {
@@ -33,11 +39,7 @@ main {
   -webkit-backdrop-filter: blur(20px);
 }
 
-/* 
-   Improved Reveal Logic: 
-   Content is visible by default to prevent "White Page" issues.
-   Animation only triggers if the 'active' class is handled by JS.
-*/
+/* Animations */
 .reveal {
   opacity: 0;
   transform: translateY(15px);
@@ -47,12 +49,6 @@ main {
 .reveal.active {
   opacity: 1 !important;
   transform: translateY(0) !important;
-}
-
-/* Fallback for safety */
-.reveal-loaded .reveal {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .no-scrollbar::-webkit-scrollbar {

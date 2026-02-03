@@ -1,6 +1,5 @@
-
 import React from "react";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -11,6 +10,15 @@ export const metadata: Metadata = {
   title: "Serenity Maldives | Defined by Perspective",
   description: "A bespoke boutique agency crafting unrivaled journeys across the Maldivian atolls.",
   metadataBase: new URL('https://maldivesserenity.com'),
+  icons: {
+    icon: '/favicon.ico',
+  },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -20,12 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
-      </head>
       <body className="antialiased overflow-x-hidden selection:bg-sky-100 selection:text-sky-900">
         <Navbar />
-        <main>{children}</main>
+        {children}
         <ChatBot />
         <ScrollToTopButton />
         <Footer />

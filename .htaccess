@@ -1,7 +1,11 @@
-# Next.js Server Routing Configuration
+# Next.js App Router Proxy Configuration
 RewriteEngine On
 
-# Forward all requests to the Node.js process if they aren't real files
+# Ensure we always proxy to the Next.js Node process
+# Even if a physical file like index.html exists, we want Next.js to handle it
+RewriteRule ^$ http://localhost:3000/ [P,L]
+
+# For other requests, if they aren't real assets (images, fonts), proxy them
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ http://localhost:3000/$1 [P,L]
