@@ -1,8 +1,7 @@
 
 import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Accommodation } from '@/types';
+import { Link } from 'react-router-dom';
+import { Accommodation } from '../types';
 
 interface ResortCardProps {
   resort: Accommodation;
@@ -15,13 +14,13 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort, hasOffer }) => {
     : 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200';
 
   return (
-    <Link href={`/stays/${resort.slug}`} className="group block mb-12">
+    <Link to={`/stays/${resort.slug}`} className="group block mb-12">
       <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-[2.5rem] mb-10 transition-all duration-1000 bg-slate-100 group-hover:shadow-2xl group-hover:-translate-y-1">
-        <Image 
+        <img 
           src={displayImage} 
           alt={resort.name} 
-          fill
-          className="object-cover transition-transform duration-[3s] ease-out group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-[3s] ease-out group-hover:scale-105"
+          loading="lazy"
         />
         <div className="absolute top-8 left-8 flex flex-col gap-3">
           <span className="bg-white/95 backdrop-blur-md px-5 py-2 rounded-full text-[10px] font-black text-slate-950 uppercase tracking-[0.4em] shadow-sm border-[1px] border-slate-50 w-fit">

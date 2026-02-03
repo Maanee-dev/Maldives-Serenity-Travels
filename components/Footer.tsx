@@ -1,8 +1,6 @@
 
-'use client';
-
 import React from 'react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   return (
@@ -10,7 +8,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
           <div className="md:col-span-1">
-            <Link href="/" className="text-2xl font-serif font-bold text-slate-900 tracking-[0.2em] uppercase">SERENITY</Link>
+            <Link to="/" className="text-2xl font-serif font-bold text-slate-900 tracking-[0.2em] uppercase">SERENITY</Link>
             <p className="mt-6 text-slate-500 text-[10px] leading-relaxed uppercase tracking-[0.3em] font-medium">
               Curated luxury for the discerning traveler. <br/>
               Reg No: SP02722025 <br/>
@@ -21,10 +19,10 @@ const Footer: React.FC = () => {
           <div className="space-y-6">
             <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 mb-8 underline underline-offset-8 decoration-slate-200">Company</h4>
             <ul className="space-y-3 text-slate-600 text-[10px] uppercase font-bold tracking-widest">
-              <li><Link href="/" className="hover:text-slate-900 transition-colors">Home</Link></li>
-              <li><Link href="/stories" className="hover:text-slate-900 transition-colors">About Us</Link></li>
-              <li><Link href="/experiences" className="hover:text-slate-900 transition-colors">Tours</Link></li>
-              <li><Link href="/plan" className="hover:text-slate-900 transition-colors">Contacts</Link></li>
+              <li><Link to="/" className="hover:text-slate-900 transition-colors">Home</Link></li>
+              <li><Link to="/stories" className="hover:text-slate-900 transition-colors">About Us</Link></li>
+              <li><Link to="/experiences" className="hover:text-slate-900 transition-colors">Tours</Link></li>
+              <li><Link to="/plan" className="hover:text-slate-900 transition-colors">Contacts</Link></li>
             </ul>
           </div>
 

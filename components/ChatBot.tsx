@@ -1,4 +1,3 @@
-'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
@@ -16,7 +15,6 @@ const ChatBot: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom of chat
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -33,16 +31,13 @@ const ChatBot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Initialize GoogleGenAI right before the call to ensure the latest API key is used
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
       
-      // Convert internal messages to API-compatible format
       const history = newMessages.map(m => ({
         role: m.role,
         parts: [{ text: m.text }]
       }));
 
-      // Generate response using Gemini 3 Flash for efficiency and reasoning
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: history,
@@ -51,7 +46,6 @@ const ChatBot: React.FC = () => {
         }
       });
 
-      // Extract text output using the .text property as per SDK guidelines
       const modelText = response.text || "I apologize, I'm having trouble connecting right now. Please reach out to our experts directly.";
       setMessages(prev => [...prev, { role: 'model', text: modelText }]);
     } catch (error) {
@@ -64,7 +58,6 @@ const ChatBot: React.FC = () => {
 
   return (
     <div className="fixed bottom-8 left-8 z-[100]">
-      {/* Floating Concierge Activation Button */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className="bg-slate-900 text-white p-5 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all group flex items-center gap-3 border border-slate-800"
@@ -77,10 +70,8 @@ const ChatBot: React.FC = () => {
         </svg>
       </button>
 
-      {/* Chat Interface Window */}
       {isOpen && (
         <div className="absolute bottom-24 left-0 w-[90vw] md:w-[420px] bg-white rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-slate-100 overflow-hidden animate-in slide-in-from-bottom-10 duration-500 flex flex-col max-h-[70vh]">
-          {/* Header */}
           <div className="bg-slate-900 p-8 text-white flex justify-between items-center">
             <div>
               <h3 className="text-xl font-serif italic font-bold">Serenity Concierge</h3>
@@ -91,7 +82,6 @@ const ChatBot: React.FC = () => {
             </button>
           </div>
           
-          {/* Message History Scroller */}
           <div ref={scrollRef} className="flex-1 overflow-y-auto p-8 space-y-6 no-scrollbar bg-[#FCFAF7]">
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -113,7 +103,6 @@ const ChatBot: React.FC = () => {
             )}
           </div>
 
-          {/* User Input Interaction Area */}
           <div className="p-8 bg-white border-t border-slate-50">
             <div className="relative">
               <input 

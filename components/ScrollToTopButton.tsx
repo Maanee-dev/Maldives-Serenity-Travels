@@ -1,16 +1,11 @@
-'use client';
 
 import React, { useState, useEffect } from 'react';
 
-/**
- * ScrollToTopButton Component: Appears after scrolling down to allow quick navigation back to the top.
- */
 const ScrollToTopButton: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const toggleVisibility = () => {
-      // Show button if page is scrolled more than 300px
       if (window.pageYOffset > 300) {
         setIsVisible(true);
       } else {
