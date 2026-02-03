@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -9,9 +10,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Standardized imports to PascalCase to match React conventions and resolve casing conflicts on case-insensitive systems
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Standardized imports to match existing lowercase filenames and resolve casing conflicts on case-insensitive systems
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
