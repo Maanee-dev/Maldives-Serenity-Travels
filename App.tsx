@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -10,7 +9,7 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Using PascalCase to match the canonical filenames and fix casing errors
+// Using PascalCase for page imports to match the file names and standard React patterns
 import Offers from './pages/Offers';
 import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
