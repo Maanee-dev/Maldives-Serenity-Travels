@@ -28,9 +28,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased overflow-x-hidden selection:bg-sky-100 selection:text-sky-900">
+      <body className="antialiased overflow-x-hidden selection:bg-sky-100 selection:text-sky-900 bg-[#FCFAF7]">
         <Navbar />
-        {children}
+        <main>
+          {children}
+        </main>
         <ChatBot />
         <ScrollToTopButton />
         <Footer />
