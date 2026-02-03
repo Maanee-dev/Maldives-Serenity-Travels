@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
@@ -54,6 +53,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ featuredResorts, recentStories 
     "Bespoke Escapes..."
   ];
 
+  // Typing effect
   useEffect(() => {
     let timer: number;
     const handleTyping = () => {
@@ -80,6 +80,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ featuredResorts, recentStories 
     return () => clearTimeout(timer);
   }, []);
 
+  // Hero Carousel
   useEffect(() => {
     const interval = setInterval(() => {
       setHeroIndex((prev) => (prev + 1) % heroSlides.length);
@@ -87,14 +88,28 @@ const HomeClient: React.FC<HomeClientProps> = ({ featuredResorts, recentStories 
     return () => clearInterval(interval);
   }, [heroSlides.length]);
 
+  // Intersection Observer for Reveal Animations
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('active');
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
       });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+    }, { 
+      threshold: 0.05,
+      rootMargin: '50px' // Start revealing slightly before they enter the screen
+    });
+
+    // We add a small delay to ensure DOM is fully ready
+    const timer = setTimeout(() => {
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
   }, [featuredResorts, recentStories]);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -132,9 +147,9 @@ const HomeClient: React.FC<HomeClientProps> = ({ featuredResorts, recentStories 
               <span className="text-4xl sm:text-6xl md:text-8xl lg:text-[7rem] font-serif font-bold text-white leading-none tracking-tighter">{heroSlides[heroIndex].title}</span>
               <span className="text-6xl sm:text-8xl md:text-9xl lg:text-[13rem] font-serif font-bold text-white italic leading-[0.8] tracking-tighter opacity-90">{heroSlides[heroIndex].titleAlt}<span className="not-italic text-sky-500">.</span></span>
             </h1>
-            <form onSubmit={handleSearch} className="w-full max-w-xl reveal active delay-500">
+            <form onSubmit={handleSearch} className="w-full max-w-xl reveal active">
               <div className="relative group">
-                <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={typedPlaceholder} className="w-full bg-white/5 backdrop-blur-3xl border border-white/20 rounded-full pl-10 pr-24 py-6 text-white text-[11px] font-bold uppercase tracking-[0.4em] outline-none focus:bg-white focus:text-slate-950 placeholder:text-white/30 shadow-2xl" />
+                <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={typedPlaceholder} className="w-full bg-white/5 backdrop-blur-3xl border border-white/20 rounded-full pl-10 pr-24 py-6 text-white text-[11px] font-bold uppercase tracking-[0.4em] outline-none focus:bg-white focus:text-slate-950 placeholder:text-white/30 shadow-2xl transition-all" />
                 <button type="submit" className="absolute right-2 top-2 bottom-2 bg-slate-900 text-white w-16 rounded-full flex items-center justify-center hover:bg-sky-500 transition-all shadow-xl"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></button>
               </div>
             </form>
@@ -151,7 +166,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ featuredResorts, recentStories 
                 <img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" alt="Island Culture" />
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
               </div>
-              <div className="absolute -bottom-10 -right-4 md:-bottom-16 md:-right-16 bg-[#FCFAF7] p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl z-20 max-w-[280px] md:max-w-[380px] border border-slate-50 reveal delay-500">
+              <div className="absolute -bottom-10 -right-4 md:-bottom-16 md:-right-16 bg-[#FCFAF7] p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl z-20 max-w-[280px] md:max-w-[380px] border border-slate-50 reveal">
                 <p className="text-slate-900 font-serif italic text-xl md:text-3xl leading-[1.4]">"The profound happens in the gaps between the tides."</p>
                 <div className="mt-8 flex items-center gap-4">
                   <div className="w-8 h-px bg-sky-500"></div>
@@ -274,7 +289,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ featuredResorts, recentStories 
             )}
             <div className="lg:col-span-5 flex flex-col gap-10">
               {recentStories.slice(1).map((post, idx) => (
-                <Link key={post.id} href={`/stories/${post.slug}`} className="group flex gap-6 md:gap-10 items-center p-6 md:p-10 bg-white rounded-[2.5rem] shadow-sm border border-slate-50 hover:shadow-xl transition-all duration-700 reveal" style={{ transitionDelay: `${idx * 150}ms` }}>
+                <Link key={post.id} href={`/stories/${post.slug}`} className="group flex gap-6 md:gap-10 items-center p-6 md:p-10 bg-white rounded-[2.5rem] shadow-sm border border-slate-50 hover:shadow-xl transition-all duration-700 reveal">
                   <div className="w-24 h-24 md:w-36 md:h-36 rounded-[2rem] overflow-hidden flex-shrink-0 bg-slate-100">
                     <img src={post.image} className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110" alt={post.title} />
                   </div>
