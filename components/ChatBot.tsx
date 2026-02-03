@@ -1,134 +1,165 @@
-"use client";
-
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 
-/**
- * ChatBot Component: A luxury concierge interface powered by Gemini 3 Flash.
- * Provides real-time assistance for Maldivian travel planning.
- */
+interface Message {
+  role: 'user' | 'model';
+  text: string;
+}
+
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<{ role: 'user' | 'model'; text: string }[]>([
-    { role: 'model', text: 'Welcome to Serenity. How can I assist you with your Maldivian escape today?' }
+  const [messages, setMessages] = useState<Message[]>([
+    { role: 'model', text: "Welcome to Serenity. I am Sara, your AI concierge. How may I assist with your Maldivian journey today?" }
   ]);
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isOpen]);
+  }, [messages, isTyping]);
 
   const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isTyping) return;
 
-    const userMessage = input.trim();
+    const userMessage: Message = { role: 'user', text: input };
+    setMessages(prev => [...prev, userMessage]);
     setInput('');
-    const newMessages = [...messages, { role: 'user', text: userMessage } as const];
-    setMessages(newMessages);
-    setIsLoading(true);
+    setIsTyping(true);
 
     try {
-      // Create a new GoogleGenAI instance right before making an API call to ensure it uses the current key
-      // The API key must be obtained exclusively and directly from process.env.API_KEY
+      // Correct initialization: Create a new instance right before making an API call
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
-      const history = newMessages.map(m => ({
-        role: m.role,
-        parts: [{ text: m.text }]
-      }));
+      const systemInstruction = `
+        You are Sara, the elegant AI concierge for Serenity Maldives, a boutique travel agency.
+        Your tone is sophisticated, helpful, and luxury-oriented. 
+        Agency Details:
+        - Location: Faith, S.feydhoo, Addu City, Maldives.
+        - Philosophy: "Defined by Perspective", we curate silence and luxury.
+        - Services: Bespoke travel planning, VIP arrivals, seaplane/yacht transfers.
+        
+        Website Content Summary for Context:
+        1. Adaaran Prestige Vadoo: South Male Atoll, overwater villas, private jacuzzis, butler service, house reef.
+        2. Adaaran Prestige Water Villas: Raa Atoll, wooden interiors, private sundecks, seaplane transfer.
+        3. Adaaran Select Hudhuran Fushi: "Surf Island", North Male Atoll, world-class left breaking wave.
+        4. Adaaran Select Meedhupparu: Raa Atoll, mature island, premium all-inclusive.
+        5. Experiences: Sandbank dining, dolphin safaris, private expeditions.
+        6. Offer: Honeymoon Serenity (30% off at Vadoo).
+        7. Booking: We don't use automated engines; we use human experts.
+        
+        When users ask about resorts, highlight their unique atolls and features.
+        If users ask to book, guide them to the 'Plan Trip' section or invite them to share their vision.
+        Keep responses concise but poetic.
+      `;
 
-      const response = await ai.models.generateContent({
+      // Correct usage: Use ai.chats.create for chat interactions with history
+      const chat = ai.chats.create({
         model: 'gemini-3-flash-preview',
-        contents: history,
         config: {
-          systemInstruction: "You are a luxury travel concierge for Serenity Maldives. You are elegant, helpful, and knowledgeable about Maldivian atolls, resorts, and private experiences. Keep responses concise and sophisticated. Focus on promoting our curated portfolio of luxury stays and bespoke experiences.",
-        }
+          systemInstruction,
+          temperature: 0.7,
+        },
+        // Correct history format: array of objects with role and parts
+        history: messages.map(m => ({
+          role: m.role,
+          parts: [{ text: m.text }]
+        }))
       });
 
-      // Directly access the .text property from GenerateContentResponse as per SDK guidelines
-      const modelText = response.text || "I apologize, I'm having trouble connecting right now. Please reach out to our experts directly.";
-      setMessages(prev => [...prev, { role: 'model', text: modelText }]);
+      // Correct usage: sendMessage only accepts message parameter
+      const response = await chat.sendMessage({ message: input });
+
+      // Correct extraction: Access .text as a property, not a method
+      const aiText = response.text || "I apologize, I am momentarily offline. Please reach out to our human concierge.";
+      setMessages(prev => [...prev, { role: 'model', text: aiText }]);
     } catch (error) {
-      console.error("Concierge Chat Error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "I encountered an error. Please contact our support team at info@maldivesserenity.com." }]);
+      console.error("Sara Error:", error);
+      setMessages(prev => [...prev, { role: 'model', text: "I'm having trouble connecting to the atolls. Please try again or use our inquiry form." }]);
     } finally {
-      setIsLoading(false);
+      setIsTyping(false);
     }
   };
 
   return (
-    <div className="fixed bottom-8 left-8 z-[100]">
-      <button 
+    <>
+      {/* Floating Button */}
+      <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-slate-900 text-white p-5 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all group flex items-center gap-3 border border-slate-800"
+        className="fixed bottom-8 right-8 z-[100] bg-slate-900 text-white p-5 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all group flex items-center justify-center border border-white/10"
       >
-        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-bold text-[10px] uppercase tracking-[0.4em] whitespace-nowrap ml-0 group-hover:ml-2">
-          Concierge
-        </span>
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-        </svg>
+        <div className="relative">
+            {isOpen ? (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            ) : (
+                <div className="flex items-center gap-3">
+                    <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-bold text-[10px] uppercase tracking-widest whitespace-nowrap">
+                        Ask Sara
+                    </span>
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                </div>
+            )}
+        </div>
       </button>
 
-      {isOpen && (
-        <div className="absolute bottom-24 left-0 w-[90vw] md:w-[420px] bg-white rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-slate-100 overflow-hidden animate-in slide-in-from-bottom-10 duration-500 flex flex-col max-h-[70vh]">
-          <div className="bg-slate-900 p-8 text-white flex justify-between items-center">
+      {/* Chat Window */}
+      <div className={`fixed bottom-28 right-8 z-[100] w-[350px] md:w-[400px] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col transition-all duration-700 transform ${isOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-95 pointer-events-none'}`}>
+        {/* Header */}
+        <div className="bg-slate-950 p-8 text-white">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-sky-500 flex items-center justify-center text-white font-serif italic text-xl">S</div>
             <div>
-              <h3 className="text-xl font-serif italic font-bold">Serenity Concierge</h3>
-              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-sky-400 mt-2">Personal Travel Intelligence</p>
-            </div>
-            <button onClick={() => setIsOpen(false)} className="text-white/40 hover:text-white transition-colors">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-          </div>
-          
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-8 space-y-6 no-scrollbar bg-[#FCFAF7]">
-            {messages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] p-6 rounded-[2rem] text-[13px] leading-relaxed ${m.role === 'user' ? 'bg-slate-900 text-white rounded-tr-none shadow-lg' : 'bg-white text-slate-800 shadow-sm border border-slate-100 rounded-tl-none font-medium'}`}>
-                  {m.text}
-                </div>
-              </div>
-            ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-white p-5 rounded-[1.5rem] rounded-tl-none shadow-sm border border-slate-100">
-                  <div className="flex gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-sky-400 rounded-full animate-bounce"></div>
-                    <div className="w-1.5 h-1.5 bg-sky-400 rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                    <div className="w-1.5 h-1.5 bg-sky-400 rounded-full animate-bounce [animation-delay:0.4s]"></div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="p-8 bg-white border-t border-slate-50">
-            <div className="relative">
-              <input 
-                type="text" 
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="ENQUIRE ABOUT THE ATOLLS..." 
-                className="w-full bg-slate-50 border-none rounded-full pl-8 pr-16 py-5 text-[11px] font-bold uppercase tracking-widest outline-none focus:ring-1 focus:ring-sky-500 transition-all"
-              />
-              <button 
-                onClick={handleSend}
-                disabled={isLoading}
-                className="absolute right-2 top-2 bottom-2 w-12 bg-slate-900 text-white rounded-full flex items-center justify-center hover:bg-sky-500 transition-colors disabled:opacity-20"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-              </button>
+              <h3 className="font-serif italic text-lg leading-none mb-1">Sara</h3>
+              <p className="text-[8px] uppercase tracking-widest text-sky-400 font-bold">AI Concierge • Serenity Maldives</p>
             </div>
           </div>
         </div>
-      )}
-    </div>
+
+        {/* Messages */}
+        <div ref={scrollRef} className="flex-1 p-6 space-y-4 overflow-y-auto max-h-[400px] no-scrollbar bg-[#FCFAF7]/50">
+          {messages.map((m, i) => (
+            <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div className={`max-w-[85%] p-4 rounded-3xl text-sm leading-relaxed ${m.role === 'user' ? 'bg-slate-900 text-white rounded-tr-none shadow-sm' : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none shadow-sm font-medium italic'}`}>
+                {m.text}
+              </div>
+            </div>
+          ))}
+          {isTyping && (
+            <div className="flex justify-start">
+              <div className="bg-white border border-slate-100 p-4 rounded-3xl rounded-tl-none flex gap-1">
+                <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce"></div>
+                <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Input */}
+        <div className="p-6 border-t border-slate-100 bg-white">
+          <div className="relative flex items-center">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+              placeholder="Inquire about the atolls..."
+              className="w-full bg-slate-50 border border-slate-100 rounded-full px-6 py-4 text-xs font-medium focus:outline-none focus:border-sky-500 focus:bg-white transition-all placeholder:text-slate-400"
+            />
+            <button
+              onClick={handleSend}
+              disabled={isTyping}
+              className="absolute right-2 p-3 bg-slate-900 text-white rounded-full hover:bg-sky-500 transition-all disabled:opacity-50"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+            </button>
+          </div>
+          <p className="text-[7px] text-center text-slate-400 uppercase tracking-widest mt-4">Powered by Serenity AI Intelligence</p>
+        </div>
+      </div>
+    </>
   );
 };
 

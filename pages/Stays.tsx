@@ -1,42 +1,85 @@
 
-'use client';
-
 import React, { useState, useMemo, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { AccommodationType, TransferType, Accommodation, Offer } from '@/types';
-import ResortCard from './ResortCard';
+import { useLocation } from 'react-router-dom';
+import { supabase, mapResort, mapOffer } from '../lib/supabase';
+import { RESORTS, OFFERS } from '../constants';
+import { AccommodationType, TransferType, Accommodation, Offer } from '../types';
+import ResortCard from '../components/ResortCard';
 
-interface StaysClientProps {
-  initialResorts: Accommodation[];
-  initialOffers: Offer[];
-}
-
-const StaysClient: React.FC<StaysClientProps> = ({ initialResorts, initialOffers }) => {
-  const searchParams = useSearchParams();
+const Stays: React.FC = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
   const initialQuery = searchParams.get('q') || '';
   
+  const [resorts, setResorts] = useState<Accommodation[]>([]);
+  const [offers, setOffers] = useState<Offer[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filterQuery, setFilterQuery] = useState(initialQuery);
   const [stayType, setStayType] = useState<AccommodationType>(AccommodationType.RESORT);
   const [selectedAtoll, setSelectedAtoll] = useState<string>('All');
   const [selectedTransfer, setSelectedTransfer] = useState<string>('All');
+  
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        console.log("Fetching Stays from Supabase...");
+        const { data: resortsData, error: resortError } = await supabase.from('resorts').select('*').order('name', { ascending: true });
+        const { data: offersData, error: offerError } = await supabase.from('offers').select('*');
+
+        if (resortError) throw resortError;
+
+        let finalResorts: Accommodation[] = [];
+        if (resortsData && resortsData.length > 0) {
+          console.log(`Supabase: Loaded ${resortsData.length} resorts.`);
+          finalResorts = resortsData.map(mapResort);
+        } else {
+          console.warn("Supabase: Resorts table is empty. Showing local constants.");
+          finalResorts = [];
+        }
+
+        // Merge with local fallbacks to ensure the UI is never empty during development
+        const dbSlugs = new Set(finalResorts.map(r => r.slug));
+        const localFallbacks = RESORTS.filter(r => !dbSlugs.has(r.slug));
+        setResorts([...finalResorts, ...localFallbacks]);
+        
+        if (offersData && offersData.length > 0) {
+          console.log(`Supabase: Loaded ${offersData.length} active offers.`);
+          setOffers(offersData.map(mapOffer));
+        } else {
+          setOffers(OFFERS);
+        }
+
+      } catch (err) {
+        console.error("Critical Fetch Error:", err);
+        setResorts(RESORTS);
+        setOffers(OFFERS);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
   const atolls = useMemo(() => {
-    const set = new Set(initialResorts.filter(r => r.type === stayType).map(r => r.atoll));
+    const set = new Set(resorts.filter(r => r.type === stayType).map(r => r.atoll));
     return ['All', ...Array.from(set)].sort();
-  }, [stayType, initialResorts]);
+  }, [stayType, resorts]);
 
   const filteredStays = useMemo(() => {
-    return initialResorts.filter(stay => {
+    return resorts.filter(stay => {
       const matchesType = stay.type === stayType;
       const matchesSearch = stay.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
                             stay.atoll.toLowerCase().includes(filterQuery.toLowerCase());
       const matchesAtoll = selectedAtoll === 'All' || stay.atoll === selectedAtoll;
       const matchesTransfer = selectedTransfer === 'All' || (stay.transfers && stay.transfers.includes(selectedTransfer as TransferType));
+      
       return matchesType && matchesSearch && matchesAtoll && matchesTransfer;
     });
-  }, [stayType, filterQuery, selectedAtoll, selectedTransfer, initialResorts]);
+  }, [stayType, filterQuery, selectedAtoll, selectedTransfer, resorts]);
 
   const totalPages = Math.ceil(filteredStays.length / itemsPerPage);
   const currentStays = useMemo(() => {
@@ -45,14 +88,16 @@ const StaysClient: React.FC<StaysClientProps> = ({ initialResorts, initialOffers
   }, [filteredStays, currentPage]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('active');
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
-  }, [currentStays]);
+    if (!loading) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      return () => observer.disconnect();
+    }
+  }, [currentStays, loading]);
 
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
@@ -117,19 +162,25 @@ const StaysClient: React.FC<StaysClientProps> = ({ initialResorts, initialOffers
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16 min-h-[400px]">
-             {currentStays.map(stay => (
+            {loading ? (
+              <div className="col-span-full py-40 text-center">
+                <div className="w-8 h-8 border-[1px] border-slate-200 border-t-sky-600 rounded-full animate-spin mx-auto mb-8"></div>
+                <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Accessing records...</p>
+              </div>
+            ) : currentStays.length > 0 ? (
+              currentStays.map(stay => (
                 <ResortCard 
                   key={stay.id} 
                   resort={stay} 
-                  hasOffer={initialOffers.some(o => o.resortId === stay.id)} 
+                  hasOffer={offers.some(o => o.resortId === stay.id)} 
                 />
-              ))}
-              {currentStays.length === 0 && (
-                <div className="col-span-full py-40 text-center border-2 border-dashed border-slate-100 rounded-[4rem]">
-                  <h3 className="text-4xl font-serif font-bold italic text-slate-900 mb-6">No Sanctuaries Found.</h3>
-                  <button onClick={() => {setFilterQuery(''); setSelectedAtoll('All'); setSelectedTransfer('All');}} className="text-sky-500 font-black uppercase tracking-widest text-[11px] border-b border-sky-200">Reset Search</button>
-                </div>
-              )}
+              ))
+            ) : (
+              <div className="col-span-full py-40 text-center border-2 border-dashed border-slate-100 rounded-[4rem]">
+                <h3 className="text-4xl font-serif font-bold italic text-slate-900 mb-6">No Sanctuaries Found.</h3>
+                <button onClick={() => {setFilterQuery(''); setSelectedAtoll('All'); setSelectedTransfer('All');}} className="text-sky-500 font-black uppercase tracking-widest text-[11px] border-b border-sky-200">Reset Search</button>
+              </div>
+            )}
           </div>
 
           {totalPages > 1 && (
@@ -145,4 +196,4 @@ const StaysClient: React.FC<StaysClientProps> = ({ initialResorts, initialOffers
   );
 };
 
-export default StaysClient;
+export default Stays;

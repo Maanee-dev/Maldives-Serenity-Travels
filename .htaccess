@@ -1,14 +1,19 @@
-# Next.js App Router Proxy Configuration
-RewriteEngine On
 
-# Ensure we always proxy to the Next.js Node process
-# Even if a physical file like index.html exists, we want Next.js to handle it
-RewriteRule ^$ http://localhost:3000/ [P,L]
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # Ensure index.html is the default document
+  DirectoryIndex index.html
 
-# For other requests, if they aren't real assets (images, fonts), proxy them
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ http://localhost:3000/$1 [P,L]
+  # Prevent directory listing
+  Options -Indexes
 
-# Basic security
-Options -Indexes
+  # If the request is for a real file (e.g. image.jpg) or directory, serve it
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Otherwise, redirect all other requests to index.html for React Router
+  RewriteRule ^ index.html [L]
+</IfModule>
