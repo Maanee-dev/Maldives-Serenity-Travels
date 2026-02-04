@@ -1,10 +1,8 @@
-
 import React, { useEffect, useState, useMemo } from 'react';
 import { supabase, mapOffer } from '../lib/supabase';
 import { OFFERS } from '../constants';
 import { Link } from 'react-router-dom';
 import { Offer } from '../types';
-import SEO from '../components/SEO';
 
 const Offers: React.FC = () => {
   const [offers, setOffers] = useState<Offer[]>([]);
@@ -76,11 +74,6 @@ const Offers: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen selection:bg-sky-100 selection:text-sky-900 pb-32">
-       <SEO 
-         title="Bespoke Privileges & Seasonal Deals"
-         description="Access exclusive Maldivian luxury resort offers, honeymoon packages, and last-minute serenity deals curated by our experts."
-         path="/offers"
-       />
        <section className="pt-48 pb-16 px-6 text-center">
           <div className="max-w-4xl mx-auto">
             <span className="text-[10px] font-black text-sky-500 uppercase tracking-[1em] mb-8 block">Exclusive Archives</span>
@@ -97,7 +90,7 @@ const Offers: React.FC = () => {
               <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Duration</span>
               <div className="flex gap-2">
                 {nightOptions.map(n => (
-                  <button key={n} onClick={() => { setSelectedNights(n as any); setCurrentPage(1); }} className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${selectedNights === n ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}>{n === 'All' ? 'Any' : `${n} Days`}</button>
+                  <button key={n} onClick={() => { setSelectedNights(n as any); setCurrentPage(1); }} className={`px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${selectedNights === n ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}>{n === 'All' ? 'Any' : `${n} Days`}</button>
                 ))}
               </div>
             </div>

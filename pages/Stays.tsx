@@ -5,7 +5,6 @@ import { supabase, mapResort, mapOffer } from '../lib/supabase';
 import { RESORTS, OFFERS } from '../constants';
 import { AccommodationType, TransferType, Accommodation, Offer } from '../types';
 import ResortCard from '../components/ResortCard';
-import SEO from '../components/SEO';
 
 const Stays: React.FC = () => {
   const location = useLocation();
@@ -27,6 +26,7 @@ const Stays: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        console.log("Fetching Stays from Supabase...");
         const { data: resortsData, error: resortError } = await supabase.from('resorts').select('*').order('name', { ascending: true });
         const { data: offersData, error: offerError } = await supabase.from('offers').select('*');
 
@@ -34,14 +34,20 @@ const Stays: React.FC = () => {
 
         let finalResorts: Accommodation[] = [];
         if (resortsData && resortsData.length > 0) {
+          console.log(`Supabase: Loaded ${resortsData.length} resorts.`);
           finalResorts = resortsData.map(mapResort);
+        } else {
+          console.warn("Supabase: Resorts table is empty. Showing local constants.");
+          finalResorts = [];
         }
 
+        // Merge with local fallbacks to ensure the UI is never empty during development
         const dbSlugs = new Set(finalResorts.map(r => r.slug));
         const localFallbacks = RESORTS.filter(r => !dbSlugs.has(r.slug));
         setResorts([...finalResorts, ...localFallbacks]);
         
         if (offersData && offersData.length > 0) {
+          console.log(`Supabase: Loaded ${offersData.length} active offers.`);
           setOffers(offersData.map(mapOffer));
         } else {
           setOffers(OFFERS);
@@ -101,79 +107,91 @@ const Stays: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen">
-      <SEO 
-        title="Iconic Sanctuaries & Private Islands" 
-        description="Explore our curated portfolio of Maldivian luxury resorts and boutique local guest houses. Defined by perspective."
-        path="/stays"
-      />
-      
       <section className="pt-56 pb-24 md:pb-40 px-6 text-center reveal active">
         <div className="max-w-7xl mx-auto">
-          <span className="text-[12px] uppercase tracking-[1em] font-black text-sky-500 block mb-8">The Portfolio</span>
-          <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-serif font-bold text-slate-950 tracking-tighter italic leading-none mb-16">The Stays.</h1>
+          <span className="text-[12px] uppercase tracking-[1em] font-black mb-10 block text-sky-600">The Portfolio</span>
+          <h1 className="text-6xl md:text-9xl font-serif font-bold mb-12 text-slate-900 tracking-tighter italic leading-none">
+            {stayType === AccommodationType.RESORT ? 'Iconic Stays' : 'Island Life'}
+          </h1>
+          <div className="h-px w-24 bg-amber-400 mx-auto mb-16"></div>
+          <p className="text-slate-900 text-[13px] font-black uppercase tracking-[0.5em] max-w-2xl mx-auto leading-loose opacity-100">
+            Defining the luxury of space and the art of silence <br className="hidden md:block"/> across the turquoise archipelago.
+          </p>
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 pb-32">
-        {/* Filter Controls */}
-        <div className="flex flex-col lg:flex-row justify-between items-center gap-8 mb-24 reveal">
-          <div className="flex flex-wrap justify-center gap-4">
-            {atolls.map(atoll => (
-              <button 
-                key={atoll} 
-                onClick={() => { setSelectedAtoll(atoll); setCurrentPage(1); }}
-                className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${selectedAtoll === atoll ? 'bg-slate-950 text-white shadow-xl' : 'bg-white border border-slate-100 text-slate-400 hover:border-slate-300'}`}
-              >
-                {atoll}
-              </button>
-            ))}
-          </div>
-          
-          <div className="relative w-full lg:w-80">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-24 reveal active">
+        <div className="relative group max-w-4xl mx-auto">
+          <span className="absolute left-0 -top-6 text-[11px] font-black uppercase tracking-[0.8em] text-slate-900 group-focus-within:text-sky-600 transition-colors">
+            Search Sanctuaries
+          </span>
+          <div className="relative border-b-[1px] border-slate-200 group-focus-within:border-slate-900 transition-all duration-500">
             <input 
-              type="text" 
-              placeholder="SEARCH PROPERTY..." 
+              type="text"
               value={filterQuery}
-              onChange={(e) => { setFilterQuery(e.target.value); setCurrentPage(1); }}
-              className="w-full bg-white border border-slate-100 rounded-full px-8 py-4 text-[10px] font-black uppercase tracking-widest focus:ring-2 focus:ring-sky-500 transition-all outline-none shadow-sm"
+              onChange={(e) => setFilterQuery(e.target.value)}
+              placeholder="PROPERTY OR REGION..."
+              className="w-full bg-transparent pt-8 pb-6 text-xl md:text-3xl font-serif italic text-slate-950 outline-none placeholder:text-slate-300"
             />
           </div>
         </div>
+      </div>
 
-        {/* Results Architecture */}
-        {loading ? (
-          <div className="py-32 text-center">
-            <div className="w-10 h-10 border-2 border-slate-100 border-t-sky-500 rounded-full animate-spin mx-auto mb-8"></div>
-            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Consulting archives...</p>
-          </div>
-        ) : currentStays.length > 0 ? (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
-              {currentStays.map(resort => (
-                <ResortCard key={resort.id} resort={resort} />
-              ))}
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 pb-48">
+        <div className="flex flex-col gap-24">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-12 border-b-[1px] border-slate-100 pb-16 reveal active">
+            <div className="flex gap-1 p-1 bg-slate-100/50 rounded-full">
+              <button onClick={() => setStayType(AccommodationType.RESORT)} className={`px-8 md:px-12 py-3 rounded-full text-[11px] font-black transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.RESORT ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-400 hover:text-slate-950'}`}>Resorts</button>
+              <button onClick={() => setStayType(AccommodationType.GUEST_HOUSE)} className={`px-8 md:px-12 py-3 rounded-full text-[11px] font-black transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.GUEST_HOUSE ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-400 hover:text-slate-950'}`}>Local Islands</button>
             </div>
-            
-            {/* Pagination Controls */}
-            {totalPages > 1 && (
-              <div className="mt-32 flex justify-center items-center gap-4">
-                <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-950 hover:text-white transition-all disabled:opacity-20">&larr;</button>
-                <div className="flex gap-2">
-                  {Array.from({ length: totalPages }).map((_, i) => (
-                    <button key={i} onClick={() => handlePageChange(i + 1)} className={`w-12 h-12 rounded-full text-[10px] font-black transition-all ${currentPage === i + 1 ? 'bg-slate-950 text-white' : 'bg-white border border-slate-100 text-slate-400 hover:border-slate-300'}`}>{i + 1}</button>
-                  ))}
-                </div>
-                <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-950 hover:text-white transition-all disabled:opacity-20">&rarr;</button>
+            <div className="flex flex-wrap justify-center md:justify-end gap-10 md:gap-16 items-center">
+              <div className="flex flex-col gap-2">
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Region</span>
+                <select value={selectedAtoll} onChange={(e) => setSelectedAtoll(e.target.value)} className="bg-transparent text-[11px] font-black uppercase tracking-widest text-slate-950 outline-none cursor-pointer border-b-[1px] border-transparent hover:border-slate-300 transition-all pb-1">
+                  {atolls.map(a => <option key={a} value={a}>{a}</option>)}
+                </select>
+              </div>
+              <div className="flex flex-col gap-2">
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Arrival</span>
+                <select value={selectedTransfer} onChange={(e) => setSelectedTransfer(e.target.value)} className="bg-transparent text-[11px] font-black uppercase tracking-widest text-slate-950 outline-none cursor-pointer border-b-[1px] border-transparent hover:border-slate-300 transition-all pb-1">
+                  <option value="All">All Transfers</option>
+                  {Object.values(TransferType).map(t => <option key={t} value={t}>{t.replace('_', ' ')}</option>)}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16 min-h-[400px]">
+            {loading ? (
+              <div className="col-span-full py-40 text-center">
+                <div className="w-8 h-8 border-[1px] border-slate-200 border-t-sky-600 rounded-full animate-spin mx-auto mb-8"></div>
+                <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Accessing records...</p>
+              </div>
+            ) : currentStays.length > 0 ? (
+              currentStays.map(stay => (
+                <ResortCard 
+                  key={stay.id} 
+                  resort={stay} 
+                  hasOffer={offers.some(o => o.resortId === stay.id)} 
+                />
+              ))
+            ) : (
+              <div className="col-span-full py-40 text-center border-2 border-dashed border-slate-100 rounded-[4rem]">
+                <h3 className="text-4xl font-serif font-bold italic text-slate-900 mb-6">No Sanctuaries Found.</h3>
+                <button onClick={() => {setFilterQuery(''); setSelectedAtoll('All'); setSelectedTransfer('All');}} className="text-sky-500 font-black uppercase tracking-widest text-[11px] border-b border-sky-200">Reset Search</button>
               </div>
             )}
-          </>
-        ) : (
-          <div className="py-32 text-center">
-            <h3 className="text-2xl font-serif font-bold italic text-slate-950 mb-6">No stays match your current filters.</h3>
-            <button onClick={() => { setFilterQuery(''); setSelectedAtoll('All'); setSelectedTransfer('All'); }} className="text-sky-500 font-black uppercase tracking-widest text-[10px] border-b-2 border-sky-100 pb-2">Reset Discovery</button>
           </div>
-        )}
-      </section>
+
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-12 pt-20 reveal">
+               <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="text-[11px] font-black uppercase tracking-widest text-slate-950 disabled:opacity-20 flex items-center gap-4">← Previous</button>
+               <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{currentPage} of {totalPages}</span>
+               <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="text-[11px] font-black uppercase tracking-widest text-slate-950 disabled:opacity-20 flex items-center gap-4">Next →</button>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

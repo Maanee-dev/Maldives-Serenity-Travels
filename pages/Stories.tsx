@@ -1,10 +1,8 @@
-
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { BlogPost, StoryCategory } from '../types';
 import { BLOG_POSTS } from '../constants';
-import SEO from '../components/SEO';
 
 const Stories: React.FC = () => {
   const [stories, setStories] = useState<BlogPost[]>([]);
@@ -24,6 +22,7 @@ const Stories: React.FC = () => {
         if (data && data.length > 0) {
           setStories(data as BlogPost[]);
         } else {
+          // Fallback to constants if DB is empty
           setStories(BLOG_POSTS as BlogPost[]);
         }
       } catch (err) {
@@ -64,11 +63,6 @@ const Stories: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen">
-      <SEO 
-        title="The Journal: Maldivian Dispatches"
-        description="Explore the Serenity Maldives Journal for bespoke travel guides, local heritage stories, and luxury island insights."
-        path="/stories"
-      />
       <div className="max-w-7xl mx-auto px-6 py-48 md:py-64 lg:px-12">
         
         <div className="text-center mb-32 md:mb-56 reveal active">

@@ -4,7 +4,6 @@ import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { BlogPost } from '../types';
 import { BLOG_POSTS } from '../constants';
-import SEO from '../components/SEO';
 
 const BlogPostDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -24,6 +23,7 @@ const BlogPostDetail: React.FC = () => {
         if (data) {
           setPost(data);
         } else {
+          // Fallback to local
           const local = BLOG_POSTS.find(b => b.slug === slug);
           if (local) setPost(local as BlogPost);
         }
@@ -38,6 +38,7 @@ const BlogPostDetail: React.FC = () => {
 
   useEffect(() => {
     if (post) {
+      document.title = `${post.title} | Serenity Journal`;
       window.scrollTo(0, 0);
     }
   }, [post]);
@@ -57,12 +58,6 @@ const BlogPostDetail: React.FC = () => {
 
   return (
     <article className="bg-white min-h-screen selection:bg-sky-100">
-      <SEO 
-        title={post.title}
-        description={post.excerpt}
-        image={post.image}
-        path={`/stories/${post.slug}`}
-      />
       <div className="relative h-[70vh] w-full overflow-hidden">
          <img src={post.image} alt={post.title} className="w-full h-full object-cover scale-105" />
          <div className="absolute inset-0 bg-slate-950/20"></div>

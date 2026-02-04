@@ -1,11 +1,9 @@
-
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase, mapOffer } from '../lib/supabase';
 import { RESORTS, OFFERS } from '../constants';
 import { Accommodation, AccommodationType, TransferType, MealPlan, Offer } from '../types';
 import ResortCard from '../components/ResortCard';
-import SEO from '../components/SEO';
 
 const INQUIRY_STORAGE_KEY = 'serenity_inquiry_draft';
 
@@ -294,12 +292,6 @@ const ResortDetail: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen selection:bg-sky-100 selection:text-sky-900 pb-20 overflow-x-hidden">
-      <SEO 
-        title={`${resort.name} | ${resort.atoll}`}
-        description={`${resort.shortDescription || resort.description.substring(0, 160)} - Curated by Serenity Maldives.`}
-        image={resort.images[0]}
-        path={`/stays/${resort.slug}`}
-      />
       
       {/* Cinematic Hero - Scaled for impact on all devices */}
       <section className="relative w-full pt-20 md:pt-28 lg:pt-32 px-4 md:px-6 lg:px-12 reveal active">
