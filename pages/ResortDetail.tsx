@@ -1,9 +1,11 @@
+
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase, mapOffer } from '../lib/supabase';
 import { RESORTS, OFFERS } from '../constants';
 import { Accommodation, AccommodationType, TransferType, MealPlan, Offer } from '../types';
 import ResortCard from '../components/ResortCard';
+import SEO from '../components/SEO';
 
 const INQUIRY_STORAGE_KEY = 'serenity_inquiry_draft';
 
@@ -30,7 +32,6 @@ const ResortDetail: React.FC = () => {
   const [resortOffers, setResortOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Multi-step Form State
   const [formStep, setFormStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -292,8 +293,30 @@ const ResortDetail: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen selection:bg-sky-100 selection:text-sky-900 pb-20 overflow-x-hidden">
+      <SEO 
+        title={resort.name} 
+        description={resort.shortDescription} 
+        image={resort.images[0]}
+        type="hotel"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Hotel",
+          "name": resort.name,
+          "description": resort.description,
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": resort.atoll,
+            "addressCountry": "MV"
+          },
+          "image": resort.images,
+          "starRating": {
+            "@type": "Rating",
+            "ratingValue": resort.rating
+          }
+        }}
+      />
       
-      {/* Cinematic Hero - Scaled for impact on all devices */}
+      {/* Cinematic Hero */}
       <section className="relative w-full pt-20 md:pt-28 lg:pt-32 px-4 md:px-6 lg:px-12 reveal active">
         <div className="relative aspect-[4/5] md:aspect-[16/9] lg:aspect-[21/9] w-full rounded-[2.5rem] md:rounded-[3.5rem] lg:rounded-[4.5rem] overflow-hidden shadow-2xl bg-slate-200">
           <img src={resort.images[0]} alt={resort.name} className="w-full h-full object-cover transition-transform duration-[15s] ease-out hover:scale-110" />
@@ -305,7 +328,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* Manifesto Section - Refined padding for mobile */}
+      {/* Manifesto Section */}
       <section className="py-16 md:py-32 lg:py-48 px-6 lg:px-12">
         <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-20 lg:gap-32 items-start">
           <div className="lg:col-span-7 reveal">
@@ -350,7 +373,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* Offers Section - Dynamic padding */}
+      {/* Offers Section */}
       {resortOffers.length > 0 && (
         <section className="py-16 md:py-24 bg-amber-50/30 border-y-[1px] border-amber-100/50">
           <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
@@ -383,7 +406,7 @@ const ResortDetail: React.FC = () => {
         </section>
       )}
 
-      {/* Residences Horizontal Scroller - Optimized for mobile "peeking" */}
+      {/* Residences Horizontal Scroller */}
       {resort.roomTypes && resort.roomTypes.length > 0 && (
         <section className="py-16 md:py-32 bg-white border-y-[1px] border-slate-50 overflow-hidden">
           <div className="max-w-[1440px] mx-auto">
@@ -421,7 +444,7 @@ const ResortDetail: React.FC = () => {
         </section>
       )}
 
-      {/* Gastronomy Horizontal Scroller - Editorial feel */}
+      {/* Gastronomy Section */}
       {resort.diningVenues && resort.diningVenues.length > 0 && (
         <section className="py-16 md:py-32 bg-[#FCFAF7] border-b-[1px] border-slate-50 overflow-hidden">
           <div className="max-w-[1440px] mx-auto">
@@ -464,7 +487,7 @@ const ResortDetail: React.FC = () => {
         </section>
       )}
 
-      {/* Inquiry Form Section - Mobile Optimization focus */}
+      {/* Inquiry Form Section */}
       <section id="inquiry-form" className="py-20 md:py-32 lg:py-48 bg-slate-950 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
           <h2 className="text-[40vw] font-serif italic whitespace-nowrap -rotate-12 select-none">Atoll</h2>
@@ -502,7 +525,6 @@ const ResortDetail: React.FC = () => {
                </div>
              ) : (
                <div className="bg-white/5 backdrop-blur-3xl p-6 md:p-12 lg:p-16 rounded-[2.5rem] md:rounded-[4rem] border border-white/10 shadow-2xl overflow-hidden">
-                  {/* STEP 1: IDENTITY - Mobile optimized layout */}
                   {formStep === 1 && (
                     <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
                       <div className="space-y-4 md:space-y-6">
@@ -537,7 +559,6 @@ const ResortDetail: React.FC = () => {
                     </div>
                   )}
 
-                  {/* STEP 2: DATES - Mobile scaling for calendar */}
                   {formStep === 2 && (
                     <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
                        <div className="bg-white/5 rounded-[2rem] md:rounded-[2.5rem] p-4 md:p-8">
@@ -581,7 +602,6 @@ const ResortDetail: React.FC = () => {
                     </div>
                   )}
 
-                  {/* STEP 3: PREFERENCES - Simplified for small screens */}
                   {formStep === 3 && (
                     <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
                       <div className="space-y-5">
@@ -622,7 +642,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* Similar Sanctuaries - Scroller Refinement */}
+      {/* Similar Sanctuaries */}
       {similarStays.length > 0 && (
         <section className="py-24 md:py-48 bg-[#FCFAF7] border-t-[1px] border-slate-50">
           <div className="max-w-[1440px] mx-auto">
@@ -637,18 +657,11 @@ const ResortDetail: React.FC = () => {
                   <ResortCard resort={s} />
                 </div>
               ))}
-              <div className="flex-shrink-0 w-[82vw] md:w-[45vw] lg:w-[32vw] snap-start reveal flex items-center justify-center">
-                <Link to="/stays" className="group w-full aspect-[4/5] rounded-[2.5rem] md:rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-center hover:bg-slate-950 transition-all duration-1000">
-                  <span className="text-[10px] font-bold text-slate-400 group-hover:text-sky-400 uppercase tracking-[1em] mb-8 block">Explore All</span>
-                  <h4 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 group-hover:text-white leading-tight italic">Find your <br /> sanctuary.</h4>
-                </Link>
-              </div>
             </div>
           </div>
         </section>
       )}
 
-      {/* Breadcrumb / Footer Label */}
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12 py-16 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 reveal">
          <Link to="/stays" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.6em] hover:text-slate-950 transition-colors flex items-center gap-4">
            <span className="text-lg">←</span> Return to Portfolio

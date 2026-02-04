@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /plan
 
-Sitemap: https://maldivesserenity.com/sitemap.xml
+Sitemap: https://maldives-serenitytravels.com/sitemap.xml

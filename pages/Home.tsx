@@ -5,6 +5,7 @@ import { supabase, mapResort } from '../lib/supabase';
 import { Accommodation, BlogPost } from '../types';
 import { BLOG_POSTS, RESORTS } from '../constants';
 import ResortCard from '../components/ResortCard';
+import SEO from '../components/SEO';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -21,24 +22,18 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch Resorts
         const { data: resortsData, error: resortError } = await supabase
           .from('resorts')
           .select('*')
           .limit(6);
         
         if (resortError) throw resortError;
-
         if (resortsData && resortsData.length > 0) {
-          console.log("Supabase: Found resorts", resortsData.length);
-          const mappedResorts = resortsData.map(mapResort);
-          setFeaturedResorts(mappedResorts);
+          setFeaturedResorts(resortsData.map(mapResort));
         } else {
-          console.warn("Supabase: No resorts found, falling back to local constants.");
           setFeaturedResorts(RESORTS.slice(0, 6));
         }
 
-        // Fetch Stories
         const { data: storiesData, error: storyError } = await supabase
           .from('stories')
           .select('*')
@@ -46,7 +41,6 @@ const Home: React.FC = () => {
           .limit(3);
 
         if (storyError) throw storyError;
-
         if (storiesData && storiesData.length > 0) {
           setRecentStories(storiesData as BlogPost[]);
         } else {
@@ -85,13 +79,7 @@ const Home: React.FC = () => {
     }
   ];
 
-  const searchKeywords = [
-    "Soneva Jani...",
-    "Private Atolls...",
-    "Underwater Dining...",
-    "North Male...",
-    "Bespoke Escapes..."
-  ];
+  const searchKeywords = ["Soneva Jani...", "Private Atolls...", "Underwater Dining...", "North Male...", "Bespoke Escapes..."];
 
   useEffect(() => {
     let timer: number;
@@ -150,6 +138,25 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
+      <SEO 
+        title="Bespoke Travel Agency" 
+        description="Curated luxury for the discerning traveler. Discover private island resorts, overwater villas, and bespoke experiences across the Maldivian atolls."
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "TravelAgency",
+          "name": "Serenity Maldives",
+          "image": "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200",
+          "description": "Bespoke travel agency specializing in luxury Maldivian stays and experiences.",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Faith, S.feydhoo",
+            "addressLocality": "Addu City",
+            "addressCountry": "MV"
+          },
+          "url": "https://maldives-serenitytravels.com"
+        }}
+      />
+
       {/* HERO SECTION */}
       <section className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden bg-slate-950">
         <div className="absolute inset-0 z-0">
@@ -181,6 +188,41 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* ATMOSPHERIC GALLERY - 'The Dream' section */}
+      <section className="py-32 bg-white overflow-hidden">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-5 reveal">
+              <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1.2em] mb-12 block">Atmospheric Curation</span>
+              <h2 className="text-5xl md:text-7xl font-serif font-bold italic mb-10 leading-[1.1] text-slate-900 tracking-tighter">Selling the <br/> Dream of <br/> Blue.</h2>
+              <p className="text-slate-500 text-lg leading-[2] mb-12 font-medium">We don't just book rooms; we translate visions into reality. Our portfolio is a testament to the diverse shades of Maldivian tranquility.</p>
+              <Link to="/experiences" className="text-slate-900 font-bold uppercase tracking-[0.4em] text-[10px] border-b border-slate-900 pb-2 hover:text-sky-500 hover:border-sky-500 transition-all">Explore Immersive Journeys</Link>
+            </div>
+            <div className="md:col-span-7 grid grid-cols-2 gap-4 md:gap-8 reveal active delay-300">
+              <div className="space-y-4 md:space-y-8 mt-12">
+                <div className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl group">
+                  <img src="https://images.unsplash.com/photo-1590523741477-241063fc7d9c?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110" alt="Crystal waters" />
+                </div>
+                <div className="aspect-square rounded-[2rem] overflow-hidden shadow-2xl group">
+                  <img src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110" alt="Aerial view" />
+                </div>
+              </div>
+              <div className="space-y-4 md:space-y-8">
+                <div className="aspect-square rounded-[2rem] overflow-hidden shadow-2xl group">
+                  <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110" alt="Maldives beach" />
+                </div>
+                <div className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl group">
+                  <img src="https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110" alt="Luxury villa" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* COLLECTION & OTHER SECTIONS CONTINUED... */}
+      {/* (Previous sections like Philosophy, Atolls, Collection remain below for a complete flow) */}
+      
       {/* PHILOSOPHY SECTION */}
       <section className="py-24 md:py-48 bg-white relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
