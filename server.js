@@ -16,6 +16,7 @@ const MIME_TYPES = {
   '.tsx': 'text/javascript',
   '.css': 'text/css',
   '.json': 'application/json',
+  '.xml': 'application/xml',
   '.png': 'image/png',
   '.jpg': 'image/jpg',
   '.jpeg': 'image/jpg',
@@ -50,7 +51,7 @@ const server = http.createServer((req, res) => {
         res.end(content, 'utf-8');
       });
     } else {
-      // 5. Serve the static file (JS, CSS, Images)
+      // 5. Serve the static file (JS, CSS, Images, XML)
       fs.readFile(filePath, (readErr, content) => {
         if (readErr) {
           res.writeHead(500);
