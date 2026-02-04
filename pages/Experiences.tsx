@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { EXPERIENCES } from '../constants';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 
 /**
  * Experiences Page: Showcases curated luxury activities and journeys in the Maldives.
@@ -18,6 +19,28 @@ const Experiences: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen">
+      <SEO 
+        title="Curated Maldives Experiences | Diving, Surfing & Private Safaris" 
+        description="Explore curated Maldivian experiences. From whale shark safaris and deep-sea diving to private sandbank soirées and chartered seaplane arrivals, define your unique perspective on adventure."
+        keywords={[
+          'Maldives whale shark safari', 'Maldives diving excursions', 'Maldives surf trips', 
+          'private island experiences', 'luxury water sports Maldives', 'Maldives cultural tours', 
+          'charter seaplane Maldives', 'luxury yacht Maldives', 'bespoke adventure Maldives'
+        ]}
+        image="https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&fit=crop&q=80&w=1200"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": "Luxury Maldives Experiences",
+          "itemListElement": EXPERIENCES.map((exp, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "name": exp.title,
+            "description": exp.description
+          }))
+        }}
+      />
+
       {/* 1. EDITORIAL HEADER */}
       <section className="pt-64 pb-48 px-6 text-center reveal">
         <div className="max-w-4xl mx-auto">

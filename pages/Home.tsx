@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase, mapResort } from '../lib/supabase';
@@ -139,21 +138,34 @@ const Home: React.FC = () => {
   return (
     <div className="bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
       <SEO 
-        title="Bespoke Travel Agency" 
-        description="Curated luxury for the discerning traveler. Discover private island resorts, overwater villas, and bespoke experiences across the Maldivian atolls."
+        title="Luxury Travel Agency | Bespoke Maldives Journeys" 
+        description="Serenity Maldives is a bespoke boutique travel agency. We curate silence and luxury, crafting unrivaled journeys across Maldivian atolls. Discover private islands, overwater villas, and custom experiences."
+        keywords={[
+          'Maldives luxury travel', 'private island resorts Maldives', 'overwater villas Maldives', 
+          'Maldives honeymoon packages', 'Maldives diving trips', 'bespoke Maldives travel', 
+          'Serenity Maldives', 'luxury travel agency Maldives', 'Baa Atoll resorts', 
+          'North Male Atoll luxury', 'seaplane transfers Maldives'
+        ]}
+        image="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200"
         schema={{
           "@context": "https://schema.org",
           "@type": "TravelAgency",
           "name": "Serenity Maldives",
           "image": "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200",
-          "description": "Bespoke travel agency specializing in luxury Maldivian stays and experiences.",
+          "description": "A bespoke boutique agency crafting unrivaled luxury journeys across the Maldivian atolls.",
+          "telephone": "+960-777-1234",
+          "email": "info@maldives-serenitytravels.com",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "Faith, S.feydhoo",
             "addressLocality": "Addu City",
+            "addressRegion": "Addu",
+            "postalCode": "19040",
             "addressCountry": "MV"
           },
-          "url": "https://maldives-serenitytravels.com"
+          "url": "https://maldives-serenitytravels.com",
+          "priceRange": "$$$$",
+          "areaServed": "Maldives"
         }}
       />
 
@@ -220,9 +232,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* COLLECTION & OTHER SECTIONS CONTINUED... */}
-      {/* (Previous sections like Philosophy, Atolls, Collection remain below for a complete flow) */}
-      
       {/* PHILOSOPHY SECTION */}
       <section className="py-24 md:py-48 bg-white relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
@@ -276,7 +285,7 @@ const Home: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-end mb-20 md:mb-28 reveal">
             <div className="max-w-xl">
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[1em] mb-8 block">Regional Mastery</span>
-              <h3 className="text-4xl md:text-7xl font-serif font-bold italic leading-tight text-slate-900 tracking-tighter">Atoll Coordinates.</h3>
+              <h3 className="text-4xl md:text-7xl font-serif font-bold italic leading-tight text-slate-950 tracking-tighter">Atoll Coordinates.</h3>
             </div>
             <Link to="/stays" className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.5em] border-b border-sky-500 pb-1 mb-4 hover:text-slate-900 hover:border-slate-900 transition-colors hidden md:block">Explore Geography</Link>
           </div>

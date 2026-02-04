@@ -3,6 +3,7 @@ import { supabase, mapOffer } from '../lib/supabase';
 import { OFFERS } from '../constants';
 import { Link } from 'react-router-dom';
 import { Offer } from '../types';
+import SEO from '../components/SEO';
 
 /**
  * Offers Page: Displays curated Maldivian luxury deals and seasonal privileges.
@@ -22,7 +23,6 @@ const Offers: React.FC = () => {
     const fetchOffers = async () => {
       setLoading(true);
       try {
-        // Updated query to join with resorts to get the slug
         const { data: offersData } = await supabase
           .from('offers')
           .select('*, resorts(slug)')
@@ -84,7 +84,28 @@ const Offers: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen selection:bg-sky-100 selection:text-sky-900 pb-32">
-       
+       <SEO 
+         title="Exclusive Maldives Holiday Offers & Packages" 
+         description="Access our curated archives of the most exclusive holiday deals in the Maldives. From early bird discounts to luxury honeymoon packages, explore bespoke privileges at world-class resorts."
+         keywords={[
+           'Maldives resort offers', 'Maldives honeymoon packages', 'early bird Maldives deals', 
+           'last minute Maldives holiday', 'luxury Maldives discounts', 'Maldives all inclusive offers', 
+           'bespoke travel deals Maldives', 'overwater villa packages'
+         ]}
+         image="https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200"
+         schema={{
+           "@context": "https://schema.org",
+           "@type": "ItemList",
+           "name": "Luxury Maldives Offers",
+           "itemListElement": offers.slice(0, 10).map((o, i) => ({
+             "@type": "ListItem",
+             "position": i + 1,
+             "name": o.title,
+             "description": o.discount
+           }))
+         }}
+       />
+
        {/* Editorial Header */}
        <section className="pt-48 pb-16 px-6 text-center">
           <div className="max-w-4xl mx-auto">

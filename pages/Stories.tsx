@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { BlogPost, StoryCategory } from '../types';
 import { BLOG_POSTS } from '../constants';
+import SEO from '../components/SEO';
 
 const Stories: React.FC = () => {
   const [stories, setStories] = useState<BlogPost[]>([]);
@@ -22,7 +23,6 @@ const Stories: React.FC = () => {
         if (data && data.length > 0) {
           setStories(data as BlogPost[]);
         } else {
-          // Fallback to constants if DB is empty
           setStories(BLOG_POSTS as BlogPost[]);
         }
       } catch (err) {
@@ -63,6 +63,27 @@ const Stories: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen">
+      <SEO 
+        title="The Serenity Journal | Maldivian Travel Insights" 
+        description="A dynamic editorial archive of Maldivian heritage, luxury insights, and travel intelligence. Read our dispatches on seaplane arrivals, atoll guides, and bespoke luxury updates."
+        keywords={[
+          'Maldives travel blog', 'luxury travel journal Maldives', 'Maldives resort reviews', 
+          'Maldives island guides', 'Maldivian heritage', 'Maldives seaplane guide', 
+          'travel tips Maldives', 'Serenity Travels dispatches'
+        ]}
+        image="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          "name": "The Serenity Journal",
+          "description": "Editorial dispatches from Serenity Maldives.",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Serenity Maldives"
+          }
+        }}
+      />
+
       <div className="max-w-7xl mx-auto px-6 py-48 md:py-64 lg:px-12">
         
         <div className="text-center mb-32 md:mb-56 reveal active">

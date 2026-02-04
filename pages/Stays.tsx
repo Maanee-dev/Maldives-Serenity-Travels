@@ -1,10 +1,10 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase, mapResort, mapOffer } from '../lib/supabase';
 import { RESORTS, OFFERS } from '../constants';
 import { AccommodationType, TransferType, Accommodation, Offer } from '../types';
 import ResortCard from '../components/ResortCard';
+import SEO from '../components/SEO';
 
 const Stays: React.FC = () => {
   const location = useLocation();
@@ -26,7 +26,6 @@ const Stays: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        console.log("Fetching Stays from Supabase...");
         const { data: resortsData, error: resortError } = await supabase.from('resorts').select('*').order('name', { ascending: true });
         const { data: offersData, error: offerError } = await supabase.from('offers').select('*');
 
@@ -34,20 +33,16 @@ const Stays: React.FC = () => {
 
         let finalResorts: Accommodation[] = [];
         if (resortsData && resortsData.length > 0) {
-          console.log(`Supabase: Loaded ${resortsData.length} resorts.`);
           finalResorts = resortsData.map(mapResort);
         } else {
-          console.warn("Supabase: Resorts table is empty. Showing local constants.");
           finalResorts = [];
         }
 
-        // Merge with local fallbacks to ensure the UI is never empty during development
         const dbSlugs = new Set(finalResorts.map(r => r.slug));
         const localFallbacks = RESORTS.filter(r => !dbSlugs.has(r.slug));
         setResorts([...finalResorts, ...localFallbacks]);
         
         if (offersData && offersData.length > 0) {
-          console.log(`Supabase: Loaded ${offersData.length} active offers.`);
           setOffers(offersData.map(mapOffer));
         } else {
           setOffers(OFFERS);
@@ -107,6 +102,27 @@ const Stays: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen">
+      <SEO 
+        title="Luxury Resorts & Overwater Villas Portfolio" 
+        description="Discover our curated portfolio of the finest luxury resorts and overwater villas in the Maldives. From private island sanctuaries to local island guest houses, find your perfect atoll escape."
+        keywords={[
+          'Maldives luxury resorts', 'overwater villas Maldives', 'best resorts in Maldives', 
+          'Baa Atoll resorts', 'North Male Atoll luxury', 'seaplane transfers Maldives', 
+          'Maldives guest houses', 'local island travel Maldives', 'budget Maldives travel'
+        ]}
+        image="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "itemListElement": resorts.slice(0, 10).map((r, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "url": `https://maldives-serenitytravels.com/stays/${r.slug}`,
+            "name": r.name
+          }))
+        }}
+      />
+
       <section className="pt-56 pb-24 md:pb-40 px-6 text-center reveal active">
         <div className="max-w-7xl mx-auto">
           <span className="text-[12px] uppercase tracking-[1em] font-black mb-10 block text-sky-600">The Portfolio</span>

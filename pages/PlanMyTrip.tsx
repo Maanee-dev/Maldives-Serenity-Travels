@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { RESORTS } from '../constants';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 
 const STORAGE_KEY = 'serenity_planning_draft';
 
@@ -32,7 +32,6 @@ const PlanMyTrip: React.FC = () => {
     budgetType: 'Total'
   });
 
-  // Load state from localStorage on mount
   useEffect(() => {
     const savedData = localStorage.getItem(STORAGE_KEY);
     if (savedData) {
@@ -50,7 +49,6 @@ const PlanMyTrip: React.FC = () => {
     }
   }, []);
 
-  // Save state to localStorage whenever any relevant data changes
   useEffect(() => {
     const dataToSave = {
       step,
@@ -100,7 +98,6 @@ const PlanMyTrip: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-    // Clear storage on successful submission
     localStorage.removeItem(STORAGE_KEY);
   };
 
@@ -122,6 +119,17 @@ const PlanMyTrip: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen pt-40 pb-32 px-6">
+      <SEO 
+        title="Bespoke Holiday Planning | Custom Maldives Itineraries" 
+        description="Initiate your bespoke planning journey. Our specialists curate custom Maldivian portfolios, handling seaplane transfers, resort selections, and private island itineraries tailored to your vision."
+        keywords={[
+          'custom Maldives trip', 'bespoke holiday planning', 'Maldives travel specialist', 
+          'tailor made Maldives', 'honeymoon planning Maldives', 'Maldives luxury concierge', 
+          'personalized travel itineraries', 'Serenity Maldives planning'
+        ]}
+        image="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200"
+      />
+      
       <div className="max-w-4xl mx-auto">
         
         {/* Step Indicator */}
