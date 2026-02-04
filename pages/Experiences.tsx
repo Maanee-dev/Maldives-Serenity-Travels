@@ -1,6 +1,8 @@
+
 import React, { useEffect } from 'react';
 import { EXPERIENCES } from '../constants';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 
 const Experiences: React.FC = () => {
   useEffect(() => {
@@ -15,6 +17,11 @@ const Experiences: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen">
+      <SEO 
+        title="Curated Experiences & Private Expeditions"
+        description="Discover unique Maldivian experiences: whale shark safaris, private sandbank dining, and luxury yacht charters curated for your perspective."
+        path="/experiences"
+      />
       <section className="pt-64 pb-48 px-6 text-center reveal">
         <div className="max-w-4xl mx-auto">
           <span className="text-[10px] font-bold text-sky-500 mb-12 block tracking-[1em] uppercase">The Perspective</span>

@@ -10,9 +10,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Using PascalCase to match the canonical filenames and fix casing errors
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Using lowercase to match the provided file casing and fix compilation errors
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
