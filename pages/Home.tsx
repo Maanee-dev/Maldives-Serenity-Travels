@@ -57,7 +57,7 @@ const Home: React.FC = () => {
   const heroSlides = [
     {
       type: 'video',
-      src: 'https://maldives-serenitytravels.com/assets/videos/Villa Haven - Cinematic Video - 3840 x 2160.mp4',
+      src: 'https://maldives-serenitytravels.com/images/Villa Resorts - Brand Video - Reel 2 - 1080 x 1920.mp4',
       title: 'Defined by',
       titleAlt: 'Perspective',
       subtitle: 'VOL. 01 — THE ARCHIPELAGO'
