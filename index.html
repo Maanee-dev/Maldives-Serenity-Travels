@@ -3,9 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serenity Maldives | Defined by Perspective</title>
-    <meta name="description" content="A bespoke boutique agency crafting unrivaled journeys across the Maldivian atolls.">
+    <title>__TITLE__</title>
+    <meta name="description" content="__DESCRIPTION__">
     
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="__TITLE__">
+    <meta property="og:description" content="__DESCRIPTION__">
+    <meta property="og:url" content="__URL__">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Serenity Maldives">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="__TITLE__">
+    <meta name="twitter:description" content="__DESCRIPTION__">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200">
+    
+    <link rel="canonical" href="__URL__">
     <base href="/">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -31,12 +46,6 @@
 
         .font-serif { font-family: var(--font-serif); }
 
-        /* Sophisticated Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: var(--bg-parchment); }
-        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--atoll-blue); }
-
         /* Reveal Animation System */
         .reveal { 
             opacity: 0; 
@@ -48,43 +57,17 @@
             transform: translateY(0); 
         }
 
-        .glass-nav {
-            background: rgba(252, 250, 247, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .img-editorial {
+        /* SEO Shadow Nav - Visually hidden but fully readable by bots and generators */
+        .crawler-shell {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
             overflow: hidden;
-            position: relative;
-        }
-        .img-editorial img {
-            transition: transform 2.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .img-editorial:hover img {
-            transform: scale(1.08);
-        }
-
-        /* Luxury Inputs */
-        input, select, textarea {
-            font-family: var(--font-main);
-        }
-
-        ::selection {
-            background: rgba(14, 165, 233, 0.15);
-            color: var(--atoll-blue);
-        }
-        
-        .letter-spacing-vogue {
-            letter-spacing: 0.4em;
-        }
-        
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
         }
     </style>
 
@@ -105,6 +88,27 @@
 </script>
 </head>
 <body>
+    <!-- 
+      CRAWLER SHADOW CONTENT
+      This section provides route-specific semantic data to crawlers 
+      that don't execute JS. The server replaces __TITLE__ and __DESCRIPTION__
+      based on the requested URL.
+    -->
+    <div class="crawler-shell">
+        <h1>__TITLE__</h1>
+        <p>__DESCRIPTION__</p>
+        <nav aria-label="Site Navigation">
+            <ul>
+                <li><a href="/">Home - Serenity Maldives</a></li>
+                <li><a href="/stays">Luxury Resorts & Overwater Villas Portfolio</a></li>
+                <li><a href="/offers">Exclusive Maldives Holiday Offers & Packages</a></li>
+                <li><a href="/experiences">Curated Maldives Experiences & Private Tours</a></li>
+                <li><a href="/stories">The Serenity Journal - Maldivian Travel Insights</a></li>
+                <li><a href="/plan">Bespoke Holiday Planning & Custom Itineraries</a></li>
+            </ul>
+        </nav>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>

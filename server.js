@@ -1,11 +1,12 @@
-
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
 /**
- * Enhanced Node.js Server for Hostinger
- * Handles static assets and provides an absolute fallback to index.html for SPA routing.
+ * Enhanced Node.js SEO & SPA Server
+ * 
+ * Intercepts incoming requests to inject dynamic metadata into the index.html shell.
+ * This ensures 'View Source' shows unique content and bots can index the site effectively.
  */
 const port = process.env.PORT || 3000;
 
@@ -22,49 +23,120 @@ const MIME_TYPES = {
   '.jpeg': 'image/jpg',
   '.gif': 'image/gif',
   '.svg': 'image/svg+xml',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.txt': 'text/plain'
 };
 
+// Static SEO Definitions for primary routes
+const SEO_MAP = {
+  '/': {
+    title: 'Serenity Maldives | Luxury Travel Agency & Bespoke Journeys',
+    description: 'A bespoke boutique agency crafting unrivaled luxury journeys across the Maldivian atolls. Discover private islands and overwater villas.'
+  },
+  '/stays': {
+    title: 'Luxury Resorts & Overwater Villas | Serenity Maldives Portfolio',
+    description: 'Explore our curated selection of the finest luxury resorts and overwater villas in the Maldives. Find your perfect island sanctuary.'
+  },
+  '/offers': {
+    title: 'Exclusive Maldives Holiday Offers | Bespoke Travel Deals',
+    description: 'Access the most exclusive holiday deals in the Maldives. Luxury honeymoon packages, early bird discounts, and seasonal privileges.'
+  },
+  '/experiences': {
+    title: 'Curated Maldives Experiences | Diving, Surfing & Private Safaris',
+    description: 'Explore bespoke adventures in the Maldives. From whale shark safaris to private sandbank soirées, define your unique perspective.'
+  },
+  '/stories': {
+    title: 'The Serenity Journal | Maldives Travel Blog & Insights',
+    description: 'Editorial dispatches from the heart of the archipelago. Insights on luxury travel, local culture, and atoll guides.'
+  },
+  '/plan': {
+    title: 'Bespoke Holiday Planning | Custom Maldives Itineraries',
+    description: 'Initiate your bespoke planning journey. Our specialists curate custom Maldivian portfolios tailored to your vision.'
+  }
+};
+
+/**
+ * Helper to generate readable titles from URL slugs
+ */
+function titleFromSlug(slug) {
+  if (!slug) return '';
+  return slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
 const server = http.createServer((req, res) => {
-  // 1. Normalize path and remove query strings
-  let urlPath = req.url.split('?')[0];
+  // 1. Normalize path and remove query parameters for routing
+  const rawUrl = req.url || '/';
+  const urlPath = rawUrl.split('?')[0];
   
-  // 2. Prevent directory traversal and handle root
+  // 2. Resolve local file path
   let relativePath = urlPath === '/' ? 'index.html' : urlPath.substring(1);
-  let filePath = path.join(__dirname, relativePath);
-  
+  const filePath = path.join(__dirname, relativePath);
   const extname = String(path.extname(filePath)).toLowerCase();
   const contentType = MIME_TYPES[extname] || 'application/octet-stream';
 
-  // 3. Check if the file exists
+  // 3. Asset vs Route Handling
   fs.stat(filePath, (err, stats) => {
-    if (err || !stats.isFile()) {
-      // 4. Fallback to index.html for SPA (React Router)
-      // This ensures that /stays, /offers, etc., all serve the root entry point
-      fs.readFile(path.join(__dirname, 'index.html'), (readErr, content) => {
+    // If it's a real asset file (CSS, JS, Images, Sitemap)
+    if (!err && stats.isFile() && !urlPath.endsWith('.html') && urlPath !== '/') {
+      fs.readFile(filePath, (readErr, content) => {
+        if (readErr) {
+          res.writeHead(500);
+          res.end('Error serving static asset');
+          return;
+        }
+        res.writeHead(200, { 'Content-Type': contentType });
+        res.end(content, 'utf-8');
+      });
+    } 
+    // If it's a SPA Route or fallback
+    else {
+      const indexPath = path.join(__dirname, 'index.html');
+      fs.readFile(indexPath, 'utf-8', (readErr, html) => {
         if (readErr) {
           res.writeHead(500);
           res.end('Critical Error: index.html not found');
           return;
         }
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(content, 'utf-8');
-      });
-    } else {
-      // 5. Serve the static file (JS, CSS, Images, XML)
-      fs.readFile(filePath, (readErr, content) => {
-        if (readErr) {
-          res.writeHead(500);
-          res.end('Error serving static file');
-          return;
+
+        // 4. Determine SEO Metadata for the specific URL
+        let meta = SEO_MAP[urlPath];
+
+        // Handle dynamic deep links (Resort and Story pages)
+        if (!meta) {
+          if (urlPath.startsWith('/stays/')) {
+            const slug = urlPath.split('/').pop();
+            meta = {
+              title: `${titleFromSlug(slug)} | Luxury Maldives Stay | Serenity`,
+              description: `Discover ${titleFromSlug(slug)}, an iconic Maldivian sanctuary. Experience luxury refined by perspective with Serenity Travels.`
+            };
+          } else if (urlPath.startsWith('/stories/')) {
+            const slug = urlPath.split('/').pop();
+            meta = {
+              title: `${titleFromSlug(slug)} | The Serenity Journal`,
+              description: `Editorial Dispatch: ${titleFromSlug(slug)}. Deep insights into the Maldivian luxury travel landscape.`
+            };
+          } else {
+            // Default to homepage if no match
+            meta = SEO_MAP['/'];
+          }
         }
-        res.writeHead(200, { 'Content-Type': contentType });
-        res.end(content, 'utf-8');
+
+        // 5. Dynamic Placeholder Replacement
+        const finalHtml = html
+          .replace(/__TITLE__/g, meta.title)
+          .replace(/__DESCRIPTION__/g, meta.description)
+          .replace(/__URL__/g, `https://maldives-serenitytravels.com${urlPath}`);
+
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(finalHtml, 'utf-8');
       });
     }
   });
 });
 
 server.listen(port, () => {
-  console.log(`SPA Server running at http://localhost:${port}/`);
+  console.log(`SEO-Aware Server running at http://localhost:${port}/`);
 });
