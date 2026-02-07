@@ -69,6 +69,63 @@
             height: 1px;
             overflow: hidden;
         }
+                .font-serif { font-family: var(--font-serif); }
+
+        /* Sophisticated Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg-parchment); }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--atoll-blue); }
+
+        /* Reveal Animation System */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(40px); 
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+
+        .glass-nav {
+            background: rgba(252, 250, 247, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .img-editorial {
+            overflow: hidden;
+            position: relative;
+        }
+        .img-editorial img {
+            transition: transform 2.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .img-editorial:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Luxury Inputs */
+        input, select, textarea {
+            font-family: var(--font-main);
+        }
+
+        ::selection {
+            background: rgba(14, 165, 233, 0.15);
+            color: var(--atoll-blue);
+        }
+        
+        .letter-spacing-vogue {
+            letter-spacing: 0.4em;
+        }
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 
     <script type="importmap">
