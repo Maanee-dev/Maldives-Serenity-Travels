@@ -200,38 +200,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* ATMOSPHERIC GALLERY - 'The Dream' section */}
-      <section className="py-32 bg-white overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-            <div className="md:col-span-5 reveal">
-              <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1.2em] mb-12 block">Atmospheric Curation</span>
-              <h2 className="text-5xl md:text-7xl font-serif font-bold italic mb-10 leading-[1.1] text-slate-900 tracking-tighter">Selling the <br/> Dream of <br/> Blue.</h2>
-              <p className="text-slate-500 text-lg leading-[2] mb-12 font-medium">We don't just book rooms; we translate visions into reality. Our portfolio is a testament to the diverse shades of Maldivian tranquility.</p>
-              <Link to="/experiences" className="text-slate-900 font-bold uppercase tracking-[0.4em] text-[10px] border-b border-slate-900 pb-2 hover:text-sky-500 hover:border-sky-500 transition-all">Explore Immersive Journeys</Link>
-            </div>
-            <div className="md:col-span-7 grid grid-cols-2 gap-4 md:gap-8 reveal active delay-300">
-              <div className="space-y-4 md:space-y-8 mt-12">
-                <div className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl group">
-                  <img src="https://images.unsplash.com/photo-1590523741477-241063fc7d9c?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110" alt="Crystal waters" />
-                </div>
-                <div className="aspect-square rounded-[2rem] overflow-hidden shadow-2xl group">
-                  <img src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110" alt="Aerial view" />
-                </div>
-              </div>
-              <div className="space-y-4 md:space-y-8">
-                <div className="aspect-square rounded-[2rem] overflow-hidden shadow-2xl group">
-                  <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110" alt="Maldives beach" />
-                </div>
-                <div className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl group">
-                  <img src="https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110" alt="Luxury villa" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* PHILOSOPHY SECTION */}
       <section className="py-24 md:py-48 bg-white relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
