@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -11,9 +10,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Correcting casing to lowercase to resolve conflicts with existing files in the project tree
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Standardizing on PascalCase for imports to fix casing conflict errors and ensure consistent file resolution
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
