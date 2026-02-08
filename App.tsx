@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -9,9 +10,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Standardizing on lowercase imports to fix casing conflict errors (Offers.tsx vs offers.tsx) and ensure consistent file resolution
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Fix: Updated imports to use PascalCase to resolve file name casing conflicts and match project-wide conventions
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

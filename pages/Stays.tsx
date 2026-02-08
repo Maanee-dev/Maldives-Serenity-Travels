@@ -76,9 +76,11 @@ const Stays: React.FC = () => {
   }, [stayType, filterQuery, selectedAtoll, selectedTransfer, resorts]);
 
   const totalPages = Math.ceil(filteredStays.length / itemsPerPage);
+  
+  // Update: Show all items from page 1 to currentPage instead of just one page
   const currentStays = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredStays.slice(start, start + itemsPerPage);
+    const end = currentPage * itemsPerPage;
+    return filteredStays.slice(0, end);
   }, [filteredStays, currentPage]);
 
   useEffect(() => {
@@ -93,10 +95,10 @@ const Stays: React.FC = () => {
     }
   }, [currentStays, loading]);
 
-  const handlePageChange = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-    window.scrollTo({ top: 400, behavior: 'smooth' });
+  const handleLoadMore = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(prev => prev + 1);
+    }
   };
 
   return (
@@ -205,39 +207,27 @@ const Stays: React.FC = () => {
                 ))}
               </div>
 
-              {/* Robust Pagination System */}
-              {totalPages > 1 && (
-                <div className="mt-24 md:mt-40 flex justify-center items-center gap-3 sm:gap-6 md:gap-10 reveal active">
-                  <button 
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="group flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] disabled:opacity-20 transition-all"
-                    aria-label="Previous Page"
-                  >
-                    <span className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 group-hover:text-white transition-all">&larr;</span>
-                    <span className="hidden sm:inline">Prev</span>
-                  </button>
-                  
-                  <div className="flex gap-2 sm:gap-4">
-                    {Array.from({ length: totalPages }).map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`w-8 h-8 md:w-10 md:h-10 rounded-full text-[9px] md:text-[10px] font-black transition-all ${currentPage === i + 1 ? 'bg-slate-950 text-white scale-110 shadow-xl' : 'text-slate-400 hover:text-slate-900 border border-slate-100 sm:border-none'}`}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
+              {/* Robust Load More Interface */}
+              {currentPage < totalPages && (
+                <div className="mt-24 md:mt-40 flex flex-col items-center gap-12 reveal active">
+                  <div className="flex flex-col items-center gap-4">
+                    <span className="text-[9px] font-black text-slate-300 uppercase tracking-[0.5em]">
+                      Revealed {currentStays.length} of {filteredStays.length} Sanctuaries
+                    </span>
+                    <div className="w-32 h-[1px] bg-slate-100 overflow-hidden">
+                      <div 
+                        className="h-full bg-sky-500 transition-all duration-1000" 
+                        style={{ width: `${(currentStays.length / filteredStays.length) * 100}%` }}
+                      ></div>
+                    </div>
                   </div>
-
+                  
                   <button 
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="group flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] disabled:opacity-20 transition-all"
-                    aria-label="Next Page"
+                    onClick={handleLoadMore}
+                    className="group relative px-16 py-7 rounded-full bg-slate-950 text-white font-black text-[10px] uppercase tracking-[0.6em] overflow-hidden transition-all hover:bg-sky-500 hover:shadow-2xl active:scale-95"
                   >
-                    <span className="hidden sm:inline">Next</span>
-                    <span className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 group-hover:text-white transition-all">&rarr;</span>
+                    <span className="relative z-10">Load More</span>
+                    <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
                   </button>
                 </div>
               )}
