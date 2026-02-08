@@ -159,6 +159,8 @@ const Stays: React.FC = () => {
             <div className="flex gap-1 p-1 bg-slate-100/50 rounded-full">
               <button onClick={() => setStayType(AccommodationType.RESORT)} className={`px-8 md:px-12 py-3 rounded-full text-[11px] font-black transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.RESORT ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-400 hover:text-slate-950'}`}>Resorts</button>
               <button onClick={() => setStayType(AccommodationType.GUEST_HOUSE)} className={`px-8 md:px-12 py-3 rounded-full text-[11px] font-black transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.GUEST_HOUSE ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-400 hover:text-slate-950'}`}>Local Islands</button>
+              <button onClick={() => setStayType(AccommodationType.LIVEABOARD)} className={`px-8 md:px-12 py-3 rounded-full text-[11px] font-black transition-all duration-500 uppercase tracking-[0.3em] ${stayType === AccommodationType.LIVEABOARD ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-400 hover:text-slate-950'}`}>Liveaboards</button>
+
             </div>
             <div className="flex flex-wrap justify-center md:justify-end gap-10 md:gap-16 items-center">
               <div className="flex flex-col gap-2">
