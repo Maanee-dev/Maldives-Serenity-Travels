@@ -1,7 +1,8 @@
 
 export enum AccommodationType {
   RESORT = 'RESORT',
-  GUEST_HOUSE = 'GUEST_HOUSE'
+  GUEST_HOUSE = 'GUEST_HOUSE',
+  LIVEABOARD = 'LIVEABOARD'
 }
 
 export enum TransferType {
