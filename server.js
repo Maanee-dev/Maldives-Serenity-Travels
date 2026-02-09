@@ -52,6 +52,14 @@ const SEO_MAP = {
   '/plan': {
     title: 'Bespoke Holiday Planning | Custom Maldives Itineraries',
     description: 'Initiate your bespoke planning journey. Our specialists curate custom Maldivian portfolios tailored to your vision.'
+  },
+  '/about': {
+    title: 'About Us | The Curators of Maldivian Luxury',
+    description: 'Serenity Maldives is defined by perspective. Discover our heritage and mission to curate the silence of the archipelago.'
+  },
+  '/contact': {
+    title: 'Contact Us | Initiate the Dialogue',
+    description: 'Connect with our Maldivian travel specialists for bespoke holiday planning and luxury concierge services.'
   }
 };
 
@@ -108,15 +116,17 @@ const server = http.createServer((req, res) => {
         if (!meta) {
           if (urlPath.startsWith('/stays/')) {
             const slug = urlPath.split('/').pop();
+            const resortName = titleFromSlug(slug);
             meta = {
-              title: `${titleFromSlug(slug)} | Luxury Maldives Stay | Serenity`,
-              description: `Discover ${titleFromSlug(slug)}, an iconic Maldivian sanctuary. Experience luxury refined by perspective with Serenity Travels.`
+              title: `${resortName} | Luxury Overwater Villas | Serenity Maldives`,
+              description: `Discover ${resortName}, an iconic Maldivian sanctuary featuring luxury overwater villas and private island living. Book your bespoke holiday at ${resortName} with Serenity Travels.`
             };
           } else if (urlPath.startsWith('/stories/')) {
             const slug = urlPath.split('/').pop();
+            const storyTitle = titleFromSlug(slug);
             meta = {
-              title: `${titleFromSlug(slug)} | The Serenity Journal`,
-              description: `Editorial Dispatch: ${titleFromSlug(slug)}. Deep insights into the Maldivian luxury travel landscape.`
+              title: `${storyTitle} | The Serenity Journal Dispatch`,
+              description: `Read our latest editorial dispatch: ${storyTitle}. Gain unique insights into Maldivian heritage, luxury aesthetics, and travel intelligence.`
             };
           } else {
             // Default to homepage if no match

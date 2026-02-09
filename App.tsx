@@ -10,9 +10,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Updated import casing to match PascalCase filenames and resolve casing collision errors
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Updated imports to use lowercase to resolve casing collision errors with existing files
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
