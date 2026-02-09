@@ -66,35 +66,30 @@ const Stories: React.FC = () => {
       <SEO 
         title="The Serenity Journal | Maldivian Travel Insights" 
         description="A dynamic editorial archive of Maldivian heritage, luxury insights, and travel intelligence. Read our dispatches on seaplane arrivals, atoll guides, and bespoke luxury updates."
-        keywords={[
-          'Maldives travel blog', 'luxury travel journal Maldives', 'Maldives resort reviews', 
-          'Maldives island guides', 'Maldivian heritage', 'Maldives seaplane guide', 
-          'travel tips Maldives', 'Serenity Travels dispatches'
-        ]}
-        image="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200"
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "Blog",
-          "name": "The Serenity Journal",
-          "description": "Editorial dispatches from Serenity Maldives.",
-          "publisher": {
-            "@type": "Organization",
-            "name": "Serenity Maldives"
-          }
-        }}
       />
 
-      <div className="max-w-7xl mx-auto px-6 py-48 md:py-64 lg:px-12">
-        
-        <div className="text-center mb-32 md:mb-56 reveal active">
-          <span className="text-[10px] font-bold text-sky-500 mb-12 block tracking-[1em] uppercase">The Journal</span>
-          <h1 className="text-6xl md:text-9xl font-serif font-bold text-slate-900 tracking-tighter italic leading-none">Perspective.</h1>
-          <div className="h-px w-24 bg-amber-400 mx-auto mt-16 mb-16"></div>
-          <p className="text-slate-500 text-[11px] font-bold max-w-xl mx-auto uppercase tracking-[0.5em] leading-[2.5] opacity-90">
-            A dynamic editorial archive of Maldivian heritage, <br className="hidden md:block"/> luxury insights, and travel intelligence.
+      {/* Cinematic Hero Section */}
+      <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1920" 
+            className="w-full h-full object-cover" 
+            alt="Maldives Aerial"
+          />
+          <div className="absolute inset-0 bg-slate-950/40" />
+        </div>
+        <div className="relative z-10 text-center px-6 reveal active">
+          <span className="text-[10px] font-bold text-sky-400 mb-12 block tracking-[1em] uppercase">The Journal</span>
+          <h1 className="text-6xl md:text-9xl font-serif font-bold text-white tracking-tighter italic leading-none">Perspective.</h1>
+          <div className="h-px w-24 bg-amber-400 mx-auto mt-12 mb-12"></div>
+          <p className="text-white text-[11px] font-bold max-w-xl mx-auto uppercase tracking-[0.5em] leading-[2.5] opacity-90">
+             Editorial archives of Maldivian heritage, <br className="hidden md:block"/> luxury insights, and travel intelligence.
           </p>
         </div>
+      </section>
 
+      <div className="max-w-7xl mx-auto px-6 py-24 md:py-32 lg:px-12">
+        
         {/* Filter & Search Bar */}
         <div className="mb-24 flex flex-col md:flex-row justify-between items-center gap-12 border-b border-slate-100 pb-12 reveal">
           <div className="flex flex-wrap justify-center gap-8">

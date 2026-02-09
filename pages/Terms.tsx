@@ -9,18 +9,28 @@ const Terms: React.FC = () => {
         description="Review the terms of service and booking conditions for Serenity Maldives Travel Agency."
       />
       
-      <section className="pt-48 pb-16 px-6 text-center">
-        <div className="max-w-4xl mx-auto">
-          <span className="text-[10px] font-black text-sky-500 uppercase tracking-[1.2em] mb-12 block">Agreement</span>
-          <h1 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 tracking-tighter italic leading-none mb-12">
+      {/* Cinematic Hero Section */}
+      <section className="relative h-[40vh] md:h-[60vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1920" 
+            className="w-full h-full object-cover" 
+            alt="Maldives Texture"
+          />
+          <div className="absolute inset-0 bg-slate-950/60" />
+        </div>
+        <div className="relative z-10 text-center px-6 reveal active">
+          <span className="text-[10px] font-black text-sky-400 uppercase tracking-[1.2em] mb-8 block">Agreement</span>
+          <h1 className="text-4xl md:text-7xl font-serif font-bold text-white tracking-tighter italic leading-none">
             Terms of <br /> Service.
           </h1>
-          <p className="text-slate-400 text-[9px] font-bold uppercase tracking-[0.5em]">Effective January 2026</p>
+          <div className="h-px w-16 bg-amber-400 mx-auto mt-8 mb-8"></div>
+          <p className="text-white/60 text-[9px] font-bold uppercase tracking-[0.5em]">Effective January 2026</p>
         </div>
       </section>
 
-      <section className="max-w-3xl mx-auto px-6 prose prose-slate prose-lg">
-        <div className="bg-white rounded-[3rem] p-12 md:p-20 shadow-sm border border-slate-50">
+      <section className="max-w-3xl mx-auto px-6 prose prose-slate prose-lg -mt-16 relative z-20">
+        <div className="bg-white rounded-[3rem] p-12 md:p-20 shadow-2xl border border-slate-50">
           <h2 className="font-serif italic text-3xl mb-8">1. The Contract</h2>
           <p className="text-slate-600 leading-loose text-sm mb-12">
             By engaging Serenity Maldives (hereinafter "The Agency"), you enter into a binding agreement. Our role is that of a travel curator and intermediary between you and luxury resorts, transfer operators, and service providers across the Maldivian archipelago.

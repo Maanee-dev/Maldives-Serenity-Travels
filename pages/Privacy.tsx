@@ -9,18 +9,28 @@ const Privacy: React.FC = () => {
         description="Our commitment to protecting your personal data and maintaining the confidentiality of your travel vision."
       />
       
-      <section className="pt-48 pb-16 px-6 text-center">
-        <div className="max-w-4xl mx-auto">
-          <span className="text-[10px] font-black text-sky-500 uppercase tracking-[1.2em] mb-12 block">Governance</span>
-          <h1 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 tracking-tighter italic leading-none mb-12">
+      {/* Cinematic Hero Section */}
+      <section className="relative h-[40vh] md:h-[60vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1920" 
+            className="w-full h-full object-cover" 
+            alt="Maldives Texture"
+          />
+          <div className="absolute inset-0 bg-slate-950/60" />
+        </div>
+        <div className="relative z-10 text-center px-6 reveal active">
+          <span className="text-[10px] font-black text-sky-400 uppercase tracking-[1.2em] mb-8 block">Governance</span>
+          <h1 className="text-4xl md:text-7xl font-serif font-bold text-white tracking-tighter italic leading-none">
             Privacy <br /> Policy.
           </h1>
-          <p className="text-slate-400 text-[9px] font-bold uppercase tracking-[0.5em]">Updated January 2026</p>
+          <div className="h-px w-16 bg-amber-400 mx-auto mt-8 mb-8"></div>
+          <p className="text-white/60 text-[9px] font-bold uppercase tracking-[0.5em]">Updated January 2026</p>
         </div>
       </section>
 
-      <section className="max-w-3xl mx-auto px-6 prose prose-slate prose-lg">
-        <div className="bg-white rounded-[3rem] p-12 md:p-20 shadow-sm border border-slate-50">
+      <section className="max-w-3xl mx-auto px-6 prose prose-slate prose-lg -mt-16 relative z-20">
+        <div className="bg-white rounded-[3rem] p-12 md:p-20 shadow-2xl border border-slate-50">
           <h2 className="font-serif italic text-3xl mb-8">The Sanctity of Data</h2>
           <p className="text-slate-600 leading-loose text-sm mb-12">
             Your travel vision is personal. At Serenity Maldives, we treat your data with the same level of care we apply to our bespoke itineraries. This policy outlines how we handle the digital footprints you leave with us.

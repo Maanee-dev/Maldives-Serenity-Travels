@@ -93,33 +93,33 @@ const Offers: React.FC = () => {
            'bespoke travel deals Maldives', 'overwater villa packages'
          ]}
          image="https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=1200"
-         schema={{
-           "@context": "https://schema.org",
-           "@type": "ItemList",
-           "name": "Luxury Maldives Offers",
-           "itemListElement": offers.slice(0, 10).map((o, i) => ({
-             "@type": "ListItem",
-             "position": i + 1,
-             "name": o.title,
-             "description": o.discount
-           }))
-         }}
        />
 
-       {/* Editorial Header */}
-       <section className="pt-48 pb-16 px-6 text-center">
-          <div className="max-w-4xl mx-auto">
-            <span className="text-[10px] font-black text-sky-500 uppercase tracking-[1em] mb-8 block">Exclusive Archives</span>
-            <h1 className="text-6xl md:text-8xl font-serif font-bold text-slate-950 tracking-tighter leading-none mb-12">
-              Bespoke <br /> 
-              <span className="italic text-slate-400 font-normal">Privileges.</span>
-            </h1>
-          </div>
-       </section>
+       {/* Cinematic Hero Section */}
+       <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1573843225233-6f36ee03b10e?auto=format&fit=crop&q=80&w=1920" 
+            className="w-full h-full object-cover" 
+            alt="Maldives Cocktail"
+          />
+          <div className="absolute inset-0 bg-slate-950/40" />
+        </div>
+        <div className="relative z-10 text-center px-6 reveal active">
+          <span className="text-[10px] font-black text-sky-400 uppercase tracking-[1em] mb-8 block">Exclusive Archives</span>
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold text-white tracking-tighter leading-none italic">
+            Bespoke <br /> Privileges.
+          </h1>
+          <div className="h-px w-24 bg-amber-400 mx-auto mt-12 mb-12"></div>
+          <p className="text-white text-[10px] md:text-[13px] font-bold uppercase tracking-[0.5em] max-w-2xl mx-auto leading-loose opacity-90">
+             Seasonal dispatches from the archipelago's <br className="hidden md:block"/> most iconic sanctuaries.
+          </p>
+        </div>
+      </section>
 
        {/* Intelligence Filter Bar */}
-       <section className="max-w-7xl mx-auto px-6 mb-20 sticky top-24 z-50">
-          <div className="bg-white/80 backdrop-blur-xl border border-slate-100 rounded-[3rem] p-4 md:p-6 shadow-2xl flex flex-col lg:flex-row gap-6 items-center">
+       <section className="max-w-7xl mx-auto px-6 -mt-16 md:-mt-24 mb-20 relative z-50">
+          <div className="bg-white/95 backdrop-blur-xl border border-slate-100 rounded-[3rem] p-4 md:p-6 shadow-2xl flex flex-col lg:flex-row gap-6 items-center">
             
             {/* Search Input */}
             <div className="flex-1 w-full relative">

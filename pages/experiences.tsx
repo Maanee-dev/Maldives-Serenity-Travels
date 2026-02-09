@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { EXPERIENCES } from '../constants';
 import { Link } from 'react-router-dom';
@@ -29,33 +28,30 @@ const Experiences: React.FC = () => {
           'charter seaplane Maldives', 'luxury yacht Maldives', 'bespoke adventure Maldives'
         ]}
         image="https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&fit=crop&q=80&w=1200"
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "ItemList",
-          "name": "Luxury Maldives Experiences",
-          "itemListElement": EXPERIENCES.map((exp, i) => ({
-            "@type": "ListItem",
-            "position": i + 1,
-            "name": exp.title,
-            "description": exp.description
-          }))
-        }}
       />
 
-      {/* 1. EDITORIAL HEADER */}
-      <section className="pt-64 pb-48 px-6 text-center reveal">
-        <div className="max-w-4xl mx-auto">
-          <span className="text-[10px] font-bold text-sky-500 mb-12 block tracking-[1em] uppercase">The Perspective</span>
-          <h1 className="text-6xl md:text-9xl lg:text-[11rem] font-serif font-bold mb-16 text-slate-950 tracking-tighter italic leading-none">Curated Living</h1>
-          <div className="h-px w-24 bg-amber-400 mx-auto mb-16"></div>
-          <p className="text-slate-500 text-[11px] font-bold max-w-xl mx-auto uppercase tracking-[0.5em] leading-[2.8] opacity-80">
+      {/* Cinematic Hero Header */}
+      <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1920" 
+            className="w-full h-full object-cover" 
+            alt="Diving in Maldives"
+          />
+          <div className="absolute inset-0 bg-slate-950/40" />
+        </div>
+        <div className="relative z-10 text-center px-6 reveal active">
+          <span className="text-[10px] font-bold text-sky-400 mb-12 block tracking-[1em] uppercase">The Perspective</span>
+          <h1 className="text-6xl md:text-9xl lg:text-[11rem] font-serif font-bold text-white tracking-tighter italic leading-none">Curated Living</h1>
+          <div className="h-px w-24 bg-amber-400 mx-auto mt-12 mb-12"></div>
+          <p className="text-white text-[11px] font-bold max-w-xl mx-auto uppercase tracking-[0.5em] leading-[2.8] opacity-80">
             Beyond the turquoise horizon lies a world <br className="hidden md:block"/> defined by movement, silence, and adventure.
           </p>
         </div>
       </section>
 
       {/* 2. THE MAIN EXPERIENCES FLOW */}
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-24 pb-64">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-24 py-32 md:py-64">
         <div className="flex flex-col gap-48 md:gap-80">
           {EXPERIENCES.map((exp, idx) => (
             <div key={exp.id} className={`flex flex-col lg:flex-row gap-24 lg:gap-48 items-center reveal ${idx % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}>

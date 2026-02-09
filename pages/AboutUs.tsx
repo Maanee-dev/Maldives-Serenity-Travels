@@ -20,16 +20,24 @@ const AboutUs: React.FC = () => {
         description="Serenity Maldives is a boutique travel agency defined by perspective. Discover our heritage in Addu City and our mission to curate the silence and luxury of the archipelago."
       />
 
-      {/* Hero */}
-      <section className="pt-48 md:pt-64 pb-24 md:pb-48 px-6 text-center reveal active">
-        <div className="max-w-4xl mx-auto">
+      {/* Cinematic Hero Section */}
+      <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1920" 
+            className="w-full h-full object-cover" 
+            alt="Maldives Island Life"
+          />
+          <div className="absolute inset-0 bg-slate-950/40" />
+        </div>
+        <div className="relative z-10 text-center px-6 reveal active">
           <span className="text-[10px] font-black text-sky-500 uppercase tracking-[1.2em] mb-12 block">Our Origin</span>
-          <h1 className="text-5xl md:text-8xl lg:text-[10rem] font-serif font-bold text-slate-950 tracking-tighter italic leading-none mb-16">
+          <h1 className="text-5xl md:text-8xl lg:text-9xl font-serif font-bold text-white tracking-tighter italic leading-none">
             Defined by <br /> Perspective.
           </h1>
-          <div className="h-px w-24 bg-amber-400 mx-auto mb-16"></div>
-          <p className="text-slate-500 text-[11px] font-bold uppercase tracking-[0.5em] leading-[2.8] max-w-xl mx-auto opacity-80">
-            A boutique agency born from the deep blue of Addu Atoll, <br className="hidden md:block"/> dedicated to the art of the bespoke journey.
+          <div className="h-px w-24 bg-amber-400 mx-auto mt-12 mb-12"></div>
+          <p className="text-white text-[11px] font-bold uppercase tracking-[0.5em] leading-[2.8] max-w-xl mx-auto opacity-90">
+            A boutique agency born from the southern frontier of the archipelago, <br className="hidden md:block"/> dedicated to the art of the bespoke journey.
           </p>
         </div>
       </section>

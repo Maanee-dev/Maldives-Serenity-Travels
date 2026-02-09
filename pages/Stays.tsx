@@ -77,7 +77,6 @@ const Stays: React.FC = () => {
 
   const totalPages = Math.ceil(filteredStays.length / itemsPerPage);
   
-  // Update: Show all items from page 1 to currentPage instead of just one page
   const currentStays = useMemo(() => {
     const end = currentPage * itemsPerPage;
     return filteredStays.slice(0, end);
@@ -110,34 +109,44 @@ const Stays: React.FC = () => {
         image="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200"
       />
 
-      {/* Responsive Hero Section */}
-      <section className="pt-32 md:pt-56 lg:pt-64 pb-12 md:pb-24 px-6 text-center reveal active">
-        <div className="max-w-[1440px] mx-auto">
-          <span className="text-[10px] md:text-[11px] uppercase tracking-[0.8em] font-black mb-6 md:mb-10 block text-sky-500">The Portfolio</span>
-          <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-serif font-bold mb-8 md:mb-12 text-slate-900 tracking-tighter italic leading-none break-words px-4">
+      {/* Cinematic Hero Section */}
+      <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=1920" 
+            className="w-full h-full object-cover" 
+            alt="Maldives Horizon"
+          />
+          <div className="absolute inset-0 bg-slate-950/40" />
+        </div>
+        <div className="relative z-10 text-center px-6 reveal active">
+          <span className="text-[10px] md:text-[11px] uppercase tracking-[1em] font-black mb-8 block text-sky-400">The Portfolio</span>
+          <h1 className="text-5xl md:text-8xl lg:text-9xl font-serif font-bold text-white tracking-tighter italic leading-none">
             {stayType === AccommodationType.RESORT ? 'Iconic Stays.' : stayType === AccommodationType.GUEST_HOUSE ? 'Island Life.' : 'Atoll Voyagers.'}
           </h1>
-          <div className="h-px w-16 md:w-24 bg-amber-400 mx-auto mb-8 md:mb-16"></div>
-          <p className="text-slate-500 text-[10px] md:text-[13px] font-bold uppercase tracking-[0.5em] max-w-2xl mx-auto leading-loose px-4 opacity-80">
+          <div className="h-px w-24 bg-amber-400 mx-auto mt-12 mb-12"></div>
+          <p className="text-white text-[10px] md:text-[13px] font-bold uppercase tracking-[0.5em] max-w-2xl mx-auto leading-loose opacity-90">
             Defining the luxury of space and the art of silence <br className="hidden md:block"/> across the turquoise archipelago.
           </p>
         </div>
       </section>
 
       {/* Refined Search Architecture */}
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 mb-16 md:mb-32 reveal active">
-        <div className="relative group max-w-4xl mx-auto">
-          <span className="absolute left-0 -top-6 text-[10px] font-black uppercase tracking-[0.6em] text-slate-900 group-focus-within:text-sky-500 transition-colors">
-            Search Sanctuaries
-          </span>
-          <div className="relative border-b-[1px] border-slate-200 group-focus-within:border-slate-950 transition-all duration-500">
-            <input 
-              type="text"
-              value={filterQuery}
-              onChange={(e) => { setFilterQuery(e.target.value); setCurrentPage(1); }}
-              placeholder="Soneva Jani, Baa Atoll..."
-              className="w-full bg-transparent pt-6 pb-4 md:pt-8 md:pb-6 text-xl sm:text-2xl md:text-4xl lg:text-5xl font-serif italic text-slate-950 outline-none placeholder:text-slate-100"
-            />
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 -mt-24 relative z-20 mb-16 md:mb-32 reveal active">
+        <div className="bg-white rounded-[3rem] p-12 md:p-20 shadow-2xl border border-slate-100 max-w-4xl mx-auto">
+          <div className="relative group">
+            <span className="text-[10px] font-black uppercase tracking-[0.6em] text-slate-400 group-focus-within:text-sky-500 transition-colors block mb-6">
+              Search Sanctuaries
+            </span>
+            <div className="relative border-b-[1px] border-slate-200 group-focus-within:border-slate-950 transition-all duration-500">
+              <input 
+                type="text"
+                value={filterQuery}
+                onChange={(e) => { setFilterQuery(e.target.value); setCurrentPage(1); }}
+                placeholder="Soneva Jani, Baa Atoll..."
+                className="w-full bg-transparent pb-6 text-xl sm:text-2xl md:text-4xl lg:text-5xl font-serif italic text-slate-950 outline-none placeholder:text-slate-100"
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -26,16 +26,29 @@ const Contact: React.FC = () => {
         description="Connect with our Maldivian travel specialists. Reach us via WhatsApp or our inquiry form for bespoke holiday planning in the archipelago."
       />
 
-      <section className="pt-48 md:pt-64 pb-24 px-6 text-center reveal active">
-        <div className="max-w-4xl mx-auto">
-          <span className="text-[10px] font-black text-sky-500 uppercase tracking-[1.2em] mb-12 block">Dialogue</span>
-          <h1 className="text-5xl md:text-8xl font-serif font-bold text-slate-950 tracking-tighter italic leading-none mb-16">
+      {/* Cinematic Hero Section */}
+      <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1506953823976-52e1bdc0149a?auto=format&fit=crop&q=80&w=1920" 
+            className="w-full h-full object-cover" 
+            alt="Maldives Water"
+          />
+          <div className="absolute inset-0 bg-slate-950/40" />
+        </div>
+        <div className="relative z-10 text-center px-6 reveal active">
+          <span className="text-[10px] font-black text-sky-400 uppercase tracking-[1.2em] mb-12 block">Dialogue</span>
+          <h1 className="text-5xl md:text-8xl lg:text-9xl font-serif font-bold text-white tracking-tighter italic leading-none">
             Initiate <br /> Contact.
           </h1>
+          <div className="h-px w-24 bg-amber-400 mx-auto mt-12 mb-12"></div>
+          <p className="text-white text-[11px] font-bold uppercase tracking-[0.5em] max-w-xl mx-auto opacity-90">
+             Our specialists are available for bespoke <br className="hidden md:block"/> consultations and itinerary refinement.
+          </p>
         </div>
       </section>
 
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 pb-48 grid grid-cols-1 lg:grid-cols-12 gap-24">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 py-32 md:py-48 grid grid-cols-1 lg:grid-cols-12 gap-24">
         {/* Contact Info */}
         <div className="lg:col-span-5 space-y-24 reveal">
           <div className="space-y-12">

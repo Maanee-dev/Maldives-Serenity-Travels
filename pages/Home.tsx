@@ -129,7 +129,7 @@ const Home: React.FC = () => {
   };
 
   const signatureAtolls = [
-    { name: 'Noonu Atoll', image: '', count: '12 Stays', desc: 'Untouched Blue' },
+    { name: 'Noonu Atoll', image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=800', count: '12 Stays', desc: 'Untouched Blue' },
     { name: 'Baa Atoll', image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=800', count: '18 Stays', desc: 'UNESCO Biosphere' },
     { name: 'North Male', image: 'https://images.unsplash.com/photo-1510011564758-29df30730163?auto=format&fit=crop&q=80&w=800', count: '24 Stays', desc: 'The Epicenter' },
     { name: 'Ari Atoll', image: 'https://images.unsplash.com/photo-1502602898657-3e917247a183?auto=format&fit=crop&q=80&w=800', count: '15 Stays', desc: 'Whale Shark Paths' }
@@ -147,26 +147,6 @@ const Home: React.FC = () => {
           'North Male Atoll luxury', 'seaplane transfers Maldives'
         ]}
         image="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200"
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "TravelAgency",
-          "name": "Serenity Maldives",
-          "image": "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200",
-          "description": "A bespoke boutique agency crafting unrivaled luxury journeys across the Maldivian atolls.",
-          "telephone": "+960-777-1234",
-          "email": "info@maldives-serenitytravels.com",
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Faith, S.feydhoo",
-            "addressLocality": "Addu City",
-            "addressRegion": "Addu",
-            "postalCode": "19040",
-            "addressCountry": "MV"
-          },
-          "url": "https://maldives-serenitytravels.com",
-          "priceRange": "$$$$",
-          "areaServed": "Maldives"
-        }}
       />
 
       {/* HERO SECTION */}
@@ -233,10 +213,10 @@ const Home: React.FC = () => {
                   Defined by geography and refined by hand, we curate the silence that modern living lacks.
                 </p>
                 <p className="text-slate-500 text-base md:text-lg leading-[1.8] mb-12">
-                  We are a bespoke boutique agency crafting unrivaled journeys across the Maldivian atolls. Our expertise lies in the quiet luxury of space, service, and stillness.
+                  We are a boutique agency born from the southern frontier of Addu City. Our philosophy is rooted in the belief that true luxury isn't found in the generic, but in the specific—the perfect seaplane arrival, the hidden sandbank, and the unscripted silence of a private atoll.
                 </p>
-                <Link to="/stories" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
-                  <span className="border-b-2 border-slate-100 pb-1 group-hover:border-sky-500 transition-colors">Our Philosophy</span>
+                <Link to="/about" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
+                  <span className="border-b-2 border-slate-100 pb-1 group-hover:border-sky-500 transition-colors">Our Full Narrative</span>
                   <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700">
                     <svg className="w-5 h-5 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                   </div>
@@ -247,6 +227,27 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* BESPOKE SERVICES GRID */}
+      <section className="py-24 md:py-48 bg-slate-50">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-20 text-center mb-24 reveal">
+           <span className="text-sky-500 font-black uppercase tracking-[1em] text-[10px] mb-8 block">The Serenity Standard</span>
+           <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Bespoke Handling.</h2>
+        </div>
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-20 grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24">
+           {[
+             { title: 'VIP Arrivals', desc: 'Fast-track handling at Velana International with access to private CIP lounges and direct coordination with seaplane operators.' },
+             { title: 'Atoll Concierge', desc: 'A dedicated specialist assigned to your journey, ensuring dietary needs, excursion timing, and villa preferences are executed to perfection.' },
+             { title: 'Private Charters', desc: 'Beyond standard transfers. Arrange private seaplane charters or luxury yacht arrivals directly from the runway to your residence.' }
+           ].map((service, i) => (
+             <div key={i} className="reveal bg-white p-12 rounded-[3rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-700 group">
+                <div className="w-12 h-px bg-amber-400 mb-10 group-hover:w-full transition-all duration-700"></div>
+                <h3 className="text-2xl font-serif font-bold text-slate-950 mb-6">{service.title}</h3>
+                <p className="text-slate-500 text-[11px] font-bold uppercase tracking-[0.3em] leading-loose">{service.desc}</p>
+             </div>
+           ))}
+        </div>
+      </section>
+
       {/* SIGNATURE ATOLLS */}
       <section className="py-24 md:py-40 bg-[#FCFAF7] border-y border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
@@ -254,6 +255,9 @@ const Home: React.FC = () => {
             <div className="max-w-xl">
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[1em] mb-8 block">Regional Mastery</span>
               <h3 className="text-4xl md:text-7xl font-serif font-bold italic leading-tight text-slate-950 tracking-tighter">Atoll Coordinates.</h3>
+              <p className="mt-8 text-slate-400 text-[10px] uppercase font-bold tracking-[0.3em] leading-loose">
+                 From the UNESCO Biosphere of Baa to the southern depths of Addu, we operate across the entire archipelago with local precision.
+              </p>
             </div>
             <Link to="/stays" className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.5em] border-b border-sky-500 pb-1 mb-4 hover:text-slate-900 hover:border-slate-900 transition-colors hidden md:block">Explore Geography</Link>
           </div>
@@ -280,6 +284,9 @@ const Home: React.FC = () => {
             <div className="max-w-xl">
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[1.2em] mb-8 block">The Portfolio</span>
               <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 tracking-tighter italic leading-none">The Collection.</h3>
+              <p className="mt-12 text-slate-400 text-[10px] uppercase font-bold tracking-[0.4em] leading-loose">
+                 Curated for the discerning eye. Our portfolio only accepts resorts that meet the Serenity standard of privacy, architectural integrity, and service.
+              </p>
             </div>
             <div className="w-24 h-[1px] bg-amber-400 mb-4 hidden md:block"></div>
           </div>
