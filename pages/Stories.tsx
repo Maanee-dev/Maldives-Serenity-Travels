@@ -80,10 +80,9 @@ const Stories: React.FC = () => {
         </div>
         <div className="relative z-10 text-center px-6 reveal active">
           <span className="text-[10px] font-bold text-sky-400 mb-12 block tracking-[1em] uppercase">The Journal</span>
-          <h1 className="text-6xl md:text-9xl font-serif font-bold text-white tracking-tighter italic leading-none">Perspective.</h1>
+          <h1 className="text-6xl md:text-9xl font-serif font-bold text-white tracking-tighter italic leading-none"></h1>
           <div className="h-px w-24 bg-amber-400 mx-auto mt-12 mb-12"></div>
           <p className="text-white text-[11px] font-bold max-w-xl mx-auto uppercase tracking-[0.5em] leading-[2.5] opacity-90">
-             Editorial archives of Maldivian heritage, <br className="hidden md:block"/> luxury insights, and travel intelligence.
           </p>
         </div>
       </section>

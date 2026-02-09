@@ -108,7 +108,7 @@ const Offers: React.FC = () => {
         <div className="relative z-10 text-center px-6 reveal active">
           <span className="text-[10px] font-black text-sky-400 uppercase tracking-[1em] mb-8 block">Exclusive Archives</span>
           <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold text-white tracking-tighter leading-none italic">
-            Bespoke <br /> Privileges.
+             <br /> Offers.
           </h1>
           <div className="h-px w-24 bg-amber-400 mx-auto mt-12 mb-12"></div>
           <p className="text-white text-[10px] md:text-[13px] font-bold uppercase tracking-[0.5em] max-w-2xl mx-auto leading-loose opacity-90">
