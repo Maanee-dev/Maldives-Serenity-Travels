@@ -124,6 +124,10 @@ const Stays: React.FC = () => {
           <h1 className="text-5xl md:text-8xl lg:text-9xl font-serif font-bold text-white tracking-tighter italic leading-none">
             {stayType === AccommodationType.RESORT ? 'Iconic Stays.' : stayType === AccommodationType.GUEST_HOUSE ? 'Island Life.' : 'Atoll Voyagers.'}
           </h1>
+          <div className="h-px w-24 bg-amber-400 mx-auto mt-12 mb-12"></div>
+          <p className="text-white text-[10px] md:text-[13px] font-bold uppercase tracking-[0.5em] max-w-2xl mx-auto leading-loose opacity-90">
+          </p>
+        </div>
       </section>
       
 
