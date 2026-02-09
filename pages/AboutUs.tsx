@@ -1,0 +1,109 @@
+import React, { useEffect } from 'react';
+import SEO from '../components/SEO';
+import { Link } from 'react-router-dom';
+
+const AboutUs: React.FC = () => {
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="bg-[#FCFAF7] min-h-screen selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
+      <SEO 
+        title="About Us | The Curators of Maldivian Luxury" 
+        description="Serenity Maldives is a boutique travel agency defined by perspective. Discover our heritage in Addu City and our mission to curate the silence and luxury of the archipelago."
+      />
+
+      {/* Hero */}
+      <section className="pt-48 md:pt-64 pb-24 md:pb-48 px-6 text-center reveal active">
+        <div className="max-w-4xl mx-auto">
+          <span className="text-[10px] font-black text-sky-500 uppercase tracking-[1.2em] mb-12 block">Our Origin</span>
+          <h1 className="text-5xl md:text-8xl lg:text-[10rem] font-serif font-bold text-slate-950 tracking-tighter italic leading-none mb-16">
+            Defined by <br /> Perspective.
+          </h1>
+          <div className="h-px w-24 bg-amber-400 mx-auto mb-16"></div>
+          <p className="text-slate-500 text-[11px] font-bold uppercase tracking-[0.5em] leading-[2.8] max-w-xl mx-auto opacity-80">
+            A boutique agency born from the deep blue of Addu Atoll, <br className="hidden md:block"/> dedicated to the art of the bespoke journey.
+          </p>
+        </div>
+      </section>
+
+      {/* Split Narrative */}
+      <section className="py-24 md:py-48 bg-white border-y border-slate-50">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+          <div className="reveal">
+            <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl group bg-slate-100">
+              <img 
+                src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200" 
+                className="w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110" 
+                alt="Maldives Seascape"
+              />
+            </div>
+          </div>
+          <div className="reveal delay-300">
+            <span className="text-sky-500 font-black uppercase tracking-[1em] text-[10px] mb-12 block">The Philosophy</span>
+            <h2 className="text-4xl md:text-6xl font-serif font-bold text-slate-950 italic mb-12 tracking-tight">Curating the Silence.</h2>
+            <div className="space-y-8 text-slate-600 text-lg md:text-xl leading-relaxed font-medium italic opacity-90">
+              <p>
+                In a world that never stops talking, we found luxury in the spaces between the words. At Serenity Maldives, we believe that the true essence of travel is not found in the destination, but in the perspective you gain while there.
+              </p>
+              <p>
+                Headquartered in Addu City, we operate at the southern frontier of the archipelago. This distance gives us a unique lens through which we view Maldivian hospitality—one that prioritizes privacy, heritage, and the profound beauty of the untouched.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Values Grid */}
+      <section className="py-24 md:py-48 px-6 lg:px-12">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-16">
+          {[
+            { title: 'Bespoke Integrity', desc: 'We do not believe in automated bookings. Every itinerary is a hand-crafted narrative, reviewed by experts who know the atolls by heart.' },
+            { title: 'Local Heritage', desc: 'Based in Addu City, we honor the Maldivian spirit. We bridge the gap between world-class luxury and authentic local soul.' },
+            { title: 'Silent Luxury', desc: 'Luxury is not loud. It is the perfect seaplane connection, the specific vintage on your deck, and the absence of any worry.' }
+          ].map((val, i) => (
+            <div key={i} className="reveal" style={{ transitionDelay: `${i * 150}ms` }}>
+              <span className="text-amber-500 font-serif italic text-4xl mb-8 block">0{i+1}.</span>
+              <h3 className="text-2xl font-serif font-bold text-slate-950 mb-6">{val.title}</h3>
+              <p className="text-slate-500 text-[11px] font-bold uppercase tracking-[0.3em] leading-loose">{val.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Location Section */}
+      <section className="py-24 md:py-48 bg-slate-950 text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.05] flex items-center justify-center pointer-events-none">
+          <h2 className="text-[30vw] font-serif italic -rotate-12 translate-y-1/2">Addu</h2>
+        </div>
+        <div className="max-w-4xl mx-auto px-6 text-center relative z-10 reveal">
+          <span className="text-sky-400 font-black uppercase tracking-[1em] text-[10px] mb-12 block">Our Anchor</span>
+          <h3 className="text-4xl md:text-7xl font-serif font-bold italic mb-12 tracking-tighter">Faith, Feydhoo.</h3>
+          <p className="text-slate-400 text-sm md:text-lg font-medium leading-loose mb-16 opacity-80 uppercase tracking-[0.4em]">
+            Located in the southern-most atoll, our headquarters <br className="hidden md:block"/> at S.feydhoo serve as our gateway to the infinite blue.
+          </p>
+          <div className="h-px w-24 bg-white/20 mx-auto"></div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 md:py-48 text-center bg-white">
+        <div className="max-w-4xl mx-auto px-6 reveal">
+          <h2 className="text-4xl md:text-6xl font-serif font-bold text-slate-950 italic mb-12 tracking-tight">Begin Your Narrative.</h2>
+          <Link to="/plan" className="inline-block bg-slate-950 text-white font-black px-16 py-7 rounded-full hover:bg-sky-500 transition-all duration-700 shadow-2xl uppercase tracking-[0.8em] text-[10px]">
+            Initiate Planning
+          </Link>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default AboutUs;

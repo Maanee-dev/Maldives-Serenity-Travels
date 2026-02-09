@@ -10,12 +10,16 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Updated imports to use PascalCase to resolve file name casing conflicts and match project-wide conventions
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Fix: Updated import casing to match existing files and resolve casing collision errors
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
+import AboutUs from './pages/AboutUs';
+import Contact from './pages/Contact';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
 import AdminSync from './pages/AdminSync';
 import AdminStories from './pages/AdminStories';
 
@@ -41,6 +45,10 @@ const App: React.FC = () => {
         <Route path="/stories" element={<Stories />} />
         <Route path="/stories/:slug" element={<BlogPostDetail />} />
         <Route path="/plan" element={<PlanMyTrip />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route path="/admin/sync" element={<AdminSync />} />
         <Route path="/admin/stories" element={<AdminStories />} />
       </Routes>

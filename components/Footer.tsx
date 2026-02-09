@@ -22,9 +22,9 @@ const Footer: React.FC = () => {
             <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 mb-8 underline underline-offset-8 decoration-slate-200">Company</h4>
             <ul className="space-y-3 text-slate-600 text-[10px] uppercase font-bold tracking-widest">
               <li><Link to="/" className="hover:text-slate-900 transition-colors">Home</Link></li>
-              <li><Link to="/stories" className="hover:text-slate-900 transition-colors">About Us</Link></li>
+              <li><Link to="/about" className="hover:text-slate-900 transition-colors">About Us</Link></li>
               <li><Link to="/experiences" className="hover:text-slate-900 transition-colors">Tours</Link></li>
-              <li><Link to="/plan" className="hover:text-slate-900 transition-colors">Contacts</Link></li>
+              <li><Link to="/contact" className="hover:text-slate-900 transition-colors">Contacts</Link></li>
             </ul>
           </div>
 
@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
               </li>
               <li>
                 <a href="#" className="flex items-center gap-3 text-slate-600 hover:text-slate-950 transition-colors group">
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.607.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.063 1.365-.333 2.632-1.308 3.607-.975.976-2.242 1.246-3.607 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.332-3.608-1.308-.975-.975-1.245-2.242-1.308-3.607-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.365.332-2.633 1.308-3.608.975-.976 2.242-1.246 3.607-1.308 1.266-.058-1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.337 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.397-.2 6.78-2.618 6.98-6.98.058-1.28.072-1.689.072-4.948s-.014-3.667-.072-4.947c-.2-4.337-2.618-6.78-6.98-6.98-1.281-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.607.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.063 1.365-.333 2.632-1.308 3.607-. productivity.975.976-2.242 1.246-3.607 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.332-3.608-1.308-.975-.975-1.245-2.242-1.308-3.607-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.365.332-2.633 1.308-3.608.975-.976 2.242-1.246 3.607-1.308 1.266-.058-1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.337 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.397-.2 6.78-2.618 6.98-6.98.058-1.28.072-1.689.072-4.948s-.014-3.667-.072-4.947c-.2-4.337-2.618-6.78-6.98-6.98-1.281-.058-1.689-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                   <span className="text-[10px] uppercase font-bold tracking-widest">Instagram</span>
                 </a>
               </li>
@@ -72,8 +72,8 @@ const Footer: React.FC = () => {
         <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-slate-500 text-[8px] uppercase font-bold tracking-[0.4em]">© 2026 Serenity Travels. All Rights Reserved.</p>
           <div className="flex gap-8">
-            <a href="#" className="text-slate-400 text-[8px] uppercase font-bold tracking-[0.4em] hover:text-slate-900 transition-colors">Privacy Policy</a>
-            <a href="#" className="text-slate-400 text-[8px] uppercase font-bold tracking-[0.4em] hover:text-slate-900 transition-colors">Terms of Service</a>
+            <Link to="/privacy" className="text-slate-400 text-[8px] uppercase font-bold tracking-[0.4em] hover:text-slate-900 transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="text-slate-400 text-[8px] uppercase font-bold tracking-[0.4em] hover:text-slate-900 transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>
