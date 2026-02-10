@@ -55,12 +55,12 @@ const Contact: React.FC = () => {
             <div>
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-4">Immediate Assistance</span>
               <div className="space-y-6">
-                <a href="https://wa.me/9607771234" target="_blank" rel="noreferrer" className="flex items-center gap-6 group">
+                <a href="https://wa.me/9607259060" target="_blank" rel="noreferrer" className="flex items-center gap-6 group">
                   <div className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-500">
                     <svg className="w-5 h-5 group-hover:text-white transition-colors fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.438 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-2.652 0-5.147 1.03-7.02 2.905-1.873 1.874-2.901 4.37-2.903 7.027-.001 2.03.543 4.154 1.61 5.9l-.311 1.137-.79 2.884 2.953-.776 1.061-.28z"/></svg>
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[11px] font-bold uppercase tracking-widest text-slate-900">+960 777 1234</span>
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-slate-900">+960 725 9060</span>
                     <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">General Inquiries</span>
                   </div>
                 </a>

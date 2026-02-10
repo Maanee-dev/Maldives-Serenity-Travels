@@ -137,19 +137,21 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
+      {/* 
+        PRODUCTION SEO: Exact Match Branding 
+        Format: Brand | Keyword
+      */}
       <SEO 
-        title="Luxury Travel Agency | Bespoke Maldives Journeys" 
-        description="Serenity Maldives is a bespoke boutique travel agency. We curate silence and luxury, crafting unrivaled journeys across Maldivian atolls. Discover private islands, overwater villas, and custom experiences."
+        title="Maldives Serenity Travels | Luxury Travel Agency" 
+        description="Maldives Serenity Travels is a premier boutique travel agency curating bespoke luxury journeys across the Maldivian archipelago. Discover private island sanctuaries and exclusive overwater villas."
+        isOrganization={true}
         keywords={[
-          'Maldives luxury travel', 'private island resorts Maldives', 'overwater villas Maldives', 
-          'Maldives honeymoon packages', 'Maldives diving trips', 'bespoke Maldives travel', 
-          'Serenity Maldives', 'luxury travel agency Maldives', 'Baa Atoll resorts', 
-          'North Male Atoll luxury', 'seaplane transfers Maldives'
+          'Maldives Serenity Travels', 'Maldives luxury travel', 'private island resorts Maldives', 
+          'overwater villas Maldives', 'Maldives honeymoon packages', 'bespoke Maldives travel'
         ]}
-        image="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200"
       />
 
-      {/* HERO SECTION */}
+      {/* Hero Section */}
       <section className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden bg-slate-950">
         <div className="absolute inset-0 z-0">
           {heroSlides.map((slide, idx) => (
@@ -165,11 +167,16 @@ const Home: React.FC = () => {
         </div>
         <div className="relative z-10 w-full max-w-[1600px] px-6 sm:px-12 md:px-20">
           <div className="flex flex-col items-start text-left">
+            {/* Visual Header */}
             <span className="text-[11px] font-bold uppercase tracking-[1em] text-sky-400 mb-8 block reveal active">{heroSlides[heroIndex].subtitle}</span>
-            <h1 className="flex flex-col mb-16 reveal active">
-              <span className="text-4xl sm:text-6xl md:text-8xl lg:text-[7rem] font-serif font-bold text-white leading-none tracking-tighter">{heroSlides[heroIndex].title}</span>
-              <span className="text-6xl sm:text-8xl md:text-9xl lg:text-[13rem] font-serif font-bold text-white italic leading-[0.8] tracking-tighter opacity-90">{heroSlides[heroIndex].titleAlt}<span className="not-italic text-sky-500">.</span></span>
-            </h1>
+            <div className="mb-16 reveal active">
+               {/* Exact Brand H1 for Google indexing */}
+               <h1 className="sr-only">Maldives Serenity Travels</h1>
+               <div className="flex flex-col">
+                <span className="text-4xl sm:text-6xl md:text-8xl lg:text-[7rem] font-serif font-bold text-white leading-none tracking-tighter">{heroSlides[heroIndex].title}</span>
+                <span className="text-6xl sm:text-8xl md:text-9xl lg:text-[13rem] font-serif font-bold text-white italic leading-[0.8] tracking-tighter opacity-90">{heroSlides[heroIndex].titleAlt}<span className="not-italic text-sky-500">.</span></span>
+               </div>
+            </div>
             <form onSubmit={handleSearch} className="w-full max-w-xl reveal active delay-500">
               <div className="relative group">
                 <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={typedPlaceholder} className="w-full bg-white/5 backdrop-blur-3xl border border-white/20 rounded-full pl-10 pr-24 py-6 text-white text-[11px] font-bold uppercase tracking-[0.4em] outline-none focus:bg-white focus:text-slate-950 placeholder:text-white/30 shadow-2xl" />
@@ -180,13 +187,17 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* PHILOSOPHY SECTION */}
+      {/* Philosophy Section */}
       <section className="py-24 md:py-48 bg-white relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="flex flex-col lg:flex-row gap-16 lg:gap-32 items-center">
             <div className="lg:w-1/2 relative order-2 lg:order-1 reveal">
               <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl z-10 group bg-slate-100">
-                <img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" alt="Island Culture" />
+                <img 
+                  src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" 
+                  className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" 
+                  alt="Maldives Serenity Travels logo" 
+                />
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
               </div>
               <div className="absolute -bottom-10 -right-4 md:-bottom-16 md:-right-16 bg-[#FCFAF7] p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl z-20 max-w-[280px] md:max-w-[380px] border border-slate-50 reveal delay-500">
@@ -213,7 +224,7 @@ const Home: React.FC = () => {
                   Defined by geography and refined by hand, we curate the silence that modern living lacks.
                 </p>
                 <p className="text-slate-500 text-base md:text-lg leading-[1.8] mb-12">
-                  We are a boutique agency born from the southern frontier of Addu City. Our philosophy is rooted in the belief that true luxury isn't found in the generic, but in the specific—the perfect seaplane arrival, the hidden sandbank, and the unscripted silence of a private atoll.
+                  Maldives Serenity Travels is a boutique agency born from the southern frontier of Addu City. Our philosophy is rooted in the belief that true luxury isn't found in the generic, but in the specific—the perfect seaplane arrival, the hidden sandbank, and the unscripted silence of a private atoll.
                 </p>
                 <Link to="/about" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
                   <span className="border-b-2 border-slate-100 pb-1 group-hover:border-sky-500 transition-colors">Our Full Narrative</span>
