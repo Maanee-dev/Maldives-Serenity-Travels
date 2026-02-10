@@ -1,15 +1,12 @@
 
 import { createClient } from '@supabase/supabase-js';
-import { Accommodation, AccommodationType, TransferType, MealPlan, Offer } from '../types';
+import { Accommodation, AccommodationType, TransferType, MealPlan, Offer, Experience, BlogPost } from '../types';
 
 const SUPABASE_URL = 'https://zocncwchaakjtsvlscmd.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_Ot34P55l4JGe2RjZywLovA_UokWsJ0I';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/**
- * HELPER: Robust mapping from Supabase Row to Accommodation Interface
- */
 export const mapResort = (item: any): Accommodation => {
   return {
     id: item.id,
@@ -32,13 +29,8 @@ export const mapResort = (item: any): Accommodation => {
   };
 };
 
-/**
- * HELPER: Robust mapping from Supabase Row to Offer Interface
- */
 export const mapOffer = (o: any): Offer => {
-  // If the query included a join with resorts, extract the slug
   const resortSlug = o.resorts?.slug || o.resort_slug || 'unknown';
-  
   return {
     id: o.id,
     resortId: o.resort_id,
@@ -54,5 +46,33 @@ export const mapOffer = (o: any): Offer => {
     price: o.price || 5000,
     priceSubtext: o.price_subtext || 'for 2 adults',
     rating: o.rating || 5
+  };
+};
+
+export const mapExperience = (e: any): Experience => {
+  return {
+    id: e.id,
+    resortId: e.resort_id,
+    resortName: e.resorts?.name || e.resort_name,
+    title: e.title,
+    description: e.description,
+    image: e.image,
+    category: e.category,
+    priceHint: e.price_hint
+  };
+};
+
+export const mapStory = (s: any): BlogPost => {
+  return {
+    id: s.id,
+    title: s.title,
+    slug: s.slug,
+    excerpt: s.excerpt,
+    content: s.content,
+    image: s.image,
+    date: s.date,
+    author: s.author,
+    category: s.category,
+    is_featured: !!s.is_featured
   };
 };

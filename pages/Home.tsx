@@ -125,7 +125,7 @@ const Home: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) navigate(`/stays?q=${encodeURIComponent(searchQuery)}`);
+    if (searchQuery.trim()) navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
   };
 
   const signatureAtolls = [
@@ -137,10 +137,6 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
-      {/* 
-        PRODUCTION SEO: Exact Match Branding 
-        Format: Brand | Keyword
-      */}
       <SEO 
         title="Maldives Serenity Travels | Luxury Travel Agency" 
         description="Maldives Serenity Travels is a premier boutique travel agency curating bespoke luxury journeys across the Maldivian archipelago. Discover private island sanctuaries and exclusive overwater villas."
@@ -167,10 +163,8 @@ const Home: React.FC = () => {
         </div>
         <div className="relative z-10 w-full max-w-[1600px] px-6 sm:px-12 md:px-20">
           <div className="flex flex-col items-start text-left">
-            {/* Visual Header */}
             <span className="text-[11px] font-bold uppercase tracking-[1em] text-sky-400 mb-8 block reveal active">{heroSlides[heroIndex].subtitle}</span>
             <div className="mb-16 reveal active">
-               {/* Exact Brand H1 for Google indexing */}
                <h1 className="sr-only">Maldives Serenity Travels</h1>
                <div className="flex flex-col">
                 <span className="text-4xl sm:text-6xl md:text-8xl lg:text-[7rem] font-serif font-bold text-white leading-none tracking-tighter">{heroSlides[heroIndex].title}</span>
@@ -246,41 +240,52 @@ const Home: React.FC = () => {
         </div>
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20 grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24">
            {[
-             { title: 'VIP Arrivals', desc: 'Fast-track handling at Velana International with access to private CIP lounges and direct coordination with seaplane operators.' },
-             { title: 'Atoll Concierge', desc: 'A dedicated specialist assigned to your journey, ensuring dietary needs, excursion timing, and villa preferences are executed to perfection.' },
-             { title: 'Private Charters', desc: 'Beyond standard transfers. Arrange private seaplane charters or luxury yacht arrivals directly from the runway to your residence.' }
+             { title: 'VIP Arrivals', desc: 'Fast-track handling from touchdown to seaplane departure.' },
+             { title: 'Atoll Portfolios', desc: 'Curated selection of properties aligned with your aesthetic.' },
+             { title: 'Direct Access', desc: 'Pre-negotiated privileges and upgrades via human experts.' }
            ].map((service, i) => (
-             <div key={i} className="reveal bg-white p-12 rounded-[3rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-700 group">
-                <div className="w-12 h-px bg-amber-400 mb-10 group-hover:w-full transition-all duration-700"></div>
-                <h3 className="text-2xl font-serif font-bold text-slate-950 mb-6">{service.title}</h3>
-                <p className="text-slate-500 text-[11px] font-bold uppercase tracking-[0.3em] leading-loose">{service.desc}</p>
+             <div key={i} className="bg-white p-12 rounded-[3rem] shadow-sm border border-slate-100 reveal" style={{ transitionDelay: `${i * 100}ms` }}>
+               <h3 className="text-2xl font-serif font-bold mb-6 italic">{service.title}</h3>
+               <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.4em] leading-loose">{service.desc}</p>
              </div>
            ))}
         </div>
       </section>
 
-      {/* SIGNATURE ATOLLS */}
-      <section className="py-24 md:py-40 bg-[#FCFAF7] border-y border-slate-100">
+      {/* Signature Stays */}
+      <section className="py-24 md:py-48 bg-white">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-20 md:mb-28 reveal">
-            <div className="max-w-xl">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[1em] mb-8 block">Regional Mastery</span>
-              <h3 className="text-4xl md:text-7xl font-serif font-bold italic leading-tight text-slate-950 tracking-tighter">Atoll Coordinates.</h3>
-              <p className="mt-8 text-slate-400 text-[10px] uppercase font-bold tracking-[0.3em] leading-loose">
-                 From the UNESCO Biosphere of Baa to the southern depths of Addu, we operate across the entire archipelago with local precision.
-              </p>
+          <div className="flex justify-between items-end mb-24 reveal">
+            <div>
+              <span className="text-sky-500 font-black uppercase tracking-[1em] text-[10px] mb-8 block">The Portfolio</span>
+              <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Signature Stays.</h2>
             </div>
-            <Link to="/stays" className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.5em] border-b border-sky-500 pb-1 mb-4 hover:text-slate-900 hover:border-slate-900 transition-colors hidden md:block">Explore Geography</Link>
+            <Link to="/stays" className="text-[10px] font-black uppercase tracking-[0.5em] border-b border-slate-950 pb-2 hover:text-sky-500 hover:border-sky-500 transition-all">Explore All Stays</Link>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 reveal">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
+            {featuredResorts.map(resort => (
+              <ResortCard key={resort.id} resort={resort} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Atoll Navigation */}
+      <section className="py-24 md:py-48 bg-[#FCFAF7]">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
+          <div className="mb-24 reveal text-center">
+            <span className="text-sky-500 font-black uppercase tracking-[1em] text-[10px] mb-8 block">Regional Intelligence</span>
+            <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Iconic Atolls.</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {signatureAtolls.map((atoll, i) => (
-              <Link key={i} to={`/stays?q=${atoll.name}`} className="group relative overflow-hidden rounded-[1.5rem] md:rounded-[3.5rem] cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-1000 aspect-[3/4]">
-                <img src={atoll.image} className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110 grayscale-[10%] group-hover:grayscale-0" alt={atoll.name} />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/10 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 right-4 md:bottom-10 md:left-10 md:right-10 flex flex-col items-start transition-transform duration-700">
-                  <span className="text-sky-400 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] mb-1 md:mb-3">{atoll.count}</span>
-                  <h4 className="text-lg md:text-3xl font-serif font-bold text-white leading-tight transition-all">{atoll.name}</h4>
-                  <p className="hidden md:block text-[9px] text-white/50 uppercase tracking-widest mt-3 opacity-0 group-hover:opacity-100 transition-opacity delay-100">{atoll.desc}</p>
+              <Link to={`/stays?q=${atoll.name}`} key={i} className="group relative aspect-[4/5] rounded-[2.5rem] overflow-hidden reveal shadow-xl" style={{ transitionDelay: `${i * 100}ms` }}>
+                <img src={atoll.image} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-110" alt={atoll.name} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+                <div className="absolute bottom-10 left-10 right-10">
+                  <span className="text-sky-400 font-black text-[8px] uppercase tracking-widest mb-3 block">{atoll.desc}</span>
+                  <h3 className="text-2xl font-serif font-bold text-white mb-1 group-hover:italic transition-all">{atoll.name}</h3>
+                  <span className="text-white/40 text-[9px] font-bold uppercase tracking-widest">{atoll.count}</span>
                 </div>
               </Link>
             ))}
@@ -288,96 +293,46 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* THE COLLECTION */}
+      {/* The Journal */}
       <section className="py-24 md:py-48 bg-white overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
-          <div className="mb-20 md:mb-32 reveal flex flex-col md:flex-row justify-between items-end gap-10">
-            <div className="max-w-xl">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[1.2em] mb-8 block">The Portfolio</span>
-              <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 tracking-tighter italic leading-none">The Collection.</h3>
-              <p className="mt-12 text-slate-400 text-[10px] uppercase font-bold tracking-[0.4em] leading-loose">
-                 Curated for the discerning eye. Our portfolio only accepts resorts that meet the Serenity standard of privacy, architectural integrity, and service.
-              </p>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-24 reveal">
+            <div className="max-w-2xl">
+              <span className="text-sky-500 font-black uppercase tracking-[1em] text-[10px] mb-8 block">The Journal</span>
+              <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Island Dispatches.</h2>
             </div>
-            <div className="w-24 h-[1px] bg-amber-400 mb-4 hidden md:block"></div>
+            <Link to="/stories" className="text-[10px] font-black uppercase tracking-[0.5em] border-b border-slate-950 pb-2 hover:text-sky-500 hover:border-sky-500 transition-all">Access Archives</Link>
           </div>
-          <div className="reveal no-scrollbar overflow-x-auto flex gap-8 md:gap-16 pb-12 snap-x snap-mandatory">
-            {featuredResorts.map((resort) => (
-              <div key={resort.id} className="flex-shrink-0 w-[85vw] sm:w-[55vw] lg:w-[35vw] snap-start">
-                <ResortCard resort={resort} />
-              </div>
-            ))}
-            <div className="flex-shrink-0 w-[85vw] sm:w-[55vw] lg:w-[35vw] snap-start flex items-center justify-center">
-              <Link to="/stays" className="group w-full aspect-[4/5] rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-center hover:bg-slate-950 transition-all duration-1000">
-                <span className="text-[10px] font-bold text-slate-400 group-hover:text-sky-400 uppercase tracking-[1em] mb-8 block">Explore All</span>
-                <h4 className="text-2xl md:text-4xl font-serif font-bold text-slate-900 group-hover:text-white leading-tight italic">Find your <br /> sanctuary.</h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
+            {recentStories.map((post, i) => (
+              <Link to={`/stories/${post.slug}`} key={post.id} className="group reveal" style={{ transitionDelay: `${i * 100}ms` }}>
+                <div className="aspect-[16/10] rounded-[2.5rem] overflow-hidden mb-10 shadow-sm group-hover:shadow-2xl transition-all duration-700 bg-slate-100">
+                  <img src={post.image} className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" alt={post.title} />
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4 block">{new Date(post.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+                <h3 className="text-2xl font-serif font-bold text-slate-950 mb-6 group-hover:text-sky-600 transition-colors leading-tight italic">{post.title}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed mb-8 opacity-80">{post.excerpt}</p>
+                <span className="text-[9px] font-black uppercase tracking-widest text-slate-950 border-b border-slate-100 pb-1 group-hover:border-slate-950 transition-all">Read Narrative</span>
               </Link>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* THE JOURNAL */}
-      <section className="py-24 md:py-48 bg-[#FCFAF7] border-t border-slate-100">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
-          <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-24 md:mb-40 reveal">
-            <div className="max-w-2xl text-center md:text-left">
-              <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1em] mb-8 block">Editorial Digest</span>
-              <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 italic tracking-tighter leading-none">The Journal.</h3>
-            </div>
-            <Link to="/stories" className="text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] border-b border-slate-950 pb-2 mb-4 hover:text-sky-500 hover:border-sky-500 transition-all hidden md:block">View All Dispatches</Link>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
-            {recentStories[0] && (
-              <div className="lg:col-span-7 reveal">
-                <Link to={`/stories/${recentStories[0].slug}`} className="group block relative rounded-[3.5rem] overflow-hidden shadow-2xl bg-white p-8 md:p-16 hover:shadow-sky-100 transition-all duration-1000">
-                  <div className="aspect-[16/10] rounded-[2.5rem] overflow-hidden mb-12">
-                    <img src={recentStories[0].image} className="w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-105" alt={recentStories[0].title} />
-                  </div>
-                  <div className="flex flex-col md:flex-row md:justify-between items-start md:items-end gap-8">
-                    <div className="max-w-xl">
-                      <div className="flex items-center gap-4 mb-6">
-                        <span className="text-sky-500 font-bold text-[10px] uppercase tracking-widest">{recentStories[0].category}</span>
-                        <div className="w-6 h-px bg-slate-200"></div>
-                        <span className="text-slate-500 font-bold text-[9px] uppercase tracking-widest">{new Date(recentStories[0].date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                      </div>
-                      <h4 className="text-3xl md:text-5xl font-serif font-bold text-slate-950 mb-8 group-hover:italic transition-all leading-tight tracking-tight">{recentStories[0].title}</h4>
-                      <p className="text-slate-500 text-base md:text-xl leading-relaxed line-clamp-2 italic opacity-80">{recentStories[0].excerpt}</p>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            )}
-            <div className="lg:col-span-5 flex flex-col gap-10">
-              {recentStories.slice(1).map((post, idx) => (
-                <Link key={post.id} to={`/stories/${post.slug}`} className="group flex gap-6 md:gap-10 items-center p-6 md:p-10 bg-white rounded-[2.5rem] shadow-sm border border-slate-50 hover:shadow-xl transition-all duration-700 reveal" style={{ transitionDelay: `${idx * 150}ms` }}>
-                  <div className="w-24 h-24 md:w-36 md:h-36 rounded-[2rem] overflow-hidden flex-shrink-0 bg-slate-100">
-                    <img src={post.image} className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110" alt={post.title} />
-                  </div>
-                  <div className="flex-grow">
-                    <span className="text-sky-500 font-bold text-[9px] uppercase tracking-widest mb-3 block">{post.category}</span>
-                    <h5 className="text-xl md:text-2xl font-serif font-bold text-slate-900 mb-4 group-hover:italic transition-all leading-tight">{post.title}</h5>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
+      {/* Global CTA */}
+      <section className="py-48 bg-slate-950 text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.03] flex items-center justify-center pointer-events-none">
+          <h2 className="text-[40vw] font-serif italic -rotate-12 translate-y-1/2 select-none">Atoll</h2>
         </div>
-      </section>
-
-      {/* FINAL CTA */}
-      <section className="py-24 md:py-48 bg-slate-950 relative overflow-hidden text-center text-white">
-        <div className="absolute inset-0 opacity-[0.05] flex items-center justify-center pointer-events-none">
-          <h2 className="text-[35vw] font-serif italic whitespace-nowrap -rotate-12 translate-y-1/2">Serenity</h2>
-        </div>
-        <div className="max-w-4xl mx-auto px-6 relative z-10 reveal">
-          <span className="text-[10px] font-bold text-sky-400 uppercase tracking-[1.5em] mb-12 block">Ready for Perspective?</span>
-          <h3 className="text-5xl md:text-9xl font-serif font-bold mb-16 italic tracking-tighter">Your Journey <br /> Starts Here.</h3>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
-            <Link to="/plan" className="w-full md:w-auto bg-white text-slate-950 font-bold px-16 py-7 rounded-full hover:bg-sky-400 hover:text-white transition-all duration-700 uppercase tracking-[0.5em] text-[11px] shadow-2xl">
-              Initiate Inquiry
-            </Link>
-          </div>
+        <div className="max-w-4xl mx-auto px-6 text-center relative z-10 reveal">
+          <span className="text-sky-400 font-black uppercase tracking-[1em] text-[10px] mb-12 block">Your Maldivian Perspective</span>
+          <h3 className="text-4xl md:text-7xl lg:text-9xl font-serif font-bold italic mb-12 tracking-tighter leading-tight">Begin The Journey.</h3>
+          <p className="text-slate-400 text-sm md:text-lg font-medium leading-loose mb-24 opacity-80 uppercase tracking-[0.4em]">
+             Our travel specialists are available <br className="hidden md:block"/> for bespoke consultations and itinerary refinement.
+          </p>
+          <Link to="/plan" className="inline-block bg-white text-slate-950 font-black px-16 py-7 rounded-full hover:bg-sky-400 hover:text-white transition-all duration-700 uppercase tracking-[0.8em] text-[10px] shadow-2xl">
+             Initiate Discovery
+          </Link>
         </div>
       </section>
     </div>
