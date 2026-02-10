@@ -2,8 +2,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase, mapOffer } from '../lib/supabase';
-import { RESORTS, OFFERS } from '../constants';
-import { Accommodation, AccommodationType, TransferType, MealPlan, Offer } from '../types';
+import { RESORTS, OFFERS, EXPERIENCES } from '../constants';
+import { Accommodation, AccommodationType, TransferType, MealPlan, Offer, Experience } from '../types';
 import ResortCard from '../components/ResortCard';
 import SEO from '../components/SEO';
 
@@ -30,6 +30,7 @@ const ResortDetail: React.FC = () => {
   const [resort, setResort] = useState<Accommodation | null>(null);
   const [allResorts, setAllResorts] = useState<Accommodation[]>([]);
   const [resortOffers, setResortOffers] = useState<Offer[]>([]);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
   
   const [formStep, setFormStep] = useState(1);
@@ -118,6 +119,7 @@ const ResortDetail: React.FC = () => {
     const fetchFullDetails = async () => {
       setLoading(true);
       try {
+        // Fetch all resorts for "similar" section
         const { data: allData } = await supabase.from('resorts').select('*');
         if (allData) {
            const mapped = allData.map(item => ({ 
@@ -167,6 +169,8 @@ const ResortDetail: React.FC = () => {
             }))
           };
           setResort(mappedResort);
+
+          // Fetch Offers for this resort
           const { data: offersData } = await supabase.from('offers').select('*').eq('resort_id', resData.id);
           if (offersData && offersData.length > 0) {
             setResortOffers(offersData.map(mapOffer));
@@ -174,9 +178,19 @@ const ResortDetail: React.FC = () => {
             const local = OFFERS.filter(o => o.resortId === resData.id || o.resortName === resData.name);
             setResortOffers(local);
           }
+
+          // Fetch Curated Experiences
+          const { data: expData } = await supabase.from('experiences').select('*').limit(4);
+          if (expData && expData.length > 0) {
+            setExperiences(expData as Experience[]);
+          } else {
+            setExperiences(EXPERIENCES.slice(0, 4));
+          }
+
         } else if (localBackup) {
           setResort(localBackup);
           setResortOffers(OFFERS.filter(o => o.resortId === localBackup.id));
+          setExperiences(EXPERIENCES.slice(0, 4));
         }
       } catch (error) {
         console.error('Data acquisition error:', error);
@@ -373,39 +387,6 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* Offers Section */}
-      {resortOffers.length > 0 && (
-        <section className="py-16 md:py-24 bg-amber-50/30 border-y-[1px] border-amber-100/50">
-          <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-            <div className="text-center mb-16 reveal">
-              <span className="text-[11px] font-black text-amber-500 uppercase tracking-[1em] mb-6 block">Limited Engagements</span>
-              <h3 className="text-3xl md:text-6xl font-serif font-bold italic text-slate-900 tracking-tighter leading-tight">Bespoke Privileges.</h3>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-              {resortOffers.map((offer, idx) => (
-                <div key={offer.id} className="reveal bg-white rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-16 shadow-xl border border-amber-50 flex flex-col md:flex-row gap-8 md:gap-10 items-center">
-                   <div className="w-full md:w-1/3 aspect-square rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-slate-100">
-                      <img src={offer.image} className="w-full h-full object-cover" alt={offer.title} />
-                   </div>
-                   <div className="flex-1 w-full text-center md:text-left">
-                      <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 mb-4">
-                         <span className="bg-amber-100 text-amber-600 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">{offer.discount}</span>
-                         <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{offer.category}</span>
-                      </div>
-                      <h4 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-6">{offer.title}</h4>
-                      <p className="text-slate-500 text-[11px] font-black uppercase tracking-[0.4em] mb-8 leading-loose">Experience the archipelago with negotiated rates curated for your vision.</p>
-                      <button onClick={() => {
-                        const form = document.getElementById('inquiry-form');
-                        form?.scrollIntoView({ behavior: 'smooth' });
-                      }} className="text-[10px] font-black text-slate-950 border-b border-slate-950 pb-1 hover:text-amber-500 hover:border-amber-500 transition-all uppercase tracking-widest">Secure This Offer</button>
-                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* Residences Horizontal Scroller */}
       {resort.roomTypes && resort.roomTypes.length > 0 && (
         <section className="py-16 md:py-32 bg-white border-y-[1px] border-slate-50 overflow-hidden">
@@ -483,6 +464,92 @@ const ResortDetail: React.FC = () => {
                     </div>
                  ))}
               </div>
+          </div>
+        </section>
+      )}
+
+      {/* CURATED EXPERIENCES (NEW SECTION) */}
+      {experiences.length > 0 && (
+        <section className="py-24 md:py-48 bg-white overflow-hidden">
+          <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+            <div className="mb-20 md:mb-32 reveal text-center lg:text-left flex flex-col lg:flex-row justify-between items-end gap-10">
+              <div className="max-w-2xl">
+                <span className="text-[11px] font-black text-sky-500 uppercase tracking-[1em] mb-8 block">Activities</span>
+                <h3 className="text-4xl md:text-7xl font-serif font-bold text-slate-900 tracking-tighter italic leading-none">Curated Journeys.</h3>
+                <p className="mt-12 text-slate-400 text-[10px] uppercase font-black tracking-[0.4em] leading-loose">
+                   Beyond the villa walls lies the archipelago. We curate movements that define your unique Maldivian perspective.
+                </p>
+              </div>
+              <Link to={`/experiences?resort=${resort.id}`} className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
+                <span className="border-b-2 border-slate-100 pb-1 group-hover:border-sky-500 transition-colors">Discover All</span>
+                <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700">
+                  <svg className="w-5 h-5 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </div>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+              {experiences.map((exp, idx) => (
+                <div key={exp.id} className="reveal group" style={{ transitionDelay: `${idx * 150}ms` }}>
+                  <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl bg-slate-100">
+                    <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-[5s] group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-slate-950/10 group-hover:bg-transparent transition-colors"></div>
+                    <div className="absolute top-6 left-6">
+                      <span className="bg-white/95 backdrop-blur px-4 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest text-slate-900 shadow-sm">
+                        {exp.category}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="px-2">
+                    <h4 className="text-xl md:text-2xl font-serif font-bold text-slate-950 mb-4 group-hover:text-sky-600 transition-colors">{exp.title}</h4>
+                    <p className="text-slate-500 text-[12px] leading-relaxed mb-8 opacity-80 line-clamp-2">{exp.description}</p>
+                    <button 
+                      onClick={() => {
+                        const form = document.getElementById('inquiry-form');
+                        setQuoteData(prev => ({ ...prev, notes: `Interested in ${exp.title}: ${prev.notes}` }));
+                        form?.scrollIntoView({ behavior: 'smooth' });
+                      }} 
+                      className="text-[9px] font-black text-slate-950 border-b-2 border-slate-100 group-hover:border-sky-500 transition-all uppercase tracking-[0.4em] pb-1"
+                    >
+                      Request This Journey
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Offers Section */}
+      {resortOffers.length > 0 && (
+        <section className="py-16 md:py-24 bg-amber-50/30 border-y-[1px] border-amber-100/50">
+          <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+            <div className="text-center mb-16 reveal">
+              <span className="text-[11px] font-black text-amber-500 uppercase tracking-[1em] mb-6 block">Limited Engagements</span>
+              <h3 className="text-3xl md:text-6xl font-serif font-bold italic text-slate-900 tracking-tighter leading-tight">Bespoke Privileges.</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+              {resortOffers.map((offer, idx) => (
+                <div key={offer.id} className="reveal bg-white rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-16 shadow-xl border border-amber-50 flex flex-col md:flex-row gap-8 md:gap-10 items-center">
+                   <div className="w-full md:w-1/3 aspect-square rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-slate-100">
+                      <img src={offer.image} className="w-full h-full object-cover" alt={offer.title} />
+                   </div>
+                   <div className="flex-1 w-full text-center md:text-left">
+                      <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 mb-4">
+                         <span className="bg-amber-100 text-amber-600 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">{offer.discount}</span>
+                         <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{offer.category}</span>
+                      </div>
+                      <h4 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-6">{offer.title}</h4>
+                      <p className="text-slate-500 text-[11px] font-black uppercase tracking-[0.4em] mb-8 leading-loose">Experience the archipelago with negotiated rates curated for your vision.</p>
+                      <button onClick={() => {
+                        const form = document.getElementById('inquiry-form');
+                        form?.scrollIntoView({ behavior: 'smooth' });
+                      }} className="text-[10px] font-black text-slate-950 border-b border-slate-950 pb-1 hover:text-amber-500 hover:border-amber-500 transition-all uppercase tracking-widest">Secure This Offer</button>
+                   </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       )}
