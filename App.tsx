@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -11,7 +10,9 @@ import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
 // Using lowercase file names to resolve casing conflict errors in TypeScript environment
+// @fix: Updated import path for 'offers' to lowercase to resolve naming collision and ensure consistent casing.
 import Offers from './pages/offers';
+// @fix: Updated import path for 'experiences' to lowercase to resolve naming collision and ensure consistent casing.
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';

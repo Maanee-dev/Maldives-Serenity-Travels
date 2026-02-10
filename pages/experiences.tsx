@@ -1,5 +1,7 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase';
+import { Experience } from '../types';
 import { EXPERIENCES } from '../constants';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
@@ -9,6 +11,33 @@ import SEO from '../components/SEO';
  * Casing: lowercase (experiences.tsx) for system compatibility and resolving build-time collisions.
  */
 const Experiences: React.FC = () => {
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchExperiences = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('experiences')
+          .select('*')
+          .order('created_at', { ascending: true });
+        
+        if (data && data.length > 0) {
+          setExperiences(data as Experience[]);
+        } else {
+          setExperiences(EXPERIENCES);
+        }
+      } catch (err) {
+        console.error('Experience fetch error:', err);
+        setExperiences(EXPERIENCES);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchExperiences();
+  }, []);
+
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -17,7 +46,7 @@ const Experiences: React.FC = () => {
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     return () => observer.disconnect();
-  }, []);
+  }, [loading, experiences]);
 
   return (
     <div className="bg-[#FCFAF7] min-h-screen">
@@ -36,7 +65,7 @@ const Experiences: React.FC = () => {
       <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=1920" 
+            src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1920" 
             className="w-full h-full object-cover" 
             alt="Diving in Maldives"
           />
@@ -54,53 +83,60 @@ const Experiences: React.FC = () => {
 
       {/* 2. THE MAIN EXPERIENCES FLOW */}
       <div className="max-w-[1440px] mx-auto px-6 lg:px-24 py-32 md:py-64">
-        <div className="flex flex-col gap-48 md:gap-80">
-          {EXPERIENCES.map((exp, idx) => (
-            <div key={exp.id} className={`flex flex-col lg:flex-row gap-24 lg:gap-48 items-center reveal ${idx % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}>
-               <div className="lg:w-1/2 relative aspect-[1/1] w-full rounded-[4rem] md:rounded-[6.5rem] overflow-hidden shadow-2xl group">
-                  <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-slate-950/15 group-hover:bg-transparent transition-all duration-1000"></div>
-                  <div className={`absolute bottom-16 ${idx % 2 !== 0 ? 'right-16' : 'left-16'} hidden md:block`}>
-                    <span className="text-[15vw] font-serif italic text-white/20 pointer-events-none select-none">
-                      {String(idx + 1).padStart(2, '0')}
-                    </span>
-                  </div>
-               </div>
-               
-               <div className="lg:w-1/2">
-                  <div className="max-w-xl">
-                    <span className="text-sky-500 font-bold uppercase tracking-[1em] text-[10px] mb-12 block">{exp.category}</span>
-                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-slate-950 mb-12 leading-[0.95] italic tracking-tight">
-                      {exp.title}
-                    </h2>
-                    <p className="text-slate-500 text-lg md:text-xl leading-[2.2] mb-16 font-medium opacity-85">
-                      {exp.description} Discover the Maldives through private expeditions, castaway retreats, and rhythmic local culture designed for your unique perspective.
-                    </p>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 mb-24">
-                      <div className="flex items-center gap-6 group">
-                         <div className="w-2 h-2 rounded-full bg-amber-400 group-hover:scale-[2] transition-all"></div>
-                         <span className="text-[10px] font-bold text-slate-950 uppercase tracking-widest">Bespoke Itinerary</span>
-                      </div>
-                      <div className="flex items-center gap-6 group">
-                         <div className="w-2 h-2 rounded-full bg-amber-400 group-hover:scale-[2] transition-all"></div>
-                         <span className="text-[10px] font-bold text-slate-950 uppercase tracking-widest">Expert Navigators</span>
-                      </div>
+        {loading ? (
+          <div className="py-20 text-center flex flex-col items-center justify-center">
+            <div className="w-8 h-8 border-[1px] border-slate-200 border-t-sky-500 rounded-full animate-spin mb-8"></div>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Consulting the Archive...</p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-48 md:gap-80">
+            {experiences.map((exp, idx) => (
+              <div key={exp.id} className={`flex flex-col lg:flex-row gap-24 lg:gap-48 items-center reveal ${idx % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}>
+                 <div className="lg:w-1/2 relative aspect-[1/1] w-full rounded-[4rem] md:rounded-[6.5rem] overflow-hidden shadow-2xl group">
+                    <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-slate-950/15 group-hover:bg-transparent transition-all duration-1000"></div>
+                    <div className={`absolute bottom-16 ${idx % 2 !== 0 ? 'right-16' : 'left-16'} hidden md:block`}>
+                      <span className="text-[15vw] font-serif italic text-white/20 pointer-events-none select-none">
+                        {String(idx + 1).padStart(2, '0')}
+                      </span>
                     </div>
+                 </div>
+                 
+                 <div className="lg:w-1/2">
+                    <div className="max-w-xl">
+                      <span className="text-sky-500 font-bold uppercase tracking-[1em] text-[10px] mb-12 block">{exp.category}</span>
+                      <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-slate-950 mb-12 leading-[0.95] italic tracking-tight">
+                        {exp.title}
+                      </h2>
+                      <p className="text-slate-500 text-lg md:text-xl leading-[2.2] mb-16 font-medium opacity-85">
+                        {exp.description}
+                      </p>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 mb-24">
+                        <div className="flex items-center gap-6 group">
+                           <div className="w-2 h-2 rounded-full bg-amber-400 group-hover:scale-[2] transition-all"></div>
+                           <span className="text-[10px] font-bold text-slate-950 uppercase tracking-widest">Bespoke Itinerary</span>
+                        </div>
+                        <div className="flex items-center gap-6 group">
+                           <div className="w-2 h-2 rounded-full bg-amber-400 group-hover:scale-[2] transition-all"></div>
+                           <span className="text-[10px] font-bold text-slate-950 uppercase tracking-widest">Expert Navigators</span>
+                        </div>
+                      </div>
 
-                    <Link to="/plan" className="inline-flex items-center gap-10 group">
-                       <div className="w-24 h-24 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 group-hover:border-slate-950 transition-all duration-700 shadow-sm">
-                          <svg className="w-8 h-8 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                          </svg>
-                       </div>
-                       <span className="text-[11px] font-bold uppercase tracking-[0.6em] text-slate-950 group-hover:text-sky-500 transition-colors">Initiate Request</span>
-                    </Link>
-                  </div>
-               </div>
-            </div>
-          ))}
-        </div>
+                      <Link to="/plan" className="inline-flex items-center gap-10 group">
+                         <div className="w-24 h-24 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 group-hover:border-slate-950 transition-all duration-700 shadow-sm">
+                            <svg className="w-8 h-8 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                         </div>
+                         <span className="text-[11px] font-bold uppercase tracking-[0.6em] text-slate-950 group-hover:text-sky-500 transition-colors">Initiate Request</span>
+                      </Link>
+                    </div>
+                 </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* 3. THE JET SET - Private Logistics */}

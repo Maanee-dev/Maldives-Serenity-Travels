@@ -45,12 +45,12 @@ const Home: React.FC = () => {
         if (storiesData && storiesData.length > 0) {
           setRecentStories(storiesData as BlogPost[]);
         } else {
-          setRecentStories(BLOG_POSTS.slice(0, 3));
+          setRecentStories(BLOG_POSTS.slice(0, 3) as BlogPost[]);
         }
       } catch (err) {
         console.error("Supabase connection error:", err);
         setFeaturedResorts(RESORTS.slice(0, 6));
-        setRecentStories(BLOG_POSTS.slice(0, 3));
+        setRecentStories(BLOG_POSTS.slice(0, 3) as BlogPost[]);
       }
     };
     fetchData();
@@ -263,7 +263,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* THE COLLECTION */}
-      <section className="py-24 md:py-48 bg-white overflow-hidden">
+      <section className="py-24 md:py-48 bg-white overflow-hidden border-b border-slate-50">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="mb-20 md:mb-32 reveal flex flex-col md:flex-row justify-between items-end gap-10">
             <div className="max-w-xl text-left">
@@ -287,6 +287,49 @@ const Home: React.FC = () => {
                 <h4 className="text-2xl md:text-4xl font-serif font-bold text-slate-900 group-hover:text-white leading-tight italic">Find your <br /> sanctuary.</h4>
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* THE JOURNAL - LATEST STORIES */}
+      <section className="py-24 md:py-48 bg-[#FCFAF7]">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
+          <div className="text-center mb-24 reveal">
+            <span className="text-sky-500 font-black uppercase tracking-[1em] text-[10px] mb-8 block">The Journal</span>
+            <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Editorial Dispatches.</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20 mb-24">
+            {recentStories.map((post) => (
+              <Link key={post.id} to={`/stories/${post.slug}`} className="group reveal">
+                <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl group-hover:-translate-y-2 bg-slate-100">
+                  <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-105" />
+                  <div className="absolute top-8 left-8">
+                    <span className="bg-white/95 backdrop-blur-md px-5 py-2 rounded-full text-[9px] font-black text-slate-900 uppercase tracking-[0.4em] shadow-sm">
+                      {post.category}
+                    </span>
+                  </div>
+                </div>
+                <div className="px-4">
+                  <span className="text-slate-400 font-bold text-[9px] uppercase tracking-[0.4em] mb-4 block">
+                    {new Date(post.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                  </span>
+                  <h3 className="text-2xl font-serif font-bold text-slate-900 mb-6 group-hover:text-sky-600 transition-colors leading-tight">
+                    {post.title}
+                  </h3>
+                  <div className="h-px w-12 bg-slate-200 group-hover:w-full group-hover:bg-sky-500 transition-all duration-1000"></div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="text-center reveal">
+            <Link to="/stories" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
+              <span className="border-b-2 border-slate-100 pb-1 group-hover:border-sky-500 transition-colors">Access the Archives</span>
+              <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700">
+                <svg className="w-5 h-5 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
