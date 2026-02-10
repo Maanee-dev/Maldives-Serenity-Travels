@@ -66,6 +66,7 @@ export interface Offer {
   expiryDate: string;
   image: string;
   category: 'Early Bird' | 'Last Minute' | 'Honeymoon';
+  // Enhanced UI fields
   nights: number;
   roomCategory: string;
   price: number;
@@ -75,13 +76,10 @@ export interface Offer {
 
 export interface Experience {
   id: string;
-  resortId?: string;
-  resortName?: string;
   title: string;
   description: string;
   image: string;
   category: 'Water Sports' | 'Relaxation' | 'Adventure' | 'Wellness' | 'Culture' | 'Culinary';
-  priceHint?: string;
 }
 
 export type StoryCategory = 'Dispatch' | 'Guide' | 'Update' | 'Tip';
