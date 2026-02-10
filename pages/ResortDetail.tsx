@@ -387,87 +387,6 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* Residences Horizontal Scroller */}
-      {resort.roomTypes && resort.roomTypes.length > 0 && (
-        <section className="py-16 md:py-32 bg-white border-y-[1px] border-slate-50 overflow-hidden">
-          <div className="max-w-[1440px] mx-auto">
-             <div className="px-6 lg:px-12 mb-12 md:mb-16 flex flex-col md:flex-row justify-between items-end gap-6 reveal">
-                <div>
-                   <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.8em] mb-4 block">Accommodation</span>
-                   <h3 className="text-3xl md:text-5xl font-serif font-bold italic text-slate-950 tracking-tighter">The Residences.</h3>
-                </div>
-                <p className="hidden md:block text-[10px] font-black text-slate-400 uppercase tracking-widest">Slide to explore Portfolio</p>
-             </div>
-             <div className="flex gap-4 md:gap-8 overflow-x-auto no-scrollbar px-6 lg:px-12 pb-8 snap-x snap-mandatory">
-                {resort.roomTypes.map((room, i) => (
-                  <div key={i} className="flex-shrink-0 w-[82vw] md:w-[450px] snap-start reveal" style={{ transitionDelay: `${i * 100}ms` }}>
-                    <div className="relative aspect-[16/10] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden mb-6 md:mb-8 group shadow-lg">
-                       <img src={room.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={room.name} />
-                       <div className="absolute top-4 left-4 md:top-6 md:left-6 flex gap-2">
-                          {room.size && <span className="bg-white/90 backdrop-blur px-3 md:px-4 py-1.5 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest text-slate-900 shadow-sm">{room.size}</span>}
-                          {room.capacity && <span className="bg-white/90 backdrop-blur px-3 md:px-4 py-1.5 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest text-slate-900 shadow-sm">{room.capacity}</span>}
-                       </div>
-                    </div>
-                    <h4 className="text-xl md:text-2xl font-serif font-bold text-slate-900 mb-3 md:mb-4">{room.name}</h4>
-                    <p className="text-slate-500 text-[13px] leading-relaxed mb-6 font-medium line-clamp-2">{room.description}</p>
-                    <div className="flex flex-wrap gap-x-4 md:gap-x-6 gap-y-2 md:gap-y-3">
-                       {room.highlights.map((h, j) => (
-                         <div key={j} className="flex items-center gap-2">
-                           <div className="w-1 h-1 bg-sky-500 rounded-full"></div>
-                           <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-slate-400">{h}</span>
-                         </div>
-                       ))}
-                    </div>
-                  </div>
-                ))}
-             </div>
-          </div>
-        </section>
-      )}
-
-      {/* Gastronomy Section */}
-      {resort.diningVenues && resort.diningVenues.length > 0 && (
-        <section className="py-16 md:py-32 bg-[#FCFAF7] border-b-[1px] border-slate-50 overflow-hidden">
-          <div className="max-w-[1440px] mx-auto">
-              <div className="px-6 lg:px-12 mb-12 md:mb-16 flex flex-col md:flex-row justify-between items-end gap-6 reveal">
-                <div>
-                  <span className="text-[11px] font-black text-sky-500 uppercase tracking-[1em] mb-4 block">Gastronomy</span>
-                  <h3 className="text-3xl md:text-5xl font-serif font-bold italic text-slate-950 tracking-tighter">The Atoll Table.</h3>
-                </div>
-                <p className="hidden md:block text-[10px] font-black text-slate-400 uppercase tracking-widest">Swipe for Culinary Vibe</p>
-              </div>
-              <div className="flex gap-4 md:gap-8 overflow-x-auto no-scrollbar px-6 lg:px-12 pb-8 snap-x snap-mandatory">
-                 {resort.diningVenues.map((venue, i) => (
-                    <div key={i} className="flex-shrink-0 w-[82vw] md:w-[480px] snap-start reveal" style={{ transitionDelay: `${i * 100}ms` }}>
-                       <div className="relative aspect-[4/3] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden mb-6 md:mb-8 shadow-lg group bg-slate-100">
-                          <img src={venue.image} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-105" alt={venue.name} />
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent"></div>
-                          <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6">
-                             <span className="text-white text-[9px] md:text-[10px] font-black uppercase tracking-[0.5em]">{venue.cuisine}</span>
-                          </div>
-                       </div>
-                       <div className="px-2">
-                          <div className="flex items-center gap-4 mb-4">
-                             <span className="text-[9px] md:text-[10px] font-black text-amber-500 uppercase tracking-widest bg-amber-50 px-3 py-1 rounded-full">{venue.vibe}</span>
-                          </div>
-                          <h4 className="text-xl md:text-2xl font-serif font-bold text-slate-900 mb-3 md:mb-4">{venue.name}</h4>
-                          <p className="text-slate-500 text-[13px] leading-relaxed mb-6 font-medium line-clamp-2 italic">{venue.description}</p>
-                          <div className="space-y-2">
-                             {venue.highlights.slice(0, 3).map((h, j) => (
-                               <div key={j} className="flex items-center gap-3">
-                                 <div className="w-3 md:w-4 h-px bg-slate-200"></div>
-                                 <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{h}</span>
-                               </div>
-                             ))}
-                          </div>
-                       </div>
-                    </div>
-                 ))}
-              </div>
-          </div>
-        </section>
-      )}
-
       {/* CURATED EXPERIENCES (NEW SECTION) */}
       {experiences.length > 0 && (
         <section className="py-24 md:py-48 bg-white overflow-hidden">
@@ -550,6 +469,86 @@ const ResortDetail: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+      )}
+      {/* Residences Horizontal Scroller */}
+      {resort.roomTypes && resort.roomTypes.length > 0 && (
+        <section className="py-16 md:py-32 bg-white border-y-[1px] border-slate-50 overflow-hidden">
+          <div className="max-w-[1440px] mx-auto">
+             <div className="px-6 lg:px-12 mb-12 md:mb-16 flex flex-col md:flex-row justify-between items-end gap-6 reveal">
+                <div>
+                   <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.8em] mb-4 block">Accommodation</span>
+                   <h3 className="text-3xl md:text-5xl font-serif font-bold italic text-slate-950 tracking-tighter">The Residences.</h3>
+                </div>
+                <p className="hidden md:block text-[10px] font-black text-slate-400 uppercase tracking-widest">Slide to explore Portfolio</p>
+             </div>
+             <div className="flex gap-4 md:gap-8 overflow-x-auto no-scrollbar px-6 lg:px-12 pb-8 snap-x snap-mandatory">
+                {resort.roomTypes.map((room, i) => (
+                  <div key={i} className="flex-shrink-0 w-[82vw] md:w-[450px] snap-start reveal" style={{ transitionDelay: `${i * 100}ms` }}>
+                    <div className="relative aspect-[16/10] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden mb-6 md:mb-8 group shadow-lg">
+                       <img src={room.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={room.name} />
+                       <div className="absolute top-4 left-4 md:top-6 md:left-6 flex gap-2">
+                          {room.size && <span className="bg-white/90 backdrop-blur px-3 md:px-4 py-1.5 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest text-slate-900 shadow-sm">{room.size}</span>}
+                          {room.capacity && <span className="bg-white/90 backdrop-blur px-3 md:px-4 py-1.5 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest text-slate-900 shadow-sm">{room.capacity}</span>}
+                       </div>
+                    </div>
+                    <h4 className="text-xl md:text-2xl font-serif font-bold text-slate-900 mb-3 md:mb-4">{room.name}</h4>
+                    <p className="text-slate-500 text-[13px] leading-relaxed mb-6 font-medium line-clamp-2">{room.description}</p>
+                    <div className="flex flex-wrap gap-x-4 md:gap-x-6 gap-y-2 md:gap-y-3">
+                       {room.highlights.map((h, j) => (
+                         <div key={j} className="flex items-center gap-2">
+                           <div className="w-1 h-1 bg-sky-500 rounded-full"></div>
+                           <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-slate-400">{h}</span>
+                         </div>
+                       ))}
+                    </div>
+                  </div>
+                ))}
+             </div>
+          </div>
+        </section>
+      )}
+
+      {/* Gastronomy Section */}
+      {resort.diningVenues && resort.diningVenues.length > 0 && (
+        <section className="py-16 md:py-32 bg-[#FCFAF7] border-b-[1px] border-slate-50 overflow-hidden">
+          <div className="max-w-[1440px] mx-auto">
+              <div className="px-6 lg:px-12 mb-12 md:mb-16 flex flex-col md:flex-row justify-between items-end gap-6 reveal">
+                <div>
+                  <span className="text-[11px] font-black text-sky-500 uppercase tracking-[1em] mb-4 block">Gastronomy</span>
+                  <h3 className="text-3xl md:text-5xl font-serif font-bold italic text-slate-950 tracking-tighter">The Atoll Table.</h3>
+                </div>
+                <p className="hidden md:block text-[10px] font-black text-slate-400 uppercase tracking-widest">Swipe for Culinary Vibe</p>
+              </div>
+              <div className="flex gap-4 md:gap-8 overflow-x-auto no-scrollbar px-6 lg:px-12 pb-8 snap-x snap-mandatory">
+                 {resort.diningVenues.map((venue, i) => (
+                    <div key={i} className="flex-shrink-0 w-[82vw] md:w-[480px] snap-start reveal" style={{ transitionDelay: `${i * 100}ms` }}>
+                       <div className="relative aspect-[4/3] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden mb-6 md:mb-8 shadow-lg group bg-slate-100">
+                          <img src={venue.image} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-105" alt={venue.name} />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent"></div>
+                          <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6">
+                             <span className="text-white text-[9px] md:text-[10px] font-black uppercase tracking-[0.5em]">{venue.cuisine}</span>
+                          </div>
+                       </div>
+                       <div className="px-2">
+                          <div className="flex items-center gap-4 mb-4">
+                             <span className="text-[9px] md:text-[10px] font-black text-amber-500 uppercase tracking-widest bg-amber-50 px-3 py-1 rounded-full">{venue.vibe}</span>
+                          </div>
+                          <h4 className="text-xl md:text-2xl font-serif font-bold text-slate-900 mb-3 md:mb-4">{venue.name}</h4>
+                          <p className="text-slate-500 text-[13px] leading-relaxed mb-6 font-medium line-clamp-2 italic">{venue.description}</p>
+                          <div className="space-y-2">
+                             {venue.highlights.slice(0, 3).map((h, j) => (
+                               <div key={j} className="flex items-center gap-3">
+                                 <div className="w-3 md:w-4 h-px bg-slate-200"></div>
+                                 <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{h}</span>
+                               </div>
+                             ))}
+                          </div>
+                       </div>
+                    </div>
+                 ))}
+              </div>
           </div>
         </section>
       )}

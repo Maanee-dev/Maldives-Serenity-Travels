@@ -291,39 +291,63 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* THE JOURNAL - LATEST STORIES */}
-      <section className="py-24 md:py-48 bg-[#FCFAF7]">
+      {/* THE JOURNAL - REFINED EDITORIAL DISPATCHES */}
+      <section className="py-24 md:py-48 bg-[#FCFAF7] overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
-          <div className="text-center mb-24 reveal">
+          <div className="text-center md:text-left mb-16 md:mb-24 reveal">
             <span className="text-sky-500 font-black uppercase tracking-[1em] text-[10px] mb-8 block">The Journal</span>
             <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Editorial Dispatches.</h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20 mb-24">
-            {recentStories.map((post) => (
-              <Link key={post.id} to={`/stories/${post.slug}`} className="group reveal">
-                <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl group-hover:-translate-y-2 bg-slate-100">
-                  <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-105" />
-                  <div className="absolute top-8 left-8">
-                    <span className="bg-white/95 backdrop-blur-md px-5 py-2 rounded-full text-[9px] font-black text-slate-900 uppercase tracking-[0.4em] shadow-sm">
-                      {post.category}
-                    </span>
+          {/* Mobile Refined Scroller / Desktop Grid */}
+          <div className="relative group">
+            <div className="flex md:grid md:grid-cols-3 gap-8 md:gap-12 lg:gap-20 overflow-x-auto md:overflow-x-visible no-scrollbar snap-x snap-mandatory -mx-6 px-6 md:mx-0 md:px-0 pb-12 md:pb-0">
+              {recentStories.map((post, idx) => (
+                <Link 
+                  key={post.id} 
+                  to={`/stories/${post.slug}`} 
+                  className="group flex-shrink-0 w-[85vw] md:w-auto snap-start reveal relative"
+                  style={{ transitionDelay: `${idx * 150}ms` }}
+                >
+                  <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden mb-8 md:mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl group-hover:-translate-y-2 bg-slate-100">
+                    <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-105" />
+                    
+                    {/* Editorial Number Overlay (Mobile Only) */}
+                    <div className="absolute top-6 right-8 md:hidden opacity-20 pointer-events-none">
+                      <span className="text-6xl font-serif italic text-white leading-none tracking-tighter">0{idx + 1}</span>
+                    </div>
+
+                    <div className="absolute top-8 left-8">
+                      <span className="bg-white/95 backdrop-blur-md px-5 py-2 rounded-full text-[9px] font-black text-slate-900 uppercase tracking-[0.4em] shadow-sm">
+                        {post.category}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="px-4">
-                  <span className="text-slate-400 font-bold text-[9px] uppercase tracking-[0.4em] mb-4 block">
-                    {new Date(post.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                  </span>
-                  <h3 className="text-2xl font-serif font-bold text-slate-900 mb-6 group-hover:text-sky-600 transition-colors leading-tight">
-                    {post.title}
-                  </h3>
-                  <div className="h-px w-12 bg-slate-200 group-hover:w-full group-hover:bg-sky-500 transition-all duration-1000"></div>
-                </div>
-              </Link>
-            ))}
+                  
+                  <div className="px-4 relative">
+                    <div className="flex items-center gap-4 mb-4">
+                       <span className="text-slate-400 font-bold text-[9px] uppercase tracking-[0.4em]">
+                        {new Date(post.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                      </span>
+                    </div>
+                    <h3 className="text-2xl md:text-2xl lg:text-3xl font-serif font-bold text-slate-900 mb-6 group-hover:text-sky-600 transition-colors leading-tight">
+                      {post.title}
+                    </h3>
+                    <div className="h-px w-12 bg-slate-200 group-hover:w-full group-hover:bg-sky-500 transition-all duration-1000"></div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Subtle Progress Bar (Mobile) */}
+            <div className="md:hidden flex justify-center mt-4">
+              <div className="w-24 h-0.5 bg-slate-200 rounded-full overflow-hidden">
+                <div className="h-full bg-sky-500 w-1/3 animate-[pulse_3s_infinite]"></div>
+              </div>
+            </div>
           </div>
 
-          <div className="text-center reveal">
+          <div className="text-center mt-24 md:mt-32 reveal">
             <Link to="/stories" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
               <span className="border-b-2 border-slate-100 pb-1 group-hover:border-sky-500 transition-colors">Access the Archives</span>
               <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700">
