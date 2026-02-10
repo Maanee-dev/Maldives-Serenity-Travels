@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -30,54 +31,48 @@ const ChatBot: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Correct initialization: Create a new instance right before making an API call
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const systemInstruction = `
         You are Sara, the elegant AI concierge for Serenity Maldives, a boutique travel agency.
-        Your tone is sophisticated, helpful, and luxury-oriented. 
+        Your tone is sophisticated, poetic, and highly personalized.
+        
         Agency Details:
         - Location: Faith, S.feydhoo, Addu City, Maldives.
         - Philosophy: "Defined by Perspective", we curate silence and luxury.
-        - Services: Bespoke travel planning, VIP arrivals, seaplane/yacht transfers.
+        - Specialization: Bespoke travel, VIP seaplane arrivals, private atolls.
         
-        Website Content Summary for Context:
-        1. Adaaran Prestige Vadoo: South Male Atoll, overwater villas, private jacuzzis, butler service, house reef.
-        2. Adaaran Prestige Water Villas: Raa Atoll, wooden interiors, private sundecks, seaplane transfer.
-        3. Adaaran Select Hudhuran Fushi: "Surf Island", North Male Atoll, world-class left breaking wave.
-        4. Adaaran Select Meedhupparu: Raa Atoll, mature island, premium all-inclusive.
-        5. Experiences: Sandbank dining, dolphin safaris, private expeditions.
-        6. Offer: Honeymoon Serenity (30% off at Vadoo).
-        7. Booking: We don't use automated engines; we use human experts.
+        Knowledge Base:
+        - Resorts: Adaaran Prestige Vadoo (Intimate, Butler), Adaaran Prestige Water Villas (Wooden, Raa Atoll), Adaaran Select Hudhuran Fushi (Surfing), Adaaran Select Meedhupparu (Mature, Family).
+        - Atolls: Noonu (Untouched), Baa (UNESCO Biosphere), North Male (Epicenter), Ari (Whale Sharks).
+        - Vibes: Silence, Adventure, Family, Romance.
         
-        When users ask about resorts, highlight their unique atolls and features.
-        If users ask to book, guide them to the 'Plan Trip' section or invite them to share their vision.
-        Keep responses concise but poetic.
+        Instructions:
+        1. When users ask for recommendations, suggest specific resorts based on their "vibe".
+        2. If they ask about booking, invite them to share their vision for a "Bespoke Curation" and suggest using the 'Plan Trip' form.
+        3. Keep responses concise but visually evocative. Use words like "turquoise", "sanctuary", "archipelago", and "atoll".
       `;
 
-      // Correct usage: Use ai.chats.create for chat interactions with history
-      const chat = ai.chats.create({
+      const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
+        contents: [
+          ...messages.map(m => ({
+            role: m.role,
+            parts: [{ text: m.text }]
+          })),
+          { role: 'user', parts: [{ text: input }] }
+        ],
         config: {
           systemInstruction,
-          temperature: 0.7,
+          temperature: 0.8,
         },
-        // Correct history format: array of objects with role and parts
-        history: messages.map(m => ({
-          role: m.role,
-          parts: [{ text: m.text }]
-        }))
       });
 
-      // Correct usage: sendMessage only accepts message parameter
-      const response = await chat.sendMessage({ message: input });
-
-      // Correct extraction: Access .text as a property, not a method
-      const aiText = response.text || "I apologize, I am momentarily offline. Please reach out to our human concierge.";
+      const aiText = response.text || "I apologize, the atolls are calling me away briefly. Please contact our human concierge at +960 725 9060.";
       setMessages(prev => [...prev, { role: 'model', text: aiText }]);
     } catch (error) {
       console.error("Sara Error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "I'm having trouble connecting to the atolls. Please try again or use our inquiry form." }]);
+      setMessages(prev => [...prev, { role: 'model', text: "I'm having trouble connecting to the atolls. Please try again or reach out on WhatsApp." }]);
     } finally {
       setIsTyping(false);
     }
@@ -85,7 +80,6 @@ const ChatBot: React.FC = () => {
 
   return (
     <>
-      {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-8 right-8 z-[100] bg-slate-900 text-white p-5 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all group flex items-center justify-center border border-white/10"
@@ -104,9 +98,7 @@ const ChatBot: React.FC = () => {
         </div>
       </button>
 
-      {/* Chat Window */}
       <div className={`fixed bottom-28 right-8 z-[100] w-[350px] md:w-[400px] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col transition-all duration-700 transform ${isOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-95 pointer-events-none'}`}>
-        {/* Header */}
         <div className="bg-slate-950 p-8 text-white">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-full bg-sky-500 flex items-center justify-center text-white font-serif italic text-xl">S</div>
@@ -117,11 +109,10 @@ const ChatBot: React.FC = () => {
           </div>
         </div>
 
-        {/* Messages */}
         <div ref={scrollRef} className="flex-1 p-6 space-y-4 overflow-y-auto max-h-[400px] no-scrollbar bg-[#FCFAF7]/50">
           {messages.map((m, i) => (
             <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[85%] p-4 rounded-3xl text-sm leading-relaxed ${m.role === 'user' ? 'bg-slate-900 text-white rounded-tr-none shadow-sm' : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none shadow-sm font-medium italic'}`}>
+              <div className={`max-w-[85%] p-4 rounded-3xl text-[12px] leading-relaxed ${m.role === 'user' ? 'bg-slate-900 text-white rounded-tr-none shadow-sm' : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none shadow-sm font-medium italic'}`}>
                 {m.text}
               </div>
             </div>
@@ -137,7 +128,6 @@ const ChatBot: React.FC = () => {
           )}
         </div>
 
-        {/* Input */}
         <div className="p-6 border-t border-slate-100 bg-white">
           <div className="relative flex items-center">
             <input
@@ -146,7 +136,7 @@ const ChatBot: React.FC = () => {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Inquire about the atolls..."
-              className="w-full bg-slate-50 border border-slate-100 rounded-full px-6 py-4 text-xs font-medium focus:outline-none focus:border-sky-500 focus:bg-white transition-all placeholder:text-slate-400"
+              className="w-full bg-slate-50 border border-slate-100 rounded-full px-6 py-4 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:border-sky-500 focus:bg-white transition-all placeholder:text-slate-300"
             />
             <button
               onClick={handleSend}
@@ -156,7 +146,7 @@ const ChatBot: React.FC = () => {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
             </button>
           </div>
-          <p className="text-[7px] text-center text-slate-400 uppercase tracking-widest mt-4">Powered by Serenity AI Intelligence</p>
+          <p className="text-[7px] text-center text-slate-300 uppercase tracking-widest mt-4">Powered by Serenity Intelligence</p>
         </div>
       </div>
     </>

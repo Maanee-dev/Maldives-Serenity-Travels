@@ -10,9 +10,9 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed casing to match PascalCase filenames (Offers.tsx and Experiences.tsx) and resolve collision errors
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Using lowercase file names to resolve casing conflict errors in TypeScript environment
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

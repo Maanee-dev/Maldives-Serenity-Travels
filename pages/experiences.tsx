@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { EXPERIENCES } from '../constants';
 import { Link } from 'react-router-dom';
@@ -5,6 +6,7 @@ import SEO from '../components/SEO';
 
 /**
  * Experiences Page: Showcases curated luxury activities and journeys in the Maldives.
+ * Casing: lowercase (experiences.tsx) for system compatibility and resolving build-time collisions.
  */
 const Experiences: React.FC = () => {
   useEffect(() => {
@@ -34,7 +36,7 @@ const Experiences: React.FC = () => {
       <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1920" 
+            src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=1920" 
             className="w-full h-full object-cover" 
             alt="Diving in Maldives"
           />
