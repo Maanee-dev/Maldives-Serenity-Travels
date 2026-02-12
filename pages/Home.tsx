@@ -131,14 +131,14 @@ const Home: React.FC = () => {
   };
 
   const vibes = [
-    { name: 'Quiet', desc: 'Peaceful places to relax by the ocean.', color: 'bg-sky-50', icon: '🌊' },
-    { name: 'Adventure', desc: 'Go diving or try fun water sports.', color: 'bg-amber-50', icon: '🐋' },
-    { name: 'Family', desc: 'Great resorts for kids and adults.', color: 'bg-emerald-50', icon: '👨‍👩‍👧‍👦' },
-    { name: 'Romance', desc: 'Perfect spots for couples and honeymoons.', color: 'bg-rose-50', icon: '🌅' }
+    { name: 'Quiet', desc: 'Peaceful places to relax by the ocean.', color: 'bg-sky-50 dark:bg-sky-950/20', icon: '🌊' },
+    { name: 'Adventure', desc: 'Go diving or try fun water sports.', color: 'bg-amber-50 dark:bg-amber-950/20', icon: '🐋' },
+    { name: 'Family', desc: 'Great resorts for kids and adults.', color: 'bg-emerald-50 dark:bg-emerald-950/20', icon: '👨‍👩‍👧‍👦' },
+    { name: 'Romance', desc: 'Perfect spots for couples and honeymoons.', color: 'bg-rose-50 dark:bg-rose-950/20', icon: '🌅' }
   ];
 
   return (
-    <div className="bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
+    <div className="bg-parchment dark:bg-slate-950 selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
       <SEO 
         title="Maldives Serenity Travels | Best Luxury Holidays" 
         description="Plan your perfect Maldives trip with us. We offer the best luxury resorts, overwater villas, and family holiday packages."
@@ -175,7 +175,7 @@ const Home: React.FC = () => {
             </div>
             <form onSubmit={handleSearch} className="w-full max-w-xl reveal active delay-500">
               <div className="relative group">
-                <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={typedPlaceholder} className="w-full bg-white/5 backdrop-blur-3xl border border-white/20 rounded-full pl-10 pr-24 py-6 text-white text-[11px] font-bold uppercase tracking-[0.4em] outline-none focus:bg-white focus:text-slate-950 placeholder:text-white/30 shadow-2xl transition-all" />
+                <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={typedPlaceholder} className="w-full bg-white/5 backdrop-blur-3xl border border-white/20 rounded-full pl-10 pr-24 py-6 text-white text-[11px] font-bold uppercase tracking-[0.4em] outline-none focus:bg-white focus:text-slate-950 dark:focus:text-slate-900 placeholder:text-white/30 shadow-2xl transition-all" />
                 <button type="submit" className="absolute right-2 top-2 bottom-2 bg-slate-950 text-white w-16 rounded-full flex items-center justify-center hover:bg-sky-500 transition-all shadow-xl"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></button>
               </div>
             </form>
@@ -184,11 +184,11 @@ const Home: React.FC = () => {
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-24 md:py-48 bg-white relative overflow-hidden">
+      <section className="py-24 md:py-48 bg-white dark:bg-slate-950 relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="flex flex-col lg:flex-row gap-16 lg:gap-32 items-center">
             <div className="lg:w-1/2 relative order-2 lg:order-1 reveal">
-              <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl z-10 group bg-slate-100">
+              <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl z-10 group bg-slate-100 dark:bg-slate-900">
                 <img 
                   src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" 
                   className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" 
@@ -196,8 +196,8 @@ const Home: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
               </div>
-              <div className="absolute -bottom-10 -right-4 md:-bottom-16 md:-right-16 bg-[#FCFAF7] p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl z-20 max-w-[280px] md:max-w-[380px] border border-slate-50 reveal delay-500">
-                <p className="text-slate-900 font-serif italic text-xl md:text-3xl leading-[1.4]">"Find peace in the beauty of the islands."</p>
+              <div className="absolute -bottom-10 -right-4 md:-bottom-16 md:-right-16 bg-parchment dark:bg-slate-900 p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl z-20 max-w-[280px] md:max-w-[380px] border border-slate-50 dark:border-white/5 reveal delay-500">
+                <p className="text-slate-900 dark:text-white font-serif italic text-xl md:text-3xl leading-[1.4]">"Find peace in the beauty of the islands."</p>
                 <div className="mt-8 flex items-center gap-4">
                   <div className="w-8 h-px bg-sky-500"></div>
                   <span className="text-[8px] font-bold uppercase tracking-widest text-slate-400">Island Life</span>
@@ -210,22 +210,22 @@ const Home: React.FC = () => {
                 <div className="w-12 h-[1px] bg-sky-500"></div>
                 <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1.2em]">Our Agency</span>
               </div>
-              <h2 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold text-slate-950 leading-[0.95] mb-12 tracking-tighter">
+              <h2 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold text-slate-950 dark:text-white leading-[0.95] mb-12 tracking-tighter">
                 The Best <br /> 
                 <span className="italic text-sky-500 font-normal">Maldives</span> <br /> 
                 Holidays.
               </h2>
               <div className="max-w-xl">
-                <p className="text-slate-600 text-lg md:text-2xl leading-[1.7] mb-12 font-medium opacity-90 italic">
+                <p className="text-slate-600 dark:text-slate-300 text-lg md:text-2xl leading-[1.7] mb-12 font-medium opacity-90 italic">
                   We help you plan the perfect escape to one of the most beautiful places on earth.
                 </p>
-                <p className="text-slate-500 text-base md:text-lg leading-[1.8] mb-12">
+                <p className="text-slate-500 dark:text-slate-400 text-base md:text-lg leading-[1.8] mb-12">
                   Maldives Serenity Travels is a local travel agency based in Addu City. We focus on personal service to make sure your trip is special. From seaplane transfers to finding your own private beach, we take care of all the details for you.
                 </p>
-                <Link to="/about" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
-                  <span className="border-b-2 border-slate-100 pb-1 group-hover:border-sky-500 transition-colors">Read Our Story</span>
-                  <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700">
-                    <svg className="w-5 h-5 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                <Link to="/about" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 dark:text-white uppercase tracking-[0.5em] group transition-all">
+                  <span className="border-b-2 border-slate-100 dark:border-white/10 pb-1 group-hover:border-sky-500 transition-colors">Read Our Story</span>
+                  <div className="w-14 h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover:bg-slate-950 dark:group-hover:bg-white transition-all duration-700">
+                    <svg className="w-5 h-5 text-slate-950 dark:text-white group-hover:text-white dark:group-hover:text-slate-950 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                   </div>
                 </Link>
               </div>
@@ -235,41 +235,41 @@ const Home: React.FC = () => {
       </section>
 
       {/* VIBE FINDER SECTION */}
-      <section className="py-24 md:py-48 bg-[#fcfaf7]">
+      <section className="py-24 md:py-48 bg-parchment dark:bg-slate-900/50">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20 text-center mb-24 reveal">
            <span className="text-sky-500 font-black uppercase tracking-[1em] text-[10px] mb-8 block">Dream Trip</span>
-           <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Choose Your Vibe.</h2>
+           <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 dark:text-white italic tracking-tighter">Choose Your Vibe.</h2>
         </div>
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-20 reveal">
           {vibes.map((v) => (
             <button 
               key={v.name}
               onClick={() => setActiveVibe(v.name as any)}
-              className={`p-10 rounded-[3rem] text-center transition-all duration-700 border-2 ${activeVibe === v.name ? 'bg-white border-sky-500 shadow-2xl scale-105' : 'bg-slate-50 border-transparent hover:border-slate-200'}`}
+              className={`p-10 rounded-[3rem] text-center transition-all duration-700 border-2 ${activeVibe === v.name ? 'bg-white dark:bg-slate-800 border-sky-500 shadow-2xl scale-105' : 'bg-slate-50 dark:bg-slate-900 border-transparent hover:border-slate-200 dark:hover:border-white/5'}`}
             >
               <div className="text-4xl mb-6">{v.icon}</div>
-              <h3 className="text-[12px] font-black uppercase tracking-[0.4em] text-slate-900 mb-4">{v.name}</h3>
-              <p className={`text-[10px] font-bold uppercase tracking-widest leading-loose ${activeVibe === v.name ? 'text-slate-600' : 'text-slate-400'}`}>
+              <h3 className="text-[12px] font-black uppercase tracking-[0.4em] text-slate-900 dark:text-white mb-4">{v.name}</h3>
+              <p className={`text-[10px] font-bold uppercase tracking-widest leading-loose ${activeVibe === v.name ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500'}`}>
                 {v.desc}
               </p>
             </button>
           ))}
         </div>
         <div className="text-center reveal">
-           <Link to={`/search?q=${activeVibe}`} className="bg-slate-950 text-white font-bold px-16 py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-500 transition-all duration-700 shadow-2xl">
+           <Link to={`/search?q=${activeVibe}`} className="bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-bold px-16 py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-500 dark:hover:bg-sky-400 transition-all duration-700 shadow-2xl">
              Explore {activeVibe}
            </Link>
         </div>
       </section>
 
       {/* THE COLLECTION */}
-      <section className="py-24 md:py-48 bg-white overflow-hidden border-b border-slate-50">
+      <section className="py-24 md:py-48 bg-white dark:bg-slate-950 overflow-hidden border-b border-slate-50 dark:border-white/5">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           <div className="mb-20 md:mb-32 reveal flex flex-col md:flex-row justify-between items-end gap-10">
             <div className="max-w-xl text-left">
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[1.2em] mb-8 block">Our Portfolio</span>
-              <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 tracking-tighter italic leading-none">The Top Resorts.</h3>
-              <p className="mt-12 text-slate-400 text-[10px] uppercase font-bold tracking-[0.4em] leading-loose">
+              <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 dark:text-white tracking-tighter italic leading-none">The Top Resorts.</h3>
+              <p className="mt-12 text-slate-400 dark:text-slate-500 text-[10px] uppercase font-bold tracking-[0.4em] leading-loose">
                  We have picked the very best resorts in the Maldives. Every place we offer has great service and total privacy.
               </p>
             </div>
@@ -282,9 +282,9 @@ const Home: React.FC = () => {
               </div>
             ))}
             <div className="flex-shrink-0 w-[85vw] sm:w-[55vw] lg:w-[35vw] snap-start flex items-center justify-center">
-              <Link to="/stays" className="group w-full aspect-[4/5] rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-center hover:bg-slate-950 transition-all duration-1000">
+              <Link to="/stays" className="group w-full aspect-[4/5] rounded-[3rem] bg-slate-50 dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-white/5 flex flex-col items-center justify-center p-12 text-center hover:bg-slate-950 dark:hover:bg-white transition-all duration-1000">
                 <span className="text-[10px] font-bold text-slate-400 group-hover:text-sky-400 uppercase tracking-[1em] mb-8 block">See All</span>
-                <h4 className="text-2xl md:text-4xl font-serif font-bold text-slate-900 group-hover:text-white leading-tight italic">Find your <br /> dream villa.</h4>
+                <h4 className="text-2xl md:text-4xl font-serif font-bold text-slate-900 dark:text-white dark:group-hover:text-slate-950 group-hover:text-white leading-tight italic">Find your <br /> dream villa.</h4>
               </Link>
             </div>
           </div>
@@ -292,17 +292,17 @@ const Home: React.FC = () => {
       </section>
 
       {/* THE JOURNAL - LATEST STORIES */}
-      <section className="py-24 md:py-48 bg-[#FCFAF7]">
+      <section className="py-24 md:py-48 bg-parchment dark:bg-slate-900/30">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="text-center mb-24 reveal">
             <span className="text-sky-500 font-black uppercase tracking-[1em] text-[10px] mb-8 block">The Journal</span>
-            <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Travel Tips & Stories.</h2>
+            <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 dark:text-white italic tracking-tighter">Travel Tips & Stories.</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20 mb-24">
             {recentStories.map((post) => (
               <Link key={post.id} to={`/stories/${post.slug}`} className="group reveal">
-                <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl group-hover:-translate-y-2 bg-slate-100">
+                <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl group-hover:-translate-y-2 bg-slate-100 dark:bg-slate-800">
                   <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-105" />
                   <div className="absolute top-8 left-8">
                     <span className="bg-white/95 backdrop-blur-md px-5 py-2 rounded-full text-[9px] font-black text-slate-900 uppercase tracking-[0.4em] shadow-sm">
@@ -311,23 +311,23 @@ const Home: React.FC = () => {
                   </div>
                 </div>
                 <div className="px-4">
-                  <span className="text-slate-400 font-bold text-[9px] uppercase tracking-[0.4em] mb-4 block">
+                  <span className="text-slate-400 dark:text-slate-500 font-bold text-[9px] uppercase tracking-[0.4em] mb-4 block">
                     {new Date(post.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                   </span>
-                  <h3 className="text-2xl font-serif font-bold text-slate-900 mb-6 group-hover:text-sky-600 transition-colors leading-tight">
+                  <h3 className="text-2xl font-serif font-bold text-slate-900 dark:text-white mb-6 group-hover:text-sky-600 transition-colors leading-tight">
                     {post.title}
                   </h3>
-                  <div className="h-px w-12 bg-slate-200 group-hover:w-full group-hover:bg-sky-500 transition-all duration-1000"></div>
+                  <div className="h-px w-12 bg-slate-200 dark:bg-white/10 group-hover:w-full group-hover:bg-sky-500 transition-all duration-1000"></div>
                 </div>
               </Link>
             ))}
           </div>
 
           <div className="text-center reveal">
-            <Link to="/stories" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
-              <span className="border-b-2 border-slate-100 pb-1 group-hover:border-sky-500 transition-colors">Read More Stories</span>
-              <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700">
-                <svg className="w-5 h-5 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            <Link to="/stories" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 dark:text-white uppercase tracking-[0.5em] group transition-all">
+              <span className="border-b-2 border-slate-100 dark:border-white/10 pb-1 group-hover:border-sky-500 transition-colors">Read More Stories</span>
+              <div className="w-14 h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover:bg-slate-950 dark:group-hover:bg-white transition-all duration-700">
+                <svg className="w-5 h-5 text-slate-950 dark:text-white group-hover:text-white dark:group-hover:text-slate-950 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </div>
             </Link>
           </div>

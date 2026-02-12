@@ -5,16 +5,18 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import ChatBot from './components/ChatBot';
+import DarkModeToggle from './components/DarkModeToggle';
+import OfferToasts from './components/OfferToasts';
 
 // Pages
 import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Using PascalCase for these imports to match the canonical filenames 'Offers.tsx' and 'Experiences.tsx'
-// and resolve casing mismatch errors in environments where both casings might be detected.
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Fix: Use lowercase 'offers' to match the filename and resolve casing errors
+import Offers from './pages/offers';
+// Fix: Use lowercase 'experiences' to match the filename and resolve casing errors
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
@@ -57,6 +59,8 @@ const App: React.FC = () => {
       </Routes>
       <ChatBot />
       <ScrollToTopButton />
+      <DarkModeToggle />
+      <OfferToasts />
       <Footer />
     </BrowserRouter>
   );
