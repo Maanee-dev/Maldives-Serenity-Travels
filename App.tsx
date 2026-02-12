@@ -13,10 +13,10 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Use capitalized filename to match the existing file naming convention and resolve casing conflicts
-import Offers from './pages/Offers';
-// Fix: Use capitalized filename to match the existing file naming convention and resolve casing conflicts
-import Experiences from './pages/Experiences';
+// Fix: Using lowercase import to resolve casing conflicts and match the intended file naming convention (offers.tsx)
+import Offers from './pages/offers';
+// Fix: Using lowercase import to resolve casing conflicts and match the intended file naming convention (experiences.tsx)
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
