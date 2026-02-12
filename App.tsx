@@ -6,16 +6,17 @@ import Footer from './components/Footer';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import ChatBot from './components/ChatBot';
 import DarkModeToggle from './components/DarkModeToggle';
+import PrivacyPopup from './components/PrivacyPopup';
 
 // Pages
 import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Using lowercase filename to resolve casing collision for Offers
-import Offers from './pages/offers';
-// Using lowercase filename to resolve casing collision for Experiences
-import Experiences from './pages/experiences';
+// Standardized to PascalCase to resolve build-time casing collisions
+import Offers from './pages/Offers';
+// Standardized to PascalCase to resolve build-time casing collisions
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
@@ -59,6 +60,7 @@ const App: React.FC = () => {
       <ChatBot />
       <ScrollToTopButton />
       <DarkModeToggle />
+      <PrivacyPopup />
       <Footer />
     </BrowserRouter>
   );
