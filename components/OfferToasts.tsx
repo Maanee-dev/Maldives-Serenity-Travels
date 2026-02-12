@@ -8,127 +8,101 @@ const OfferToasts: React.FC = () => {
   const [currentOffer, setCurrentOffer] = useState<Offer | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [offerList, setOfferList] = useState<Offer[]>(OFFERS);
-
-  // Frequency Control: Only show once per session
-  const triggerOffer = useCallback(() => {
-    const hasSeen = sessionStorage.getItem('serenity_offer_shown');
-    if (hasSeen || isVisible) return;
-
-    // Pick a random offer from the list
-    const randomOffer = offerList[Math.floor(Math.random() * offerList.length)];
-    setCurrentOffer(randomOffer);
-    setIsVisible(true);
-    sessionStorage.setItem('serenity_offer_shown', 'true');
-  }, [offerList, isVisible]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const fetchFreshOffers = async () => {
-      const { data } = await supabase.from('offers').select('*').limit(5);
+      const { data } = await supabase.from('offers').select('*').limit(10);
       if (data && data.length > 0) {
         setOfferList(data.map(mapOffer));
       }
     };
     fetchFreshOffers();
+  }, []);
 
-    // Setup Interaction Triggers
-    const inactivityTimer = setTimeout(triggerOffer, 30000);
+  const showNextOffer = useCallback(() => {
+    setIsVisible(false);
+    
+    setTimeout(() => {
+      const nextIdx = (currentIndex + 1) % offerList.length;
+      setCurrentIndex(nextIdx);
+      setCurrentOffer(offerList[nextIdx]);
+      setIsVisible(true);
 
-    const handleScroll = () => {
-      const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-      if (scrollPercent > 50) {
-        triggerOffer();
-        window.removeEventListener('scroll', handleScroll);
-      }
-    };
+      setTimeout(() => {
+        setIsVisible(false);
+      }, 12000);
+    }, 1200);
+  }, [currentIndex, offerList]);
 
-    const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0) {
-        triggerOffer();
-        document.removeEventListener('mouseleave', handleMouseLeave);
-      }
-    };
+  useEffect(() => {
+    const initialTimer = setTimeout(() => {
+      setCurrentOffer(offerList[0]);
+      setIsVisible(true);
+      setTimeout(() => setIsVisible(false), 12000);
+    }, 8000);
 
-    window.addEventListener('scroll', handleScroll);
-    document.addEventListener('mouseleave', handleMouseLeave);
+    const interval = setInterval(showNextOffer, 40000);
 
     return () => {
-      clearTimeout(inactivityTimer);
-      window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('mouseleave', handleMouseLeave);
+      clearTimeout(initialTimer);
+      clearInterval(interval);
     };
-  }, [triggerOffer]);
+  }, [showNextOffer, offerList]);
 
-  if (!currentOffer || !isVisible) return null;
+  if (!currentOffer) return null;
 
   return (
-    <div className="fixed inset-0 z-[500] flex items-center justify-center p-6">
-      {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-slate-950/40 dark:bg-black/60 backdrop-blur-md transition-opacity duration-700"
-        onClick={() => setIsVisible(false)}
-      />
-
-      {/* Modal Card */}
-      <div className="relative w-full max-w-sm md:max-w-md bg-white dark:bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border border-slate-100 dark:border-white/10 transform transition-all duration-700 animate-in zoom-in-95 fade-in">
+    <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[150] w-full max-w-[98vw] md:max-w-fit px-2 transition-all duration-1000 transform ${isVisible ? 'translate-y-0 opacity-100 pointer-events-auto' : 'translate-y-12 opacity-0 pointer-events-none'}`}>
+      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200 dark:border-white/10 rounded-full pl-1.5 pr-2 md:pr-6 py-1.5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)] flex items-center gap-1.5 md:gap-4 group flex-nowrap">
         
-        {/* Close Button */}
+        {/* Compact Visual - Scaled for mobile */}
+        <div className="relative w-9 h-9 md:w-12 md:h-12 rounded-full overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-slate-800 shadow-sm border border-white/20">
+           <img src={currentOffer.image} alt="" className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110" />
+           <div className="absolute inset-0 bg-sky-500/10"></div>
+        </div>
+
+        {/* Content Pill - Strict truncation for mobile */}
+        <div className="flex items-center gap-2 md:gap-8 overflow-hidden flex-nowrap">
+           <div className="flex flex-col min-w-0">
+              <div className="hidden md:flex items-center gap-2">
+                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                 <span className="text-amber-600 dark:text-amber-400 font-black text-[7px] uppercase tracking-[0.3em] whitespace-nowrap">Special Privilege</span>
+              </div>
+              <h4 className="text-[10px] md:text-[11px] font-serif font-bold text-slate-950 dark:text-white italic leading-tight truncate max-w-[70px] xs:max-w-[100px] sm:max-w-[150px] md:max-w-[200px]">
+                {currentOffer.resortName}
+              </h4>
+           </div>
+
+           <div className="hidden sm:flex h-6 w-px bg-slate-100 dark:bg-white/10"></div>
+
+           <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
+              <div className="flex flex-col items-end flex-shrink-0">
+                <span className="text-[9px] md:text-[11px] font-black text-slate-950 dark:text-sky-300 uppercase tracking-tighter leading-none">
+                  ${currentOffer.price?.toLocaleString()}
+                </span>
+                <span className="hidden md:block text-[7px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-1">
+                  {currentOffer.discount}
+                </span>
+              </div>
+              
+              <Link 
+                to={`/stays/${currentOffer.resortSlug}`} 
+                className="bg-slate-950 dark:bg-white text-white dark:text-slate-950 px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] hover:bg-sky-500 dark:hover:bg-sky-400 transition-all shadow-sm whitespace-nowrap"
+              >
+                Discover
+              </Link>
+           </div>
+        </div>
+
+        {/* Close Button - Accessible touch target */}
         <button 
-          onClick={() => setIsVisible(false)}
-          className="absolute top-6 right-6 z-20 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full backdrop-blur-md transition-all"
+           onClick={() => setIsVisible(false)} 
+           className="p-1.5 md:ml-2 text-slate-300 hover:text-slate-950 dark:hover:text-white transition-colors flex-shrink-0"
+           aria-label="Close offer"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+           <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
-
-        {/* Top: Large Square Visual */}
-        <div className="aspect-square relative overflow-hidden group">
-          <img 
-            src={currentOffer.image} 
-            alt={currentOffer.resortName} 
-            className="w-full h-full object-cover transition-transform duration-[10s] scale-105 group-hover:scale-110" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-          
-          <div className="absolute bottom-8 left-8 right-8 text-left">
-            <span className="inline-block bg-amber-500 text-white text-[9px] font-black uppercase tracking-[0.4em] px-4 py-1.5 rounded-full mb-4 shadow-lg animate-pulse">
-              Bespoke Privilege
-            </span>
-            <h3 className="text-3xl md:text-4xl font-serif font-bold text-white italic leading-tight drop-shadow-lg">
-              {currentOffer.resortName}
-            </h3>
-          </div>
-        </div>
-
-        {/* Bottom: Details */}
-        <div className="p-8 md:p-10 text-center">
-          <div className="flex flex-col items-center gap-4 mb-8">
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-black text-slate-950 dark:text-white tracking-tighter">
-                ${currentOffer.price?.toLocaleString()}
-              </span>
-              <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                / {currentOffer.nights} Nights
-              </span>
-            </div>
-            <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em] leading-relaxed max-w-[250px]">
-              {currentOffer.title}
-            </p>
-          </div>
-
-          <Link 
-            to={`/stays/${currentOffer.resortSlug}`}
-            onClick={() => setIsVisible(false)}
-            className="block w-full bg-slate-950 dark:bg-white text-white dark:text-slate-950 py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.6em] hover:bg-sky-500 dark:hover:bg-sky-400 transition-all shadow-xl"
-          >
-            Secure Discovery
-          </Link>
-          
-          <button 
-            onClick={() => setIsVisible(false)}
-            className="mt-6 text-[8px] font-bold text-slate-300 dark:text-slate-600 uppercase tracking-[0.5em] hover:text-slate-900 dark:hover:text-slate-400 transition-colors"
-          >
-            Maybe Later
-          </button>
-        </div>
       </div>
     </div>
   );
