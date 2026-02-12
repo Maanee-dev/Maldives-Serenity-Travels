@@ -37,15 +37,15 @@ const Navbar: React.FC = () => {
   const isHomePage = location.pathname === '/';
   const isDarkState = (scrolled || isOpen || !isHomePage);
   
-  const textColorClass = isDarkState ? 'text-slate-900' : 'text-white';
-  const bgColorClass = isDarkState ? 'bg-slate-900' : 'bg-white';
-  const fillClass = isDarkState ? 'fill-slate-900' : 'fill-white';
-  const strokeClass = isDarkState ? 'stroke-slate-900' : 'stroke-white';
+  const textColorClass = isDarkState ? 'text-sky-950' : 'text-white';
+  const bgColorClass = isDarkState ? 'bg-sky-600' : 'bg-white';
+  const fillClass = isDarkState ? 'fill-sky-600' : 'fill-white';
+  const strokeClass = isDarkState ? 'stroke-sky-600' : 'stroke-white';
 
   return (
     <>
       {/* Header */}
-      <nav className={`fixed w-full z-[300] transition-all duration-1000 ${isDarkState ? 'glass-nav py-4 border-b border-slate-100/50 shadow-sm' : 'bg-transparent py-8 md:py-12'}`}>
+      <nav className={`fixed w-full z-[300] transition-all duration-1000 ${isDarkState ? 'glass-nav py-4 border-b border-sky-100/50 shadow-sm' : 'bg-transparent py-8 md:py-12'}`}>
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex justify-between items-center relative">
           
           {/* Left: Discover Toggle */}
@@ -150,7 +150,7 @@ const Navbar: React.FC = () => {
                   <Link 
                     to={link.path}
                     style={{ transitionDelay: `${150 + i * 80}ms` }}
-                    className={`block text-3xl sm:text-4xl md:text-5xl lg:text-[5rem] font-serif font-bold text-slate-900 italic hover:text-sky-500 transition-all duration-700 transform leading-tight ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
+                    className={`block text-3xl sm:text-4xl md:text-5xl lg:text-[5rem] font-serif font-bold text-sky-950 italic hover:text-sky-500 transition-all duration-700 transform leading-tight ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
                   >
                     {link.name}.
                   </Link>
@@ -161,8 +161,8 @@ const Navbar: React.FC = () => {
           
           {/* Menu Footer */}
           <div className={`mt-auto mb-12 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-16 transition-all duration-1000 delay-500 pb-10 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <a href="#" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 hover:text-slate-900 transition-colors">Instagram</a>
-            <a href="#" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 hover:text-slate-900 transition-colors">Inquiries</a>
+            <a href="#" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-sky-200 hover:text-sky-900 transition-colors">Instagram</a>
+            <a href="#" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-sky-200 hover:text-sky-900 transition-colors">Inquiries</a>
           </div>
         </div>
       </div>

@@ -26,10 +26,34 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'atoll': {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                800: '#075985',
+                900: '#0c4a6e',
+                950: '#082f49',
+              },
+            }
+          }
+        }
+      }
+    </script>
+
     <style>
         :root {
             --bg-parchment: #FCFAF7;
-            --text-charcoal: #0F172A;
+            --text-charcoal: #082F49; /* Deep Atoll Blue instead of Charcoal */
             --atoll-blue: #0ea5e9;
             --brand-orange: #f15d22;
             --font-main: 'Plus Jakarta Sans', sans-serif;
@@ -74,8 +98,8 @@
         /* Sophisticated Scrollbar */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: var(--bg-parchment); }
-        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--brand-orange); }
+        ::-webkit-scrollbar-thumb { background: #bae6fd; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--atoll-blue); }
 
         .glass-nav {
             background: rgba(252, 250, 247, 0.85);
@@ -100,8 +124,8 @@
         }
 
         ::selection {
-            background: rgba(241, 93, 34, 0.1);
-            color: var(--brand-orange);
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--atoll-blue);
         }
         
         .letter-spacing-vogue {
