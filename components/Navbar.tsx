@@ -4,34 +4,13 @@ import { Link, useLocation } from 'react-router-dom';
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isDark, setIsDark] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
-    
-    // Theme sync
-    const savedTheme = localStorage.getItem('serenity-theme');
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialDark = savedTheme === 'dark' || (!savedTheme && systemDark);
-    setIsDark(initialDark);
-    if (initialDark) document.documentElement.classList.add('dark');
-    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const toggleTheme = () => {
-    const nextDark = !isDark;
-    setIsDark(nextDark);
-    if (nextDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('serenity-theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('serenity-theme', 'light');
-    }
-  };
 
   useEffect(() => {
     setIsOpen(false);
@@ -58,15 +37,15 @@ const Navbar: React.FC = () => {
   const isHomePage = location.pathname === '/';
   const isDarkState = (scrolled || isOpen || !isHomePage);
   
-  const textColorClass = isDarkState ? 'text-slate-900 dark:text-white' : 'text-white';
-  const bgColorClass = isDarkState ? 'bg-slate-900 dark:bg-white' : 'bg-white';
-  const fillClass = isDarkState ? 'fill-slate-900 dark:fill-white' : 'fill-white';
-  const strokeClass = isDarkState ? 'stroke-slate-900 dark:stroke-white' : 'stroke-white';
+  const textColorClass = isDarkState ? 'text-slate-900' : 'text-white';
+  const bgColorClass = isDarkState ? 'bg-slate-900' : 'bg-white';
+  const fillClass = isDarkState ? 'fill-slate-900' : 'fill-white';
+  const strokeClass = isDarkState ? 'stroke-slate-900' : 'stroke-white';
 
   return (
     <>
       {/* Header */}
-      <nav className={`fixed w-full z-[300] transition-all duration-1000 ${isDarkState ? 'glass-nav py-4 border-b border-slate-100/50 dark:border-white/5 shadow-sm' : 'bg-transparent py-8 md:py-12'}`}>
+      <nav className={`fixed w-full z-[300] transition-all duration-1000 ${isDarkState ? 'glass-nav py-4 border-b border-slate-100/50 shadow-sm' : 'bg-transparent py-8 md:py-12'}`}>
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex justify-between items-center relative">
           
           {/* Left: Discover Toggle */}
@@ -126,21 +105,8 @@ const Navbar: React.FC = () => {
             </svg>
           </Link>
 
-          {/* Right: Plan CTA & Theme Toggle */}
-          <div className="flex-1 flex justify-end items-center gap-6 md:gap-10">
-            {/* Theme Toggle */}
-            <button 
-              onClick={toggleTheme}
-              className={`p-3 rounded-full border transition-all duration-500 hover:scale-110 active:scale-95 ${isDarkState ? 'border-slate-100 dark:border-white/10' : 'border-white/20'}`}
-              aria-label="Toggle Theme"
-            >
-              {isDark ? (
-                <svg className="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
-              ) : (
-                <svg className="w-5 h-5 text-sky-500 fill-current" viewBox="0 0 24 24"><path d="M12.1,22c-0.3,0-0.6,0-0.9,0c-5.5-0.2-9.8-4.7-9.8-10.2c0-5.4,4.2-9.9,9.6-10.2c0.4,0,0.7,0.1,1,0.4c0.3,0.3,0.3,0.7,0.2,1.1 c-0.6,2.4-0.1,5,1.5,7c1.6,2,3.9,3.1,6.4,3.1c1.3,0,2.6-0.3,3.7-0.9c0.4-0.2,0.8-0.1,1.1,0.2c0.3,0.3,0.4,0.7,0.2,1.1 C23.6,18.1,18.3,22,12.1,22z"/></svg>
-              )}
-            </button>
-
+          {/* Right: Plan CTA */}
+          <div className="flex-1 flex justify-end">
             <Link 
               to="/plan" 
               className={`group relative flex items-center justify-center transition-all duration-700 ${textColorClass}`}
@@ -174,8 +140,9 @@ const Navbar: React.FC = () => {
       </nav>
 
       {/* Fullscreen Overlay Menu */}
-      <div className={`fixed inset-0 z-[250] bg-white dark:bg-slate-950 transition-all duration-1000 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+      <div className={`fixed inset-0 z-[250] bg-white transition-all duration-1000 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
         <div className="h-full w-full overflow-y-auto no-scrollbar scroll-smooth flex flex-col">
+          {/* Centered links that handle overflow naturally */}
           <div className="m-auto flex flex-col items-center justify-center px-6 md:px-12 lg:px-24 pt-32 pb-24 text-center w-full min-h-max">
             <div className="flex flex-col items-center justify-center space-y-2 md:space-y-4 lg:space-y-2 w-full">
               {navLinks.map((link, i) => (
@@ -183,7 +150,7 @@ const Navbar: React.FC = () => {
                   <Link 
                     to={link.path}
                     style={{ transitionDelay: `${150 + i * 80}ms` }}
-                    className={`block text-3xl sm:text-4xl md:text-5xl lg:text-[5rem] font-serif font-bold text-slate-900 dark:text-white italic hover:text-sky-500 transition-all duration-700 transform leading-tight ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
+                    className={`block text-3xl sm:text-4xl md:text-5xl lg:text-[5rem] font-serif font-bold text-slate-900 italic hover:text-sky-500 transition-all duration-700 transform leading-tight ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
                   >
                     {link.name}.
                   </Link>
@@ -192,9 +159,10 @@ const Navbar: React.FC = () => {
             </div>
           </div>
           
+          {/* Menu Footer */}
           <div className={`mt-auto mb-12 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-16 transition-all duration-1000 delay-500 pb-10 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <a href="#" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">Instagram</a>
-            <a href="#" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">Inquiries</a>
+            <a href="#" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 hover:text-slate-900 transition-colors">Instagram</a>
+            <a href="#" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 hover:text-slate-900 transition-colors">Inquiries</a>
           </div>
         </div>
       </div>

@@ -14,7 +14,7 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort, hasOffer }) => {
 
   return (
     <Link to={`/stays/${resort.slug}`} className="group block mb-12">
-      <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-[2.5rem] mb-8 transition-all duration-1000 bg-slate-100 dark:bg-slate-900 group-hover:shadow-2xl group-hover:-translate-y-2">
+      <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-[2.5rem] mb-8 transition-all duration-1000 bg-slate-100 group-hover:shadow-2xl group-hover:-translate-y-2">
         <img 
           src={displayImage} 
           alt={resort.name} 
@@ -24,7 +24,7 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort, hasOffer }) => {
         
         {/* Floating Metadata */}
         <div className="absolute top-8 left-8 flex flex-col gap-3">
-          <span className="bg-white/95 dark:bg-slate-950/90 backdrop-blur-md px-5 py-2 rounded-full text-[10px] font-black text-slate-950 dark:text-white uppercase tracking-[0.4em] shadow-sm border-[1px] border-slate-50 dark:border-white/10 w-fit">
+          <span className="bg-white/95 backdrop-blur-md px-5 py-2 rounded-full text-[10px] font-black text-slate-950 uppercase tracking-[0.4em] shadow-sm border-[1px] border-slate-50 w-fit">
             {resort.atoll}
           </span>
           {hasOffer && (
@@ -39,7 +39,7 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort, hasOffer }) => {
         
         {/* Quick View Link */}
         <div className="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-700">
-           <div className="w-12 h-12 bg-white dark:bg-slate-900 rounded-full flex items-center justify-center text-slate-950 dark:text-white shadow-2xl">
+           <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-slate-950 shadow-2xl">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
            </div>
         </div>
@@ -47,19 +47,19 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort, hasOffer }) => {
       
       <div className="px-4 text-center md:text-left">
         <div className="flex flex-col md:flex-row md:justify-between md:items-baseline gap-2 mb-4">
-          <h3 className="text-2xl font-serif font-bold text-slate-950 dark:text-white group-hover:italic group-hover:text-[#f15d22] transition-all duration-500 leading-tight">
+          <h3 className="text-2xl font-serif font-bold text-slate-950 group-hover:italic group-hover:text-[#f15d22] transition-all duration-500 leading-tight">
             {resort.name}
           </h3>
-          <span className="text-[10px] font-black text-[#f15d22] uppercase tracking-widest px-3 py-1 bg-orange-50 dark:bg-orange-950/30 rounded-full">
+          <span className="text-[10px] font-black text-[#f15d22] uppercase tracking-widest px-3 py-1 bg-orange-50 rounded-full">
             {resort.priceRange || '$$$$'}
           </span>
         </div>
         
-        <p className="text-slate-400 dark:text-slate-500 text-[9px] font-black uppercase tracking-[0.4em] mb-6 line-clamp-1">
+        <p className="text-slate-400 text-[9px] font-black uppercase tracking-[0.4em] mb-6 line-clamp-1">
           {(resort.features && resort.features.length > 0) ? resort.features.join(' • ') : 'Bespoke Sanctuary • Private Island'}
         </p>
         
-        <div className="h-px w-12 bg-slate-200 dark:bg-white/10 group-hover:w-full group-hover:bg-[#f15d22] transition-all duration-1000"></div>
+        <div className="h-px w-12 bg-slate-200 group-hover:w-full group-hover:bg-[#f15d22] transition-all duration-1000"></div>
       </div>
     </Link>
   );
