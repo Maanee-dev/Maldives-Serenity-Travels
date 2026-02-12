@@ -13,10 +13,9 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Correcting import casing to PascalCase to resolve "already included file name differs only in casing" errors (line 17)
-import Offers from './pages/Offers';
-// Fix: Correcting import casing to PascalCase to resolve "already included file name differs only in casing" errors (line 19)
-import Experiences from './pages/Experiences';
+// Corrected import casing to lowercase to resolve "already included file name differs only in casing" errors
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
