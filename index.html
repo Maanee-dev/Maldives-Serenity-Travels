@@ -31,7 +31,6 @@
             --bg-parchment: #FCFAF7;
             --text-charcoal: #0F172A;
             --atoll-blue: #0ea5e9;
-            --brand-orange: #f15d22;
             --font-main: 'Plus Jakarta Sans', sans-serif;
             --font-serif: 'Playfair Display', serif;
         }
@@ -61,7 +60,7 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* SEO Shadow Nav */
+        /* SEO Shadow Nav - Visually hidden but fully readable by bots and generators */
         .crawler-shell {
             position: absolute;
             left: -10000px;
@@ -70,12 +69,24 @@
             height: 1px;
             overflow: hidden;
         }
+                .font-serif { font-family: var(--font-serif); }
 
         /* Sophisticated Scrollbar */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: var(--bg-parchment); }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--brand-orange); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--atoll-blue); }
+
+        /* Reveal Animation System */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(40px); 
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
 
         .glass-nav {
             background: rgba(252, 250, 247, 0.85);
@@ -100,12 +111,20 @@
         }
 
         ::selection {
-            background: rgba(241, 93, 34, 0.1);
-            color: var(--brand-orange);
+            background: rgba(14, 165, 233, 0.15);
+            color: var(--atoll-blue);
         }
         
         .letter-spacing-vogue {
             letter-spacing: 0.4em;
+        }
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 
@@ -126,16 +145,21 @@
 </script>
 </head>
 <body>
+    <!-- 
+      CRAWLER SHADOW CONTENT
+      Exact brand match implementation for search engine visibility.
+    -->
     <div class="crawler-shell">
         <h1>Maldives Serenity Travels</h1>
+        <p>__DESCRIPTION__</p>
         <nav aria-label="Site Navigation">
             <ul>
                 <li><a href="/">Home - Maldives Serenity Travels</a></li>
-                <li><a href="/stays">Luxury Resorts & Water Villas</a></li>
-                <li><a href="/offers">Best Maldives Travel Deals & Offers</a></li>
-                <li><a href="/experiences">Fun Maldives Activities & Tours</a></li>
-                <li><a href="/stories">Travel Blog - Maldives News & Tips</a></li>
-                <li><a href="/plan">Plan My Trip - Custom Holiday Planning</a></li>
+                <li><a href="/stays">Luxury Resorts & Overwater Villas Portfolio</a></li>
+                <li><a href="/offers">Exclusive Maldives Holiday Offers & Packages</a></li>
+                <li><a href="/experiences">Curated Maldives Experiences & Private Tours</a></li>
+                <li><a href="/stories">The Serenity Journal - Maldivian Travel Insights</a></li>
+                <li><a href="/plan">Bespoke Holiday Planning & Custom Itineraries</a></li>
             </ul>
         </nav>
     </div>

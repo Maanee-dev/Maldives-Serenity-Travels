@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+/**
+ * Footer Component: Provides branding, site navigation, social presence, and contact information.
+ * Implementation ensures a standard default export to satisfy module resolution.
+ */
 const Footer: React.FC = () => {
   return (
     <footer className="bg-white pt-24 pb-12 border-t border-slate-100">
@@ -11,34 +15,34 @@ const Footer: React.FC = () => {
               SERENITY
             </Link>
             <p className="mt-6 text-slate-500 text-[10px] leading-relaxed uppercase tracking-[0.3em] font-medium">
-              Luxury travel made easy for everyone. <br/>
+              Curated luxury for the discerning traveler. <br/>
               Reg No: SP02722025 <br/>
               License: MOT.01.RS.TA.25.PJ0482
             </p>
           </div>
           
           <div className="space-y-6">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 mb-8 underline underline-offset-8 decoration-slate-200">Our Company</h4>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 mb-8 underline underline-offset-8 decoration-slate-200">Company</h4>
             <ul className="space-y-3 text-slate-600 text-[10px] uppercase font-bold tracking-widest">
               <li><Link to="/" className="hover:text-slate-900 transition-colors">Home</Link></li>
               <li><Link to="/about" className="hover:text-slate-900 transition-colors">About Us</Link></li>
-              <li><Link to="/experiences" className="hover:text-slate-900 transition-colors">Things To Do</Link></li>
-              <li><Link to="/contact" className="hover:text-slate-900 transition-colors">Contact</Link></li>
+              <li><Link to="/experiences" className="hover:text-slate-900 transition-colors">Experiences</Link></li>
+              <li><Link to="/contact" className="hover:text-slate-900 transition-colors">Contacts</Link></li>
             </ul>
           </div>
 
           <div className="space-y-6">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 mb-8 underline underline-offset-8 decoration-slate-200">Legal Info</h4>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 mb-8 underline underline-offset-8 decoration-slate-200">Legal</h4>
             <ul className="space-y-3 text-slate-600 text-[10px] uppercase font-bold tracking-widest">
-              <li><Link to="/terms" className="hover:text-slate-900 transition-colors">Terms of Use</Link></li>
+              <li><Link to="/terms" className="hover:text-slate-900 transition-colors">Terms of Service</Link></li>
               <li><Link to="/privacy" className="hover:text-slate-900 transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/stays" className="hover:text-slate-900 transition-colors">Resorts & Hotels</Link></li>
-              <li><Link to="/offers" className="hover:text-slate-900 transition-colors">Special Deals</Link></li>
+              <li><Link to="/stays" className="hover:text-slate-900 transition-colors">Resort Portfolio</Link></li>
+              <li><Link to="/offers" className="hover:text-slate-900 transition-colors">Exclusive Offers</Link></li>
             </ul>
           </div>
 
           <div className="space-y-6">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 mb-8 underline underline-offset-8 decoration-slate-200">Follow Us</h4>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 mb-8 underline underline-offset-8 decoration-slate-200">Connect</h4>
             <ul className="space-y-4">
               <li>
                 <a 
@@ -50,7 +54,7 @@ const Footer: React.FC = () => {
                   <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.438 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-2.652 0-5.147 1.03-7.02 2.905-1.873 1.874-2.901 4.37-2.903 7.027-.001 2.03.543 4.154 1.61 5.9l-.311 1.137-.79 2.884 2.953-.776 1.061-.28z"/>
                   </svg>
-                  <span className="text-[10px] font-bold uppercase tracking-widest">WhatsApp Chat</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest">WhatsApp Inquiry</span>
                 </a>
               </li>
               <li>
@@ -70,10 +74,10 @@ const Footer: React.FC = () => {
 
         <div className="pt-12 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-slate-400 text-[9px] font-bold uppercase tracking-[0.4em]">
-            © 2026 Maldives Serenity Travels.
+            © 2026 Maldives Serenity Travels. All Rights Reserved.
           </p>
           <div className="flex items-center gap-8">
-            <span className="text-slate-300 text-[8px] font-bold uppercase tracking-widest">Easy Booking for Everyone</span>
+            <span className="text-slate-300 text-[8px] font-bold uppercase tracking-widest">Designed by Perspective</span>
           </div>
         </div>
       </div>

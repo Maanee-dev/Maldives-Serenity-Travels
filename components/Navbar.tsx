@@ -28,10 +28,10 @@ const Navbar: React.FC = () => {
   };
 
   const navLinks = [
-    { name: 'Hotels', path: '/stays' },
-    { name: 'Deals', path: '/offers' },
-    { name: 'Activities', path: '/experiences' },
-    { name: 'Blog', path: '/stories' },
+    { name: 'Stays', path: '/stays' },
+    { name: 'Offers', path: '/offers' },
+    { name: 'Experiences', path: '/experiences' },
+    { name: 'Stories', path: '/stories' },
   ];
 
   const isHomePage = location.pathname === '/';
@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
       <nav className={`fixed w-full z-[300] transition-all duration-1000 ${isDarkState ? 'glass-nav py-4 border-b border-slate-100/50 shadow-sm' : 'bg-transparent py-8 md:py-12'}`}>
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex justify-between items-center relative">
           
-          {/* Left: Menu Toggle */}
+          {/* Left: Discover Toggle */}
           <div className="flex-1 flex items-center">
             <button 
               onClick={toggleMenu}
@@ -61,12 +61,12 @@ const Navbar: React.FC = () => {
                 <span className={`absolute block h-[1px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${bgColorClass} ${isOpen ? 'w-6 -rotate-45' : 'w-6 translate-y-[5px]'}`}></span>
               </div>
               <span className={`hidden lg:block text-[9px] font-bold uppercase tracking-[0.6em] transition-all duration-700 ${textColorClass} ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
-                Menu
+                Discover
               </span>
             </button>
           </div>
 
-          {/* Center: Logo */}
+          {/* Center: Brand Identity Logo */}
           <Link to="/" className="flex flex-col items-center group transition-transform duration-500 hover:scale-[1.02] relative z-10">
             <svg 
               version="1.0" 
@@ -105,7 +105,7 @@ const Navbar: React.FC = () => {
             </svg>
           </Link>
 
-          {/* Right: Plan Trip CTA */}
+          {/* Right: Plan CTA */}
           <div className="flex-1 flex justify-end">
             <Link 
               to="/plan" 
@@ -113,7 +113,7 @@ const Navbar: React.FC = () => {
             >
               <div className="hidden md:flex items-center overflow-hidden">
                 <span className="text-[10px] font-bold uppercase tracking-[0.4em] transition-all duration-500 group-hover:-translate-x-3">
-                  Book Trip
+                  Plan Trip
                 </span>
                 <span className="absolute right-0 opacity-0 translate-x-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-0 font-serif italic text-lg leading-none lowercase">
                   &rarr;
@@ -139,9 +139,10 @@ const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Fullscreen Menu */}
+      {/* Fullscreen Overlay Menu */}
       <div className={`fixed inset-0 z-[250] bg-white transition-all duration-1000 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
         <div className="h-full w-full overflow-y-auto no-scrollbar scroll-smooth flex flex-col">
+          {/* Centered links that handle overflow naturally */}
           <div className="m-auto flex flex-col items-center justify-center px-6 md:px-12 lg:px-24 pt-32 pb-24 text-center w-full min-h-max">
             <div className="flex flex-col items-center justify-center space-y-2 md:space-y-4 lg:space-y-2 w-full">
               {navLinks.map((link, i) => (
@@ -161,7 +162,7 @@ const Navbar: React.FC = () => {
           {/* Menu Footer */}
           <div className={`mt-auto mb-12 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-16 transition-all duration-1000 delay-500 pb-10 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <a href="#" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 hover:text-slate-900 transition-colors">Instagram</a>
-            <a href="#" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 hover:text-slate-900 transition-colors">Contact Us</a>
+            <a href="#" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 hover:text-slate-900 transition-colors">Inquiries</a>
           </div>
         </div>
       </div>

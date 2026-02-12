@@ -59,27 +59,27 @@ const Home: React.FC = () => {
     {
       type: 'video',
       src: 'https://maldives-serenitytravels.com/images/Villa Resorts - Brand Video - Reel 2 - 1080 x 1920.mp4',
-      title: 'The Best',
-      titleAlt: 'Maldives',
-      subtitle: 'VOL. 01 — BEAUTIFUL ISLANDS'
+      title: 'Defined by',
+      titleAlt: 'Perspective',
+      subtitle: 'VOL. 01 — THE ARCHIPELAGO'
     },
     {
       type: 'image',
       src: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=90&w=1920',
-      title: 'Find Your',
-      titleAlt: 'Peace',
-      subtitle: 'VOL. 02 — PRIVATE HOTELS'
+      title: 'Crafting',
+      titleAlt: 'Silence',
+      subtitle: 'VOL. 02 — PRIVATE SANCTUARIES'
     },
     {
       type: 'image',
       src: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=90&w=1920',
-      title: 'Luxury for',
-      titleAlt: 'Everyone',
-      subtitle: 'VOL. 03 — PERFECT HOLIDAYS'
+      title: 'Beyond the',
+      titleAlt: 'Horizon',
+      subtitle: 'VOL. 03 — INFINITE LUXURY'
     }
   ];
 
-  const searchKeywords = ["Soneva Jani...", "Private Islands...", "Best Hotels...", "North Male...", "Honeymoon Deals..."];
+  const searchKeywords = ["Soneva Jani...", "Private Atolls...", "Underwater Dining...", "North Male...", "Bespoke Escapes..."];
 
   useEffect(() => {
     let timer: number;
@@ -130,21 +130,21 @@ const Home: React.FC = () => {
   };
 
   const vibes = [
-    { name: 'Silence', desc: 'Quiet hotels where you can truly relax.', color: 'bg-sky-50', icon: '🌊' },
-    { name: 'Adventure', desc: 'Fun activities like diving and surfing.', color: 'bg-orange-50', icon: '🐋' },
-    { name: 'Family', desc: 'Large villas perfect for kids and groups.', color: 'bg-emerald-50', icon: '👨‍👩‍👧‍👦' },
-    { name: 'Romance', desc: 'Beautiful spots for honeymoons and couples.', color: 'bg-rose-50', icon: '🌅' }
+    { name: 'Silence', desc: 'Minimalist retreats where the only sound is the tide.', color: 'bg-sky-50', icon: '🌊' },
+    { name: 'Adventure', desc: 'Dive into the deep blue or chase the perfect wave.', color: 'bg-amber-50', icon: '🐋' },
+    { name: 'Family', desc: 'Generous spaces designed for intergenerational bonding.', color: 'bg-emerald-50', icon: '👨‍👩‍👧‍👦' },
+    { name: 'Romance', desc: 'Intimate sanctuaries for unscripted love stories.', color: 'bg-rose-50', icon: '🌅' }
   ];
 
   return (
-    <div className="bg-[#FCFAF7] selection:bg-orange-100 selection:text-orange-900 overflow-x-hidden">
+    <div className="bg-[#FCFAF7] selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
       <SEO 
-        title="Maldives Serenity Travels | Best Maldives Holiday Agency" 
-        description="Maldives Serenity Travels is a premier travel agency helping you find the best luxury holidays in the Maldives. Find the perfect private island for your next trip."
+        title="Maldives Serenity Travels | Luxury Travel Agency" 
+        description="Maldives Serenity Travels is a premier boutique travel agency curating bespoke luxury journeys across the Maldivian archipelago. Discover private island sanctuaries and exclusive overwater villas."
         isOrganization={true}
         keywords={[
-          'Maldives travel agency', 'best Maldives resorts', 'private islands Maldives', 
-          'water villas Maldives', 'Maldives holiday packages'
+          'Maldives Serenity Travels', 'Maldives luxury travel', 'private island resorts Maldives', 
+          'overwater villas Maldives', 'Maldives honeymoon packages', 'bespoke Maldives travel'
         ]}
       />
 
@@ -164,25 +164,25 @@ const Home: React.FC = () => {
         </div>
         <div className="relative z-10 w-full max-w-[1600px] px-6 sm:px-12 md:px-20">
           <div className="flex flex-col items-start text-left">
-            <span className="text-[11px] font-bold uppercase tracking-[1em] text-orange-400 mb-8 block reveal active">{heroSlides[heroIndex].subtitle}</span>
+            <span className="text-[11px] font-bold uppercase tracking-[1em] text-sky-400 mb-8 block reveal active">{heroSlides[heroIndex].subtitle}</span>
             <div className="mb-16 reveal active">
                <h1 className="sr-only">Maldives Serenity Travels</h1>
                <div className="flex flex-col">
                 <span className="text-4xl sm:text-6xl md:text-8xl lg:text-[7rem] font-serif font-bold text-white leading-none tracking-tighter">{heroSlides[heroIndex].title}</span>
-                <span className="text-6xl sm:text-8xl md:text-9xl lg:text-[13rem] font-serif font-bold text-white italic leading-[0.8] tracking-tighter opacity-90">{heroSlides[heroIndex].titleAlt}<span className="not-italic text-[#f15d22]">.</span></span>
+                <span className="text-6xl sm:text-8xl md:text-9xl lg:text-[13rem] font-serif font-bold text-white italic leading-[0.8] tracking-tighter opacity-90">{heroSlides[heroIndex].titleAlt}<span className="not-italic text-sky-500">.</span></span>
                </div>
             </div>
             <form onSubmit={handleSearch} className="w-full max-w-xl reveal active delay-500">
               <div className="relative group">
                 <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={typedPlaceholder} className="w-full bg-white/5 backdrop-blur-3xl border border-white/20 rounded-full pl-10 pr-24 py-6 text-white text-[11px] font-bold uppercase tracking-[0.4em] outline-none focus:bg-white focus:text-slate-950 placeholder:text-white/30 shadow-2xl transition-all" />
-                <button type="submit" className="absolute right-2 top-2 bottom-2 bg-slate-950 text-white w-16 rounded-full flex items-center justify-center hover:bg-[#f15d22] transition-all shadow-xl"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></button>
+                <button type="submit" className="absolute right-2 top-2 bottom-2 bg-slate-950 text-white w-16 rounded-full flex items-center justify-center hover:bg-sky-500 transition-all shadow-xl"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></button>
               </div>
             </form>
           </div>
         </div>
       </section>
 
-      {/* About Section */}
+      {/* Philosophy Section */}
       <section className="py-24 md:py-48 bg-white relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="flex flex-col lg:flex-row gap-16 lg:gap-32 items-center">
@@ -191,39 +191,39 @@ const Home: React.FC = () => {
                 <img 
                   src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" 
                   className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" 
-                  alt="Maldives Island" 
+                  alt="Maldives Perspective" 
                 />
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
               </div>
               <div className="absolute -bottom-10 -right-4 md:-bottom-16 md:-right-16 bg-[#FCFAF7] p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl z-20 max-w-[280px] md:max-w-[380px] border border-slate-50 reveal delay-500">
-                <p className="text-slate-900 font-serif italic text-xl md:text-3xl leading-[1.4]">"Find true beauty in the simple moments by the sea."</p>
+                <p className="text-slate-900 font-serif italic text-xl md:text-3xl leading-[1.4]">"The profound happens in the gaps between the tides."</p>
                 <div className="mt-8 flex items-center gap-4">
-                  <div className="w-8 h-px bg-[#f15d22]"></div>
-                  <span className="text-[8px] font-bold uppercase tracking-widest text-slate-400">Island Wisdom</span>
+                  <div className="w-8 h-px bg-sky-500"></div>
+                  <span className="text-[8px] font-bold uppercase tracking-widest text-slate-400">Maldivian Wisdom</span>
                 </div>
               </div>
             </div>
 
             <div className="lg:w-1/2 order-1 lg:order-2 reveal">
               <div className="flex items-center gap-6 mb-12">
-                <div className="w-12 h-[1px] bg-[#f15d22]"></div>
-                <span className="text-[10px] font-bold text-[#f15d22] uppercase tracking-[1.2em]">Our Story</span>
+                <div className="w-12 h-[1px] bg-sky-500"></div>
+                <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[1.2em]">The Agency</span>
               </div>
               <h2 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold text-slate-950 leading-[0.95] mb-12 tracking-tighter">
-                Luxury <br /> 
-                <span className="italic text-[#f15d22] font-normal">Made</span> <br /> 
-                Simple.
+                Luxury is <br /> 
+                <span className="italic text-sky-500 font-normal">No Longer</span> <br /> 
+                Optional.
               </h2>
               <div className="max-w-xl">
                 <p className="text-slate-600 text-lg md:text-2xl leading-[1.7] mb-12 font-medium opacity-90 italic">
-                  We find the best island getaways so you don't have to.
+                  Defined by geography and refined by hand, we curate the silence that modern living lacks.
                 </p>
                 <p className="text-slate-500 text-base md:text-lg leading-[1.8] mb-12">
-                  Maldives Serenity Travels is a team of experts based in the heart of the Maldives. We believe that everyone deserves a great holiday. We help you book the best resorts, find quiet island spots, and plan fun trips that you'll remember forever.
+                  Maldives Serenity Travels is a boutique agency born from the southern frontier of Addu City. Our philosophy is rooted in the belief that true luxury isn't found in the generic, but in the specific—the perfect seaplane arrival, the hidden sandbank, and the unscripted silence of a private atoll.
                 </p>
                 <Link to="/about" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
-                  <span className="border-b-2 border-slate-100 pb-1 group-hover:border-[#f15d22] transition-colors">Learn More About Us</span>
-                  <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-[#f15d22] transition-all duration-700">
+                  <span className="border-b-2 border-slate-100 pb-1 group-hover:border-sky-500 transition-colors">Our Full Narrative</span>
+                  <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700">
                     <svg className="w-5 h-5 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                   </div>
                 </Link>
@@ -233,18 +233,18 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* VIBE FINDER */}
+      {/* VIBE FINDER SECTION */}
       <section className="py-24 md:py-48 bg-[#fcfaf7]">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20 text-center mb-24 reveal">
-           <span className="text-[#f15d22] font-black uppercase tracking-[1em] text-[10px] mb-8 block">Find Your Trip</span>
-           <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">What are you looking for?</h2>
+           <span className="text-sky-500 font-black uppercase tracking-[1em] text-[10px] mb-8 block">Dream Finder</span>
+           <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Find Your Pulse.</h2>
         </div>
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-20 reveal">
           {vibes.map((v) => (
             <button 
               key={v.name}
               onClick={() => setActiveVibe(v.name as any)}
-              className={`p-10 rounded-[3rem] text-center transition-all duration-700 border-2 ${activeVibe === v.name ? 'bg-white border-[#f15d22] shadow-2xl scale-105' : 'bg-slate-50 border-transparent hover:border-slate-200'}`}
+              className={`p-10 rounded-[3rem] text-center transition-all duration-700 border-2 ${activeVibe === v.name ? 'bg-white border-sky-500 shadow-2xl scale-105' : 'bg-slate-50 border-transparent hover:border-slate-200'}`}
             >
               <div className="text-4xl mb-6">{v.icon}</div>
               <h3 className="text-[12px] font-black uppercase tracking-[0.4em] text-slate-900 mb-4">{v.name}</h3>
@@ -255,8 +255,8 @@ const Home: React.FC = () => {
           ))}
         </div>
         <div className="text-center reveal">
-           <Link to={`/search?q=${activeVibe}`} className="bg-slate-950 text-white font-bold px-16 py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-[#f15d22] transition-all duration-700 shadow-2xl">
-             See {activeVibe} Trips
+           <Link to={`/search?q=${activeVibe}`} className="bg-slate-950 text-white font-bold px-16 py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-500 transition-all duration-700 shadow-2xl">
+             Explore {activeVibe}
            </Link>
         </div>
       </section>
@@ -266,13 +266,13 @@ const Home: React.FC = () => {
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="mb-20 md:mb-32 reveal flex flex-col md:flex-row justify-between items-end gap-10">
             <div className="max-w-xl text-left">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[1.2em] mb-8 block">Our Favorites</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[1.2em] mb-8 block">The Portfolio</span>
               <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 tracking-tighter italic leading-none">The Collection.</h3>
               <p className="mt-12 text-slate-400 text-[10px] uppercase font-bold tracking-[0.4em] leading-loose">
-                 Hand-picked hotels just for you. We only choose resorts that are known for great service and beautiful views.
+                 Curated for the discerning eye. Our portfolio only accepts resorts that meet the Serenity standard of privacy, architectural integrity, and service.
               </p>
             </div>
-            <div className="w-24 h-[1px] bg-orange-400 mb-4 hidden md:block"></div>
+            <div className="w-24 h-[1px] bg-amber-400 mb-4 hidden md:block"></div>
           </div>
           <div className="reveal no-scrollbar overflow-x-auto flex gap-8 md:gap-16 pb-12 snap-x snap-mandatory">
             {featuredResorts.map((resort) => (
@@ -282,20 +282,20 @@ const Home: React.FC = () => {
             ))}
             <div className="flex-shrink-0 w-[85vw] sm:w-[55vw] lg:w-[35vw] snap-start flex items-center justify-center">
               <Link to="/stays" className="group w-full aspect-[4/5] rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-center hover:bg-slate-950 transition-all duration-1000">
-                <span className="text-[10px] font-bold text-slate-400 group-hover:text-orange-400 uppercase tracking-[1em] mb-8 block">View All</span>
-                <h4 className="text-2xl md:text-4xl font-serif font-bold text-slate-900 group-hover:text-white leading-tight italic">Find your <br /> dream hotel.</h4>
+                <span className="text-[10px] font-bold text-slate-400 group-hover:text-sky-400 uppercase tracking-[1em] mb-8 block">Explore All</span>
+                <h4 className="text-2xl md:text-4xl font-serif font-bold text-slate-900 group-hover:text-white leading-tight italic">Find your <br /> sanctuary.</h4>
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* BLOG */}
+      {/* THE JOURNAL - LATEST STORIES */}
       <section className="py-24 md:py-48 bg-[#FCFAF7]">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="text-center mb-24 reveal">
-            <span className="text-[#f15d22] font-black uppercase tracking-[1em] text-[10px] mb-8 block">Travel Blog</span>
-            <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Expert Island Tips.</h2>
+            <span className="text-sky-500 font-black uppercase tracking-[1em] text-[10px] mb-8 block">The Journal</span>
+            <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Editorial Dispatches.</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20 mb-24">
@@ -313,10 +313,10 @@ const Home: React.FC = () => {
                   <span className="text-slate-400 font-bold text-[9px] uppercase tracking-[0.4em] mb-4 block">
                     {new Date(post.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                   </span>
-                  <h3 className="text-2xl font-serif font-bold text-slate-900 mb-6 group-hover:text-[#f15d22] transition-colors leading-tight">
+                  <h3 className="text-2xl font-serif font-bold text-slate-900 mb-6 group-hover:text-sky-600 transition-colors leading-tight">
                     {post.title}
                   </h3>
-                  <div className="h-px w-12 bg-slate-200 group-hover:w-full group-hover:bg-[#f15d22] transition-all duration-1000"></div>
+                  <div className="h-px w-12 bg-slate-200 group-hover:w-full group-hover:bg-sky-500 transition-all duration-1000"></div>
                 </div>
               </Link>
             ))}
@@ -324,7 +324,7 @@ const Home: React.FC = () => {
 
           <div className="text-center reveal">
             <Link to="/stories" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
-              <span className="border-b-2 border-slate-100 pb-1 group-hover:border-[#f15d22] transition-colors">Read More Stories</span>
+              <span className="border-b-2 border-slate-100 pb-1 group-hover:border-sky-500 transition-colors">Access the Archives</span>
               <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700">
                 <svg className="w-5 h-5 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </div>
@@ -333,17 +333,17 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* FINAL CTA */}
       <section className="py-24 md:py-48 bg-slate-950 relative overflow-hidden text-center text-white">
         <div className="absolute inset-0 opacity-[0.05] flex items-center justify-center pointer-events-none">
-          <h2 className="text-[35vw] font-serif italic whitespace-nowrap -rotate-12 translate-y-1/2">Relax</h2>
+          <h2 className="text-[35vw] font-serif italic whitespace-nowrap -rotate-12 translate-y-1/2">Serenity</h2>
         </div>
         <div className="max-w-4xl mx-auto px-6 relative z-10 reveal">
-          <span className="text-[10px] font-bold text-orange-400 uppercase tracking-[1.5em] mb-12 block">Ready for your holiday?</span>
+          <span className="text-[10px] font-bold text-sky-400 uppercase tracking-[1.5em] mb-12 block">Ready for Perspective?</span>
           <h3 className="text-5xl md:text-9xl font-serif font-bold mb-16 italic tracking-tighter">Your Journey <br /> Starts Here.</h3>
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
-            <Link to="/plan" className="w-full md:w-auto bg-white text-slate-950 font-bold px-16 py-7 rounded-full hover:bg-[#f15d22] hover:text-white transition-all duration-700 uppercase tracking-[0.5em] text-[11px] shadow-2xl">
-              Book Your Trip
+            <Link to="/plan" className="w-full md:w-auto bg-white text-slate-950 font-bold px-16 py-7 rounded-full hover:bg-sky-400 hover:text-white transition-all duration-700 uppercase tracking-[0.5em] text-[11px] shadow-2xl">
+              Initiate Inquiry
             </Link>
           </div>
         </div>

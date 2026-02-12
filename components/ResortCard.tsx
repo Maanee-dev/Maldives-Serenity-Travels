@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Accommodation } from '../types';
@@ -28,7 +29,7 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort, hasOffer }) => {
             {resort.atoll}
           </span>
           {hasOffer && (
-            <span className="bg-[#f15d22] text-white px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.3em] shadow-lg animate-pulse w-fit">
+            <span className="bg-amber-400 text-white px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.3em] shadow-lg animate-pulse w-fit">
               Bespoke Offer
             </span>
           )}
@@ -47,10 +48,10 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort, hasOffer }) => {
       
       <div className="px-4 text-center md:text-left">
         <div className="flex flex-col md:flex-row md:justify-between md:items-baseline gap-2 mb-4">
-          <h3 className="text-2xl font-serif font-bold text-slate-950 group-hover:italic group-hover:text-[#f15d22] transition-all duration-500 leading-tight">
+          <h3 className="text-2xl font-serif font-bold text-slate-950 group-hover:italic group-hover:text-sky-600 transition-all duration-500 leading-tight">
             {resort.name}
           </h3>
-          <span className="text-[10px] font-black text-[#f15d22] uppercase tracking-widest px-3 py-1 bg-orange-50 rounded-full">
+          <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest px-3 py-1 bg-amber-50 rounded-full">
             {resort.priceRange || '$$$$'}
           </span>
         </div>
@@ -59,7 +60,7 @@ const ResortCard: React.FC<ResortCardProps> = ({ resort, hasOffer }) => {
           {(resort.features && resort.features.length > 0) ? resort.features.join(' • ') : 'Bespoke Sanctuary • Private Island'}
         </p>
         
-        <div className="h-px w-12 bg-slate-200 group-hover:w-full group-hover:bg-[#f15d22] transition-all duration-1000"></div>
+        <div className="h-px w-12 bg-slate-200 group-hover:w-full group-hover:bg-sky-500 transition-all duration-1000"></div>
       </div>
     </Link>
   );

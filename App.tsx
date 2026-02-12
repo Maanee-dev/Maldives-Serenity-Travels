@@ -11,11 +11,9 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed casing of imports to resolve build errors and follow naming conventions.
-// Using lowercase filenames to match 'offers.tsx' and 'experiences.tsx' which are 
-// optimized for system compatibility and resolving build-time collisions.
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Fixed casing of imports to resolve build errors and follow naming conventions
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
