@@ -35,11 +35,15 @@ const Navbar: React.FC = () => {
   ];
 
   const isHomePage = location.pathname === '/';
+  // Nav becomes "solid" (glass) when scrolled, when menu is open, or on subpages
   const isNavSolid = (scrolled || isOpen || !isHomePage);
   
-  // Logo Logic: We keep the logo reactive to the scroll state for brand prominence,
-  // but all interaction icons (Hamburger, Plan) stay white as requested.
-  const logoFillClass = `${isNavSolid ? 'fill-slate-900' : 'fill-white'} dark:fill-white`;
+  // Reactive Color Logic for Ghost Elements
+  // If nav is solid and it's NOT dark mode, use slate-900. Otherwise (on hero or dark mode), use white.
+  const elementColorClass = isNavSolid ? 'text-slate-900 dark:text-white' : 'text-white';
+  const elementBgClass = isNavSolid ? 'bg-slate-900 dark:bg-white' : 'bg-white';
+  const logoFillClass = isNavSolid ? 'fill-slate-900 dark:fill-white' : 'fill-white';
+  const elementShadowClass = isNavSolid ? '' : 'drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]';
 
   return (
     <>
@@ -47,21 +51,21 @@ const Navbar: React.FC = () => {
       <nav className={`fixed w-full z-[300] transition-all duration-1000 ${isNavSolid ? 'glass-nav py-4 border-b border-slate-100/50 dark:border-white/5 shadow-sm' : 'bg-transparent py-8 md:py-12'}`}>
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex justify-between items-center relative">
           
-          {/* Left: Discover Toggle (Ghost Style - Always White) */}
+          {/* Left: Discover Toggle (Ghost Style - Reactive Color) */}
           <div className="flex-1 flex items-center">
             <button 
               onClick={toggleMenu}
               className="group flex items-center gap-4 focus:outline-none relative z-[301]"
               aria-label={isOpen ? "Close menu" : "Open menu"}
             >
-              <div className="relative w-8 h-8 flex items-center justify-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] transition-transform duration-500 group-hover:scale-110">
+              <div className={`relative w-8 h-8 flex items-center justify-center transition-transform duration-500 group-hover:scale-110 ${elementShadowClass}`}>
                 <div className="relative w-6 h-5 flex items-center justify-center">
-                  <span className={`absolute block h-[1.5px] bg-white transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'w-6 rotate-45' : 'w-6 -translate-y-[5px]'}`}></span>
-                  <span className={`absolute block h-[1.5px] bg-white transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'w-0 opacity-0' : 'w-4 translate-x-[-4px]'}`}></span>
-                  <span className={`absolute block h-[1.5px] bg-white transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'w-6 -rotate-45' : 'w-6 translate-y-[5px]'}`}></span>
+                  <span className={`absolute block h-[1.5px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${elementBgClass} ${isOpen ? 'w-6 rotate-45' : 'w-6 -translate-y-[5px]'}`}></span>
+                  <span className={`absolute block h-[1.5px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${elementBgClass} ${isOpen ? 'w-0 opacity-0' : 'w-4 translate-x-[-4px]'}`}></span>
+                  <span className={`absolute block h-[1.5px] transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${elementBgClass} ${isOpen ? 'w-6 -rotate-45' : 'w-6 translate-y-[5px]'}`}></span>
                 </div>
               </div>
-              <span className={`hidden lg:block text-[9px] font-black uppercase tracking-[0.6em] transition-all duration-700 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
+              <span className={`hidden lg:block text-[9px] font-black uppercase tracking-[0.6em] transition-all duration-700 ${elementColorClass} ${elementShadowClass} ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
                 Discover
               </span>
             </button>
@@ -106,26 +110,26 @@ const Navbar: React.FC = () => {
             </svg>
           </Link>
 
-          {/* Right: Plan CTA (Ghost Style - Always White) */}
+          {/* Right: Plan CTA (Ghost Style - Reactive Color) */}
           <div className="flex-1 flex justify-end">
             <Link 
               to="/plan" 
               className="group relative flex items-center justify-center p-2 focus:outline-none"
             >
               {/* Desktop: Ghost Text with Arrow */}
-              <div className="hidden md:flex items-center gap-4 transition-all duration-500 hover:scale-105 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white">
+              <div className={`hidden md:flex items-center gap-4 transition-all duration-500 hover:scale-105 ${elementShadowClass}`}>
+                <span className={`text-[10px] font-black uppercase tracking-[0.4em] ${elementColorClass}`}>
                   Plan Trip
                 </span>
-                <span className="text-white font-serif italic text-lg leading-none transition-transform group-hover:translate-x-1">
+                <span className={`${elementColorClass} font-serif italic text-lg leading-none transition-transform group-hover:translate-x-1`}>
                   &rarr;
                 </span>
               </div>
 
               {/* Mobile: Minimalist Ghost Calendar Icon */}
-              <div className="md:hidden flex items-center justify-center transition-all duration-300 active:scale-90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+              <div className={`md:hidden flex items-center justify-center transition-all duration-300 active:scale-90 ${elementShadowClass}`}>
                 <svg 
-                  className="w-6 h-6 text-white" 
+                  className={`w-6 h-6 ${elementColorClass}`} 
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke="currentColor" 
