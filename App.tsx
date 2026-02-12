@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -9,10 +10,10 @@ import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// @fix: Corrected import casing to PascalCase to match 'pages/Offers.tsx' and resolve naming collisions.
-import Offers from './pages/Offers';
-// @fix: Corrected import casing to PascalCase to match 'pages/Experiences.tsx' and resolve naming collisions.
-import Experiences from './pages/Experiences';
+// @fix: Changed import casing to lowercase to resolve collision between 'Offers.tsx' and 'offers.tsx'.
+import Offers from './pages/offers';
+// @fix: Changed import casing to lowercase to resolve collision between 'Experiences.tsx' and 'experiences.tsx'.
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
