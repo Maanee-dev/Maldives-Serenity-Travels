@@ -12,9 +12,9 @@ import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
 // Fixed casing of imports to resolve build errors and follow naming conventions
-// Using lowercase imports to match 'offers.tsx' and 'experiences.tsx' files
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Using PascalCase imports to match 'Offers.tsx' and 'Experiences.tsx' files
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
