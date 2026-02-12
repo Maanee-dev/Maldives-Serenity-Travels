@@ -124,6 +124,7 @@ const Offers: React.FC = () => {
           </h1>
           <div className="h-px w-24 bg-amber-400 mx-auto mt-12 mb-12"></div>
           <p className="text-white text-[10px] md:text-[13px] font-bold uppercase tracking-[0.5em] max-w-2xl mx-auto leading-loose opacity-90">
+             Discover the silent luxury of the archipelago through our negotiated seasonal privileges.
           </p>
         </div>
       </section>

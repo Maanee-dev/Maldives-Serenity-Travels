@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -7,12 +8,12 @@ import ChatBot from './components/ChatBot';
 
 // Pages
 import Home from './pages/Home';
+import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Updated import path to lowercase 'offers' to match the updated filename and resolve casing conflicts
-import Offers from './pages/offers';
-// Fix: Updated import path to lowercase 'experiences' to match the updated filename and resolve casing conflicts
-import Experiences from './pages/experiences';
+// Fixed casing of imports to resolve build errors and follow naming conventions
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
@@ -38,6 +39,7 @@ const App: React.FC = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/stays" element={<Stays />} />
         <Route path="/stays/:slug" element={<ResortDetail />} />
         <Route path="/offers" element={<Offers />} />
