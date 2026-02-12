@@ -13,8 +13,9 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Corrected import casing to lowercase to resolve "already included file name differs only in casing" errors
+// Fix: Use lowercase filename to match the system compatibility fix and resolve casing conflicts
 import Offers from './pages/offers';
+// Fix: Use lowercase filename to match the system compatibility fix and resolve casing conflicts
 import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
