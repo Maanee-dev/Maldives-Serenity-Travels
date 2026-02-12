@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -12,10 +13,10 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Use lowercase filename to match the system's preferred casing and resolve build-time naming conflicts
-import Offers from './pages/offers';
-// Fix: Use lowercase filename to match the system's preferred casing and resolve build-time naming conflicts
-import Experiences from './pages/experiences';
+// Fix: Use capitalized filename to match the existing file naming convention and resolve casing conflicts
+import Offers from './pages/Offers';
+// Fix: Use capitalized filename to match the existing file naming convention and resolve casing conflicts
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
