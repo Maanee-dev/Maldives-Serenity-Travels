@@ -13,10 +13,10 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Standardizing to PascalCase to resolve casing conflicts and match the primary filenames
-import Offers from './pages/Offers';
-// Standardizing to PascalCase to resolve casing conflicts and match the primary filenames
-import Experiences from './pages/Experiences';
+// Updated to lowercase to resolve casing conflicts
+import Offers from './pages/offers';
+// Updated to lowercase to resolve casing conflicts
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

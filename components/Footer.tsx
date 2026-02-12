@@ -1,8 +1,10 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
+  // Common styling for payment images to ensure perfect fit and luxury aesthetic
+  const paymentImgClass = "h-5 md:h-6 w-auto object-contain grayscale brightness-0 opacity-40 group-hover:grayscale-0 group-hover:brightness-100 group-hover:opacity-100 dark:invert dark:brightness-[10] dark:group-hover:invert-0 dark:group-hover:brightness-100 transition-all duration-700";
+
   return (
     <footer className="bg-white dark:bg-slate-950 pt-24 pb-12 border-t border-slate-100 dark:border-white/5 transition-colors duration-700">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -11,7 +13,7 @@ const Footer: React.FC = () => {
             <Link to="/" className="text-2xl font-serif font-bold text-slate-900 dark:text-white tracking-[0.2em] uppercase">
               SERENITY
             </Link>
-            <p className="mt-6 text-slate-500 dark:text-slate-400 text-[10px] leading-relaxed uppercase tracking-[0.3em] font-medium">
+            <p className="mt-6 text-slate-500 dark:text-slate-400 text-[10px] leading-relaxed uppercase tracking-[0.3em] font-medium transition-colors">
               Curated luxury for the discerning traveler. <br/>
               Reg No: SP02722025 <br/>
               License: MOT.01.RS.TA.25.PJ0482
@@ -19,8 +21,8 @@ const Footer: React.FC = () => {
           </div>
           
           <div className="space-y-6">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 dark:text-white mb-8 underline underline-offset-8 decoration-slate-200 dark:decoration-white/10">Company</h4>
-            <ul className="space-y-3 text-slate-600 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest">
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 dark:text-white mb-8 underline underline-offset-8 decoration-slate-200 dark:decoration-white/10 transition-colors">Company</h4>
+            <ul className="space-y-3 text-slate-600 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest transition-colors">
               <li><Link to="/" className="hover:text-slate-900 dark:hover:text-white transition-colors">Home</Link></li>
               <li><Link to="/about" className="hover:text-slate-900 dark:hover:text-white transition-colors">About Us</Link></li>
               <li><Link to="/experiences" className="hover:text-slate-900 dark:hover:text-white transition-colors">Experiences</Link></li>
@@ -29,8 +31,8 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="space-y-6">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 dark:text-white mb-8 underline underline-offset-8 decoration-slate-200 dark:decoration-white/10">Legal</h4>
-            <ul className="space-y-3 text-slate-600 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest">
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 dark:text-white mb-8 underline underline-offset-8 decoration-slate-200 dark:decoration-white/10 transition-colors">Legal</h4>
+            <ul className="space-y-3 text-slate-600 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest transition-colors">
               <li><Link to="/terms" className="hover:text-slate-900 dark:hover:text-white transition-colors">Terms of Service</Link></li>
               <li><Link to="/privacy" className="hover:text-slate-900 dark:hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link to="/stays" className="hover:text-slate-900 dark:hover:text-white transition-colors">Resort Portfolio</Link></li>
@@ -39,7 +41,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="space-y-6">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 dark:text-white mb-8 underline underline-offset-8 decoration-slate-200 dark:decoration-white/10">Connect</h4>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 dark:text-white mb-8 underline underline-offset-8 decoration-slate-200 dark:decoration-white/10 transition-colors">Connect</h4>
             <ul className="space-y-4">
               <li>
                 <a 
@@ -69,13 +71,49 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="pt-12 border-t border-slate-50 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-slate-400 dark:text-slate-600 text-[9px] font-bold uppercase tracking-[0.4em]">
+        <div className="pt-12 border-t border-slate-50 dark:border-white/5 flex flex-col lg:flex-row justify-between items-center gap-10">
+          {/* Copyright Section */}
+          <p className="text-slate-400 dark:text-slate-600 text-[9px] font-bold uppercase tracking-[0.4em] order-3 lg:order-1 transition-colors">
             © 2026 Maldives Serenity Travels. All Rights Reserved.
           </p>
-          <div className="flex items-center gap-8">
-            <span className="text-slate-300 dark:text-slate-700 text-[8px] font-bold uppercase tracking-widest">Designed by Perspective</span>
+
+          {/* Payment Methods Section: Standardized for perfect image fits */}
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 order-1 lg:order-2 group">
+            {/* 
+                INSTRUCTIONS FOR USER:
+                Replace the URLs below with your own brand assets.
+                The CSS handles all sizing, centering, and theme colors.
+            */}
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" 
+              alt="Visa" 
+              className={paymentImgClass}
+            />
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" 
+              alt="Mastercard" 
+              className={paymentImgClass}
+            />
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" 
+              alt="American Express" 
+              className={paymentImgClass}
+            />
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" 
+              alt="PayPal" 
+              className={paymentImgClass}
+            />
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" 
+              alt="Apple Pay" 
+              className={paymentImgClass}
+            />
           </div>
+
+          <p className="text-slate-300 dark:text-slate-800 text-[9px] font-black uppercase tracking-[0.4em] order-2 lg:order-3 transition-colors">
+            Addu City • Malé • Archive 2026
+          </p>
         </div>
       </div>
     </footer>
