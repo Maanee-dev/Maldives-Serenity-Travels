@@ -228,23 +228,27 @@ const ResortDetail: React.FC = () => {
     setIsSubmitting(true);
     try {
       const fullPhone = `${quoteData.countryCode} ${quoteData.customerPhone}`;
+      
       const { error } = await supabase.from('inquiries').insert({
         inquiry_type: 'resort_specific',
+        customer_name: quoteData.customerName,
+        customer_email: quoteData.customerEmail,
+        customer_phone: fullPhone,
+        country: quoteData.country,
         resort_id: resort.id,
         resort_name: resort.name,
         check_in: quoteData.checkIn,
         check_out: quoteData.checkOut,
         room_type: quoteData.roomType,
         meal_plan: quoteData.mealPlan,
-        customer_name: quoteData.customerName,
-        customer_email: quoteData.customerEmail,
-        customer_phone: fullPhone,
-        country: quoteData.country,
         notes: quoteData.notes
       });
+
       if (error) throw error;
+      
       setIsSubmitted(true);
     } catch (err) {
+      console.error("Submission failed:", err);
       alert('We encountered an error processing your request.');
     } finally {
       setIsSubmitting(false);

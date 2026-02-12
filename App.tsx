@@ -11,8 +11,8 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Using PascalCase for component imports to align with file system and React conventions.
-// This resolves casing conflicts where both lowercase and capitalized files may exist on disk.
+// Using PascalCase for these imports to match the canonical filenames 'Offers.tsx' and 'Experiences.tsx'
+// and resolve casing mismatch errors in environments where both casings might be detected.
 import Offers from './pages/Offers';
 import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';

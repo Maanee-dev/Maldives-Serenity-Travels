@@ -38,7 +38,11 @@ const PlanMyTrip: React.FC = () => {
 
   useEffect(() => {
     const fetchResorts = async () => {
-      const { data, error } = await supabase.from('resorts').select('*');
+      const { data, error } = await supabase
+        .from('resorts')
+        .select('*')
+        .order('name', { ascending: true });
+      
       if (data) {
         setDbResorts(data.map(mapResort));
       }
@@ -334,7 +338,7 @@ const PlanMyTrip: React.FC = () => {
                        <div key={name} className="flex items-center justify-between p-6 bg-slate-950 rounded-[2rem] text-white shadow-2xl animate-in zoom-in-95 duration-500">
                           <div className="flex items-center gap-6">
                             <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/10">
-                               <img src={r?.images[0]} className="w-full h-full object-cover" alt="" />
+                               <img src={r?.images?.[0] || 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200'} className="w-full h-full object-cover" alt="" />
                             </div>
                             <div className="flex flex-col">
                                <span className="text-[10px] font-bold uppercase tracking-widest">{name}</span>
