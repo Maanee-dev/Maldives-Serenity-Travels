@@ -12,8 +12,10 @@ import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
 // Fixed casing of imports to resolve build errors and follow naming conventions
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Using lowercase as preferred by the environment to resolve duplicate file casing conflicts
+// and ensure compatibility across different operating systems.
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
