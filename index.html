@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,6 +46,7 @@
 
         .font-serif { font-family: var(--font-serif); }
 
+        /* Reveal Animation System */
         .reveal { 
             opacity: 0; 
             transform: translateY(40px); 
@@ -60,6 +60,7 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+        /* SEO Shadow Nav - Visually hidden but fully readable by bots and generators */
         .crawler-shell {
             position: absolute;
             left: -10000px;
@@ -68,10 +69,24 @@
             height: 1px;
             overflow: hidden;
         }
+                .font-serif { font-family: var(--font-serif); }
 
+        /* Sophisticated Scrollbar */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: var(--bg-parchment); }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--atoll-blue); }
+
+        /* Reveal Animation System */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(40px); 
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
 
         .glass-nav {
             background: rgba(252, 250, 247, 0.85);
@@ -85,6 +100,31 @@
         }
         .img-editorial img {
             transition: transform 2.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .img-editorial:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Luxury Inputs */
+        input, select, textarea {
+            font-family: var(--font-main);
+        }
+
+        ::selection {
+            background: rgba(14, 165, 233, 0.15);
+            color: var(--atoll-blue);
+        }
+        
+        .letter-spacing-vogue {
+            letter-spacing: 0.4em;
+        }
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 
@@ -105,36 +145,23 @@
 </script>
 </head>
 <body>
+    <!-- 
+      CRAWLER SHADOW CONTENT
+      Exact brand match implementation for search engine visibility.
+    -->
     <div class="crawler-shell">
-        <h1>Maldives Serenity Travels - Bespoke Luxury Travel Curator</h1>
-        <p>Curating the silence of the archipelago. Expert advice on luxury resorts, overwater villas, and private island escapes in the Maldives.</p>
-        <nav aria-label="Main Navigation">
+        <h1>Maldives Serenity Travels</h1>
+        <p>__DESCRIPTION__</p>
+        <nav aria-label="Site Navigation">
             <ul>
-                <li><a href="/">Home - Bespoke Maldives Travel</a></li>
-                <li><a href="/stays">Portfolio of Luxury Resorts & Overwater Villas</a></li>
-                <li><a href="/offers">Exclusive Maldives Privileges & Seasonal Offers</a></li>
-                <li><a href="/experiences">Curated Adventures & Private Atoll Safaris</a></li>
-                <li><a href="/stories">The Serenity Journal - Editorial Atoll Guides</a></li>
-                <li><a href="/plan">Bespoke Holiday Planning Services</a></li>
-                <li><a href="/about">About Serenity Maldives Heritage</a></li>
-                <li><a href="/contact">Contact Our Maldivian Specialists</a></li>
+                <li><a href="/">Home - Maldives Serenity Travels</a></li>
+                <li><a href="/stays">Luxury Resorts & Overwater Villas Portfolio</a></li>
+                <li><a href="/offers">Exclusive Maldives Holiday Offers & Packages</a></li>
+                <li><a href="/experiences">Curated Maldives Experiences & Private Tours</a></li>
+                <li><a href="/stories">The Serenity Journal - Maldivian Travel Insights</a></li>
+                <li><a href="/plan">Bespoke Holiday Planning & Custom Itineraries</a></li>
             </ul>
         </nav>
-        <section>
-          <h2>Featured Destinations</h2>
-          <ul>
-            <li><a href="/stays/adaaran-prestige-vadoo">Adaaran Prestige Vadoo - South Male Atoll</a></li>
-            <li><a href="/stays/villa-nautica">Villa Nautica Paradise Island</a></li>
-            <li><a href="/stays/intercontinental-maldives">InterContinental Maamunagau Resort</a></li>
-          </ul>
-        </section>
-        <section>
-          <h2>Travel Intelligence</h2>
-          <ul>
-            <li><a href="/stories/art-of-the-seaplane">The Art of the Seaplane Arrival</a></li>
-            <li><a href="/stories/guide-to-atolls">Comprehensive Guide to Maldivian Atolls</a></li>
-          </ul>
-        </section>
     </div>
 
     <div id="root"></div>

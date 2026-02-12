@@ -1,4 +1,3 @@
-
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -28,39 +27,39 @@ const MIME_TYPES = {
   '.txt': 'text/plain'
 };
 
-// Optimized SEO Map with high-value keywords for Maldives luxury travel
+// Static SEO Definitions for primary routes
 const SEO_MAP = {
   '/': {
-    title: 'Serenity Maldives | Luxury Travel Agency & Bespoke Private Island Journeys',
-    description: 'The premier boutique agency for luxury Maldives travel. We curate bespoke journeys to the most exclusive private islands, overwater villas, and hidden atolls. Start your Maldivian escape here.'
+    title: 'Serenity Maldives | Luxury Travel Agency & Bespoke Journeys',
+    description: 'A bespoke boutique agency crafting unrivaled luxury journeys across the Maldivian atolls. Discover private islands and overwater villas.'
   },
   '/stays': {
-    title: 'Luxury Maldives Resorts & Overwater Villas | The Serenity Portfolio',
-    description: 'Browse our hand-picked collection of the finest 5-star resorts in the Maldives. Filter by Atoll, transfer type, and villa style to find your perfect island sanctuary.'
+    title: 'Luxury Resorts & Overwater Villas | Serenity Maldives Portfolio',
+    description: 'Explore our curated selection of the finest luxury resorts and overwater villas in the Maldives. Find your perfect island sanctuary.'
   },
   '/offers': {
-    title: 'Exclusive Maldives Holiday Offers 2026 | Luxury Honeymoon & Early Bird Deals',
-    description: 'Unlock seasonal privileges and exclusive discounts at top-tier Maldivian resorts. Negotiated rates for honeymooners, families, and luxury seekers. Limited availability.'
+    title: 'Exclusive Maldives Holiday Offers | Bespoke Travel Deals',
+    description: 'Access the most exclusive holiday deals in the Maldives. Luxury honeymoon packages, early bird discounts, and seasonal privileges.'
   },
   '/experiences': {
-    title: 'Curated Maldives Experiences | Whale Shark Safaris & Private Island Dining',
-    description: 'Explore bespoke Maldivian adventures. From UNESCO Biosphere diving to private sandbank soirées, we define your unique perspective on the archipelago.'
+    title: 'Curated Maldives Experiences | Diving, Surfing & Private Safaris',
+    description: 'Explore bespoke adventures in the Maldives. From whale shark safaris to private sandbank soirées, define your unique perspective.'
   },
   '/stories': {
-    title: 'The Serenity Journal | Maldives Travel Guides, Insights & Atoll Dispatches',
-    description: 'Editorial insights into the luxury travel world of the Maldives. Read expert guides on seaplane arrivals, atoll weather, and the finest overwater architecture.'
+    title: 'The Serenity Journal | Maldives Travel Blog & Insights',
+    description: 'Editorial dispatches from the heart of the archipelago. Insights on luxury travel, local culture, and atoll guides.'
   },
   '/plan': {
-    title: 'Bespoke Maldives Holiday Planning | Personal Travel Concierge',
-    description: 'Initiate your custom planning journey. Our Maldivian travel specialists curate unique itineraries tailored to your aesthetic and vision for luxury.'
+    title: 'Bespoke Holiday Planning | Custom Maldives Itineraries',
+    description: 'Initiate your bespoke planning journey. Our specialists curate custom Maldivian portfolios tailored to your vision.'
   },
   '/about': {
-    title: 'About Serenity Maldives | The Curators of Silent Luxury',
-    description: 'Based in Addu City, Serenity Maldives is defined by perspective. Learn about our heritage and our mission to curate the silence of the Maldivian atolls.'
+    title: 'About Us | The Curators of Maldivian Luxury',
+    description: 'Serenity Maldives is defined by perspective. Discover our heritage and mission to curate the silence of the archipelago.'
   },
   '/contact': {
-    title: 'Contact Our Maldives Travel Specialists | Inquire for Bespoke Luxury',
-    description: 'Connect with our specialists in the Maldives for expert advice on your next holiday. Available via WhatsApp, phone, or our digital inquiry channel.'
+    title: 'Contact Us | Initiate the Dialogue',
+    description: 'Connect with our Maldivian travel specialists for bespoke holiday planning and luxury concierge services.'
   }
 };
 
@@ -76,15 +75,19 @@ function titleFromSlug(slug) {
 }
 
 const server = http.createServer((req, res) => {
+  // 1. Normalize path and remove query parameters for routing
   const rawUrl = req.url || '/';
   const urlPath = rawUrl.split('?')[0];
   
+  // 2. Resolve local file path
   let relativePath = urlPath === '/' ? 'index.html' : urlPath.substring(1);
   const filePath = path.join(__dirname, relativePath);
   const extname = String(path.extname(filePath)).toLowerCase();
   const contentType = MIME_TYPES[extname] || 'application/octet-stream';
 
+  // 3. Asset vs Route Handling
   fs.stat(filePath, (err, stats) => {
+    // If it's a real asset file (CSS, JS, Images, Sitemap)
     if (!err && stats.isFile() && !urlPath.endsWith('.html') && urlPath !== '/') {
       fs.readFile(filePath, (readErr, content) => {
         if (readErr) {
@@ -96,6 +99,7 @@ const server = http.createServer((req, res) => {
         res.end(content, 'utf-8');
       });
     } 
+    // If it's a SPA Route or fallback
     else {
       const indexPath = path.join(__dirname, 'index.html');
       fs.readFile(indexPath, 'utf-8', (readErr, html) => {
@@ -105,28 +109,32 @@ const server = http.createServer((req, res) => {
           return;
         }
 
+        // 4. Determine SEO Metadata for the specific URL
         let meta = SEO_MAP[urlPath];
 
+        // Handle dynamic deep links (Resort and Story pages)
         if (!meta) {
           if (urlPath.startsWith('/stays/')) {
             const slug = urlPath.split('/').pop();
             const resortName = titleFromSlug(slug);
             meta = {
-              title: `${resortName} | Luxury Overwater Villas & Beach Suites | Serenity Maldives`,
-              description: `Experience ${resortName}, an iconic Maldivian sanctuary. Book bespoke stays at ${resortName} featuring private pools and butler service with Serenity Travels.`
+              title: `${resortName} | Luxury Overwater Villas | Serenity Maldives`,
+              description: `Discover ${resortName}, an iconic Maldivian sanctuary featuring luxury overwater villas and private island living. Book your bespoke holiday at ${resortName} with Serenity Travels.`
             };
           } else if (urlPath.startsWith('/stories/')) {
             const slug = urlPath.split('/').pop();
             const storyTitle = titleFromSlug(slug);
             meta = {
               title: `${storyTitle} | The Serenity Journal Dispatch`,
-              description: `Read "${storyTitle}" in our latest journal entry. Gain deep insights into Maldivian heritage, luxury aesthetics, and expert travel intelligence.`
+              description: `Read our latest editorial dispatch: ${storyTitle}. Gain unique insights into Maldivian heritage, luxury aesthetics, and travel intelligence.`
             };
           } else {
+            // Default to homepage if no match
             meta = SEO_MAP['/'];
           }
         }
 
+        // 5. Dynamic Placeholder Replacement
         const finalHtml = html
           .replace(/__TITLE__/g, meta.title)
           .replace(/__DESCRIPTION__/g, meta.description)

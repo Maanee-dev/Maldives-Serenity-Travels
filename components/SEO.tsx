@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -9,12 +8,13 @@ interface SEOProps {
   keywords?: string[];
   type?: 'website' | 'article' | 'hotel';
   schema?: object;
+  // New prop to handle specific organization schema
   isOrganization?: boolean;
 }
 
 /**
  * Production-grade SEO Component
- * Optimized for Google indexing with structured data and canonical normalization.
+ * Optimized for Next.js-style metadata patterns.
  */
 const SEO: React.FC<SEOProps> = ({ 
   title, 
@@ -22,14 +22,14 @@ const SEO: React.FC<SEOProps> = ({
   image = 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1200', 
   keywords = [
     'Maldives luxury travel', 'private island resorts Maldives', 'overwater villas Maldives', 
-    'bespoke Maldives travel', 'Maldives Serenity Travels', 'Baa Atoll Resorts', 'North Male Atoll'
+    'bespoke Maldives travel', 'Maldives Serenity Travels'
   ],
   type = 'website',
   schema,
   isOrganization = false
 }) => {
   const location = useLocation();
-  const canonical = `https://maldives-serenitytravels.com${location.pathname === '/' ? '' : location.pathname}`;
+  const canonical = `https://maldives-serenitytravels.com${location.pathname}`;
 
   useEffect(() => {
     document.title = title;
@@ -46,19 +46,23 @@ const SEO: React.FC<SEOProps> = ({
 
     setMeta('name', 'description', description);
     setMeta('name', 'keywords', keywords.join(', '));
+    
+    // Open Graph
     setMeta('property', 'og:title', title);
     setMeta('property', 'og:description', description);
     setMeta('property', 'og:image', image);
     setMeta('property', 'og:url', canonical);
     setMeta('property', 'og:type', type);
+    // CRITICAL: Ensure site_name matches the brand name exactly
     setMeta('property', 'og:site_name', 'Maldives Serenity Travels');
-    setMeta('property', 'og:locale', 'en_US');
 
+    // Twitter
     setMeta('name', 'twitter:card', 'summary_large_image');
     setMeta('name', 'twitter:title', title);
     setMeta('name', 'twitter:description', description);
     setMeta('name', 'twitter:image', image);
 
+    // Canonical
     let link: HTMLLinkElement | null = document.querySelector('link[rel="canonical"]');
     if (!link) {
       link = document.createElement('link');
@@ -67,31 +71,10 @@ const SEO: React.FC<SEOProps> = ({
     }
     link.setAttribute('href', canonical);
 
-    // Schema Logic
+    // Organization & Custom Schema
     const scriptId = 'schema-jsonld';
     let script = document.getElementById(scriptId) as HTMLScriptElement | null;
     
-    // BreadcrumbList Schema
-    const pathParts = location.pathname.split('/').filter(Boolean);
-    const breadcrumbSchema = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://maldives-serenitytravels.com"
-        },
-        ...pathParts.map((part, i) => ({
-          "@type": "ListItem",
-          "position": i + 2,
-          "name": part.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-          "item": `https://maldives-serenitytravels.com/${pathParts.slice(0, i + 1).join('/')}`
-        }))
-      ]
-    };
-
     const orgSchema = isOrganization ? {
       "@context": "https://schema.org",
       "@type": "Organization",
@@ -104,25 +87,23 @@ const SEO: React.FC<SEOProps> = ({
         "contactType": "customer service",
         "areaServed": "MV",
         "availableLanguage": ["en"]
-      },
-      "sameAs": [
-        "https://instagram.com/maldives_serenitytravels",
-        "https://wa.me/9607259060"
-      ]
+      }
     } : null;
 
-    const combinedSchema = schema ? { ...breadcrumbSchema, ...orgSchema, ...schema } : breadcrumbSchema;
+    const finalSchema = schema ? { ...orgSchema, ...schema } : orgSchema;
 
-    if (script) {
-      script.textContent = JSON.stringify(combinedSchema);
-    } else {
-      const newScript = document.createElement('script');
-      newScript.id = scriptId;
-      newScript.type = 'application/ld+json';
-      newScript.textContent = JSON.stringify(combinedSchema);
-      document.head.appendChild(newScript);
+    if (finalSchema) {
+      if (script) {
+        script.textContent = JSON.stringify(finalSchema);
+      } else {
+        const newScript = document.createElement('script');
+        newScript.id = scriptId;
+        newScript.type = 'application/ld+json';
+        newScript.textContent = JSON.stringify(finalSchema);
+        document.head.appendChild(newScript);
+      }
     }
-  }, [title, description, image, canonical, type, schema, keywords, isOrganization, location.pathname]);
+  }, [title, description, image, canonical, type, schema, keywords, isOrganization]);
 
   return null;
 };
