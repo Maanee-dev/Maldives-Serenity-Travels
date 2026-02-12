@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import SEO from '../components/SEO';
 import { Link } from 'react-router-dom';
@@ -14,7 +15,7 @@ const AboutUs: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-[#FCFAF7] min-h-screen selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden">
+    <div className="bg-parchment dark:bg-slate-950 min-h-screen selection:bg-sky-100 selection:text-sky-900 overflow-x-hidden transition-colors duration-700">
       <SEO 
         title="About Us | The Curators of Maldivian Luxury" 
         description="Serenity Maldives is a boutique travel agency defined by perspective. Discover our heritage in Addu City and our mission to curate the silence and luxury of the archipelago."
@@ -43,10 +44,10 @@ const AboutUs: React.FC = () => {
       </section>
 
       {/* Split Narrative */}
-      <section className="py-24 md:py-48 bg-white border-y border-slate-50">
+      <section className="py-24 md:py-48 bg-white dark:bg-slate-950 border-y border-slate-50 dark:border-white/5 transition-colors">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
           <div className="reveal">
-            <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl group bg-slate-100">
+            <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl group bg-slate-100 dark:bg-slate-900 transition-colors">
               <img 
                 src="https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?auto=format&fit=crop&q=80&w=1200" 
                 className="w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110" 
@@ -56,8 +57,8 @@ const AboutUs: React.FC = () => {
           </div>
           <div className="reveal delay-300">
             <span className="text-sky-500 font-black uppercase tracking-[1em] text-[10px] mb-12 block">The Philosophy</span>
-            <h2 className="text-4xl md:text-6xl font-serif font-bold text-slate-950 italic mb-12 tracking-tight">Curating the Silence.</h2>
-            <div className="space-y-8 text-slate-600 text-lg md:text-xl leading-relaxed font-medium italic opacity-90">
+            <h2 className="text-4xl md:text-6xl font-serif font-bold text-slate-950 dark:text-white italic mb-12 tracking-tight transition-colors">Curating the Silence.</h2>
+            <div className="space-y-8 text-slate-600 dark:text-slate-400 text-lg md:text-xl leading-relaxed font-medium italic opacity-90 transition-colors">
               <p>
                 In a world that never stops talking, we found luxury in the spaces between the words. At Serenity Maldives, we believe that the true essence of travel is not found in the destination, but in the perspective you gain while there.
               </p>
@@ -70,7 +71,7 @@ const AboutUs: React.FC = () => {
       </section>
 
       {/* Values Grid */}
-      <section className="py-24 md:py-48 px-6 lg:px-12">
+      <section className="py-24 md:py-48 px-6 lg:px-12 bg-parchment dark:bg-slate-950 transition-colors duration-700">
         <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-16">
           {[
             { title: 'Bespoke Integrity', desc: 'We do not believe in automated bookings. Every itinerary is a hand-crafted narrative, reviewed by experts who know the atolls by heart.' },
@@ -78,9 +79,9 @@ const AboutUs: React.FC = () => {
             { title: 'Silent Luxury', desc: 'Luxury is not loud. It is the perfect seaplane connection, the specific vintage on your deck, and the absence of any worry.' }
           ].map((val, i) => (
             <div key={i} className="reveal" style={{ transitionDelay: `${i * 150}ms` }}>
-              <span className="text-amber-500 font-serif italic text-4xl mb-8 block">0{i+1}.</span>
-              <h3 className="text-2xl font-serif font-bold text-slate-950 mb-6">{val.title}</h3>
-              <p className="text-slate-500 text-[11px] font-bold uppercase tracking-[0.3em] leading-loose">{val.desc}</p>
+              <span className="text-amber-500 font-serif italic text-4xl mb-8 block transition-colors">0{i+1}.</span>
+              <h3 className="text-2xl font-serif font-bold text-slate-950 dark:text-white mb-6 transition-colors">{val.title}</h3>
+              <p className="text-slate-500 dark:text-slate-500 text-[11px] font-bold uppercase tracking-[0.3em] leading-loose transition-colors">{val.desc}</p>
             </div>
           ))}
         </div>
@@ -102,10 +103,10 @@ const AboutUs: React.FC = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-24 md:py-48 text-center bg-white">
+      <section className="py-24 md:py-48 text-center bg-white dark:bg-slate-950 transition-colors duration-700">
         <div className="max-w-4xl mx-auto px-6 reveal">
-          <h2 className="text-4xl md:text-6xl font-serif font-bold text-slate-950 italic mb-12 tracking-tight">Begin Your Narrative.</h2>
-          <Link to="/plan" className="inline-block bg-slate-950 text-white font-black px-16 py-7 rounded-full hover:bg-sky-500 transition-all duration-700 shadow-2xl uppercase tracking-[0.8em] text-[10px]">
+          <h2 className="text-4xl md:text-6xl font-serif font-bold text-slate-950 dark:text-white italic mb-12 tracking-tight transition-colors">Begin Your Narrative.</h2>
+          <Link to="/plan" className="inline-block bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-black px-16 py-7 rounded-full hover:bg-sky-500 dark:hover:bg-sky-400 transition-all duration-700 shadow-2xl uppercase tracking-[0.8em] text-[10px]">
             Initiate Planning
           </Link>
         </div>
