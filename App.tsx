@@ -13,10 +13,10 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Updated to lowercase to resolve casing conflicts
-import Offers from './pages/offers';
-// Updated to lowercase to resolve casing conflicts
-import Experiences from './pages/experiences';
+// Fixed casing: Using PascalCase to match Offers.tsx and avoid conflicts with offers.tsx
+import Offers from './pages/Offers';
+// Fixed casing: Using PascalCase to match Experiences.tsx and avoid conflicts with experiences.tsx
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

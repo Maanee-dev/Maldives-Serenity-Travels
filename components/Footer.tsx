@@ -2,8 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
-  // Common styling for payment images to ensure perfect fit and luxury aesthetic
-  const paymentImgClass = "h-5 md:h-6 w-auto object-contain grayscale brightness-0 opacity-40 group-hover:grayscale-0 group-hover:brightness-100 group-hover:opacity-100 dark:invert dark:brightness-[10] dark:group-hover:invert-0 dark:group-hover:brightness-100 transition-all duration-700";
+  /**
+   * Refined styling logic for payment method logos:
+   * - brightness-0 / dark:invert: Normalizes any image into a theme-appropriate monochrome icon.
+   * - opacity-40 / dark:opacity-20: Keeps the branding subtle as per "Silent Luxury" guidelines.
+   * - group-hover: grayscale removal and brightness restoration allows the original brand identity to appear elegantly on interaction.
+   */
+  const paymentImgClass = "h-5 md:h-6 w-auto object-contain grayscale brightness-0 opacity-40 group-hover:grayscale-0 group-hover:brightness-100 group-hover:opacity-100 dark:invert dark:opacity-20 dark:group-hover:invert-0 dark:group-hover:opacity-100 transition-all duration-700 ease-in-out select-none pointer-events-none";
 
   return (
     <footer className="bg-white dark:bg-slate-950 pt-24 pb-12 border-t border-slate-100 dark:border-white/5 transition-colors duration-700">
@@ -77,38 +82,41 @@ const Footer: React.FC = () => {
             © 2026 Maldives Serenity Travels. All Rights Reserved.
           </p>
 
-          {/* Payment Methods Section: Standardized for perfect image fits */}
+          {/* 
+              PAYMENT METHODS ARCHITECTURE
+              - Standardized heights for perfect alignment.
+              - Grouped for unified hover interaction.
+              - Ready for custom image source insertion.
+          */}
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 order-1 lg:order-2 group">
-            {/* 
-                INSTRUCTIONS FOR USER:
-                Replace the URLs below with your own brand assets.
-                The CSS handles all sizing, centering, and theme colors.
-            */}
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" 
-              alt="Visa" 
-              className={paymentImgClass}
-            />
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" 
-              alt="Mastercard" 
-              className={paymentImgClass}
-            />
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" 
-              alt="American Express" 
-              className={paymentImgClass}
-            />
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" 
-              alt="PayPal" 
-              className={paymentImgClass}
-            />
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" 
-              alt="Apple Pay" 
-              className={paymentImgClass}
-            />
+            {/* Generic Card / PCI Compliance Slot */}
+            <div className="flex items-center gap-8 md:gap-10">
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" 
+                alt="Visa" 
+                className={paymentImgClass}
+              />
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" 
+                alt="Mastercard" 
+                className={paymentImgClass}
+              />
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" 
+                alt="American Express" 
+                className={paymentImgClass}
+              />
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" 
+                alt="PayPal" 
+                className={paymentImgClass}
+              />
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" 
+                alt="Apple Pay" 
+                className={paymentImgClass}
+              />
+            </div>
           </div>
 
           <p className="text-slate-300 dark:text-slate-800 text-[9px] font-black uppercase tracking-[0.4em] order-2 lg:order-3 transition-colors">
