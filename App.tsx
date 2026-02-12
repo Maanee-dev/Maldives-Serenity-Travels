@@ -12,10 +12,10 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Corrected casing to use PascalCase 'Offers' to match the intended component file and avoid compiler ambiguity
-import Offers from './pages/Offers';
-// Fix: Corrected casing to use PascalCase 'Experiences' to match the intended component file and avoid compiler ambiguity
-import Experiences from './pages/Experiences';
+// Fix: Corrected casing to use lowercase './pages/offers' to match the existing file and resolve build conflict
+import Offers from './pages/offers';
+// Fix: Corrected casing to use lowercase './pages/experiences' to match the existing file and resolve build conflict
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

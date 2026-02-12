@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -36,12 +35,11 @@ const Navbar: React.FC = () => {
   ];
 
   const isHomePage = location.pathname === '/';
-  // Standard scroll/detail page logic
   const isNavSolid = (scrolled || isOpen || !isHomePage);
   
-  // Logo Logic: Dark on light, White on dark mode or hero
+  // Logo Logic: We keep the logo reactive to the scroll state for brand prominence,
+  // but all interaction icons (Hamburger, Plan) stay white as requested.
   const logoFillClass = `${isNavSolid ? 'fill-slate-900' : 'fill-white'} dark:fill-white`;
-  const discoverTextClass = `${isNavSolid ? 'text-slate-900' : 'text-white'} dark:text-white`;
 
   return (
     <>
@@ -49,34 +47,34 @@ const Navbar: React.FC = () => {
       <nav className={`fixed w-full z-[300] transition-all duration-1000 ${isNavSolid ? 'glass-nav py-4 border-b border-slate-100/50 dark:border-white/5 shadow-sm' : 'bg-transparent py-8 md:py-12'}`}>
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex justify-between items-center relative">
           
-          {/* Left: Discover Toggle (Always White Icons inside a dark circle) */}
+          {/* Left: Discover Toggle (Ghost Style - Always White) */}
           <div className="flex-1 flex items-center">
             <button 
               onClick={toggleMenu}
               className="group flex items-center gap-4 focus:outline-none relative z-[301]"
               aria-label={isOpen ? "Close menu" : "Open menu"}
             >
-              <div className="relative w-10 h-10 md:w-12 md:h-12 bg-slate-900 dark:bg-slate-800 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-110 shadow-lg">
+              <div className="relative w-8 h-8 flex items-center justify-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] transition-transform duration-500 group-hover:scale-110">
                 <div className="relative w-6 h-5 flex items-center justify-center">
                   <span className={`absolute block h-[1.5px] bg-white transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'w-6 rotate-45' : 'w-6 -translate-y-[5px]'}`}></span>
                   <span className={`absolute block h-[1.5px] bg-white transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'w-0 opacity-0' : 'w-4 translate-x-[-4px]'}`}></span>
                   <span className={`absolute block h-[1.5px] bg-white transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'w-6 -rotate-45' : 'w-6 translate-y-[5px]'}`}></span>
                 </div>
               </div>
-              <span className={`hidden lg:block text-[9px] font-black uppercase tracking-[0.6em] transition-all duration-700 ${discoverTextClass} ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
+              <span className={`hidden lg:block text-[9px] font-black uppercase tracking-[0.6em] transition-all duration-700 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
                 Discover
               </span>
             </button>
           </div>
 
-          {/* Center: Brand Identity Logo (Responsive to Mode) */}
+          {/* Center: Brand Identity Logo */}
           <Link to="/" className="flex flex-col items-center group transition-transform duration-500 hover:scale-[1.02] relative z-10">
             <svg 
               version="1.0" 
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 600 600"
               preserveAspectRatio="xMidYMid meet"
-              className={`w-32 h-32 md:w-40 md:h-40 lg:w-56 lg:h-56 -my-10 md:-my-12 lg:-my-20 transition-all duration-1000 ${logoFillClass}`}
+              className={`w-24 h-24 md:w-40 md:h-40 lg:w-56 lg:h-56 -my-8 md:-my-12 lg:-my-20 transition-all duration-1000 ${logoFillClass}`}
             >
               <g transform="translate(0.000000,600.000000) scale(0.100000,-0.100000)" stroke="none">
                 <path d="M3116 3398 c-10 -14 -16 -44 -16 -81 0 -63 -18 -108 -67 -166 -27 -32 -33 -34 -100 -37 -159 -6 -255 -146 -123 -179 75 -18 277 140 338 266 38 77 59 183 41 205 -17 21 -56 17 -73 -8z"/>
@@ -108,29 +106,44 @@ const Navbar: React.FC = () => {
             </svg>
           </Link>
 
-          {/* Right: Plan CTA (Always White Text/Arrow inside a persistent dark pill) */}
+          {/* Right: Plan CTA (Ghost Style - Always White) */}
           <div className="flex-1 flex justify-end">
             <Link 
               to="/plan" 
-              className="group relative flex items-center justify-center"
+              className="group relative flex items-center justify-center p-2 focus:outline-none"
             >
-              <div className="flex items-center bg-slate-900 dark:bg-slate-800 px-6 py-3 md:px-8 md:py-4 rounded-full shadow-xl transition-all duration-500 hover:bg-sky-500 dark:hover:bg-sky-600 hover:scale-105 active:scale-95">
-                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] text-white transition-all duration-500 group-hover:pr-4">
+              {/* Desktop: Ghost Text with Arrow */}
+              <div className="hidden md:flex items-center gap-4 transition-all duration-500 hover:scale-105 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white">
                   Plan Trip
                 </span>
-                <span className="hidden md:block absolute right-4 opacity-0 translate-x-2 transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-0 font-serif italic text-lg leading-none text-white">
+                <span className="text-white font-serif italic text-lg leading-none transition-transform group-hover:translate-x-1">
                   &rarr;
                 </span>
+              </div>
+
+              {/* Mobile: Minimalist Ghost Calendar Icon */}
+              <div className="md:hidden flex items-center justify-center transition-all duration-300 active:scale-90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+                <svg 
+                  className="w-6 h-6 text-white" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth="1.5" />
+                  <path d="M16 2v4M8 2v4M3 10h18" strokeWidth="1.5" strokeLinecap="round" />
+                  <path d="M12 14v4M10 16h4" strokeWidth="1.2" strokeLinecap="round" />
+                </svg>
               </div>
             </Link>
           </div>
         </div>
       </nav>
 
-      {/* Fullscreen Overlay Menu (Dark Mode Aware) */}
+      {/* Fullscreen Overlay Menu */}
       <div className={`fixed inset-0 z-[250] bg-white dark:bg-slate-950 transition-all duration-1000 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
         <div className="h-full w-full overflow-y-auto no-scrollbar scroll-smooth flex flex-col bg-parchment dark:bg-slate-950">
-          {/* Centered links */}
           <div className="m-auto flex flex-col items-center justify-center px-6 md:px-12 lg:px-24 pt-32 pb-24 text-center w-full min-h-max">
             <div className="flex flex-col items-center justify-center space-y-2 md:space-y-4 lg:space-y-2 w-full">
               {navLinks.map((link, i) => (
@@ -147,7 +160,6 @@ const Navbar: React.FC = () => {
             </div>
           </div>
           
-          {/* Menu Footer */}
           <div className={`mt-auto mb-12 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-16 transition-all duration-1000 delay-500 pb-10 ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <a href="#" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 dark:text-slate-600 hover:text-slate-900 dark:hover:text-white transition-colors">Instagram</a>
             <Link to="/contact" className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.5em] text-slate-300 dark:text-slate-600 hover:text-slate-900 dark:hover:text-white transition-colors">Inquiries</Link>
