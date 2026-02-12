@@ -18,13 +18,20 @@ const Experiences: React.FC = () => {
     const fetchExperiences = async () => {
       setLoading(true);
       try {
+        // Fetch experiences with resort details
         const { data, error } = await supabase
           .from('experiences')
-          .select('*')
+          .select('*, resorts(id, name, slug)')
           .order('created_at', { ascending: true });
         
         if (data && data.length > 0) {
-          setExperiences(data as Experience[]);
+          const mapped = data.map(item => ({
+            ...item,
+            resortName: item.resorts?.name,
+            resortSlug: item.resorts?.slug,
+            resortId: item.resorts?.id
+          })) as Experience[];
+          setExperiences(mapped);
         } else {
           setExperiences(EXPERIENCES);
         }
@@ -95,6 +102,17 @@ const Experiences: React.FC = () => {
                  <div className="lg:w-1/2 relative aspect-[1/1] w-full rounded-[4rem] md:rounded-[6.5rem] overflow-hidden shadow-2xl group">
                     <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110" />
                     <div className="absolute inset-0 bg-slate-950/15 group-hover:bg-transparent transition-all duration-1000"></div>
+                    
+                    {/* Host Resort Floating Badge */}
+                    {exp.resortName && (
+                      <div className={`absolute top-12 ${idx % 2 !== 0 ? 'left-12' : 'right-12'} z-10`}>
+                         <Link to={`/stays/${exp.resortSlug}`} className="bg-white/95 backdrop-blur-md px-6 py-3 rounded-full flex flex-col items-start gap-1 shadow-2xl hover:bg-sky-500 hover:text-white transition-all duration-500 group/badge">
+                            <span className="text-[7px] font-black uppercase tracking-widest opacity-60 group-hover/badge:text-white/80">Host Sanctuary</span>
+                            <span className="text-[9px] font-black uppercase tracking-[0.2em]">{exp.resortName}</span>
+                         </Link>
+                      </div>
+                    )}
+
                     <div className={`absolute bottom-16 ${idx % 2 !== 0 ? 'right-16' : 'left-16'} hidden md:block`}>
                       <span className="text-[15vw] font-serif italic text-white/20 pointer-events-none select-none">
                         {String(idx + 1).padStart(2, '0')}
@@ -123,14 +141,23 @@ const Experiences: React.FC = () => {
                         </div>
                       </div>
 
-                      <Link to="/plan" className="inline-flex items-center gap-10 group">
-                         <div className="w-24 h-24 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 group-hover:border-slate-950 transition-all duration-700 shadow-sm">
-                            <svg className="w-8 h-8 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                         </div>
-                         <span className="text-[11px] font-bold uppercase tracking-[0.6em] text-slate-950 group-hover:text-sky-500 transition-colors">Initiate Request</span>
-                      </Link>
+                      <div className="flex flex-wrap gap-8">
+                        <Link to="/plan" className="inline-flex items-center gap-10 group">
+                           <div className="w-20 h-20 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 group-hover:border-slate-950 transition-all duration-700 shadow-sm">
+                              <svg className="w-6 h-6 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                              </svg>
+                           </div>
+                           <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-slate-950 group-hover:text-sky-500 transition-colors">Initiate Request</span>
+                        </Link>
+                        
+                        {exp.resortSlug && (
+                          <Link to={`/stays/${exp.resortSlug}`} className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-400 uppercase tracking-[0.6em] hover:text-slate-950 transition-all group/resort">
+                             <span className="border-b border-transparent group-hover/resort:border-slate-950 pb-1 transition-all">View Sanctuary</span>
+                             <span className="text-lg opacity-0 group-hover/resort:opacity-100 group-hover/resort:translate-x-2 transition-all">→</span>
+                          </Link>
+                        )}
+                      </div>
                     </div>
                  </div>
               </div>

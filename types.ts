@@ -80,6 +80,9 @@ export interface Experience {
   description: string;
   image: string;
   category: 'Water Sports' | 'Relaxation' | 'Adventure' | 'Wellness' | 'Culture' | 'Culinary';
+  resortId?: string;
+  resortName?: string;
+  resortSlug?: string;
 }
 
 export type StoryCategory = 'Dispatch' | 'Guide' | 'Update' | 'Tip';

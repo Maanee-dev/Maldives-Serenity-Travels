@@ -91,9 +91,12 @@ export const EXPERIENCES: Experience[] = [
   {
     id: 'exp-1',
     title: 'Whale Shark Safari',
-    description: 'Swim alongside the gentle giants of the ocean in South Ari Atoll.',
+    description: 'Swim alongside the gentle giants of the ocean in South Ari Atoll. A definitive Maldivian movement that brings you face-to-face with the majesty of the deep blue.',
     image: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&fit=crop&q=80&w=1200',
-    category: 'Adventure'
+    category: 'Adventure',
+    resortId: '739a8c14-2391-4d32-8456-789012345678',
+    resortName: 'Adaaran Prestige Vadoo',
+    resortSlug: 'adaaran-prestige-vadoo'
   }
 ];
 

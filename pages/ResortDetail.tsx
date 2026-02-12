@@ -179,18 +179,30 @@ const ResortDetail: React.FC = () => {
             setResortOffers(local);
           }
 
-          // Fetch Curated Experiences
-          const { data: expData } = await supabase.from('experiences').select('*').limit(4);
+          // Fetch Experiences specific to THIS resort
+          const { data: expData } = await supabase
+            .from('experiences')
+            .select('*, resorts(id, name, slug)')
+            .eq('resort_id', resData.id);
+            
           if (expData && expData.length > 0) {
-            setExperiences(expData as Experience[]);
+            setExperiences(expData.map(item => ({
+              ...item,
+              resortName: item.resorts?.name,
+              resortSlug: item.resorts?.slug,
+              resortId: item.resorts?.id
+            })) as Experience[]);
           } else {
-            setExperiences(EXPERIENCES.slice(0, 4));
+            // Fallback to constants if they match this resort or just some generic ones
+            const local = EXPERIENCES.filter(e => e.resortId === resData.id);
+            setExperiences(local.length > 0 ? local : EXPERIENCES.slice(0, 4));
           }
 
         } else if (localBackup) {
           setResort(localBackup);
           setResortOffers(OFFERS.filter(o => o.resortId === localBackup.id));
-          setExperiences(EXPERIENCES.slice(0, 4));
+          const localExps = EXPERIENCES.filter(e => e.resortId === localBackup.id);
+          setExperiences(localExps.length > 0 ? localExps : EXPERIENCES.slice(0, 4));
         }
       } catch (error) {
         console.error('Data acquisition error:', error);
@@ -387,7 +399,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* CURATED EXPERIENCES (NEW SECTION) */}
+      {/* CURATED EXPERIENCES (Unified with Experiences Page) */}
       {experiences.length > 0 && (
         <section className="py-24 md:py-48 bg-white overflow-hidden">
           <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
@@ -396,11 +408,11 @@ const ResortDetail: React.FC = () => {
                 <span className="text-[11px] font-black text-sky-500 uppercase tracking-[1em] mb-8 block">Activities</span>
                 <h3 className="text-4xl md:text-7xl font-serif font-bold text-slate-900 tracking-tighter italic leading-none">Curated Journeys.</h3>
                 <p className="mt-12 text-slate-400 text-[10px] uppercase font-black tracking-[0.4em] leading-loose">
-                   Beyond the villa walls lies the archipelago. We curate movements that define your unique Maldivian perspective.
+                   Beyond the villa walls lies the archipelago. Movement that defines your unique Maldivian perspective at {resort.name}.
                 </p>
               </div>
-              <Link to={`/experiences?resort=${resort.id}`} className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
-                <span className="border-b-2 border-slate-100 pb-1 group-hover:border-sky-500 transition-colors">Discover All</span>
+              <Link to={`/experiences`} className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
+                <span className="border-b-2 border-slate-100 pb-1 group-hover:border-sky-500 transition-colors">Discover All Atolls</span>
                 <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700">
                   <svg className="w-5 h-5 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </div>
@@ -410,7 +422,7 @@ const ResortDetail: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
               {experiences.map((exp, idx) => (
                 <div key={exp.id} className="reveal group" style={{ transitionDelay: `${idx * 150}ms` }}>
-                  <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl bg-slate-100">
+                  <div className="relative aspect-[1/1] rounded-[2.5rem] overflow-hidden mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl bg-slate-100">
                     <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-[5s] group-hover:scale-110" />
                     <div className="absolute inset-0 bg-slate-950/10 group-hover:bg-transparent transition-colors"></div>
                     <div className="absolute top-6 left-6">
