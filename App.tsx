@@ -11,10 +11,10 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed casing of imports to resolve build errors and follow naming conventions
-// Using PascalCase imports to match 'Offers.tsx' and 'Experiences.tsx' files
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
+// Updated imports to use lowercase file names to resolve casing conflict build errors.
+// This matches the file names 'offers.tsx' and 'experiences.tsx' which are marked for system compatibility.
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

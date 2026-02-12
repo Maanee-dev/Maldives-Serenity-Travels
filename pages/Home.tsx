@@ -137,7 +137,7 @@ const Home: React.FC = () => {
   ];
 
   return (
-    <div className="bg-[#FCFAF7] selection:bg-orange-100 selection:text-orange-900 overflow-x-hidden">
+    <div className="bg-[#FCFAF7] dark:bg-slate-950 selection:bg-orange-100 selection:text-orange-900 transition-colors duration-500 overflow-x-hidden">
       <SEO 
         title="Maldives Serenity Travels | Luxury Travel Agency" 
         description="Maldives Serenity Travels is a premier boutique travel agency curating bespoke luxury journeys across the Maldivian archipelago. Discover private island sanctuaries and exclusive overwater villas."
@@ -148,8 +148,8 @@ const Home: React.FC = () => {
         ]}
       />
 
-      {/* Hero Section */}
-      <section className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden bg-slate-950">
+      {/* Hero Section - Using brand-blue:light in light mode and ocean-navy in dark mode */}
+      <section className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden bg-brand-blue-light dark:bg-slate-950">
         <div className="absolute inset-0 z-0">
           {heroSlides.map((slide, idx) => (
             <div key={idx} className={`absolute inset-0 transition-all duration-[3000ms] ease-out ${heroIndex === idx ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
@@ -169,13 +169,13 @@ const Home: React.FC = () => {
                <h1 className="sr-only">Maldives Serenity Travels</h1>
                <div className="flex flex-col">
                 <span className="text-4xl sm:text-6xl md:text-8xl lg:text-[7rem] font-serif font-bold text-white leading-none tracking-tighter">{heroSlides[heroIndex].title}</span>
-                <span className="text-6xl sm:text-8xl md:text-9xl lg:text-[13rem] font-serif font-bold text-white italic leading-[0.8] tracking-tighter opacity-90">{heroSlides[heroIndex].titleAlt}<span className="not-italic text-[#f15d22]">.</span></span>
+                <span className="text-6xl sm:text-8xl md:text-9xl lg:text-[13rem] font-serif font-bold text-white italic leading-[0.8] tracking-tighter opacity-90">{heroSlides[heroIndex].titleAlt}<span className="not-italic text-brand-orange">.</span></span>
                </div>
             </div>
             <form onSubmit={handleSearch} className="w-full max-w-xl reveal active delay-500">
               <div className="relative group">
                 <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={typedPlaceholder} className="w-full bg-white/5 backdrop-blur-3xl border border-white/20 rounded-full pl-10 pr-24 py-6 text-white text-[11px] font-bold uppercase tracking-[0.4em] outline-none focus:bg-white focus:text-slate-950 placeholder:text-white/30 shadow-2xl transition-all" />
-                <button type="submit" className="absolute right-2 top-2 bottom-2 bg-slate-950 text-white w-16 rounded-full flex items-center justify-center hover:bg-[#f15d22] transition-all shadow-xl"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></button>
+                <button type="submit" className="absolute right-2 top-2 bottom-2 bg-slate-950 dark:bg-brand-blue-light text-white w-16 rounded-full flex items-center justify-center hover:bg-brand-orange transition-all shadow-xl"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></button>
               </div>
             </form>
           </div>
@@ -183,11 +183,11 @@ const Home: React.FC = () => {
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-24 md:py-48 bg-white relative overflow-hidden">
+      <section className="py-24 md:py-48 bg-white dark:bg-slate-950 transition-colors duration-500 relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="flex flex-col lg:flex-row gap-16 lg:gap-32 items-center">
             <div className="lg:w-1/2 relative order-2 lg:order-1 reveal">
-              <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl z-10 group bg-slate-100">
+              <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl z-10 group bg-slate-100 dark:bg-slate-900">
                 <img 
                   src="https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&q=80&w=1200" 
                   className="w-full h-full object-cover transition-transform duration-[8s] group-hover:scale-110" 
@@ -195,10 +195,10 @@ const Home: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
               </div>
-              <div className="absolute -bottom-10 -right-4 md:-bottom-16 md:-right-16 bg-[#FCFAF7] p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl z-20 max-w-[280px] md:max-w-[380px] border border-slate-50 reveal delay-500">
-                <p className="text-slate-900 font-serif italic text-xl md:text-3xl leading-[1.4]">"The profound happens in the gaps between the tides."</p>
+              <div className="absolute -bottom-10 -right-4 md:-bottom-16 md:-right-16 bg-[#FCFAF7] dark:bg-slate-900 p-8 md:p-16 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl z-20 max-w-[280px] md:max-w-[380px] border border-slate-50 dark:border-white/5 reveal delay-500">
+                <p className="text-slate-900 dark:text-white font-serif italic text-xl md:text-3xl leading-[1.4]">"The profound happens in the gaps between the tides."</p>
                 <div className="mt-8 flex items-center gap-4">
-                  <div className="w-8 h-px bg-[#f15d22]"></div>
+                  <div className="w-8 h-px bg-brand-orange"></div>
                   <span className="text-[8px] font-bold uppercase tracking-widest text-slate-400">Maldivian Wisdom</span>
                 </div>
               </div>
@@ -206,25 +206,25 @@ const Home: React.FC = () => {
 
             <div className="lg:w-1/2 order-1 lg:order-2 reveal">
               <div className="flex items-center gap-6 mb-12">
-                <div className="w-12 h-[1px] bg-[#f15d22]"></div>
-                <span className="text-[10px] font-bold text-[#f15d22] uppercase tracking-[1.2em]">The Agency</span>
+                <div className="w-12 h-[1px] bg-brand-orange"></div>
+                <span className="text-[10px] font-bold text-brand-orange uppercase tracking-[1.2em]">The Agency</span>
               </div>
-              <h2 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold text-slate-950 leading-[0.95] mb-12 tracking-tighter">
+              <h2 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold text-slate-950 dark:text-white leading-[0.95] mb-12 tracking-tighter">
                 Luxury is <br /> 
-                <span className="italic text-[#f15d22] font-normal">No Longer</span> <br /> 
+                <span className="italic text-brand-orange font-normal">No Longer</span> <br /> 
                 Optional.
               </h2>
               <div className="max-w-xl">
-                <p className="text-slate-600 text-lg md:text-2xl leading-[1.7] mb-12 font-medium opacity-90 italic">
+                <p className="text-slate-600 dark:text-slate-300 text-lg md:text-2xl leading-[1.7] mb-12 font-medium opacity-90 italic">
                   Defined by geography and refined by hand, we curate the silence that modern living lacks.
                 </p>
-                <p className="text-slate-500 text-base md:text-lg leading-[1.8] mb-12">
+                <p className="text-slate-500 dark:text-slate-400 text-base md:text-lg leading-[1.8] mb-12">
                   Maldives Serenity Travels is a boutique agency born from the southern frontier of Addu City. Our philosophy is rooted in the belief that true luxury isn't found in the generic, but in the specific—the perfect seaplane arrival, the hidden sandbank, and the unscripted silence of a private atoll.
                 </p>
-                <Link to="/about" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
-                  <span className="border-b-2 border-slate-100 pb-1 group-hover:border-[#f15d22] transition-colors">Our Full Narrative</span>
-                  <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-[#f15d22] transition-all duration-700">
-                    <svg className="w-5 h-5 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                <Link to="/about" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 dark:text-white uppercase tracking-[0.5em] group transition-all">
+                  <span className="border-b-2 border-slate-100 dark:border-white/10 pb-1 group-hover:border-brand-orange transition-colors">Our Full Narrative</span>
+                  <div className="w-14 h-14 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover:bg-brand-orange transition-all duration-700">
+                    <svg className="w-5 h-5 text-slate-950 dark:text-white group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                   </div>
                 </Link>
               </div>
@@ -234,41 +234,41 @@ const Home: React.FC = () => {
       </section>
 
       {/* VIBE FINDER SECTION */}
-      <section className="py-24 md:py-48 bg-[#fcfaf7]">
+      <section className="py-24 md:py-48 bg-[#fcfaf7] dark:bg-slate-900 transition-colors">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20 text-center mb-24 reveal">
-           <span className="text-[#f15d22] font-black uppercase tracking-[1em] text-[10px] mb-8 block">Dream Finder</span>
-           <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Find Your Pulse.</h2>
+           <span className="text-brand-orange font-black uppercase tracking-[1em] text-[10px] mb-8 block">Dream Finder</span>
+           <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 dark:text-white italic tracking-tighter">Find Your Pulse.</h2>
         </div>
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-20 reveal">
           {vibes.map((v) => (
             <button 
               key={v.name}
               onClick={() => setActiveVibe(v.name as any)}
-              className={`p-10 rounded-[3rem] text-center transition-all duration-700 border-2 ${activeVibe === v.name ? 'bg-white border-[#f15d22] shadow-2xl scale-105' : 'bg-slate-50 border-transparent hover:border-slate-200'}`}
+              className={`p-10 rounded-[3rem] text-center transition-all duration-700 border-2 ${activeVibe === v.name ? 'bg-white dark:bg-slate-800 border-brand-orange shadow-2xl scale-105' : 'bg-slate-50 dark:bg-slate-800/50 border-transparent hover:border-slate-200 dark:hover:border-white/10'}`}
             >
               <div className="text-4xl mb-6">{v.icon}</div>
-              <h3 className="text-[12px] font-black uppercase tracking-[0.4em] text-slate-900 mb-4">{v.name}</h3>
-              <p className={`text-[10px] font-bold uppercase tracking-widest leading-loose ${activeVibe === v.name ? 'text-slate-600' : 'text-slate-400'}`}>
+              <h3 className="text-[12px] font-black uppercase tracking-[0.4em] text-slate-900 dark:text-white mb-4">{v.name}</h3>
+              <p className={`text-[10px] font-bold uppercase tracking-widest leading-loose ${activeVibe === v.name ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500'}`}>
                 {v.desc}
               </p>
             </button>
           ))}
         </div>
         <div className="text-center reveal">
-           <Link to={`/search?q=${activeVibe}`} className="bg-slate-950 text-white font-bold px-16 py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-[#f15d22] transition-all duration-700 shadow-2xl">
+           <Link to={`/search?q=${activeVibe}`} className="bg-slate-950 dark:bg-brand-blue-light text-white font-bold px-16 py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-brand-orange transition-all duration-700 shadow-2xl">
              Explore {activeVibe}
            </Link>
         </div>
       </section>
 
       {/* THE COLLECTION */}
-      <section className="py-24 md:py-48 bg-white overflow-hidden border-b border-slate-50">
+      <section className="py-24 md:py-48 bg-white dark:bg-slate-950 overflow-hidden border-b border-slate-50 dark:border-white/5 transition-colors duration-500">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
           <div className="mb-20 md:mb-32 reveal flex flex-col md:flex-row justify-between items-end gap-10">
             <div className="max-w-xl text-left">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[1.2em] mb-8 block">The Portfolio</span>
-              <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 tracking-tighter italic leading-none">The Collection.</h3>
-              <p className="mt-12 text-slate-400 text-[10px] uppercase font-bold tracking-[0.4em] leading-loose">
+              <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[1.2em] mb-8 block">The Portfolio</span>
+              <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 dark:text-white tracking-tighter italic leading-none">The Collection.</h3>
+              <p className="mt-12 text-slate-400 dark:text-slate-500 text-[10px] uppercase font-bold tracking-[0.4em] leading-loose">
                  Curated for the discerning eye. Our portfolio only accepts resorts that meet the Serenity standard of privacy, architectural integrity, and service.
               </p>
             </div>
@@ -281,60 +281,17 @@ const Home: React.FC = () => {
               </div>
             ))}
             <div className="flex-shrink-0 w-[85vw] sm:w-[55vw] lg:w-[35vw] snap-start flex items-center justify-center">
-              <Link to="/stays" className="group w-full aspect-[4/5] rounded-[3rem] bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-center hover:bg-slate-950 transition-all duration-1000">
+              <Link to="/stays" className="group w-full aspect-[4/5] rounded-[3rem] bg-slate-50 dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-white/10 flex flex-col items-center justify-center p-12 text-center hover:bg-slate-950 dark:hover:bg-brand-blue-light transition-all duration-1000">
                 <span className="text-[10px] font-bold text-slate-400 group-hover:text-orange-400 uppercase tracking-[1em] mb-8 block">Explore All</span>
-                <h4 className="text-2xl md:text-4xl font-serif font-bold text-slate-900 group-hover:text-white leading-tight italic">Find your <br /> sanctuary.</h4>
+                <h4 className="text-2xl md:text-4xl font-serif font-bold text-slate-900 dark:text-white group-hover:text-white leading-tight italic">Find your <br /> sanctuary.</h4>
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* THE JOURNAL - LATEST STORIES */}
-      <section className="py-24 md:py-48 bg-[#FCFAF7]">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
-          <div className="text-center mb-24 reveal">
-            <span className="text-[#f15d22] font-black uppercase tracking-[1em] text-[10px] mb-8 block">The Journal</span>
-            <h2 className="text-4xl md:text-7xl font-serif font-bold text-slate-950 italic tracking-tighter">Editorial Dispatches.</h2>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20 mb-24">
-            {recentStories.map((post) => (
-              <Link key={post.id} to={`/stories/${post.slug}`} className="group reveal">
-                <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl group-hover:-translate-y-2 bg-slate-100">
-                  <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-[4s] group-hover:scale-105" />
-                  <div className="absolute top-8 left-8">
-                    <span className="bg-white/95 backdrop-blur-md px-5 py-2 rounded-full text-[9px] font-black text-slate-900 uppercase tracking-[0.4em] shadow-sm">
-                      {post.category}
-                    </span>
-                  </div>
-                </div>
-                <div className="px-4">
-                  <span className="text-slate-400 font-bold text-[9px] uppercase tracking-[0.4em] mb-4 block">
-                    {new Date(post.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                  </span>
-                  <h3 className="text-2xl font-serif font-bold text-slate-900 mb-6 group-hover:text-[#f15d22] transition-colors leading-tight">
-                    {post.title}
-                  </h3>
-                  <div className="h-px w-12 bg-slate-200 group-hover:w-full group-hover:bg-[#f15d22] transition-all duration-1000"></div>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          <div className="text-center reveal">
-            <Link to="/stories" className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 uppercase tracking-[0.5em] group transition-all">
-              <span className="border-b-2 border-slate-100 pb-1 group-hover:border-[#f15d22] transition-colors">Access the Archives</span>
-              <div className="w-14 h-14 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-slate-950 transition-all duration-700">
-                <svg className="w-5 h-5 text-slate-950 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* FINAL CTA */}
-      <section className="py-24 md:py-48 bg-slate-950 relative overflow-hidden text-center text-white">
+      {/* FINAL CTA - Adapts to Lagoon Blue in Light Mode and Navy in Dark Mode */}
+      <section className="py-24 md:py-48 bg-brand-blue-light dark:bg-slate-950 relative overflow-hidden text-center text-white transition-colors duration-700">
         <div className="absolute inset-0 opacity-[0.05] flex items-center justify-center pointer-events-none">
           <h2 className="text-[35vw] font-serif italic whitespace-nowrap -rotate-12 translate-y-1/2">Serenity</h2>
         </div>
@@ -342,7 +299,7 @@ const Home: React.FC = () => {
           <span className="text-[10px] font-bold text-orange-400 uppercase tracking-[1.5em] mb-12 block">Ready for Perspective?</span>
           <h3 className="text-5xl md:text-9xl font-serif font-bold mb-16 italic tracking-tighter">Your Journey <br /> Starts Here.</h3>
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
-            <Link to="/plan" className="w-full md:w-auto bg-white text-slate-950 font-bold px-16 py-7 rounded-full hover:bg-[#f15d22] hover:text-white transition-all duration-700 uppercase tracking-[0.5em] text-[11px] shadow-2xl">
+            <Link to="/plan" className="w-full md:w-auto bg-white text-slate-950 font-bold px-16 py-7 rounded-full hover:bg-brand-orange hover:text-white transition-all duration-700 uppercase tracking-[0.5em] text-[11px] shadow-2xl">
               Initiate Inquiry
             </Link>
           </div>
