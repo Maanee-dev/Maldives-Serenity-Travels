@@ -1,6 +1,6 @@
 
 import { createClient } from '@supabase/supabase-js';
-import { Accommodation, AccommodationType, TransferType, MealPlan, Offer, Experience } from '../types';
+import { Accommodation, AccommodationType, TransferType, MealPlan, Offer } from '../types';
 
 const SUPABASE_URL = 'https://zocncwchaakjtsvlscmd.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_Ot34P55l4JGe2RjZywLovA_UokWsJ0I';
@@ -54,21 +54,5 @@ export const mapOffer = (o: any): Offer => {
     price: o.price || 5000,
     priceSubtext: o.price_subtext || 'for 2 adults',
     rating: o.rating || 5
-  };
-};
-
-/**
- * HELPER: Robust mapping from Supabase Row to Experience Interface
- */
-export const mapExperience = (e: any): Experience => {
-  return {
-    id: e.id,
-    title: e.title,
-    description: e.description,
-    image: e.image,
-    category: e.category,
-    resortId: e.resort_id,
-    resortName: e.resorts?.name || e.resort_name,
-    resortSlug: e.resorts?.slug || e.resort_slug
   };
 };
