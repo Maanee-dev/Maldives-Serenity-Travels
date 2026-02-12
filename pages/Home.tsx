@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase, mapResort } from '../lib/supabase';
@@ -269,7 +268,7 @@ const Home: React.FC = () => {
             <div className="max-w-xl text-left">
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[1.2em] mb-8 block">Our Portfolio</span>
               <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 dark:text-white tracking-tighter italic leading-none">The Top Resorts.</h3>
-              <p className="mt-12 text-slate-400 dark:text-slate-500 text-[10px] uppercase font-bold tracking-[0.4em] leading-loose">
+              <p className="mt-12 text-slate-400 dark:text-slate-400 text-[10px] uppercase font-bold tracking-[0.4em] leading-loose">
                  We have picked the very best resorts in the Maldives. Every place we offer has great service and total privacy.
               </p>
             </div>
