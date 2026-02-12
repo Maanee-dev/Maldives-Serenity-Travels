@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
-import { RESORTS } from '../constants';
 import { Link } from 'react-router-dom';
+import { supabase, mapResort } from '../lib/supabase';
+import { Accommodation } from '../types';
 import SEO from '../components/SEO';
 
 const STORAGE_KEY = 'serenity_planning_draft';
@@ -8,6 +10,8 @@ const STORAGE_KEY = 'serenity_planning_draft';
 const PlanMyTrip: React.FC = () => {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [dbResorts, setDbResorts] = useState<Accommodation[]>([]);
   
   // Selection States
   const [purpose, setPurpose] = useState('');
@@ -33,6 +37,14 @@ const PlanMyTrip: React.FC = () => {
   });
 
   useEffect(() => {
+    const fetchResorts = async () => {
+      const { data, error } = await supabase.from('resorts').select('*');
+      if (data) {
+        setDbResorts(data.map(mapResort));
+      }
+    };
+    fetchResorts();
+
     const savedData = localStorage.getItem(STORAGE_KEY);
     if (savedData) {
       try {
@@ -78,11 +90,11 @@ const PlanMyTrip: React.FC = () => {
 
   const filteredResortList = useMemo(() => {
     if (!resortSearch || resortSearch.length < 2) return [];
-    return RESORTS.filter(r => 
+    return dbResorts.filter(r => 
       r.name.toLowerCase().includes(resortSearch.toLowerCase()) && 
       !selectedResorts.includes(r.name)
     ).slice(0, 5);
-  }, [resortSearch, selectedResorts]);
+  }, [resortSearch, selectedResorts, dbResorts]);
 
   const selectResort = (name: string) => {
     if (selectedResorts.length < 3) {
@@ -95,10 +107,37 @@ const PlanMyTrip: React.FC = () => {
     setSelectedResorts(prev => prev.filter(r => r !== name));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    localStorage.removeItem(STORAGE_KEY);
+    setIsSubmitting(true);
+    
+    try {
+      const { error } = await supabase.from('inquiries').insert({
+        inquiry_type: 'general_plan',
+        customer_name: finalDetails.fullName,
+        customer_email: finalDetails.email,
+        customer_phone: `${finalDetails.phoneCode} ${finalDetails.phone}`,
+        purpose: purpose,
+        experiences: selectedExperiences,
+        preferences: preferences,
+        preferred_resorts: selectedResorts,
+        travel_dates_text: finalDetails.dates,
+        guests: parseInt(finalDetails.guests),
+        meal_plan: finalDetails.mealPlan,
+        budget: finalDetails.budget,
+        budget_type: finalDetails.budgetType
+      });
+
+      if (error) throw error;
+
+      setSubmitted(true);
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (err) {
+      console.error("Submission error:", err);
+      alert("We encountered an error processing your request. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -290,7 +329,7 @@ const PlanMyTrip: React.FC = () => {
 
                 <div className="space-y-4">
                    {selectedResorts.map(name => {
-                     const r = RESORTS.find(res => res.name === name);
+                     const r = dbResorts.find(res => res.name === name);
                      return (
                        <div key={name} className="flex items-center justify-between p-6 bg-slate-950 rounded-[2rem] text-white shadow-2xl animate-in zoom-in-95 duration-500">
                           <div className="flex items-center gap-6">
@@ -384,8 +423,8 @@ const PlanMyTrip: React.FC = () => {
                 </div>
 
                 <div className="pt-12 flex flex-col items-center gap-8">
-                  <button type="submit" className="w-full bg-slate-950 text-white font-bold py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-500 transition-all duration-700 shadow-2xl">
-                    Submit Inquiry
+                  <button type="submit" disabled={isSubmitting} className="w-full bg-slate-950 text-white font-bold py-7 rounded-full text-[11px] uppercase tracking-[0.8em] hover:bg-sky-500 transition-all duration-700 shadow-2xl disabled:opacity-50">
+                    {isSubmitting ? 'DISPATCHING...' : 'Submit Inquiry'}
                   </button>
                   <button type="button" onClick={prevStep} className="text-slate-300 font-bold uppercase tracking-widest text-[9px] hover:text-slate-950 transition-colors">← Back</button>
                 </div>

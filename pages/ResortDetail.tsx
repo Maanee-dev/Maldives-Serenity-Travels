@@ -119,7 +119,6 @@ const ResortDetail: React.FC = () => {
     const fetchFullDetails = async () => {
       setLoading(true);
       try {
-        // Fetch all resorts for "similar" section
         const { data: allData } = await supabase.from('resorts').select('*');
         if (allData) {
            const mapped = allData.map(item => ({ 
@@ -170,7 +169,6 @@ const ResortDetail: React.FC = () => {
           };
           setResort(mappedResort);
 
-          // Fetch Offers for this resort
           const { data: offersData } = await supabase.from('offers').select('*').eq('resort_id', resData.id);
           if (offersData && offersData.length > 0) {
             setResortOffers(offersData.map(mapOffer));
@@ -179,7 +177,6 @@ const ResortDetail: React.FC = () => {
             setResortOffers(local);
           }
 
-          // Fetch Experiences specific to THIS resort
           const { data: expData } = await supabase
             .from('experiences')
             .select('*, resorts(id, name, slug)')
@@ -193,7 +190,6 @@ const ResortDetail: React.FC = () => {
               resortId: item.resorts?.id
             })) as Experience[]);
           } else {
-            // Fallback to constants if they match this resort or just some generic ones
             const local = EXPERIENCES.filter(e => e.resortId === resData.id);
             setExperiences(local.length > 0 ? local : EXPERIENCES.slice(0, 4));
           }
@@ -233,6 +229,7 @@ const ResortDetail: React.FC = () => {
     try {
       const fullPhone = `${quoteData.countryCode} ${quoteData.customerPhone}`;
       const { error } = await supabase.from('inquiries').insert({
+        inquiry_type: 'resort_specific',
         resort_id: resort.id,
         resort_name: resort.name,
         check_in: quoteData.checkIn,
@@ -399,7 +396,7 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* CURATED EXPERIENCES (Unified with Experiences Page) */}
+      {/* CURATED EXPERIENCES */}
       {experiences.length > 0 && (
         <section className="py-24 md:py-48 bg-white overflow-hidden">
           <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
@@ -484,7 +481,7 @@ const ResortDetail: React.FC = () => {
           </div>
         </section>
       )}
-      {/* Residences Horizontal Scroller */}
+      {/* Residences Section */}
       {resort.roomTypes && resort.roomTypes.length > 0 && (
         <section className="py-16 md:py-32 bg-white border-y-[1px] border-slate-50 overflow-hidden">
           <div className="max-w-[1440px] mx-auto">
@@ -509,7 +506,7 @@ const ResortDetail: React.FC = () => {
                     <p className="text-slate-500 text-[13px] leading-relaxed mb-6 font-medium line-clamp-2">{room.description}</p>
                     <div className="flex flex-wrap gap-x-4 md:gap-x-6 gap-y-2 md:gap-y-3">
                        {room.highlights.map((h, j) => (
-                         <div key={j} className="flex items-center gap-2">
+                         <div key={j} className="flex items-center gap-3">
                            <div className="w-1 h-1 bg-sky-500 rounded-full"></div>
                            <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-slate-400">{h}</span>
                          </div>

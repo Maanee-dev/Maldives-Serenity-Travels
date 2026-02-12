@@ -11,11 +11,10 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed casing of imports to resolve build errors and follow naming conventions
-// Using lowercase as preferred by the environment to resolve duplicate file casing conflicts
-// and ensure compatibility across different operating systems.
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Using PascalCase for component imports to align with file system and React conventions.
+// This resolves casing conflicts where both lowercase and capitalized files may exist on disk.
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
