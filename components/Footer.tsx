@@ -2,126 +2,125 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
-  /**
-   * Refined styling logic for payment method logos:
-   * - brightness-0 / dark:invert: Normalizes any image into a theme-appropriate monochrome icon.
-   * - opacity-40 / dark:opacity-20: Keeps the branding subtle as per "Silent Luxury" guidelines.
-   * - group-hover: grayscale removal and brightness restoration allows the original brand identity to appear elegantly on interaction.
-   */
-  const paymentImgClass = "h-5 md:h-6 w-auto object-contain grayscale brightness-0 opacity-40 group-hover:grayscale-0 group-hover:brightness-100 group-hover:opacity-100 dark:invert dark:opacity-20 dark:group-hover:invert-0 dark:group-hover:opacity-100 transition-all duration-700 ease-in-out select-none pointer-events-none";
+  const paymentImgClass = "h-4 md:h-5 w-auto object-contain grayscale brightness-0 opacity-30 group-hover:grayscale-0 group-hover:brightness-100 group-hover:opacity-100 dark:invert dark:opacity-10 dark:group-hover:invert-0 dark:group-hover:opacity-100 transition-all duration-700 ease-in-out select-none pointer-events-none";
 
   return (
-    <footer className="bg-white dark:bg-slate-950 pt-24 pb-12 border-t border-slate-100 dark:border-white/5 transition-colors duration-700">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
-          <div className="md:col-span-1">
-            <Link to="/" className="text-2xl font-serif font-bold text-slate-900 dark:text-white tracking-[0.2em] uppercase">
+    <footer className="bg-white dark:bg-slate-950 pt-32 pb-16 border-t border-slate-100 dark:border-white/5 transition-colors duration-700">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        
+        {/* Top Section: Branding & Newsletter */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-32">
+          <div className="lg:col-span-4">
+            <Link to="/" className="text-3xl font-serif font-bold text-slate-900 dark:text-white tracking-[0.2em] uppercase block mb-8">
               SERENITY
             </Link>
-            <p className="mt-6 text-slate-500 dark:text-slate-400 text-[10px] leading-relaxed uppercase tracking-[0.3em] font-medium transition-colors">
-              Curated luxury for the discerning traveler. <br/>
-              Reg No: SP02722025 <br/>
-              License: MOT.01.RS.TA.25.PJ0482
+            <p className="text-slate-500 dark:text-slate-400 text-[10px] leading-[2.5] uppercase tracking-[0.3em] font-medium max-w-sm">
+              A bespoke boutique agency born from the southern frontier of the archipelago. We curate silence and luxury for the discerning traveler.
             </p>
           </div>
           
-          <div className="space-y-6">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 dark:text-white mb-8 underline underline-offset-8 decoration-slate-200 dark:decoration-white/10 transition-colors">Company</h4>
-            <ul className="space-y-3 text-slate-600 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest transition-colors">
-              <li><Link to="/" className="hover:text-slate-900 dark:hover:text-white transition-colors">Home</Link></li>
-              <li><Link to="/about" className="hover:text-slate-900 dark:hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/experiences" className="hover:text-slate-900 dark:hover:text-white transition-colors">Experiences</Link></li>
-              <li><Link to="/contact" className="hover:text-slate-900 dark:hover:text-white transition-colors">Contacts</Link></li>
-            </ul>
-          </div>
-
-          <div className="space-y-6">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 dark:text-white mb-8 underline underline-offset-8 decoration-slate-200 dark:decoration-white/10 transition-colors">Legal</h4>
-            <ul className="space-y-3 text-slate-600 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest transition-colors">
-              <li><Link to="/terms" className="hover:text-slate-900 dark:hover:text-white transition-colors">Terms of Service</Link></li>
-              <li><Link to="/privacy" className="hover:text-slate-900 dark:hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/stays" className="hover:text-slate-900 dark:hover:text-white transition-colors">Resort Portfolio</Link></li>
-              <li><Link to="/offers" className="hover:text-slate-900 dark:hover:text-white transition-colors">Exclusive Offers</Link></li>
-            </ul>
-          </div>
-
-          <div className="space-y-6">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-900 dark:text-white mb-8 underline underline-offset-8 decoration-slate-200 dark:decoration-white/10 transition-colors">Connect</h4>
-            <ul className="space-y-4">
-              <li>
-                <a 
-                  href="https://wa.me/9607259060" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center gap-3 text-slate-600 dark:text-slate-500 hover:text-slate-950 dark:hover:text-white transition-colors group"
-                >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.438 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-2.652 0-5.147 1.03-7.02 2.905-1.873 1.874-2.901 4.37-2.903 7.027-.001 2.03.543 4.154 1.61 5.9l-.311 1.137-.79 2.884 2.953-.776 1.061-.28z"/>
-                  </svg>
-                  <span className="text-[10px] font-bold uppercase tracking-widest">WhatsApp Inquiry</span>
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#" 
-                  className="flex items-center gap-3 text-slate-600 dark:text-slate-500 hover:text-slate-950 dark:hover:text-white transition-colors group"
-                >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                  </svg>
-                  <span className="text-[10px] font-bold uppercase tracking-widest">Instagram Feed</span>
-                </a>
-              </li>
-            </ul>
+          <div className="lg:col-span-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-12 bg-slate-50 dark:bg-slate-900/50 p-10 md:p-16 rounded-[3rem] border border-slate-100 dark:border-white/5 transition-colors">
+            <div className="max-w-md">
+              <h4 className="text-2xl font-serif font-bold italic text-slate-950 dark:text-white mb-4">The Digital Dispatch</h4>
+              <p className="text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-widest font-bold">Receive seasonal privileges and editorial updates directly.</p>
+            </div>
+            <form className="w-full md:w-auto flex-1 max-w-sm flex items-center relative group" onSubmit={(e) => e.preventDefault()}>
+              <input 
+                type="email" 
+                placeholder="YOUR EMAIL" 
+                className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/10 rounded-full px-8 py-5 text-[10px] font-bold tracking-widest focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all dark:text-white placeholder:text-slate-200"
+              />
+              <button className="absolute right-2 bg-slate-950 dark:bg-white text-white dark:text-slate-950 px-6 py-3.5 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-sky-500 dark:hover:bg-sky-400 transition-colors">Join</button>
+            </form>
           </div>
         </div>
 
-        <div className="pt-12 border-t border-slate-50 dark:border-white/5 flex flex-col lg:flex-row justify-between items-center gap-10">
-          {/* Copyright Section */}
-          <p className="text-slate-400 dark:text-slate-600 text-[9px] font-bold uppercase tracking-[0.4em] order-3 lg:order-1 transition-colors">
-            © 2026 Maldives Serenity Travels. All Rights Reserved.
-          </p>
-
-          {/* 
-              PAYMENT METHODS ARCHITECTURE
-              - Standardized heights for perfect alignment.
-              - Grouped for unified hover interaction.
-              - Ready for custom image source insertion.
-          */}
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 order-1 lg:order-2 group">
-            {/* Generic Card / PCI Compliance Slot */}
-            <div className="flex items-center gap-8 md:gap-10">
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" 
-                alt="Visa" 
-                className={paymentImgClass}
-              />
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" 
-                alt="Mastercard" 
-                className={paymentImgClass}
-              />
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" 
-                alt="American Express" 
-                className={paymentImgClass}
-              />
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" 
-                alt="PayPal" 
-                className={paymentImgClass}
-              />
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" 
-                alt="Apple Pay" 
-                className={paymentImgClass}
-              />
-            </div>
+        {/* Middle Section: Detailed Navigation */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-12 md:gap-20 mb-32 border-b border-slate-50 dark:border-white/5 pb-24 transition-colors">
+          
+          {/* Column 1: Company */}
+          <div className="space-y-8">
+            <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-900 dark:text-white">Agency</h4>
+            <ul className="space-y-4 text-slate-500 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest">
+              <li><Link to="/about" className="hover:text-sky-500 transition-colors">Our Heritage</Link></li>
+              <li><Link to="/stories" className="hover:text-sky-500 transition-colors">The Journal</Link></li>
+              <li><Link to="/contact" className="hover:text-sky-500 transition-colors">Connect</Link></li>
+              <li><Link to="/careers" className="hover:text-sky-500 transition-colors opacity-40 cursor-not-allowed">Careers</Link></li>
+            </ul>
           </div>
 
-          <p className="text-slate-300 dark:text-slate-800 text-[9px] font-black uppercase tracking-[0.4em] order-2 lg:order-3 transition-colors">
-            Addu City • Malé • Archive 2026
-          </p>
+          {/* Column 2: Portfolio */}
+          <div className="space-y-8">
+            <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-900 dark:text-white">Portfolio</h4>
+            <ul className="space-y-4 text-slate-500 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest">
+              <li><Link to="/stays" className="hover:text-sky-500 transition-colors">Luxury Resorts</Link></li>
+              <li><Link to="/stays?type=GUEST_HOUSE" className="hover:text-sky-500 transition-colors">Guest Houses</Link></li>
+              <li><Link to="/stays?type=LIVEABOARD" className="hover:text-sky-500 transition-colors">Liveaboards</Link></li>
+              <li><Link to="/offers" className="hover:text-sky-500 transition-colors">Exclusives</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 3: Legal */}
+          <div className="space-y-8">
+            <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-900 dark:text-white">Governance</h4>
+            <ul className="space-y-4 text-slate-500 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest">
+              <li><Link to="/terms" className="hover:text-sky-500 transition-colors">Terms of Service</Link></li>
+              <li><Link to="/privacy" className="hover:text-sky-500 transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/faq" className="hover:text-sky-500 transition-colors">Travel FAQ</Link></li>
+              <li><Link to="/safety" className="hover:text-sky-500 transition-colors opacity-40 cursor-not-allowed">Safety Protocols</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 4: Contact & Social */}
+          <div className="space-y-8">
+            <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-900 dark:text-white">Social</h4>
+            <ul className="space-y-4 text-slate-500 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest">
+              <li><a href="#" className="hover:text-sky-500 transition-colors">Instagram Feed</a></li>
+              <li><a href="#" className="hover:text-sky-500 transition-colors">WhatsApp Direct</a></li>
+              <li><a href="#" className="hover:text-sky-500 transition-colors">Twitter (X)</a></li>
+              <li><a href="#" className="hover:text-sky-500 transition-colors">LinkedIn</a></li>
+            </ul>
+          </div>
+
+          {/* Column 5: Office Location */}
+          <div className="space-y-8 col-span-2 md:col-span-1">
+            <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-900 dark:text-white">Our Office</h4>
+            <div className="text-slate-400 dark:text-slate-600 text-[10px] leading-relaxed uppercase tracking-widest space-y-4 font-medium">
+              <p>
+                Faith, S.feydhoo<br />
+                Addu City, 19040<br />
+                Republic of Maldives
+              </p>
+              <div className="pt-4 border-t border-slate-50 dark:border-white/5 space-y-1">
+                <p className="text-slate-500 dark:text-slate-400 font-black">Mon — Fri</p>
+                <p>09:00 — 18:00 (GMT+5)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Section: Compliance & Payments */}
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-12">
+          
+          <div className="order-3 lg:order-1 text-center lg:text-left">
+            <p className="text-slate-300 dark:text-slate-700 text-[9px] font-bold uppercase tracking-[0.5em] mb-4">
+              © 2026 Maldives Serenity Travels. Reg No: SP02722025.
+            </p>
+            <p className="text-slate-200 dark:text-slate-800 text-[8px] font-black uppercase tracking-[0.4em]">
+              Licensed by Ministry of Tourism: MOT.01.RS.TA.25.PJ0482
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16 order-1 lg:order-2 group transition-colors">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className={paymentImgClass} />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className={paymentImgClass} />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" className={paymentImgClass} />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className={paymentImgClass} />
+          </div>
+
+          <div className="order-2 lg:order-3">
+             <span className="text-sky-500/30 dark:text-sky-400/10 text-[40px] font-serif italic select-none">Perspective.</span>
+          </div>
         </div>
       </div>
     </footer>

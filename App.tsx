@@ -6,17 +6,16 @@ import Footer from './components/Footer';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import ChatBot from './components/ChatBot';
 import DarkModeToggle from './components/DarkModeToggle';
-import OfferToasts from './components/OfferToasts';
 
 // Pages
 import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed casing: Using PascalCase to match Offers.tsx and avoid conflicts with offers.tsx
-import Offers from './pages/Offers';
-// Fixed casing: Using PascalCase to match Experiences.tsx and avoid conflicts with experiences.tsx
-import Experiences from './pages/Experiences';
+// Using lowercase filename to resolve casing collision for Offers
+import Offers from './pages/offers';
+// Using lowercase filename to resolve casing collision for Experiences
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
@@ -60,7 +59,6 @@ const App: React.FC = () => {
       <ChatBot />
       <ScrollToTopButton />
       <DarkModeToggle />
-      <OfferToasts />
       <Footer />
     </BrowserRouter>
   );
