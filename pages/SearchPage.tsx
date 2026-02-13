@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { supabase, mapResort, mapOffer } from '../lib/supabase';
@@ -16,22 +17,19 @@ const SearchPage: React.FC = () => {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [stories, setStories] = useState<BlogPost[]>([]);
 
-  // Individual Pagination States
-  const [visibleStays, setVisibleStays] = useState(3);
-  const [visibleOffers, setVisibleOffers] = useState(4);
-  const [visibleExperiences, setVisibleExperiences] = useState(3);
-  const [visibleStories, setVisibleStories] = useState(4);
-
   useEffect(() => {
     const fetchAllData = async () => {
       setLoading(true);
       try {
+        // Fetch Stays
         const { data: resortsData } = await supabase.from('resorts').select('*');
         const stays = resortsData ? resortsData.map(mapResort) : RESORTS;
         
+        // Fetch Offers
         const { data: offersData } = await supabase.from('offers').select('*, resorts(slug)');
         const dealList = offersData ? offersData.map(mapOffer) : OFFERS;
         
+        // Fetch Experiences
         const { data: expData } = await supabase.from('experiences').select('*, resorts(id, name, slug)');
         const expList = expData ? expData.map(item => ({
           ...item,
@@ -40,6 +38,7 @@ const SearchPage: React.FC = () => {
           resortId: item.resorts?.id || ''
         })) as Experience[] : EXPERIENCES;
 
+        // Fetch Stories
         const { data: storiesData } = await supabase.from('stories').select('*');
         const blogList = storiesData ? (storiesData as BlogPost[]) : (BLOG_POSTS as BlogPost[]);
 
@@ -98,7 +97,7 @@ const SearchPage: React.FC = () => {
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     return () => observer.disconnect();
-  }, [loading, filtered, visibleStays, visibleOffers, visibleExperiences, visibleStories]);
+  }, [loading, filtered]);
 
   return (
     <div className="bg-parchment dark:bg-slate-950 min-h-screen selection:bg-sky-100 selection:text-sky-900 pb-32 overflow-x-hidden transition-colors duration-700">
@@ -147,15 +146,10 @@ const SearchPage: React.FC = () => {
                 <span className="text-[10px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-widest transition-colors">{filtered.stays.length} Matches</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
-                {filtered.stays.slice(0, visibleStays).map(stay => (
+                {filtered.stays.map(stay => (
                   <ResortCard key={stay.id} resort={stay} />
                 ))}
               </div>
-              {visibleStays < filtered.stays.length && (
-                <div className="mt-16 flex justify-center">
-                   <button onClick={() => setVisibleStays(prev => prev + 3)} className="bg-slate-950 dark:bg-white text-white dark:text-slate-950 px-12 py-4 rounded-full text-[9px] font-black uppercase tracking-[0.4em] hover:bg-sky-500 dark:hover:bg-sky-400 transition-all shadow-xl">Load More Stays</button>
-                </div>
-              )}
             </section>
           )}
 
@@ -170,7 +164,7 @@ const SearchPage: React.FC = () => {
                 <span className="text-[10px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-widest transition-colors">{filtered.offers.length} Matches</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {filtered.offers.slice(0, visibleOffers).map(offer => (
+                {filtered.offers.map(offer => (
                   <Link key={offer.id} to={`/stays/${offer.resortSlug}`} className="group flex flex-col h-full bg-white dark:bg-slate-900 rounded-[2.5rem] p-6 shadow-sm border border-slate-50 dark:border-white/5 hover:shadow-2xl transition-all duration-700">
                     <div className="aspect-square rounded-[2rem] overflow-hidden mb-6 bg-slate-100 dark:bg-slate-800">
                       <img src={offer.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-[4s]" alt={offer.title} />
@@ -184,11 +178,6 @@ const SearchPage: React.FC = () => {
                   </Link>
                 ))}
               </div>
-              {visibleOffers < filtered.offers.length && (
-                <div className="mt-16 flex justify-center">
-                   <button onClick={() => setVisibleOffers(prev => prev + 4)} className="bg-slate-950 dark:bg-white text-white dark:text-slate-950 px-12 py-4 rounded-full text-[9px] font-black uppercase tracking-[0.4em] hover:bg-sky-500 dark:hover:bg-sky-400 transition-all shadow-xl">Load More Offers</button>
-                </div>
-              )}
             </section>
           )}
 
@@ -203,7 +192,7 @@ const SearchPage: React.FC = () => {
                 <span className="text-[10px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-widest transition-colors">{filtered.experiences.length} Matches</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                {filtered.experiences.slice(0, visibleExperiences).map(exp => (
+                {filtered.experiences.map(exp => (
                   <div key={exp.id} className="group flex flex-col">
                     <div className="aspect-[4/3] rounded-[3rem] overflow-hidden mb-8 shadow-sm group-hover:shadow-xl transition-all duration-700 bg-slate-100 dark:bg-slate-900">
                       <img src={exp.image} className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-110" alt={exp.title} />
@@ -217,11 +206,6 @@ const SearchPage: React.FC = () => {
                   </div>
                 ))}
               </div>
-              {visibleExperiences < filtered.experiences.length && (
-                <div className="mt-16 flex justify-center">
-                   <button onClick={() => setVisibleExperiences(prev => prev + 3)} className="bg-slate-950 dark:bg-white text-white dark:text-slate-950 px-12 py-4 rounded-full text-[9px] font-black uppercase tracking-[0.4em] hover:bg-sky-500 dark:hover:bg-sky-400 transition-all shadow-xl">Load More Journeys</button>
-                </div>
-              )}
             </section>
           )}
 
@@ -236,7 +220,7 @@ const SearchPage: React.FC = () => {
                 <span className="text-[10px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-widest transition-colors">{filtered.stories.length} Matches</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-                {filtered.stories.slice(0, visibleStories).map(post => (
+                {filtered.stories.map(post => (
                   <Link key={post.id} to={`/stories/${post.slug}`} className="group flex flex-col md:flex-row gap-8 items-center">
                     <div className="w-full md:w-1/3 aspect-square rounded-[2rem] overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-slate-900 shadow-sm transition-all group-hover:shadow-2xl">
                       <img src={post.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-[3s]" alt={post.title} />
@@ -250,11 +234,6 @@ const SearchPage: React.FC = () => {
                   </Link>
                 ))}
               </div>
-              {visibleStories < filtered.stories.length && (
-                <div className="mt-16 flex justify-center">
-                   <button onClick={() => setVisibleStories(prev => prev + 4)} className="bg-slate-950 dark:bg-white text-white dark:text-slate-950 px-12 py-4 rounded-full text-[9px] font-black uppercase tracking-[0.4em] hover:bg-sky-500 dark:hover:bg-sky-400 transition-all shadow-xl">Load More Stories</button>
-                </div>
-              )}
             </section>
           )}
 
