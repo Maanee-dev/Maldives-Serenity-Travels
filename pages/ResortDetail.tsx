@@ -25,12 +25,21 @@ const COUNTRIES = [
   { name: 'Maldives', code: '+960' }
 ].sort((a, b) => a.name.localeCompare(b.name));
 
+interface ResortFAQ {
+  id: string;
+  question: string;
+  answer: string;
+  category: string;
+}
+
 const ResortDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [resort, setResort] = useState<Accommodation | null>(null);
   const [allResorts, setAllResorts] = useState<Accommodation[]>([]);
   const [resortOffers, setResortOffers] = useState<Offer[]>([]);
   const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [faqs, setFaqs] = useState<ResortFAQ[]>([]);
+  const [openFaq, setOpenFaq] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   
   const [formStep, setFormStep] = useState(1);
@@ -169,6 +178,7 @@ const ResortDetail: React.FC = () => {
           };
           setResort(mappedResort);
 
+          // Fetch Offers
           const { data: offersData } = await supabase.from('offers').select('*').eq('resort_id', resData.id);
           if (offersData && offersData.length > 0) {
             setResortOffers(offersData.map(mapOffer));
@@ -177,6 +187,7 @@ const ResortDetail: React.FC = () => {
             setResortOffers(local);
           }
 
+          // Fetch Experiences
           const { data: expData } = await supabase
             .from('experiences')
             .select('*, resorts(id, name, slug)')
@@ -193,6 +204,15 @@ const ResortDetail: React.FC = () => {
             const local = EXPERIENCES.filter(e => e.resortId === resData.id);
             setExperiences(local.length > 0 ? local : EXPERIENCES.slice(0, 4));
           }
+
+          // Fetch FAQs
+          const { data: faqData } = await supabase
+            .from('resort_faqs')
+            .select('*')
+            .eq('resort_id', resData.id)
+            .order('category', { ascending: true });
+          
+          if (faqData) setFaqs(faqData);
 
         } else if (localBackup) {
           setResort(localBackup);
@@ -339,6 +359,17 @@ const ResortDetail: React.FC = () => {
           "starRating": {
             "@type": "Rating",
             "ratingValue": resort.rating
+          },
+          "mainEntity": {
+            "@type": "FAQPage",
+            "mainEntity": faqs.map(f => ({
+              "@type": "Question",
+              "name": f.question,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": f.answer
+              }
+            }))
           }
         }}
       />
@@ -482,6 +513,7 @@ const ResortDetail: React.FC = () => {
           </div>
         </section>
       )}
+
       {/* Residences Section */}
       {resort.roomTypes && resort.roomTypes.length > 0 && (
         <section className="py-16 md:py-32 bg-white dark:bg-slate-950 border-y-[1px] border-slate-50 dark:border-white/5 overflow-hidden transition-colors">
@@ -559,6 +591,52 @@ const ResortDetail: React.FC = () => {
                     </div>
                  ))}
               </div>
+          </div>
+        </section>
+      )}
+
+      {/* INTELLIGENT INSIGHTS (FAQ SECTION) */}
+      {faqs.length > 0 && (
+        <section className="py-24 md:py-48 bg-white dark:bg-slate-950 transition-colors">
+          <div className="max-w-[1440px] mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-24">
+             <div className="lg:col-span-4 reveal">
+                <span className="text-[11px] font-black text-sky-500 uppercase tracking-[1em] mb-8 block">Intelligence</span>
+                <h3 className="text-4xl md:text-6xl font-serif font-bold italic text-slate-900 dark:text-white tracking-tighter leading-tight transition-colors">Bespoke <br/> Insights.</h3>
+                <p className="text-slate-400 dark:text-slate-600 text-[10px] font-black uppercase tracking-[0.4em] mt-12 leading-loose transition-colors">Expertly curated answers regarding {resort.name} and the archipelago.</p>
+             </div>
+             
+             <div className="lg:col-span-8 reveal delay-300">
+                <div className="space-y-4">
+                   {faqs.map((faq) => (
+                     <div 
+                       key={faq.id} 
+                       className={`border-b-[1px] border-slate-100 dark:border-white/5 transition-all duration-700 ${openFaq === faq.id ? 'pb-12' : 'pb-6'}`}
+                     >
+                        <button 
+                          onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}
+                          className="w-full flex justify-between items-center text-left group"
+                        >
+                           <h4 className={`text-xl md:text-2xl font-serif font-bold italic transition-all duration-500 ${openFaq === faq.id ? 'text-sky-600 dark:text-sky-400' : 'text-slate-900 dark:text-white group-hover:text-sky-500'}`}>
+                             {faq.question}
+                           </h4>
+                           <div className={`w-10 h-10 rounded-full border border-slate-100 dark:border-white/10 flex items-center justify-center transition-all duration-700 ${openFaq === faq.id ? 'bg-sky-500 border-sky-500 rotate-45' : 'group-hover:border-sky-500'}`}>
+                              <svg className={`w-4 h-4 transition-colors ${openFaq === faq.id ? 'text-white' : 'text-slate-300'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                           </div>
+                        </button>
+                        <div className={`grid transition-all duration-700 ease-in-out ${openFaq === faq.id ? 'grid-rows-[1fr] opacity-100 mt-8' : 'grid-rows-[0fr] opacity-0 mt-0'}`}>
+                           <div className="overflow-hidden">
+                              <p className="text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed font-medium transition-colors">
+                                {faq.answer}
+                              </p>
+                              <div className="mt-8">
+                                 <span className="text-[8px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-widest">Category: {faq.category}</span>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                   ))}
+                </div>
+             </div>
           </div>
         </section>
       )}
@@ -724,7 +802,7 @@ const ResortDetail: React.FC = () => {
           <div className="max-w-[1440px] mx-auto">
             <div className="px-6 lg:px-12 mb-16 md:mb-24 reveal">
               <span className="text-[11px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.8em] mb-4 block">Refined Selection</span>
-              <h3 className="text-3xl md:text-6xl font-serif font-bold italic text-slate-950 dark:text-white tracking-tighter transition-colors">Similar Sanctuaries.</h3>
+              <h3 className="text-3xl md:text-6xl font-serif font-bold italic text-slate-900 dark:text-white tracking-tighter transition-colors">Similar Sanctuaries.</h3>
             </div>
             
             <div className="flex gap-6 md:gap-8 overflow-x-auto no-scrollbar px-6 lg:px-12 pb-12 snap-x snap-mandatory">

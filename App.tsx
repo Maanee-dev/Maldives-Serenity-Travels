@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -12,10 +11,10 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Casing adjusted to match lowercase files to resolve casing collisions
-import Offers from './pages/offers';
-// Casing adjusted to match lowercase files to resolve casing collisions
-import Experiences from './pages/experiences';
+// Fixed: Using PascalCase for consistency and to resolve casing collisions between Offers.tsx and offers.tsx
+import Offers from './pages/Offers';
+// Fixed: Using PascalCase for consistency and to resolve casing collisions between Experiences.tsx and experiences.tsx
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
