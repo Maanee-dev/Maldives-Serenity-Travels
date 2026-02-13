@@ -33,9 +33,9 @@ const SearchPage: React.FC = () => {
         const { data: expData } = await supabase.from('experiences').select('*, resorts(id, name, slug)');
         const expList = expData ? expData.map(item => ({
           ...item,
-          resortName: item.resorts?.name,
-          resortSlug: item.resorts?.slug,
-          resortId: item.resorts?.id
+          resortName: item.resorts?.name || 'Unknown Resort',
+          resortSlug: item.resorts?.slug || '',
+          resortId: item.resorts?.id || ''
         })) as Experience[] : EXPERIENCES;
 
         // Fetch Stories
@@ -62,25 +62,27 @@ const SearchPage: React.FC = () => {
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase();
+    if (!q) return { stays: [], offers: [], experiences: [], stories: [] };
+
     return {
       stays: resorts.filter(r => 
-        r.name.toLowerCase().includes(q) || 
-        r.atoll.toLowerCase().includes(q) || 
-        r.features.some(f => f.toLowerCase().includes(q))
+        (r.name?.toLowerCase() || '').includes(q) || 
+        (r.atoll?.toLowerCase() || '').includes(q) || 
+        (Array.isArray(r.features) && r.features.some(f => f?.toLowerCase().includes(q)))
       ),
       offers: offers.filter(o => 
-        o.title.toLowerCase().includes(q) || 
-        o.resortName.toLowerCase().includes(q)
+        (o.title?.toLowerCase() || '').includes(q) || 
+        (o.resortName?.toLowerCase() || '').includes(q)
       ),
       experiences: experiences.filter(e => 
-        e.title.toLowerCase().includes(q) || 
-        e.category.toLowerCase().includes(q) || 
-        e.description.toLowerCase().includes(q)
+        (e.title?.toLowerCase() || '').includes(q) || 
+        (e.category?.toLowerCase() || '').includes(q) || 
+        (e.description?.toLowerCase() || '').includes(q)
       ),
       stories: stories.filter(s => 
-        s.title.toLowerCase().includes(q) || 
-        s.excerpt.toLowerCase().includes(q) || 
-        s.category.toLowerCase().includes(q)
+        (s.title?.toLowerCase() || '').includes(q) || 
+        (s.excerpt?.toLowerCase() || '').includes(q) || 
+        (s.category?.toLowerCase() || '').includes(q)
       )
     };
   }, [query, resorts, offers, experiences, stories]);
@@ -263,18 +265,21 @@ const SearchPage: React.FC = () => {
   );
 };
 
-const StarRating = ({ count }: { count: number }) => (
-  <div className="flex gap-0.5 mb-3">
-    {Array.from({ length: 5 }).map((_, i) => (
-      <svg 
-        key={i} 
-        className={`w-3 h-3 ${i < count ? 'text-amber-400 fill-current' : 'text-slate-200 dark:text-slate-800 fill-current transition-colors'}`} 
-        viewBox="0 0 24 24"
-      >
-        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-      </svg>
-    ))}
-  </div>
-);
+const StarRating = ({ count }: { count: number }) => {
+  const ratingCount = typeof count === 'number' ? count : 5;
+  return (
+    <div className="flex gap-0.5 mb-3">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg 
+          key={i} 
+          className={`w-3 h-3 ${i < ratingCount ? 'text-amber-400 fill-current' : 'text-slate-200 dark:text-slate-800 fill-current transition-colors'}`} 
+          viewBox="0 0 24 24"
+        >
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+        </svg>
+      ))}
+    </div>
+  );
+};
 
 export default SearchPage;
