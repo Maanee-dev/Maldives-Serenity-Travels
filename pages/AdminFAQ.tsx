@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { GoogleGenAI, Type } from "@google/genai";
 import { supabase } from '../lib/supabase';
 
 interface FAQResult {
@@ -10,7 +11,6 @@ interface FAQResult {
   inserted: number;
   faqs: any[];
   error: string | null;
-  raw_response?: any;
 }
 
 const AdminFAQ: React.FC = () => {
@@ -27,7 +27,7 @@ const AdminFAQ: React.FC = () => {
 
   useEffect(() => {
     const fetchResorts = async () => {
-      const { data } = await supabase.from('resorts').select('id, name').order('name');
+      const { data } = await supabase.from('resorts').select('id, name, description, features').order('name');
       if (data) setResorts(data);
     };
     fetchResorts();
@@ -35,59 +35,62 @@ const AdminFAQ: React.FC = () => {
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-  const callEdgeFunction = async (resortId: string, retryCount = 0): Promise<any> => {
-    const url = `https://zocncwchaakjtsvlscmd.supabase.co/functions/v1/generate-resort-faqs?resort_id=${resortId}`;
+  /**
+   * Generates FAQs using the Gemini API directly in the browser
+   */
+  const generateFaqsWithGemini = async (resort: any) => {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${serviceRoleKey}`
+    const prompt = `
+      Generate 6-8 comprehensive, luxury-toned FAQs for the following Maldives resort:
+      Resort Name: ${resort.name}
+      Description: ${resort.description}
+      Features: ${Array.isArray(resort.features) ? resort.features.join(', ') : resort.features}
+      
+      Requirements:
+      1. Tone: Sophisticated, poetic, yet helpful.
+      2. Categories: Must be one of 'Arrival', 'Dining', 'Experience', 'Wellness', or 'General'.
+      3. Content: Focus on specific features mentioned above.
+    `;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              question: { type: Type.STRING },
+              answer: { type: Type.STRING },
+              category: { type: Type.STRING },
+              is_ai_generated: { type: Type.BOOLEAN }
+            },
+            required: ["question", "answer", "category", "is_ai_generated"]
+          }
         }
-      });
-
-      if (response.ok) {
-        return await response.json();
       }
+    });
 
-      // Handle 4xx - Do not retry
-      if (response.status >= 400 && response.status < 500) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `HTTP ${response.status}`);
-      }
-
-      // Retry logic for 5xx errors
-      if (response.status >= 500 && retryCount < 2) {
-        const waitTime = (retryCount + 1) * 1000;
-        addLog(`⚠️ Server Error (HTTP ${response.status}) for ${resortId}. Retrying in ${waitTime}ms...`);
-        await sleep(waitTime);
-        return callEdgeFunction(resortId, retryCount + 1);
-      }
-
-      const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}` }));
-      throw new Error(errorData.error || `HTTP ${response.status}`);
-    } catch (err: any) {
-      // Network errors
-      if (err.name === 'TypeError' && retryCount < 2) {
-        const waitTime = (retryCount + 1) * 1000;
-        addLog(`📡 Network timeout/error. Retrying in ${waitTime}ms...`);
-        await sleep(waitTime);
-        return callEdgeFunction(resortId, retryCount + 1);
-      }
-      throw err;
-    }
+    const jsonStr = response.text;
+    if (!jsonStr) throw new Error("Gemini returned empty content.");
+    
+    const parsedFaqs = JSON.parse(jsonStr);
+    // Attach resort_id to each FAQ
+    return parsedFaqs.map((f: any) => ({ ...f, resort_id: resort.id }));
   };
 
-  const verifyFaqs = async (resortId: string, adminKey: string) => {
-    // Create a temporary admin client to bypass RLS for verification
+  /**
+   * Persists FAQs to Supabase using the admin client
+   */
+  const saveToDatabase = async (faqs: any[], adminKey: string) => {
     const adminClient = createClient('https://zocncwchaakjtsvlscmd.supabase.co', adminKey);
     const { data, error } = await adminClient
       .from('resort_faqs')
-      .select('id, resort_id, question, answer, category, is_ai_generated, created_at')
-      .eq('resort_id', resortId)
-      .order('created_at', { ascending: false })
-      .limit(10);
+      .upsert(faqs, { onConflict: 'resort_id,question' }) // Assumes a unique constraint exists or replaces
+      .select();
     
     if (error) throw error;
     return data || [];
@@ -95,11 +98,11 @@ const AdminFAQ: React.FC = () => {
 
   const runAutomation = async () => {
     if (!serviceRoleKey) {
-      alert("Service Role Key is required for this operation.");
+      alert("Supabase Service Role Key is required to save data to the database.");
       return;
     }
 
-    if (!confirm(`Are you sure you want to trigger AI generation for ${resorts.length} resorts?`)) {
+    if (!confirm(`Using Gemini API to generate FAQs for ${resorts.length} resorts. Proceed?`)) {
       return;
     }
 
@@ -107,13 +110,13 @@ const AdminFAQ: React.FC = () => {
     setResults([]);
     setLogs([]);
     setProgress(0);
-    addLog(`🚀 Starting Batch FAQ Generation for ${resorts.length} resorts...`);
+    addLog(`🚀 Initializing Serenity Intelligence for ${resorts.length} properties...`);
 
     const tempResults: FAQResult[] = [];
 
     for (let i = 0; i < resorts.length; i++) {
       const resort = resorts[i];
-      addLog(`Processing: ${resort.name}`);
+      addLog(`Analyzing: ${resort.name}`);
       
       const result: FAQResult = {
         resort_id: resort.id,
@@ -125,47 +128,41 @@ const AdminFAQ: React.FC = () => {
       };
 
       try {
-        const response = await callEdgeFunction(resort.id);
-        result.raw_response = response;
+        // 1. GENERATE (Using process.env.API_KEY internally)
+        addLog(`🧠 Calling Gemini for ${resort.name}...`);
+        const generatedFaqs = await generateFaqsWithGemini(resort);
+        
+        // 2. SAVE (Using provided Service Role Key)
+        addLog(`💾 Committing ${generatedFaqs.length} rows to database...`);
+        const savedRows = await saveToDatabase(generatedFaqs, serviceRoleKey);
+        
+        result.faqs = savedRows;
+        result.inserted = savedRows.length;
+        result.status = 'success';
+        addLog(`✅ Successfully updated ${resort.name}`);
 
-        if (response.inserted !== undefined) {
-          result.inserted = response.inserted;
-          // Verify and fetch rows using the service key
-          const fetchedFaqs = await verifyFaqs(resort.id, serviceRoleKey);
-          result.faqs = fetchedFaqs;
-          result.status = 'success';
-          addLog(`✅ Success: Generated ${response.inserted} FAQs for ${resort.name}`);
-        } else if (response.faqs) {
-          result.faqs = response.faqs;
-          result.inserted = response.faqs.length;
-          result.status = 'success';
-          addLog(`✅ Success: Retrieved ${result.inserted} FAQs directly.`);
-        } else {
-          throw new Error("Edge Function returned ambiguous data.");
-        }
       } catch (err: any) {
         result.error = err.message;
-        addLog(`❌ Failed ${resort.name}: ${err.message}`);
+        addLog(`❌ Failure at ${resort.name}: ${err.message}`);
       }
 
       tempResults.push(result);
-      // We update the results state progressively for the UI table
       setResults([...tempResults]);
       setProgress(Math.round(((i + 1) / resorts.length) * 100));
       
-      // Safety throttle between calls
-      await sleep(300);
+      // Rate limiting safety for Batch processing
+      await sleep(500);
     }
 
     setIsProcessing(false);
-    addLog(`🏁 Batch Complete. ${tempResults.filter(r => r.status === 'success').length} successful, ${tempResults.filter(r => r.status === 'failure').length} failed.`);
+    addLog(`🏁 Orchestration Complete.`);
   };
 
   const downloadResults = () => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(results, null, 2));
     const downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", `serenity_faq_orchestration_${new Date().toISOString().split('T')[0]}.json`);
+    downloadAnchorNode.setAttribute("download", `serenity_faq_report_${new Date().toISOString().split('T')[0]}.json`);
     document.body.appendChild(downloadAnchorNode);
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
@@ -176,23 +173,26 @@ const AdminFAQ: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-12">
           
-          {/* Left: Configuration & Control */}
+          {/* Left: Configuration */}
           <div className="lg:w-1/3 space-y-8">
             <div className="reveal active">
-              <span className="text-[10px] font-black text-sky-400 uppercase tracking-[1em] mb-4 block">Intelligence Suite</span>
-              <h1 className="text-4xl md:text-5xl font-serif font-bold italic text-white leading-tight mb-8">FAQ <br/> Orchestration.</h1>
+              <span className="text-[10px] font-black text-sky-400 uppercase tracking-[1em] mb-4 block">Gemini Hybrid Suite</span>
+              <h1 className="text-4xl md:text-5xl font-serif font-bold italic text-white leading-tight mb-8">AI FAQ <br/> Engine.</h1>
               
               <div className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-xl space-y-6">
                 <div>
-                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">Service Role Key (Secrets)</label>
+                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">Supabase Service Key (Write Auth)</label>
                   <input 
                     type="password" 
                     value={serviceRoleKey}
                     onChange={(e) => setServiceRoleKey(e.target.value)}
-                    placeholder="eyJhbGciOiJIUzI1..."
+                    placeholder="Database Write Token..."
                     className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-xs font-mono text-sky-300 focus:outline-none focus:border-sky-500 transition-all placeholder:text-slate-800"
                   />
-                  <p className="text-[8px] text-slate-600 mt-3 leading-relaxed">Required for Edge Function invocation and DB verification. Key is held only in session memory.</p>
+                  <p className="text-[8px] text-slate-600 mt-3 leading-relaxed">
+                    Intelligence uses the system Gemini Key. <br/> 
+                    Database operations require your Service Role key.
+                  </p>
                 </div>
 
                 <div className="pt-4">
@@ -201,7 +201,7 @@ const AdminFAQ: React.FC = () => {
                     disabled={isProcessing || !serviceRoleKey}
                     className={`w-full py-6 rounded-full font-black text-[10px] uppercase tracking-[0.4em] transition-all shadow-2xl ${isProcessing || !serviceRoleKey ? 'bg-slate-800 text-slate-600 cursor-not-allowed opacity-50' : 'bg-white text-slate-950 hover:bg-sky-400 hover:text-white active:scale-95'}`}
                   >
-                    {isProcessing ? 'Engine Processing...' : 'Execute Batch sync'}
+                    {isProcessing ? 'Thinking...' : 'Start Intelligence Sync'}
                   </button>
                 </div>
 
@@ -210,30 +210,30 @@ const AdminFAQ: React.FC = () => {
                     onClick={downloadResults}
                     className="w-full py-4 border border-white/10 rounded-full font-bold text-[9px] uppercase tracking-widest text-slate-400 hover:text-white hover:border-white transition-all"
                   >
-                    Download results .JSON
+                    Export Batch JSON
                   </button>
                 )}
               </div>
             </div>
 
             <div className="bg-sky-500/5 border border-sky-500/10 p-8 rounded-[2.5rem] space-y-4">
-              <h4 className="text-[10px] font-black text-sky-400 uppercase tracking-widest">Automation Schema</h4>
+              <h4 className="text-[10px] font-black text-sky-400 uppercase tracking-widest">Logic Flow</h4>
               <ul className="text-[9px] text-slate-500 space-y-3 leading-relaxed">
-                <li className="flex gap-3"><span className="text-sky-500">•</span> HTTP GET with 10s Timeout per resort.</li>
-                <li className="flex gap-3"><span className="text-sky-500">•</span> Exponential Backoff: 1s, then 2s retry window.</li>
-                <li className="flex gap-3"><span className="text-sky-500">•</span> Post-call SQL Verification: SELECT id FROM resort_faqs.</li>
-                <li className="flex gap-3"><span className="text-sky-500">•</span> Real-time status reporting and error logging.</li>
+                <li className="flex gap-3"><span className="text-sky-500">01</span> Fetch Resort data via Public API.</li>
+                <li className="flex gap-3"><span className="text-sky-500">02</span> Generate structured JSON via Gemini 3 Flash.</li>
+                <li className="flex gap-3"><span className="text-sky-500">03</span> Upsert rows via Service Role client.</li>
+                <li className="flex gap-3"><span className="text-sky-500">04</span> Verify and log response integrity.</li>
               </ul>
             </div>
           </div>
 
-          {/* Right: Monitoring Console */}
+          {/* Right: Console */}
           <div className="lg:w-2/3 w-full space-y-6">
             
-            {/* Progress & Stats */}
+            {/* Real-time Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white/5 border border-white/10 p-6 rounded-3xl flex flex-col gap-2">
-                <span className="text-[9px] font-black uppercase text-slate-500">System progress</span>
+                <span className="text-[9px] font-black uppercase text-slate-500">Intelligence Progress</span>
                 <div className="flex items-end gap-3">
                   <span className="text-3xl font-serif italic text-white leading-none">{progress}%</span>
                   <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden mb-1">
@@ -242,55 +242,55 @@ const AdminFAQ: React.FC = () => {
                 </div>
               </div>
               <div className="bg-white/5 border border-white/10 p-6 rounded-3xl flex flex-col gap-2">
-                <span className="text-[9px] font-black uppercase text-slate-500">Success Rate</span>
+                <span className="text-[9px] font-black uppercase text-slate-500">Successful Syncs</span>
                 <span className="text-3xl font-serif italic text-emerald-400 leading-none">
                   {results.filter(r => r.status === 'success').length} <span className="text-sm text-slate-600 not-italic">/ {resorts.length}</span>
                 </span>
               </div>
               <div className="bg-white/5 border border-white/10 p-6 rounded-3xl flex flex-col gap-2">
-                <span className="text-[9px] font-black uppercase text-slate-500">Errors</span>
+                <span className="text-[9px] font-black uppercase text-slate-500">System Warnings</span>
                 <span className="text-3xl font-serif italic text-red-500 leading-none">
                   {results.filter(r => r.status === 'failure').length}
                 </span>
               </div>
             </div>
 
-            {/* Terminal Live Log */}
+            {/* Live Terminal */}
             <div className="bg-black border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
               <div className="bg-white/5 px-8 py-4 border-b border-white/5 flex items-center justify-between">
                 <span className="text-[8px] font-bold uppercase tracking-widest text-slate-500 flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></div>
-                  Live Orchestration Log
+                  Intelligence Log
                 </span>
                 <div className="flex gap-1.5">
                   <div className="w-2 h-2 rounded-full bg-white/5"></div>
                   <div className="w-2 h-2 rounded-full bg-white/5"></div>
                 </div>
               </div>
-              <div className="h-72 overflow-y-auto p-8 font-mono text-[10px] space-y-2 no-scrollbar scroll-smooth bg-black/60">
-                {logs.length === 0 && <p className="text-slate-800 italic">Console idling. Waiting for execution signal...</p>}
+              <div className="h-72 overflow-y-auto p-8 font-mono text-[10px] space-y-2 no-scrollbar bg-black/60">
+                {logs.length === 0 && <p className="text-slate-800 italic">Waiting for execution signal...</p>}
                 {logs.map((log, i) => (
-                  <p key={i} className={`${log.includes('✅') ? 'text-emerald-500' : log.includes('❌') ? 'text-red-500' : log.includes('⚠️') ? 'text-amber-500' : 'text-slate-500'}`}>
+                  <p key={i} className={`${log.includes('✅') ? 'text-emerald-500' : log.includes('❌') ? 'text-red-500' : log.includes('🧠') ? 'text-sky-400' : 'text-slate-500'}`}>
                     {log}
                   </p>
                 ))}
               </div>
             </div>
 
-            {/* Results Archive Table */}
+            {/* Grid Preview */}
             {results.length > 0 && (
               <div className="bg-white/5 border border-white/10 rounded-[2.5rem] overflow-hidden reveal active">
                 <div className="px-8 py-6 border-b border-white/5">
-                  <h3 className="text-xs font-black uppercase tracking-[0.2em] text-white">Execution results</h3>
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em] text-white">Registry Status</h3>
                 </div>
                 <div className="max-h-[400px] overflow-y-auto no-scrollbar">
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="bg-white/[0.02] border-b border-white/5">
-                        <th className="px-8 py-4 text-[9px] font-black uppercase text-slate-500 tracking-widest">Resort</th>
+                        <th className="px-8 py-4 text-[9px] font-black uppercase text-slate-500 tracking-widest">Property</th>
                         <th className="px-8 py-4 text-[9px] font-black uppercase text-slate-500 tracking-widest">Status</th>
-                        <th className="px-8 py-4 text-[9px] font-black uppercase text-slate-500 tracking-widest">Inserted</th>
-                        <th className="px-8 py-4 text-[9px] font-black uppercase text-slate-500 tracking-widest">Last Check</th>
+                        <th className="px-8 py-4 text-[9px] font-black uppercase text-slate-500 tracking-widest">Generated</th>
+                        <th className="px-8 py-4 text-[9px] font-black uppercase text-slate-500 tracking-widest">Error</th>
                       </tr>
                     </thead>
                     <tbody className="text-[11px]">
@@ -303,8 +303,8 @@ const AdminFAQ: React.FC = () => {
                             </span>
                           </td>
                           <td className="px-8 py-4 font-mono text-sky-400">{r.inserted} rows</td>
-                          <td className="px-8 py-4 text-[9px] text-slate-600 font-bold uppercase tracking-widest">
-                            {r.error ? r.error : 'Verified OK'}
+                          <td className="px-8 py-4 text-[9px] text-slate-600 truncate max-w-[150px]">
+                            {r.error || '—'}
                           </td>
                         </tr>
                       ))}
