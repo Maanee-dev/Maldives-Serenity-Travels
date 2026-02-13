@@ -400,17 +400,14 @@ const ResortDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* CURATED EXPERIENCES */}
+      {/* CURATED EXPERIENCES - Horizontal Scroller */}
       {experiences.length > 0 && (
         <section className="py-24 md:py-48 bg-white dark:bg-slate-950/50 overflow-hidden transition-colors">
-          <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-            <div className="mb-20 md:mb-32 reveal text-center lg:text-left flex flex-col lg:flex-row justify-between items-end gap-10">
+          <div className="max-w-[1440px] mx-auto">
+            <div className="px-6 lg:px-12 mb-12 md:mb-16 flex flex-col md:flex-row justify-between items-end gap-10 reveal">
               <div className="max-w-2xl">
-                <span className="text-[11px] font-black text-sky-500 uppercase tracking-[1em] mb-8 block">Activities</span>
+                <span className="text-[11px] font-black text-sky-500 uppercase tracking-[1em] mb-4 md:mb-8 block">Activities</span>
                 <h3 className="text-4xl md:text-7xl font-serif font-bold text-slate-900 dark:text-white tracking-tighter italic leading-none transition-colors">Curated Journeys.</h3>
-                <p className="mt-12 text-slate-400 dark:text-slate-500 text-[10px] uppercase font-black tracking-[0.4em] leading-loose">
-                   Beyond the villa walls lies the archipelago. Movement that defines your unique Maldivian perspective at {resort.name}.
-                </p>
               </div>
               <Link to={`/experiences`} className="inline-flex items-center gap-6 text-[10px] font-bold text-slate-950 dark:text-white uppercase tracking-[0.5em] group transition-all">
                 <span className="border-b-2 border-slate-100 dark:border-white/10 pb-1 group-hover:border-sky-500 transition-colors">Discover All Atolls</span>
@@ -420,9 +417,9 @@ const ResortDetail: React.FC = () => {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            <div className="flex gap-4 md:gap-8 overflow-x-auto no-scrollbar px-6 lg:px-12 pb-12 snap-x snap-mandatory">
               {experiences.map((exp, idx) => (
-                <div key={exp.id} className="reveal group" style={{ transitionDelay: `${idx * 150}ms` }}>
+                <div key={exp.id} className="flex-shrink-0 w-[82vw] md:w-[400px] snap-start reveal group" style={{ transitionDelay: `${idx * 150}ms` }}>
                   <div className="relative aspect-[1/1] rounded-[2.5rem] overflow-hidden mb-10 shadow-sm transition-all duration-1000 group-hover:shadow-2xl bg-slate-100 dark:bg-slate-900">
                     <img src={exp.image} alt={exp.title} className="w-full h-full object-cover transition-transform duration-[5s] group-hover:scale-110" />
                     <div className="absolute inset-0 bg-slate-950/10 group-hover:bg-transparent transition-colors"></div>

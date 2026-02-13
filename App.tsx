@@ -12,10 +12,10 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Using PascalCase to resolve casing collision and match project standard
-import Offers from './pages/Offers';
-// Using PascalCase to resolve casing collision and match project standard
-import Experiences from './pages/Experiences';
+// Casing adjusted to match lowercase files to resolve casing collisions
+import Offers from './pages/offers';
+// Casing adjusted to match lowercase files to resolve casing collisions
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
