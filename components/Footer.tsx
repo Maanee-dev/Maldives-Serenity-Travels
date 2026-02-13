@@ -116,7 +116,6 @@ const Footer: React.FC = () => {
             <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className={paymentImgClass} />
             <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" className={paymentImgClass} />
             <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className={paymentImgClass} />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Apple_Pay_logo.svg" alt="ApplePay" className={paymentImgClass} />
           </div>
 
           <div className="order-2 lg:order-3">
