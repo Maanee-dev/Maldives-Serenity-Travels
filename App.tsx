@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -11,10 +12,9 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fixed: Using PascalCase for consistency and to resolve casing collisions between Offers.tsx and offers.tsx
-import Offers from './pages/Offers';
-// Fixed: Using PascalCase for consistency and to resolve casing collisions between Experiences.tsx and experiences.tsx
-import Experiences from './pages/Experiences';
+// Fix casing for Offers and Experiences to resolve "differs only in casing" errors
+import Offers from './pages/offers';
+import Experiences from './pages/experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';
@@ -24,6 +24,7 @@ import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import AdminSync from './pages/AdminSync';
 import AdminStories from './pages/AdminStories';
+import AdminFAQ from './pages/AdminFAQ';
 
 const ScrollToTopOnRoute = () => {
   const { pathname } = useLocation();
@@ -54,6 +55,7 @@ const App: React.FC = () => {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/admin/sync" element={<AdminSync />} />
         <Route path="/admin/stories" element={<AdminStories />} />
+        <Route path="/admin/faqs" element={<AdminFAQ />} />
       </Routes>
       <ChatBot />
       <ScrollToTopButton />
