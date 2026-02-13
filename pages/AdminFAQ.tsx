@@ -4,6 +4,9 @@ import { createClient } from '@supabase/supabase-js';
 import { GoogleGenAI, Type } from "@google/genai";
 import { supabase } from '../lib/supabase';
 
+// Removed conflicting local declare global for window.aistudio to resolve TS errors.
+// We will access window.aistudio using type casting to bypass conflicting declarations.
+
 interface FAQResult {
   resort_id: string;
   resort_name: string;
@@ -17,6 +20,7 @@ const AdminFAQ: React.FC = () => {
   const [resorts, setResorts] = useState<any[]>([]);
   const [serviceRoleKey, setServiceRoleKey] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [hasApiKey, setHasApiKey] = useState<boolean | null>(null);
   const [results, setResults] = useState<FAQResult[]>([]);
   const [logs, setLogs] = useState<string[]>([]);
   const [progress, setProgress] = useState(0);
@@ -26,6 +30,13 @@ const AdminFAQ: React.FC = () => {
   };
 
   useEffect(() => {
+    const checkKey = async () => {
+      // Cast window to any to access the aistudio helper without type conflicts.
+      const selected = await (window as any).aistudio.hasSelectedApiKey();
+      setHasApiKey(selected);
+    };
+    checkKey();
+
     const fetchResorts = async () => {
       const { data } = await supabase.from('resorts').select('id, name, description, features').order('name');
       if (data) setResorts(data);
@@ -33,12 +44,19 @@ const AdminFAQ: React.FC = () => {
     fetchResorts();
   }, []);
 
+  const handleSelectKey = async () => {
+    // Cast window to any to access the aistudio helper without type conflicts.
+    await (window as any).aistudio.openSelectKey();
+    setHasApiKey(true); // Assume success as per instructions to avoid race conditions
+  };
+
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   /**
    * Generates FAQs using the Gemini API directly in the browser
    */
   const generateFaqsWithGemini = async (resort: any) => {
+    // Create instance immediately before call to ensure we use the latest injected process.env.API_KEY
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     const prompt = `
@@ -53,33 +71,40 @@ const AdminFAQ: React.FC = () => {
       3. Content: Focus on specific features mentioned above.
     `;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.ARRAY,
-          items: {
-            type: Type.OBJECT,
-            properties: {
-              question: { type: Type.STRING },
-              answer: { type: Type.STRING },
-              category: { type: Type.STRING },
-              is_ai_generated: { type: Type.BOOLEAN }
-            },
-            required: ["question", "answer", "category", "is_ai_generated"]
+    try {
+      const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                question: { type: Type.STRING },
+                answer: { type: Type.STRING },
+                category: { type: Type.STRING },
+                is_ai_generated: { type: Type.BOOLEAN }
+              },
+              required: ["question", "answer", "category", "is_ai_generated"]
+            }
           }
         }
-      }
-    });
+      });
 
-    const jsonStr = response.text;
-    if (!jsonStr) throw new Error("Gemini returned empty content.");
-    
-    const parsedFaqs = JSON.parse(jsonStr);
-    // Attach resort_id to each FAQ
-    return parsedFaqs.map((f: any) => ({ ...f, resort_id: resort.id }));
+      const jsonStr = response.text;
+      if (!jsonStr) throw new Error("Gemini returned empty content.");
+      
+      const parsedFaqs = JSON.parse(jsonStr);
+      return parsedFaqs.map((f: any) => ({ ...f, resort_id: resort.id }));
+    } catch (err: any) {
+      if (err.message?.includes("Requested entity was not found")) {
+        setHasApiKey(false);
+        throw new Error("API Key session expired or invalid. Please re-select your key.");
+      }
+      throw err;
+    }
   };
 
   /**
@@ -89,7 +114,7 @@ const AdminFAQ: React.FC = () => {
     const adminClient = createClient('https://zocncwchaakjtsvlscmd.supabase.co', adminKey);
     const { data, error } = await adminClient
       .from('resort_faqs')
-      .upsert(faqs, { onConflict: 'resort_id,question' }) // Assumes a unique constraint exists or replaces
+      .upsert(faqs, { onConflict: 'resort_id,question' }) 
       .select();
     
     if (error) throw error;
@@ -97,6 +122,12 @@ const AdminFAQ: React.FC = () => {
   };
 
   const runAutomation = async () => {
+    if (!hasApiKey) {
+      addLog("❌ Error: Gemini API Key not selected.");
+      await handleSelectKey();
+      return;
+    }
+
     if (!serviceRoleKey) {
       alert("Supabase Service Role Key is required to save data to the database.");
       return;
@@ -128,11 +159,9 @@ const AdminFAQ: React.FC = () => {
       };
 
       try {
-        // 1. GENERATE (Using process.env.API_KEY internally)
         addLog(`🧠 Calling Gemini for ${resort.name}...`);
         const generatedFaqs = await generateFaqsWithGemini(resort);
         
-        // 2. SAVE (Using provided Service Role Key)
         addLog(`💾 Committing ${generatedFaqs.length} rows to database...`);
         const savedRows = await saveToDatabase(generatedFaqs, serviceRoleKey);
         
@@ -144,13 +173,16 @@ const AdminFAQ: React.FC = () => {
       } catch (err: any) {
         result.error = err.message;
         addLog(`❌ Failure at ${resort.name}: ${err.message}`);
+        if (err.message.includes("API Key session expired")) {
+          setIsProcessing(false);
+          return;
+        }
       }
 
       tempResults.push(result);
       setResults([...tempResults]);
       setProgress(Math.round(((i + 1) / resorts.length) * 100));
       
-      // Rate limiting safety for Batch processing
       await sleep(500);
     }
 
@@ -180,6 +212,31 @@ const AdminFAQ: React.FC = () => {
               <h1 className="text-4xl md:text-5xl font-serif font-bold italic text-white leading-tight mb-8">AI FAQ <br/> Engine.</h1>
               
               <div className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-xl space-y-6">
+                
+                {/* Gemini API Key Status */}
+                <div className="space-y-4">
+                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Gemini Intelligence Auth</label>
+                  {!hasApiKey ? (
+                    <div className="space-y-4">
+                      <button 
+                        onClick={handleSelectKey}
+                        className="w-full bg-sky-500 text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-sky-400 transition-all"
+                      >
+                        Select Gemini API Key
+                      </button>
+                      <p className="text-[8px] text-slate-500 leading-relaxed">
+                        A paid GCP project key is required for batch operations. 
+                        See <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noreferrer" className="text-sky-400 underline">Billing Documentation</a>.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/20 px-6 py-4 rounded-2xl">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                      <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest">Key Active & Injected</span>
+                    </div>
+                  )}
+                </div>
+
                 <div>
                   <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 block">Supabase Service Key (Write Auth)</label>
                   <input 
@@ -190,16 +247,15 @@ const AdminFAQ: React.FC = () => {
                     className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-xs font-mono text-sky-300 focus:outline-none focus:border-sky-500 transition-all placeholder:text-slate-800"
                   />
                   <p className="text-[8px] text-slate-600 mt-3 leading-relaxed">
-                    Intelligence uses the system Gemini Key. <br/> 
-                    Database operations require your Service Role key.
+                    Database operations require your Supabase Service Role key to bypass RLS.
                   </p>
                 </div>
 
                 <div className="pt-4">
                   <button 
                     onClick={runAutomation}
-                    disabled={isProcessing || !serviceRoleKey}
-                    className={`w-full py-6 rounded-full font-black text-[10px] uppercase tracking-[0.4em] transition-all shadow-2xl ${isProcessing || !serviceRoleKey ? 'bg-slate-800 text-slate-600 cursor-not-allowed opacity-50' : 'bg-white text-slate-950 hover:bg-sky-400 hover:text-white active:scale-95'}`}
+                    disabled={isProcessing || !serviceRoleKey || !hasApiKey}
+                    className={`w-full py-6 rounded-full font-black text-[10px] uppercase tracking-[0.4em] transition-all shadow-2xl ${isProcessing || !serviceRoleKey || !hasApiKey ? 'bg-slate-800 text-slate-600 cursor-not-allowed opacity-50' : 'bg-white text-slate-950 hover:bg-sky-400 hover:text-white active:scale-95'}`}
                   >
                     {isProcessing ? 'Thinking...' : 'Start Intelligence Sync'}
                   </button>
@@ -219,7 +275,7 @@ const AdminFAQ: React.FC = () => {
             <div className="bg-sky-500/5 border border-sky-500/10 p-8 rounded-[2.5rem] space-y-4">
               <h4 className="text-[10px] font-black text-sky-400 uppercase tracking-widest">Logic Flow</h4>
               <ul className="text-[9px] text-slate-500 space-y-3 leading-relaxed">
-                <li className="flex gap-3"><span className="text-sky-500">01</span> Fetch Resort data via Public API.</li>
+                <li className="flex gap-3"><span className="text-sky-500">01</span> Validate Gemini Session via AI Studio.</li>
                 <li className="flex gap-3"><span className="text-sky-500">02</span> Generate structured JSON via Gemini 3 Flash.</li>
                 <li className="flex gap-3"><span className="text-sky-500">03</span> Upsert rows via Service Role client.</li>
                 <li className="flex gap-3"><span className="text-sky-500">04</span> Verify and log response integrity.</li>
@@ -237,7 +293,7 @@ const AdminFAQ: React.FC = () => {
                 <div className="flex items-end gap-3">
                   <span className="text-3xl font-serif italic text-white leading-none">{progress}%</span>
                   <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden mb-1">
-                    <div className="h-full bg-sky-500 transition-all duration-500" style={{ width: `${progress}%` }}></div>
+                    <div className="h-full bg-sky-50 transition-all duration-500" style={{ width: `${progress}%` }}></div>
                   </div>
                 </div>
               </div>
