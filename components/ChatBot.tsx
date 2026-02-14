@@ -1,21 +1,90 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, FunctionDeclaration, Type } from "@google/genai";
+import { useNavigate } from 'react-router-dom';
+import { supabase, mapResort } from '../lib/supabase';
+import { Accommodation } from '../types';
 
 interface Message {
   role: 'user' | 'model';
   text: string;
 }
 
+interface QuoteDraft {
+  resortName: string;
+  roomType: string;
+  checkIn: string;
+  checkOut: string;
+  basePrice: number;
+  adjustedPrice: number;
+}
+
 const ChatBot: React.FC = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [hasKey, setHasKey] = useState<boolean>(!!process.env.API_KEY);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'model', text: "Welcome to Serenity. I am Sara, your AI concierge. How may I assist with your Maldivian journey today?" }
+    { role: 'model', text: "I am Sara. Tell me your vision for the Maldives, and I shall curate it." }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [resorts, setResorts] = useState<Accommodation[]>([]);
+  const [quoteDraft, setQuoteDraft] = useState<QuoteDraft | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Tools configuration for Gemini
+  const tools: { functionDeclarations: FunctionDeclaration[] } = {
+    functionDeclarations: [
+      {
+        name: "search_resorts",
+        description: "Search for resorts based on features (e.g. surfing, spa, butler), atolls, or vibes.",
+        parameters: {
+          type: Type.OBJECT,
+          properties: {
+            query: { type: Type.STRING, description: "The feature or name to search for." }
+          },
+          required: ["query"]
+        }
+      },
+      {
+        name: "get_room_options",
+        description: "Get specific room types for a chosen resort slug.",
+        parameters: {
+          type: Type.OBJECT,
+          properties: {
+            slug: { type: Type.STRING, description: "The resort slug." }
+          },
+          required: ["slug"]
+        }
+      },
+      {
+        name: "navigate_to",
+        description: "Redirect the user to a specific path on the website.",
+        parameters: {
+          type: Type.OBJECT,
+          properties: {
+            path: { type: Type.STRING, description: "The internal path like /stays or /offers." }
+          },
+          required: ["path"]
+        }
+      },
+      {
+        name: "prepare_quotation",
+        description: "Prepares a formal quotation draft for the guest. Call this after resort, dates, and room are chosen.",
+        parameters: {
+          type: Type.OBJECT,
+          properties: {
+            resortName: { type: Type.STRING },
+            roomType: { type: Type.STRING },
+            checkIn: { type: Type.STRING },
+            checkOut: { type: Type.STRING },
+            estimatedPrice: { type: Type.NUMBER }
+          },
+          required: ["resortName", "roomType", "checkIn", "checkOut", "estimatedPrice"]
+        }
+      }
+    ]
+  };
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -23,23 +92,57 @@ const ChatBot: React.FC = () => {
     }
   }, [messages, isTyping]);
 
-  // Check for key on mount and when process.env updates
   useEffect(() => {
-    const checkKey = async () => {
+    const init = async () => {
+      // Fetch resort manifest for tool assistance
+      const { data } = await supabase.from('resorts').select('*');
+      if (data) setResorts(data.map(mapResort));
+
       const aiStudio = (window as any).aistudio;
       if (aiStudio) {
         const selected = await aiStudio.hasSelectedApiKey();
         setHasKey(selected && !!process.env.API_KEY);
       }
     };
-    checkKey();
+    init();
   }, [isOpen]);
 
   const handleSelectKey = async () => {
     const aiStudio = (window as any).aistudio;
     if (aiStudio) {
       await aiStudio.openSelectKey();
-      setHasKey(true); // Assume success to avoid race conditions per guidelines
+      setHasKey(true);
+    }
+  };
+
+  const executeTool = (name: string, args: any) => {
+    switch (name) {
+      case 'search_resorts':
+        const found = resorts.filter(r => 
+          r.name.toLowerCase().includes(args.query.toLowerCase()) || 
+          r.features.some(f => f.toLowerCase().includes(args.query.toLowerCase())) ||
+          r.atoll.toLowerCase().includes(args.query.toLowerCase())
+        );
+        return found.map(r => ({ name: r.name, slug: r.slug, features: r.features }));
+      
+      case 'get_room_options':
+        const res = resorts.find(r => r.slug === args.slug);
+        return res?.roomTypes || [];
+
+      case 'navigate_to':
+        navigate(args.path);
+        return { status: "Redirected to " + args.path };
+
+      case 'prepare_quotation':
+        setQuoteDraft({
+          ...args,
+          basePrice: args.estimatedPrice,
+          adjustedPrice: args.estimatedPrice
+        });
+        return { status: "Quotation draft prepared. Awaiting price confirmation." };
+
+      default:
+        return { error: "Tool not found" };
     }
   };
 
@@ -52,28 +155,23 @@ const ChatBot: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Create new instance to pick up the latest API_KEY from environment
       const apiKey = process.env.API_KEY;
       if (!apiKey) throw new Error("API Key missing");
 
       const ai = new GoogleGenAI({ apiKey });
-      
       const systemInstruction = `
-        You are Sara, the elegant AI concierge for Serenity Maldives, a boutique travel agency.
-        Your tone is sophisticated, poetic, and highly personalized.
-        
-        Agency Details:
-        - Location: Faith, S.feydhoo, Addu City, Maldives.
-        - Philosophy: "Defined by Perspective", we curate silence and luxury.
-        
-        Knowledge Base:
-        - Resorts: Adaaran Prestige Vadoo (Intimate, Butler), Adaaran Prestige Water Villas (Wooden, Raa Atoll), Adaaran Select Hudhuran Fushi (Surfing), Adaaran Select Meedhupparu (Mature, Family).
-        - Atolls: Noonu (Untouched), Baa (UNESCO Biosphere), North Male (Epicenter), Ari (Whale Sharks).
-        
-        Instructions:
-        1. Suggest specific resorts based on the user's "vibe" (Silence, Adventure, Family, Romance).
-        2. For bookings, suggest the 'Plan Trip' form for a "Bespoke Curation".
-        3. Use evocative language: "turquoise", "sanctuary", "archipelago", "atoll".
+        You are Sara, the concise AI concierge for Serenity Maldives.
+        RULES:
+        1. Keep answers to 1-2 short sentences.
+        2. Use tools to search resorts if the guest mentions features (e.g. surfing, diving).
+        3. If a guest wants a reservation, follow this flow:
+           a. Suggest/Confirm a Resort.
+           b. Ask for Check-in and Check-out dates.
+           c. Fetch room types using get_room_options.
+           d. Suggest the best room based on their vibe.
+           e. Once dates/room are chosen, call prepare_quotation.
+        4. Redirect users to /stays, /offers, or /plan if they ask for lists or broad information.
+        5. Tone: Elegant, minimalist, helpful.
       `;
 
       const response = await ai.models.generateContent({
@@ -87,22 +185,57 @@ const ChatBot: React.FC = () => {
         ],
         config: {
           systemInstruction,
-          temperature: 0.8,
+          tools: [tools],
+          temperature: 0.2,
         },
       });
 
-      const aiText = response.text || "I apologize, the atolls are calling me away briefly. Please contact our human concierge at +960 725 9060.";
-      setMessages(prev => [...prev, { role: 'model', text: aiText }]);
+      if (response.functionCalls) {
+        for (const fc of response.functionCalls) {
+          const result = executeTool(fc.name, fc.args);
+          
+          // Send tool result back to model
+          const toolResponse = await ai.models.generateContent({
+            model: 'gemini-3-flash-preview',
+            contents: [
+              ...messages.map(m => ({ role: m.role, parts: [{ text: m.text }] })),
+              { role: 'user', parts: [{ text: input }] },
+              { role: 'model', parts: [{ functionCall: fc }] },
+              { role: 'user', parts: [{ functionResponse: { name: fc.name, response: result } }] }
+            ],
+            config: { systemInstruction, tools: [tools] }
+          });
+          
+          setMessages(prev => [...prev, { role: 'model', text: toolResponse.text || "Selection confirmed." }]);
+        }
+      } else {
+        setMessages(prev => [...prev, { role: 'model', text: response.text || "The atolls are quiet. How else may I assist?" }]);
+      }
     } catch (error: any) {
       console.error("Sara Error:", error);
-      if (error.message?.includes("Requested entity was not found")) {
-        setHasKey(false);
-        setMessages(prev => [...prev, { role: 'model', text: "It seems my connection to the intelligence core has expired. Please re-select your Gemini API key." }]);
-      } else {
-        setMessages(prev => [...prev, { role: 'model', text: "I'm having trouble connecting to the atolls. Please try again or reach out on WhatsApp." }]);
-      }
+      setMessages(prev => [...prev, { role: 'model', text: "My connection to the atolls is fading. Please try again." }]);
     } finally {
       setIsTyping(false);
+    }
+  };
+
+  const finalizeQuote = async () => {
+    if (!quoteDraft) return;
+    try {
+      const { error } = await supabase.from('inquiries').insert({
+        inquiry_type: 'concierge_quote',
+        resort_name: quoteDraft.resortName,
+        room_type: quoteDraft.roomType,
+        check_in: quoteDraft.checkIn,
+        check_out: quoteDraft.checkOut,
+        budget: quoteDraft.adjustedPrice.toString(),
+        notes: "Automated quote via Sara Concierge."
+      });
+      if (error) throw error;
+      setMessages(prev => [...prev, { role: 'model', text: `Perfect. I have dispatched your quotation for ${quoteDraft.resortName} at US$ ${quoteDraft.adjustedPrice.toLocaleString()}. Our team will reach out shortly.` }]);
+      setQuoteDraft(null);
+    } catch (e) {
+      alert("Error saving quotation.");
     }
   };
 
@@ -127,43 +260,79 @@ const ChatBot: React.FC = () => {
       </button>
 
       <div className={`fixed bottom-28 right-8 z-[100] w-[350px] md:w-[400px] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col transition-all duration-700 transform ${isOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-95 pointer-events-none'}`}>
-        <div className="bg-slate-950 p-8 text-white">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full bg-sky-500 flex items-center justify-center text-white font-serif italic text-xl">S</div>
-            <div>
-              <h3 className="font-serif italic text-lg leading-none mb-1">Sara</h3>
-              <p className="text-[8px] uppercase tracking-widest text-sky-400 font-bold">AI Concierge • Serenity Maldives</p>
+        <div className="bg-slate-950 p-6 text-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-sky-500 flex items-center justify-center text-white font-serif italic">S</div>
+              <div>
+                <h3 className="font-serif italic text-sm leading-none">Sara</h3>
+                <p className="text-[7px] uppercase tracking-widest text-sky-400 font-bold">AI Concierge</p>
+              </div>
             </div>
+            <button onClick={() => setMessages([{ role: 'model', text: "Dialogue reset. How may I guide you?" }])} className="text-[7px] uppercase tracking-widest text-slate-500 hover:text-white transition-colors">Reset</button>
           </div>
         </div>
 
         <div ref={scrollRef} className="flex-1 p-6 space-y-4 overflow-y-auto max-h-[400px] no-scrollbar bg-[#FCFAF7]/50">
           {messages.map((m, i) => (
             <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[85%] p-4 rounded-3xl text-[12px] leading-relaxed ${m.role === 'user' ? 'bg-slate-900 text-white rounded-tr-none shadow-sm' : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none shadow-sm font-medium italic'}`}>
+              <div className={`max-w-[85%] p-4 rounded-2xl text-[11px] leading-relaxed ${m.role === 'user' ? 'bg-slate-900 text-white rounded-tr-none' : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none font-medium italic'}`}>
                 {m.text}
               </div>
             </div>
           ))}
+
+          {quoteDraft && (
+            <div className="animate-in fade-in zoom-in-95 duration-500 bg-white border border-sky-100 rounded-3xl p-6 shadow-xl space-y-4">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-sky-500">Draft Quotation</h4>
+                  <p className="text-[13px] font-serif font-bold text-slate-950 mt-1">{quoteDraft.resortName}</p>
+                  <p className="text-[9px] text-slate-400 uppercase tracking-widest mt-0.5">{quoteDraft.roomType}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[9px] text-slate-400 uppercase tracking-widest">Dates</p>
+                  <p className="text-[10px] font-bold text-slate-700">{quoteDraft.checkIn} - {quoteDraft.checkOut}</p>
+                </div>
+              </div>
+              
+              <div className="pt-4 border-t border-slate-50 flex items-center justify-between">
+                <div>
+                  <label className="text-[8px] font-black uppercase text-slate-400 block mb-1">Adjust Pricing (US$)</label>
+                  <input 
+                    type="number" 
+                    value={quoteDraft.adjustedPrice}
+                    onChange={(e) => setQuoteDraft({...quoteDraft, adjustedPrice: parseInt(e.target.value) || 0})}
+                    className="w-24 bg-slate-50 border-none rounded-lg px-3 py-2 text-[11px] font-black text-sky-600 focus:ring-1 focus:ring-sky-500"
+                  />
+                </div>
+                <button 
+                  onClick={finalizeQuote}
+                  className="bg-slate-950 text-white px-6 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-sky-500 transition-all shadow-lg"
+                >
+                  Send Quote
+                </button>
+              </div>
+            </div>
+          )}
+
           {!hasKey && (
             <div className="flex flex-col items-center gap-4 py-4 text-center">
-              <p className="text-[10px] text-slate-400 uppercase tracking-widest leading-relaxed">
-                To begin our dialogue, I require <br/> access to the intelligence core.
-              </p>
               <button 
                 onClick={handleSelectKey}
                 className="bg-sky-500 text-white px-6 py-3 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-sky-400 transition-all shadow-md"
               >
-                Initialize Concierge
+                Connect to Atolls
               </button>
             </div>
           )}
+          
           {isTyping && (
             <div className="flex justify-start">
-              <div className="bg-white border border-slate-100 p-4 rounded-3xl rounded-tl-none flex gap-1">
-                <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce"></div>
-                <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+              <div className="bg-white border border-slate-100 p-3 rounded-2xl flex gap-1">
+                <div className="w-1 h-1 bg-sky-500 rounded-full animate-bounce"></div>
+                <div className="w-1 h-1 bg-sky-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                <div className="w-1 h-1 bg-sky-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
               </div>
             </div>
           )}
@@ -173,22 +342,22 @@ const ChatBot: React.FC = () => {
           <div className="relative flex items-center">
             <input
               type="text"
-              disabled={!hasKey}
+              disabled={!hasKey || !!quoteDraft}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-              placeholder={hasKey ? "Inquire about the atolls..." : "Awaiting authentication..."}
+              placeholder={hasKey ? "Tell me your vibe..." : "Awaiting key..."}
               className="w-full bg-slate-50 border border-slate-100 rounded-full px-6 py-4 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:border-sky-500 focus:bg-white transition-all placeholder:text-slate-300 disabled:opacity-50"
             />
             <button
               onClick={handleSend}
-              disabled={isTyping || !hasKey}
+              disabled={isTyping || !hasKey || !!quoteDraft}
               className="absolute right-2 p-3 bg-slate-900 text-white rounded-full hover:bg-sky-500 transition-all disabled:opacity-50"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
             </button>
           </div>
-          <p className="text-[7px] text-center text-slate-300 uppercase tracking-widest mt-4">Powered by Serenity Intelligence</p>
+          <p className="text-[6px] text-center text-slate-300 uppercase tracking-widest mt-4">Perspective Intelligence v2.5</p>
         </div>
       </div>
     </>
