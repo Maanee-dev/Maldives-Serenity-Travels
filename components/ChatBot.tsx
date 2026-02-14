@@ -24,7 +24,7 @@ const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [hasKey, setHasKey] = useState<boolean>(!!process.env.API_KEY);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'model', text: "I am Sara. Tell me your vision for the Maldives, and I shall curate it." }
+    { role: 'model', text: "I am Sara. Describe your Maldivian dream, and I shall manifest it." }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -32,45 +32,45 @@ const ChatBot: React.FC = () => {
   const [quoteDraft, setQuoteDraft] = useState<QuoteDraft | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Tools configuration for Gemini
+  // Tools configuration
   const tools: { functionDeclarations: FunctionDeclaration[] } = {
     functionDeclarations: [
       {
         name: "search_resorts",
-        description: "Search for resorts based on features (e.g. surfing, spa, butler), atolls, or vibes.",
+        description: "Search the DB for resorts by name, atoll, or features (like surfing or diving).",
         parameters: {
           type: Type.OBJECT,
           properties: {
-            query: { type: Type.STRING, description: "The feature or name to search for." }
+            query: { type: Type.STRING, description: "Feature or resort name." }
           },
           required: ["query"]
         }
       },
       {
         name: "get_room_options",
-        description: "Get specific room types for a chosen resort slug.",
+        description: "Fetch room categories for a specific resort slug.",
         parameters: {
           type: Type.OBJECT,
           properties: {
-            slug: { type: Type.STRING, description: "The resort slug." }
+            slug: { type: Type.STRING }
           },
           required: ["slug"]
         }
       },
       {
         name: "navigate_to",
-        description: "Redirect the user to a specific path on the website.",
+        description: "Redirect the browser to a specific URL path.",
         parameters: {
           type: Type.OBJECT,
           properties: {
-            path: { type: Type.STRING, description: "The internal path like /stays or /offers." }
+            path: { type: Type.STRING, description: "/stays, /offers, /plan, or specific resort paths." }
           },
           required: ["path"]
         }
       },
       {
         name: "prepare_quotation",
-        description: "Prepares a formal quotation draft for the guest. Call this after resort, dates, and room are chosen.",
+        description: "Creates a draft quote. Call after choosing resort, dates, and room.",
         parameters: {
           type: Type.OBJECT,
           properties: {
@@ -87,17 +87,13 @@ const ChatBot: React.FC = () => {
   };
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, isTyping]);
 
   useEffect(() => {
     const init = async () => {
-      // Fetch resort manifest for tool assistance
       const { data } = await supabase.from('resorts').select('*');
       if (data) setResorts(data.map(mapResort));
-
       const aiStudio = (window as any).aistudio;
       if (aiStudio) {
         const selected = await aiStudio.hasSelectedApiKey();
@@ -123,15 +119,16 @@ const ChatBot: React.FC = () => {
           r.features.some(f => f.toLowerCase().includes(args.query.toLowerCase())) ||
           r.atoll.toLowerCase().includes(args.query.toLowerCase())
         );
-        return found.map(r => ({ name: r.name, slug: r.slug, features: r.features }));
+        // CRITICAL: Always return an object, not a raw array, to prevent 400 error
+        return { results: found.map(r => ({ name: r.name, slug: r.slug, features: r.features })) };
       
       case 'get_room_options':
         const res = resorts.find(r => r.slug === args.slug);
-        return res?.roomTypes || [];
+        return { rooms: res?.roomTypes?.map(rt => rt.name) || [] };
 
       case 'navigate_to':
         navigate(args.path);
-        return { status: "Redirected to " + args.path };
+        return { status: `Success: Navigated to ${args.path}` };
 
       case 'prepare_quotation':
         setQuoteDraft({
@@ -139,10 +136,10 @@ const ChatBot: React.FC = () => {
           basePrice: args.estimatedPrice,
           adjustedPrice: args.estimatedPrice
         });
-        return { status: "Quotation draft prepared. Awaiting price confirmation." };
+        return { status: "Draft ready. Visual editor displayed to user." };
 
       default:
-        return { error: "Tool not found" };
+        return { error: "Unknown tool" };
     }
   };
 
@@ -155,65 +152,72 @@ const ChatBot: React.FC = () => {
     setIsTyping(true);
 
     try {
-      const apiKey = process.env.API_KEY;
-      if (!apiKey) throw new Error("API Key missing");
-
-      const ai = new GoogleGenAI({ apiKey });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
       const systemInstruction = `
         You are Sara, the concise AI concierge for Serenity Maldives.
+        IDENTITY: Sophisticated, poetic, and extremely helpful.
+        
         RULES:
-        1. Keep answers to 1-2 short sentences.
-        2. Use tools to search resorts if the guest mentions features (e.g. surfing, diving).
-        3. If a guest wants a reservation, follow this flow:
-           a. Suggest/Confirm a Resort.
-           b. Ask for Check-in and Check-out dates.
-           c. Fetch room types using get_room_options.
-           d. Suggest the best room based on their vibe.
-           e. Once dates/room are chosen, call prepare_quotation.
-        4. Redirect users to /stays, /offers, or /plan if they ask for lists or broad information.
-        5. Tone: Elegant, minimalist, helpful.
+        1. Short answers only (1-2 sentences).
+        2. DATABASE ANALYSIS: Use search_resorts for feature matching (e.g., 'surfing' -> suggest Cinnamon).
+        3. REDIRECTS: Use navigate_to if users want to see all resorts (/stays), offers (/offers), or stories (/stories).
+        4. RESERVATIONS:
+           - First: Suggest a resort using search_resorts.
+           - Second: Ask for Check-in/Check-out.
+           - Third: Use get_room_options to suggest a residence.
+           - Fourth: Use prepare_quotation once details are solid.
+        
+        SITEMAP:
+        - Portfolio: /stays
+        - Exclusives: /offers
+        - Stories: /stories
+        - Planning Form: /plan
       `;
+
+      let currentHistory = [
+        ...messages.map(m => ({ role: m.role, parts: [{ text: m.text }] })),
+        { role: 'user', parts: [{ text: input }] }
+      ];
 
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: [
-          ...messages.map(m => ({
-            role: m.role,
-            parts: [{ text: m.text }]
-          })),
-          { role: 'user', parts: [{ text: input }] }
-        ],
-        config: {
-          systemInstruction,
-          tools: [tools],
-          temperature: 0.2,
-        },
+        contents: currentHistory,
+        config: { systemInstruction, tools: [tools], temperature: 0.1 }
       });
 
       if (response.functionCalls) {
+        let finalHistory = [...currentHistory];
+        
         for (const fc of response.functionCalls) {
-          const result = executeTool(fc.name, fc.args);
+          const toolResult = executeTool(fc.name, fc.args);
           
-          // Send tool result back to model
-          const toolResponse = await ai.models.generateContent({
-            model: 'gemini-3-flash-preview',
-            contents: [
-              ...messages.map(m => ({ role: m.role, parts: [{ text: m.text }] })),
-              { role: 'user', parts: [{ text: input }] },
-              { role: 'model', parts: [{ functionCall: fc }] },
-              { role: 'user', parts: [{ functionResponse: { name: fc.name, response: result } }] }
-            ],
-            config: { systemInstruction, tools: [tools] }
-          });
-          
-          setMessages(prev => [...prev, { role: 'model', text: toolResponse.text || "Selection confirmed." }]);
+          finalHistory.push({ role: 'model', parts: [{ functionCall: fc }] } as any);
+          // FIX: Function Response must have 'role: function' in some versions or properly mapped.
+          // Using 'user' role for function response parts is standard in sendMessage loops.
+          finalHistory.push({ 
+            role: 'user', 
+            parts: [{ 
+              functionResponse: { 
+                name: fc.name, 
+                response: toolResult // This is now always an object
+              } 
+            }] 
+          } as any);
         }
+
+        const secondResponse = await ai.models.generateContent({
+          model: 'gemini-3-flash-preview',
+          contents: finalHistory,
+          config: { systemInstruction, tools: [tools] }
+        });
+
+        setMessages(prev => [...prev, { role: 'model', text: secondResponse.text || "Selection confirmed. How shall we proceed?" }]);
       } else {
-        setMessages(prev => [...prev, { role: 'model', text: response.text || "The atolls are quiet. How else may I assist?" }]);
+        setMessages(prev => [...prev, { role: 'model', text: response.text || "The atolls are quiet. Please rephrase." }]);
       }
     } catch (error: any) {
       console.error("Sara Error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "My connection to the atolls is fading. Please try again." }]);
+      setMessages(prev => [...prev, { role: 'model', text: "A storm is passing over our signal. Please try again or use our WhatsApp link." }]);
     } finally {
       setIsTyping(false);
     }
@@ -229,13 +233,13 @@ const ChatBot: React.FC = () => {
         check_in: quoteDraft.checkIn,
         check_out: quoteDraft.checkOut,
         budget: quoteDraft.adjustedPrice.toString(),
-        notes: "Automated quote via Sara Concierge."
+        notes: `AI Generated Quote. Base: ${quoteDraft.basePrice}. Final: ${quoteDraft.adjustedPrice}.`
       });
       if (error) throw error;
-      setMessages(prev => [...prev, { role: 'model', text: `Perfect. I have dispatched your quotation for ${quoteDraft.resortName} at US$ ${quoteDraft.adjustedPrice.toLocaleString()}. Our team will reach out shortly.` }]);
+      setMessages(prev => [...prev, { role: 'model', text: `Your bespoke quotation for ${quoteDraft.resortName} at US$ ${quoteDraft.adjustedPrice.toLocaleString()} is saved and ready for dispatch. Our specialists will contact you shortly.` }]);
       setQuoteDraft(null);
     } catch (e) {
-      alert("Error saving quotation.");
+      alert("Database link failed.");
     }
   };
 
@@ -260,79 +264,72 @@ const ChatBot: React.FC = () => {
       </button>
 
       <div className={`fixed bottom-28 right-8 z-[100] w-[350px] md:w-[400px] bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col transition-all duration-700 transform ${isOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-95 pointer-events-none'}`}>
-        <div className="bg-slate-950 p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-sky-500 flex items-center justify-center text-white font-serif italic">S</div>
-              <div>
-                <h3 className="font-serif italic text-sm leading-none">Sara</h3>
-                <p className="text-[7px] uppercase tracking-widest text-sky-400 font-bold">AI Concierge</p>
-              </div>
+        <div className="bg-slate-950 p-6 text-white flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-sky-500 flex items-center justify-center text-white font-serif italic">S</div>
+            <div>
+              <h3 className="font-serif italic text-sm leading-none">Sara</h3>
+              <p className="text-[7px] uppercase tracking-widest text-sky-400 font-bold">Intelligence Suite</p>
             </div>
-            <button onClick={() => setMessages([{ role: 'model', text: "Dialogue reset. How may I guide you?" }])} className="text-[7px] uppercase tracking-widest text-slate-500 hover:text-white transition-colors">Reset</button>
           </div>
+          <button onClick={() => setMessages([{ role: 'model', text: "Dialogue cleared. How may I serve you?" }])} className="text-[7px] font-black uppercase text-slate-500 hover:text-white transition-colors">Reset</button>
         </div>
 
         <div ref={scrollRef} className="flex-1 p-6 space-y-4 overflow-y-auto max-h-[400px] no-scrollbar bg-[#FCFAF7]/50">
           {messages.map((m, i) => (
             <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[85%] p-4 rounded-2xl text-[11px] leading-relaxed ${m.role === 'user' ? 'bg-slate-900 text-white rounded-tr-none' : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none font-medium italic'}`}>
+              <div className={`max-w-[85%] p-4 rounded-2xl text-[11px] leading-relaxed ${m.role === 'user' ? 'bg-slate-900 text-white rounded-tr-none' : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none font-medium'}`}>
                 {m.text}
               </div>
             </div>
           ))}
 
           {quoteDraft && (
-            <div className="animate-in fade-in zoom-in-95 duration-500 bg-white border border-sky-100 rounded-3xl p-6 shadow-xl space-y-4">
+            <div className="animate-in fade-in zoom-in-95 duration-500 bg-white border border-sky-100 rounded-[2rem] p-6 shadow-xl space-y-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-sky-500">Draft Quotation</h4>
-                  <p className="text-[13px] font-serif font-bold text-slate-950 mt-1">{quoteDraft.resortName}</p>
-                  <p className="text-[9px] text-slate-400 uppercase tracking-widest mt-0.5">{quoteDraft.roomType}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-[9px] text-slate-400 uppercase tracking-widest">Dates</p>
-                  <p className="text-[10px] font-bold text-slate-700">{quoteDraft.checkIn} - {quoteDraft.checkOut}</p>
+                  <h4 className="text-[9px] font-black uppercase text-sky-500 mb-1">Reservation Draft</h4>
+                  <p className="text-[13px] font-serif font-bold text-slate-950 leading-tight">{quoteDraft.resortName}</p>
+                  <p className="text-[8px] text-slate-400 uppercase tracking-widest mt-1">{quoteDraft.roomType}</p>
                 </div>
               </div>
-              
-              <div className="pt-4 border-t border-slate-50 flex items-center justify-between">
+              <div className="grid grid-cols-2 gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
                 <div>
-                  <label className="text-[8px] font-black uppercase text-slate-400 block mb-1">Adjust Pricing (US$)</label>
-                  <input 
-                    type="number" 
-                    value={quoteDraft.adjustedPrice}
-                    onChange={(e) => setQuoteDraft({...quoteDraft, adjustedPrice: parseInt(e.target.value) || 0})}
-                    className="w-24 bg-slate-50 border-none rounded-lg px-3 py-2 text-[11px] font-black text-sky-600 focus:ring-1 focus:ring-sky-500"
-                  />
+                   <p className="text-[7px] font-black text-slate-400 uppercase">Arrival</p>
+                   <p className="text-[9px] font-bold text-slate-900">{quoteDraft.checkIn}</p>
                 </div>
-                <button 
-                  onClick={finalizeQuote}
-                  className="bg-slate-950 text-white px-6 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-sky-500 transition-all shadow-lg"
-                >
-                  Send Quote
-                </button>
+                <div>
+                   <p className="text-[7px] font-black text-slate-400 uppercase">Departure</p>
+                   <p className="text-[9px] font-bold text-slate-900">{quoteDraft.checkOut}</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between pt-2">
+                <div className="space-y-1">
+                   <p className="text-[7px] font-black text-slate-400 uppercase">Proposed Price (USD)</p>
+                   <input 
+                      type="number" 
+                      value={quoteDraft.adjustedPrice} 
+                      onChange={(e) => setQuoteDraft({...quoteDraft, adjustedPrice: parseInt(e.target.value) || 0})}
+                      className="w-24 bg-slate-50 border-none rounded-lg px-2 py-1.5 text-[11px] font-black text-sky-600 focus:ring-1 focus:ring-sky-500"
+                   />
+                </div>
+                <button onClick={finalizeQuote} className="bg-slate-950 text-white px-5 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-sky-500 transition-all">Submit Quote</button>
               </div>
             </div>
           )}
 
           {!hasKey && (
-            <div className="flex flex-col items-center gap-4 py-4 text-center">
-              <button 
-                onClick={handleSelectKey}
-                className="bg-sky-500 text-white px-6 py-3 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-sky-400 transition-all shadow-md"
-              >
-                Connect to Atolls
-              </button>
+            <div className="py-6 text-center">
+              <button onClick={handleSelectKey} className="bg-sky-500 text-white px-6 py-3 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg">Authenticate Sara</button>
             </div>
           )}
           
           {isTyping && (
             <div className="flex justify-start">
-              <div className="bg-white border border-slate-100 p-3 rounded-2xl flex gap-1">
+              <div className="bg-white border border-slate-100 px-3 py-2 rounded-full flex gap-1">
                 <div className="w-1 h-1 bg-sky-500 rounded-full animate-bounce"></div>
-                <div className="w-1 h-1 bg-sky-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                <div className="w-1 h-1 bg-sky-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                <div className="w-1 h-1 bg-sky-500 rounded-full animate-bounce delay-100"></div>
+                <div className="w-1 h-1 bg-sky-500 rounded-full animate-bounce delay-200"></div>
               </div>
             </div>
           )}
@@ -346,7 +343,7 @@ const ChatBot: React.FC = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-              placeholder={hasKey ? "Tell me your vibe..." : "Awaiting key..."}
+              placeholder={hasKey ? "Inquire about the atolls..." : "Authentication required"}
               className="w-full bg-slate-50 border border-slate-100 rounded-full px-6 py-4 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:border-sky-500 focus:bg-white transition-all placeholder:text-slate-300 disabled:opacity-50"
             />
             <button
@@ -357,7 +354,7 @@ const ChatBot: React.FC = () => {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
             </button>
           </div>
-          <p className="text-[6px] text-center text-slate-300 uppercase tracking-widest mt-4">Perspective Intelligence v2.5</p>
+          <p className="text-[6px] text-center text-slate-300 uppercase tracking-widest mt-4">Perspective Intelligence v3.0</p>
         </div>
       </div>
     </>
