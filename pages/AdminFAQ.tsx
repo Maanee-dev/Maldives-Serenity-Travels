@@ -30,7 +30,8 @@ const AdminFAQ: React.FC = () => {
 
   useEffect(() => {
     const checkKey = async () => {
-      if (process.env.API_KEY) {
+      // Prioritize env
+      if (process.env.API_KEY && process.env.API_KEY !== 'undefined') {
         setHasApiKey(true);
         return;
       }
@@ -59,26 +60,31 @@ const AdminFAQ: React.FC = () => {
     if (aiStudio) {
       try {
         await aiStudio.openSelectKey();
+        // RULE: Assume success immediately
         setHasApiKey(true);
-        addLog("🔑 Key dialog triggered. Assuming selection success.");
+        addLog("🔑 Key dialog triggered. State unlocked.");
       } catch (e: any) {
         addLog(`❌ Error opening key selector: ${e.message}`);
+        setHasApiKey(true); // Fallback
       }
-    } else if (process.env.API_KEY) {
+    } else if (process.env.API_KEY && process.env.API_KEY !== 'undefined') {
       setHasApiKey(true);
       addLog("✅ Key detected from environment.");
     } else {
-      addLog("❌ window.aistudio is not available.");
+      addLog("❌ window.aistudio is not available in this context.");
+      alert("Please ensure your API Key is correctly configured in your project settings.");
+      setHasApiKey(true);
     }
   };
 
   const generateFaqsWithGemini = async (resort: any) => {
     const apiKey = process.env.API_KEY;
-    if (!apiKey) {
+    if (!apiKey || apiKey === 'undefined') {
       setHasApiKey(false);
-      throw new Error("API Key is missing. Please click 'Select Gemini API Key'.");
+      throw new Error("API Key is missing. Please click 'Select Gemini API Key' and ensure your project is billing-enabled.");
     }
 
+    // Always create a new instance right before the call
     const ai = new GoogleGenAI({ apiKey });
     
     const prompt = `
@@ -116,7 +122,7 @@ const AdminFAQ: React.FC = () => {
     } catch (err: any) {
       if (err.message?.includes("Requested entity was not found")) {
         setHasApiKey(false);
-        throw new Error("The selected API key project was not found. Please re-authenticate.");
+        throw new Error("The selected API key or project was not found. Please re-authenticate via the selector.");
       }
       throw err;
     }
@@ -134,14 +140,14 @@ const AdminFAQ: React.FC = () => {
   };
 
   const runAutomation = async () => {
-    if (!process.env.API_KEY) {
+    if (!process.env.API_KEY || process.env.API_KEY === 'undefined') {
       addLog("❌ API_KEY not detected. Triggering selection...");
       await handleSelectKey();
       return;
     }
 
     if (!serviceRoleKey) {
-      alert("Supabase Service Role Key required.");
+      alert("Supabase Service Role Key required for synthesis write-access.");
       return;
     }
 
@@ -171,7 +177,7 @@ const AdminFAQ: React.FC = () => {
       } catch (err: any) {
         result.error = err.message;
         addLog(`❌ Error at ${resort.name}: ${err.message}`);
-        if (err.message.includes("API Key") || err.message.includes("authenticate")) {
+        if (err.message.includes("API Key") || err.message.includes("authenticate") || err.message.includes("entity")) {
           setIsProcessing(false);
           setHasApiKey(false);
           return;
@@ -181,6 +187,7 @@ const AdminFAQ: React.FC = () => {
       tempResults.push(result);
       setResults([...tempResults]);
       setProgress(Math.round(((i + 1) / resorts.length) * 100));
+      // Small throttle to stay within rate limits for Gemini 3
       await new Promise(r => setTimeout(r, 600));
     }
 
@@ -192,7 +199,7 @@ const AdminFAQ: React.FC = () => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(results, null, 2));
     const downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", "faq_report.json");
+    downloadAnchorNode.setAttribute("download", "faq_synthesis_report.json");
     document.body.appendChild(downloadAnchorNode);
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
@@ -206,16 +213,18 @@ const AdminFAQ: React.FC = () => {
             <span className="text-[10px] font-black text-sky-400 uppercase tracking-[1em] block">Admin Engine</span>
             <h1 className="text-4xl font-serif italic text-white mb-8">FAQ Hub.</h1>
             <div className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-xl space-y-6">
-              {!hasApiKey && !process.env.API_KEY ? (
+              {!hasApiKey && (!process.env.API_KEY || process.env.API_KEY === 'undefined') ? (
                 <button onClick={handleSelectKey} className="w-full bg-sky-500 text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-sky-400 transition-all">Select Gemini API Key</button>
               ) : (
-                <div className="bg-emerald-500/10 border border-emerald-500/20 px-6 py-4 rounded-2xl flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                  <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest">Auth Active</span>
-                  <button onClick={handleSelectKey} className="ml-auto text-[7px] font-black uppercase text-slate-500 hover:text-white">Swap</button>
+                <div className="bg-emerald-500/10 border border-emerald-500/20 px-6 py-4 rounded-2xl flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest">Active Session</span>
+                  </div>
+                  <button onClick={handleSelectKey} className="text-[7px] font-black uppercase text-slate-500 hover:text-white transition-colors">Switch Key</button>
                 </div>
               )}
-              <input type="password" value={serviceRoleKey} onChange={(e) => setServiceRoleKey(e.target.value)} placeholder="Supabase Service Role Key" className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-xs font-mono text-sky-300" />
+              <input type="password" value={serviceRoleKey} onChange={(e) => setServiceRoleKey(e.target.value)} placeholder="Supabase Service Role Key" className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-xs font-mono text-sky-300 focus:ring-1 focus:ring-sky-500 outline-none" />
               <button onClick={runAutomation} disabled={isProcessing || !serviceRoleKey} className={`w-full py-6 rounded-full font-black text-[10px] uppercase tracking-[0.4em] transition-all ${isProcessing || !serviceRoleKey ? 'bg-slate-800 text-slate-600' : 'bg-white text-slate-950 hover:bg-sky-400 hover:text-white'}`}>
                 {isProcessing ? 'Synthesizing...' : 'Run Global Sync'}
               </button>
@@ -231,6 +240,7 @@ const AdminFAQ: React.FC = () => {
               <div className="bg-white/5 border border-white/10 p-6 rounded-3xl"><span className="text-[9px] font-black uppercase text-slate-500">Errors</span><p className="text-2xl text-red-500 font-serif italic mt-2">{results.filter(r => r.status === 'failure').length}</p></div>
             </div>
             <div className="bg-black border border-white/5 rounded-[2.5rem] h-72 overflow-y-auto p-8 font-mono text-[10px] space-y-2 no-scrollbar">
+              {logs.length === 0 && <p className="text-slate-700 italic">Waiting for execution dispatch...</p>}
               {logs.map((log, i) => <p key={i} className={log.includes('✅') ? 'text-emerald-500' : log.includes('❌') ? 'text-red-500' : 'text-slate-500'}>{log}</p>)}
             </div>
           </div>

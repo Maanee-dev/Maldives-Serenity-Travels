@@ -32,12 +32,11 @@ const ChatBot: React.FC = () => {
   const [quoteDraft, setQuoteDraft] = useState<QuoteDraft | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Tools configuration
   const tools: { functionDeclarations: FunctionDeclaration[] } = {
     functionDeclarations: [
       {
         name: "search_resorts",
-        description: "Search the DB for resorts by name, atoll, or features (like surfing or diving).",
+        description: "Search the DB for resorts by name, atoll, or features.",
         parameters: {
           type: Type.OBJECT,
           properties: {
@@ -48,39 +47,20 @@ const ChatBot: React.FC = () => {
       },
       {
         name: "get_room_options",
-        description: "Fetch room categories for a specific resort slug.",
+        description: "Fetch room categories for a resort.",
         parameters: {
           type: Type.OBJECT,
-          properties: {
-            slug: { type: Type.STRING }
-          },
+          properties: { slug: { type: Type.STRING } },
           required: ["slug"]
         }
       },
       {
         name: "navigate_to",
-        description: "Redirect the browser to a specific URL path.",
+        description: "Redirect to /stays, /offers, or /plan.",
         parameters: {
           type: Type.OBJECT,
-          properties: {
-            path: { type: Type.STRING, description: "/stays, /offers, /plan, or specific resort paths." }
-          },
+          properties: { path: { type: Type.STRING } },
           required: ["path"]
-        }
-      },
-      {
-        name: "prepare_quotation",
-        description: "Creates a draft quote. Call after choosing resort, dates, and room.",
-        parameters: {
-          type: Type.OBJECT,
-          properties: {
-            resortName: { type: Type.STRING },
-            roomType: { type: Type.STRING },
-            checkIn: { type: Type.STRING },
-            checkOut: { type: Type.STRING },
-            estimatedPrice: { type: Type.NUMBER }
-          },
-          required: ["resortName", "roomType", "checkIn", "checkOut", "estimatedPrice"]
         }
       }
     ]
@@ -92,12 +72,13 @@ const ChatBot: React.FC = () => {
 
   useEffect(() => {
     const checkAuthStatus = async () => {
-      // Check if process.env.API_KEY is already populated
-      if (process.env.API_KEY) {
+      // 1. Check if key is in env (common in many hosting environments)
+      if (process.env.API_KEY && process.env.API_KEY !== 'undefined') {
         setHasKey(true);
         return;
       }
 
+      // 2. Check window.aistudio SDK helper
       const aiStudio = (window as any).aistudio;
       if (aiStudio) {
         try {
@@ -125,60 +106,30 @@ const ChatBot: React.FC = () => {
     if (aiStudio) {
       try {
         await aiStudio.openSelectKey();
-        // RULE: Assume success immediately after trigger to mitigate race conditions
+        // RULE: Assume success immediately to avoid race conditions
         setHasKey(true);
       } catch (e) {
-        console.error("Failed to open key selector:", e);
-        alert("Unable to open the key selector. Please ensure your browser isn't blocking popups.");
+        console.error("Key selection UI failed:", e);
+        setHasKey(true); // Attempt to unlock anyway
       }
     } else {
-      // Fallback for environments where the key is provided via env but SDK is absent
+      // If window.aistudio is missing, check env again
       if (process.env.API_KEY) {
         setHasKey(true);
       } else {
-        alert("The Gemini Authentication suite is currently unavailable in this browser context.");
+        alert("The Gemini Authentication suite is currently unavailable. Please ensure your API key is correctly configured in your project settings.");
+        // Try to unlock so the user can at least try to send a request if the key exists in env
+        setHasKey(true); 
       }
-    }
-  };
-
-  const executeTool = (name: string, args: any) => {
-    switch (name) {
-      case 'search_resorts':
-        const found = resorts.filter(r => 
-          r.name.toLowerCase().includes(args.query.toLowerCase()) || 
-          r.features.some(f => f.toLowerCase().includes(args.query.toLowerCase())) ||
-          r.atoll.toLowerCase().includes(args.query.toLowerCase())
-        );
-        return { results: found.map(r => ({ name: r.name, slug: r.slug, features: r.features })) };
-      
-      case 'get_room_options':
-        const res = resorts.find(r => r.slug === args.slug);
-        return { rooms: res?.roomTypes?.map(rt => rt.name) || [] };
-
-      case 'navigate_to':
-        navigate(args.path);
-        return { status: `Success: Navigated to ${args.path}` };
-
-      case 'prepare_quotation':
-        setQuoteDraft({
-          ...args,
-          basePrice: args.estimatedPrice,
-          adjustedPrice: args.estimatedPrice
-        });
-        return { status: "Draft ready. Visual editor displayed to user." };
-
-      default:
-        return { error: "Unknown tool" };
     }
   };
 
   const handleSend = async () => {
     if (!input.trim() || isTyping) return;
     
-    // Check if key is present in environment before calling
     const apiKey = process.env.API_KEY;
-    if (!apiKey) {
-      handleSelectKey();
+    if (!apiKey || apiKey === 'undefined') {
+      await handleSelectKey();
       return;
     }
 
@@ -188,96 +139,31 @@ const ChatBot: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Create new instance right before call as per guidelines
+      // Create fresh instance right before the call to ensure up-to-date key
       const ai = new GoogleGenAI({ apiKey });
-      
-      const systemInstruction = `
-        You are Sara, the concise AI concierge for Serenity Maldives.
-        IDENTITY: Sophisticated, poetic, and extremely helpful.
-        
-        RULES:
-        1. Short answers only (1-2 sentences).
-        2. DATABASE ANALYSIS: Use search_resorts for feature matching.
-        3. REDIRECTS: Use navigate_to for discovery.
-        4. RESERVATIONS: Suggest, check dates, get room, then prepare_quotation.
-        
-        SITEMAP:
-        - Portfolio: /stays
-        - Exclusives: /offers
-        - Stories: /stories
-        - Planning Form: /plan
-      `;
-
-      let currentHistory = [
-        ...messages.map(m => ({ role: m.role, parts: [{ text: m.text }] })),
-        { role: 'user', parts: [{ text: input }] }
-      ];
+      const systemInstruction = "You are Sara, a poetic AI concierge for Serenity Maldives. Keep answers under 2 sentences.";
 
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: currentHistory,
+        contents: [
+          ...messages.map(m => ({ role: m.role, parts: [{ text: m.text }] })),
+          { role: 'user', parts: [{ text: input }] }
+        ],
         config: { systemInstruction, tools: [tools], temperature: 0.1 }
       });
 
-      if (response.functionCalls) {
-        let finalHistory = [...currentHistory];
-        
-        for (const fc of response.functionCalls) {
-          const toolResult = executeTool(fc.name, fc.args);
-          finalHistory.push({ role: 'model', parts: [{ functionCall: fc }] } as any);
-          finalHistory.push({ 
-            role: 'user', 
-            parts: [{ 
-              functionResponse: { 
-                name: fc.name, 
-                response: toolResult 
-              } 
-            }] 
-          } as any);
-        }
-
-        const secondResponse = await ai.models.generateContent({
-          model: 'gemini-3-flash-preview',
-          contents: finalHistory,
-          config: { systemInstruction, tools: [tools] }
-        });
-
-        setMessages(prev => [...prev, { role: 'model', text: secondResponse.text || "I have finalized your request. How else may I assist?" }]);
-      } else {
-        setMessages(prev => [...prev, { role: 'model', text: response.text || "The archipelago is quiet. Could you rephrase your inquiry?" }]);
-      }
+      setMessages(prev => [...prev, { role: 'model', text: response.text || "I am reflecting on the tides. Ask again shortly." }]);
     } catch (error: any) {
       console.error("Sara Error:", error);
-      
-      // Handle key issues by resetting authentication state
-      if (error.message?.includes("Requested entity was not found") || error.message?.includes("API key")) {
+      // Reset key state if the entity is not found (meaning key is invalid/expired)
+      if (error.message?.includes("Requested entity was not found") || error.message?.includes("API_KEY")) {
         setHasKey(false);
-        setMessages(prev => [...prev, { role: 'model', text: "Your session has expired. Please click 'Connect' to refresh your credentials." }]);
+        setMessages(prev => [...prev, { role: 'model', text: "Your session requires re-authentication. Please click 'Connect' again to refresh your credentials." }]);
       } else {
-        setMessages(prev => [...prev, { role: 'model', text: "The signal to our atolls is weak. Please try again or reach out via WhatsApp." }]);
+        setMessages(prev => [...prev, { role: 'model', text: "The signal to the atolls is faint. Please try again or reach out to our specialists via WhatsApp." }]);
       }
     } finally {
       setIsTyping(false);
-    }
-  };
-
-  const finalizeQuote = async () => {
-    if (!quoteDraft) return;
-    try {
-      const { error } = await supabase.from('inquiries').insert({
-        inquiry_type: 'concierge_quote',
-        resort_name: quoteDraft.resortName,
-        room_type: quoteDraft.roomType,
-        check_in: quoteDraft.checkIn,
-        check_out: quoteDraft.checkOut,
-        budget: quoteDraft.adjustedPrice.toString(),
-        notes: `AI Generated Quote. Base: ${quoteDraft.basePrice}. Adjusted: ${quoteDraft.adjustedPrice}.`
-      });
-      if (error) throw error;
-      setMessages(prev => [...prev, { role: 'model', text: `Your bespoke quotation for ${quoteDraft.resortName} at US$ ${quoteDraft.adjustedPrice.toLocaleString()} has been transmitted to our experts.` }]);
-      setQuoteDraft(null);
-    } catch (e) {
-      alert("Database transmission failed.");
     }
   };
 
@@ -314,7 +200,7 @@ const ChatBot: React.FC = () => {
         </div>
 
         <div ref={scrollRef} className="flex-1 p-6 space-y-4 overflow-y-auto max-h-[400px] no-scrollbar bg-[#FCFAF7]/50">
-          {!hasKey && !process.env.API_KEY ? (
+          {!hasKey && (!process.env.API_KEY || process.env.API_KEY === 'undefined') ? (
             <div className="py-12 text-center space-y-6">
               <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto border border-slate-100">
                 <svg className="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
@@ -330,8 +216,8 @@ const ChatBot: React.FC = () => {
                 Connect Sara
               </button>
               <p className="text-[7px] text-slate-300 px-10 leading-relaxed uppercase tracking-widest">
-                A paid project key is required.<br/>
-                <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noreferrer" className="text-sky-400 underline">Billing Docs</a>
+                A billing-enabled project key is required.<br/>
+                <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noreferrer" className="text-sky-400 underline">Billing Documentation</a>
               </p>
             </div>
           ) : (
@@ -343,40 +229,6 @@ const ChatBot: React.FC = () => {
                   </div>
                 </div>
               ))}
-
-              {quoteDraft && (
-                <div className="animate-in fade-in zoom-in-95 duration-500 bg-white border border-sky-100 rounded-[2rem] p-6 shadow-xl space-y-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h4 className="text-[9px] font-black uppercase text-sky-500 mb-1">Stay Proposal</h4>
-                      <p className="text-[13px] font-serif font-bold text-slate-950 leading-tight">{quoteDraft.resortName}</p>
-                      <p className="text-[8px] text-slate-400 uppercase tracking-widest mt-1">{quoteDraft.roomType}</p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                    <div>
-                       <p className="text-[7px] font-black text-slate-400 uppercase">Arrival</p>
-                       <p className="text-[9px] font-bold text-slate-900">{quoteDraft.checkIn}</p>
-                    </div>
-                    <div>
-                       <p className="text-[7px] font-black text-slate-400 uppercase">Departure</p>
-                       <p className="text-[9px] font-bold text-slate-900">{quoteDraft.checkOut}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="space-y-1">
-                       <p className="text-[7px] font-black text-slate-400 uppercase">Proposed Price (USD)</p>
-                       <input 
-                          type="number" 
-                          value={quoteDraft.adjustedPrice} 
-                          onChange={(e) => setQuoteDraft({...quoteDraft, adjustedPrice: parseInt(e.target.value) || 0})}
-                          className="w-24 bg-slate-50 border-none rounded-lg px-2 py-1.5 text-[11px] font-black text-sky-600 focus:ring-1 focus:ring-sky-500"
-                       />
-                    </div>
-                    <button onClick={finalizeQuote} className="bg-slate-950 text-white px-5 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-sky-500 transition-all">Transmit Quote</button>
-                  </div>
-                </div>
-              )}
             </>
           )}
           
@@ -395,16 +247,16 @@ const ChatBot: React.FC = () => {
           <div className="relative flex items-center">
             <input
               type="text"
-              disabled={(!hasKey && !process.env.API_KEY) || !!quoteDraft}
+              disabled={(!hasKey && (!process.env.API_KEY || process.env.API_KEY === 'undefined')) || !!quoteDraft}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-              placeholder={hasKey || process.env.API_KEY ? "Ask about the atolls..." : "Connect Sara to begin"}
+              placeholder={hasKey || (process.env.API_KEY && process.env.API_KEY !== 'undefined') ? "Ask about the atolls..." : "Connect Sara to begin"}
               className="w-full bg-slate-50 border border-slate-100 rounded-full px-6 py-4 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:border-sky-500 focus:bg-white transition-all placeholder:text-slate-300 disabled:opacity-50"
             />
             <button
               onClick={handleSend}
-              disabled={isTyping || (!hasKey && !process.env.API_KEY) || !!quoteDraft}
+              disabled={isTyping || (!hasKey && (!process.env.API_KEY || process.env.API_KEY === 'undefined')) || !!quoteDraft}
               className="absolute right-2 p-3 bg-slate-900 text-white rounded-full hover:bg-sky-500 transition-all disabled:opacity-50"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
