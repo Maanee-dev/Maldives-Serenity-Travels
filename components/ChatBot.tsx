@@ -9,6 +9,7 @@ interface Message {
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasKey, setHasKey] = useState<boolean>(!!process.env.API_KEY);
   const [messages, setMessages] = useState<Message[]>([
     { role: 'model', text: "Welcome to Serenity. I am Sara, your AI concierge. How may I assist with your Maldivian journey today?" }
   ]);
@@ -22,8 +23,28 @@ const ChatBot: React.FC = () => {
     }
   }, [messages, isTyping]);
 
+  // Check for key on mount and when process.env updates
+  useEffect(() => {
+    const checkKey = async () => {
+      const aiStudio = (window as any).aistudio;
+      if (aiStudio) {
+        const selected = await aiStudio.hasSelectedApiKey();
+        setHasKey(selected && !!process.env.API_KEY);
+      }
+    };
+    checkKey();
+  }, [isOpen]);
+
+  const handleSelectKey = async () => {
+    const aiStudio = (window as any).aistudio;
+    if (aiStudio) {
+      await aiStudio.openSelectKey();
+      setHasKey(true); // Assume success to avoid race conditions per guidelines
+    }
+  };
+
   const handleSend = async () => {
-    if (!input.trim() || isTyping) return;
+    if (!input.trim() || isTyping || !hasKey) return;
 
     const userMessage: Message = { role: 'user', text: input };
     setMessages(prev => [...prev, userMessage]);
@@ -31,7 +52,11 @@ const ChatBot: React.FC = () => {
     setIsTyping(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      // Create new instance to pick up the latest API_KEY from environment
+      const apiKey = process.env.API_KEY;
+      if (!apiKey) throw new Error("API Key missing");
+
+      const ai = new GoogleGenAI({ apiKey });
       
       const systemInstruction = `
         You are Sara, the elegant AI concierge for Serenity Maldives, a boutique travel agency.
@@ -40,17 +65,15 @@ const ChatBot: React.FC = () => {
         Agency Details:
         - Location: Faith, S.feydhoo, Addu City, Maldives.
         - Philosophy: "Defined by Perspective", we curate silence and luxury.
-        - Specialization: Bespoke travel, VIP seaplane arrivals, private atolls.
         
         Knowledge Base:
         - Resorts: Adaaran Prestige Vadoo (Intimate, Butler), Adaaran Prestige Water Villas (Wooden, Raa Atoll), Adaaran Select Hudhuran Fushi (Surfing), Adaaran Select Meedhupparu (Mature, Family).
         - Atolls: Noonu (Untouched), Baa (UNESCO Biosphere), North Male (Epicenter), Ari (Whale Sharks).
-        - Vibes: Silence, Adventure, Family, Romance.
         
         Instructions:
-        1. When users ask for recommendations, suggest specific resorts based on their "vibe".
-        2. If they ask about booking, invite them to share their vision for a "Bespoke Curation" and suggest using the 'Plan Trip' form.
-        3. Keep responses concise but visually evocative. Use words like "turquoise", "sanctuary", "archipelago", and "atoll".
+        1. Suggest specific resorts based on the user's "vibe" (Silence, Adventure, Family, Romance).
+        2. For bookings, suggest the 'Plan Trip' form for a "Bespoke Curation".
+        3. Use evocative language: "turquoise", "sanctuary", "archipelago", "atoll".
       `;
 
       const response = await ai.models.generateContent({
@@ -70,9 +93,14 @@ const ChatBot: React.FC = () => {
 
       const aiText = response.text || "I apologize, the atolls are calling me away briefly. Please contact our human concierge at +960 725 9060.";
       setMessages(prev => [...prev, { role: 'model', text: aiText }]);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Sara Error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "I'm having trouble connecting to the atolls. Please try again or reach out on WhatsApp." }]);
+      if (error.message?.includes("Requested entity was not found")) {
+        setHasKey(false);
+        setMessages(prev => [...prev, { role: 'model', text: "It seems my connection to the intelligence core has expired. Please re-select your Gemini API key." }]);
+      } else {
+        setMessages(prev => [...prev, { role: 'model', text: "I'm having trouble connecting to the atolls. Please try again or reach out on WhatsApp." }]);
+      }
     } finally {
       setIsTyping(false);
     }
@@ -117,6 +145,19 @@ const ChatBot: React.FC = () => {
               </div>
             </div>
           ))}
+          {!hasKey && (
+            <div className="flex flex-col items-center gap-4 py-4 text-center">
+              <p className="text-[10px] text-slate-400 uppercase tracking-widest leading-relaxed">
+                To begin our dialogue, I require <br/> access to the intelligence core.
+              </p>
+              <button 
+                onClick={handleSelectKey}
+                className="bg-sky-500 text-white px-6 py-3 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-sky-400 transition-all shadow-md"
+              >
+                Initialize Concierge
+              </button>
+            </div>
+          )}
           {isTyping && (
             <div className="flex justify-start">
               <div className="bg-white border border-slate-100 p-4 rounded-3xl rounded-tl-none flex gap-1">
@@ -132,15 +173,16 @@ const ChatBot: React.FC = () => {
           <div className="relative flex items-center">
             <input
               type="text"
+              disabled={!hasKey}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Inquire about the atolls..."
-              className="w-full bg-slate-50 border border-slate-100 rounded-full px-6 py-4 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:border-sky-500 focus:bg-white transition-all placeholder:text-slate-300"
+              placeholder={hasKey ? "Inquire about the atolls..." : "Awaiting authentication..."}
+              className="w-full bg-slate-50 border border-slate-100 rounded-full px-6 py-4 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:border-sky-500 focus:bg-white transition-all placeholder:text-slate-300 disabled:opacity-50"
             />
             <button
               onClick={handleSend}
-              disabled={isTyping}
+              disabled={isTyping || !hasKey}
               className="absolute right-2 p-3 bg-slate-900 text-white rounded-full hover:bg-sky-500 transition-all disabled:opacity-50"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
