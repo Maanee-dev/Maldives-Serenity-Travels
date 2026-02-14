@@ -12,9 +12,9 @@ import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import Stays from './pages/Stays';
 import ResortDetail from './pages/ResortDetail';
-// Fix: Use lowercase imports to resolve "Already included file name differs only in casing" errors.
-import Offers from './pages/offers';
-import Experiences from './pages/experiences';
+// Casing standardized to match project root files and resolve TS errors.
+import Offers from './pages/Offers';
+import Experiences from './pages/Experiences';
 import Stories from './pages/Stories';
 import BlogPostDetail from './pages/BlogPostDetail';
 import PlanMyTrip from './pages/PlanMyTrip';

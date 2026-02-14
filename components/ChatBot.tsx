@@ -22,7 +22,7 @@ interface QuoteDraft {
 const ChatBot: React.FC = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [hasKey, setHasKey] = useState<boolean>(!!process.env.API_KEY);
+  const [hasKey, setHasKey] = useState<boolean>(false);
   const [messages, setMessages] = useState<Message[]>([
     { role: 'model', text: "I am Sara. Describe your Maldivian dream, and I shall manifest it." }
   ]);
@@ -91,23 +91,39 @@ const ChatBot: React.FC = () => {
   }, [messages, isTyping]);
 
   useEffect(() => {
-    const init = async () => {
-      const { data } = await supabase.from('resorts').select('*');
-      if (data) setResorts(data.map(mapResort));
+    const checkAuthStatus = async () => {
       const aiStudio = (window as any).aistudio;
       if (aiStudio) {
         const selected = await aiStudio.hasSelectedApiKey();
-        setHasKey(selected && !!process.env.API_KEY);
+        setHasKey(selected);
+      } else if (process.env.API_KEY) {
+        // Fallback for environments where key is already injected but window.aistudio isn't present
+        setHasKey(true);
       }
     };
-    init();
+    
+    const fetchDB = async () => {
+      const { data } = await supabase.from('resorts').select('*');
+      if (data) setResorts(data.map(mapResort));
+    };
+
+    if (isOpen) {
+      checkAuthStatus();
+      fetchDB();
+    }
   }, [isOpen]);
 
   const handleSelectKey = async () => {
     const aiStudio = (window as any).aistudio;
     if (aiStudio) {
       await aiStudio.openSelectKey();
+      // Rule: Assume success immediately after trigger to mitigate race conditions
       setHasKey(true);
+    } else {
+      console.warn("AI Studio SDK not available in this browser context.");
+      // Fallback: If we're in a standard dev environment without the SDK, 
+      // check if the key was manually provided via env.
+      if (process.env.API_KEY) setHasKey(true);
     }
   };
 
@@ -119,7 +135,6 @@ const ChatBot: React.FC = () => {
           r.features.some(f => f.toLowerCase().includes(args.query.toLowerCase())) ||
           r.atoll.toLowerCase().includes(args.query.toLowerCase())
         );
-        // CRITICAL: Always return an object, not a raw array, to prevent 400 error
         return { results: found.map(r => ({ name: r.name, slug: r.slug, features: r.features })) };
       
       case 'get_room_options':
@@ -144,7 +159,14 @@ const ChatBot: React.FC = () => {
   };
 
   const handleSend = async () => {
-    if (!input.trim() || isTyping || !hasKey) return;
+    if (!input.trim() || isTyping) return;
+    
+    // Re-check key availability before proceeding
+    const currentApiKey = process.env.API_KEY;
+    if (!currentApiKey && !hasKey) {
+      handleSelectKey();
+      return;
+    }
 
     const userMessage: Message = { role: 'user', text: input };
     setMessages(prev => [...prev, userMessage]);
@@ -152,20 +174,18 @@ const ChatBot: React.FC = () => {
     setIsTyping(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      // Create new instance right before call to ensure most recent key
+      const ai = new GoogleGenAI({ apiKey: currentApiKey || '' });
+      
       const systemInstruction = `
         You are Sara, the concise AI concierge for Serenity Maldives.
         IDENTITY: Sophisticated, poetic, and extremely helpful.
         
         RULES:
         1. Short answers only (1-2 sentences).
-        2. DATABASE ANALYSIS: Use search_resorts for feature matching (e.g., 'surfing' -> suggest Cinnamon).
-        3. REDIRECTS: Use navigate_to if users want to see all resorts (/stays), offers (/offers), or stories (/stories).
-        4. RESERVATIONS:
-           - First: Suggest a resort using search_resorts.
-           - Second: Ask for Check-in/Check-out.
-           - Third: Use get_room_options to suggest a residence.
-           - Fourth: Use prepare_quotation once details are solid.
+        2. DATABASE ANALYSIS: Use search_resorts for feature matching.
+        3. REDIRECTS: Use navigate_to for discovery.
+        4. RESERVATIONS: Suggest, check dates, get room, then prepare_quotation.
         
         SITEMAP:
         - Portfolio: /stays
@@ -190,16 +210,13 @@ const ChatBot: React.FC = () => {
         
         for (const fc of response.functionCalls) {
           const toolResult = executeTool(fc.name, fc.args);
-          
           finalHistory.push({ role: 'model', parts: [{ functionCall: fc }] } as any);
-          // FIX: Function Response must have 'role: function' in some versions or properly mapped.
-          // Using 'user' role for function response parts is standard in sendMessage loops.
           finalHistory.push({ 
             role: 'user', 
             parts: [{ 
               functionResponse: { 
                 name: fc.name, 
-                response: toolResult // This is now always an object
+                response: toolResult 
               } 
             }] 
           } as any);
@@ -217,7 +234,14 @@ const ChatBot: React.FC = () => {
       }
     } catch (error: any) {
       console.error("Sara Error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "A storm is passing over our signal. Please try again or use our WhatsApp link." }]);
+      
+      // Handle key invalidation/missing entity errors
+      if (error.message?.includes("Requested entity was not found") || error.message?.includes("API key")) {
+        setHasKey(false);
+        setMessages(prev => [...prev, { role: 'model', text: "Your authentication session has expired. Please re-authenticate to continue our dialogue." }]);
+      } else {
+        setMessages(prev => [...prev, { role: 'model', text: "A storm is passing over our signal. Please try again or use our WhatsApp link." }]);
+      }
     } finally {
       setIsTyping(false);
     }
@@ -236,7 +260,7 @@ const ChatBot: React.FC = () => {
         notes: `AI Generated Quote. Base: ${quoteDraft.basePrice}. Final: ${quoteDraft.adjustedPrice}.`
       });
       if (error) throw error;
-      setMessages(prev => [...prev, { role: 'model', text: `Your bespoke quotation for ${quoteDraft.resortName} at US$ ${quoteDraft.adjustedPrice.toLocaleString()} is saved and ready for dispatch. Our specialists will contact you shortly.` }]);
+      setMessages(prev => [...prev, { role: 'model', text: `Your bespoke quotation for ${quoteDraft.resortName} at US$ ${quoteDraft.adjustedPrice.toLocaleString()} is saved. Our specialists will contact you shortly.` }]);
       setQuoteDraft(null);
     } catch (e) {
       alert("Database link failed.");
@@ -276,52 +300,70 @@ const ChatBot: React.FC = () => {
         </div>
 
         <div ref={scrollRef} className="flex-1 p-6 space-y-4 overflow-y-auto max-h-[400px] no-scrollbar bg-[#FCFAF7]/50">
-          {messages.map((m, i) => (
-            <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[85%] p-4 rounded-2xl text-[11px] leading-relaxed ${m.role === 'user' ? 'bg-slate-900 text-white rounded-tr-none' : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none font-medium'}`}>
-                {m.text}
+          {!hasKey ? (
+            <div className="py-12 text-center space-y-6">
+              <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto border border-slate-100">
+                <svg className="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
               </div>
+              <div className="space-y-2">
+                <h4 className="text-[11px] font-black uppercase text-slate-900 tracking-widest">Authentication Required</h4>
+                <p className="text-[9px] text-slate-400 uppercase tracking-widest leading-relaxed px-8">To access the Perspective Intelligence suite, please select your Gemini API Key.</p>
+              </div>
+              <button 
+                onClick={handleSelectKey} 
+                className="bg-sky-500 text-white px-8 py-3 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg hover:bg-sky-400 transition-all"
+              >
+                Connect Sara
+              </button>
+              <p className="text-[7px] text-slate-300 px-10 leading-relaxed uppercase tracking-widest">
+                A billing-enabled project key is required.<br/>
+                <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noreferrer" className="text-sky-400 underline">Billing Documentation</a>
+              </p>
             </div>
-          ))}
+          ) : (
+            <>
+              {messages.map((m, i) => (
+                <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[85%] p-4 rounded-2xl text-[11px] leading-relaxed ${m.role === 'user' ? 'bg-slate-900 text-white rounded-tr-none' : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none font-medium'}`}>
+                    {m.text}
+                  </div>
+                </div>
+              ))}
 
-          {quoteDraft && (
-            <div className="animate-in fade-in zoom-in-95 duration-500 bg-white border border-sky-100 rounded-[2rem] p-6 shadow-xl space-y-4">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h4 className="text-[9px] font-black uppercase text-sky-500 mb-1">Reservation Draft</h4>
-                  <p className="text-[13px] font-serif font-bold text-slate-950 leading-tight">{quoteDraft.resortName}</p>
-                  <p className="text-[8px] text-slate-400 uppercase tracking-widest mt-1">{quoteDraft.roomType}</p>
+              {quoteDraft && (
+                <div className="animate-in fade-in zoom-in-95 duration-500 bg-white border border-sky-100 rounded-[2rem] p-6 shadow-xl space-y-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="text-[9px] font-black uppercase text-sky-500 mb-1">Reservation Draft</h4>
+                      <p className="text-[13px] font-serif font-bold text-slate-950 leading-tight">{quoteDraft.resortName}</p>
+                      <p className="text-[8px] text-slate-400 uppercase tracking-widest mt-1">{quoteDraft.roomType}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    <div>
+                       <p className="text-[7px] font-black text-slate-400 uppercase">Arrival</p>
+                       <p className="text-[9px] font-bold text-slate-900">{quoteDraft.checkIn}</p>
+                    </div>
+                    <div>
+                       <p className="text-[7px] font-black text-slate-400 uppercase">Departure</p>
+                       <p className="text-[9px] font-bold text-slate-900">{quoteDraft.checkOut}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="space-y-1">
+                       <p className="text-[7px] font-black text-slate-400 uppercase">Proposed Price (USD)</p>
+                       <input 
+                          type="number" 
+                          value={quoteDraft.adjustedPrice} 
+                          onChange={(e) => setQuoteDraft({...quoteDraft, adjustedPrice: parseInt(e.target.value) || 0})}
+                          className="w-24 bg-slate-50 border-none rounded-lg px-2 py-1.5 text-[11px] font-black text-sky-600 focus:ring-1 focus:ring-sky-500"
+                       />
+                    </div>
+                    <button onClick={finalizeQuote} className="bg-slate-950 text-white px-5 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-sky-500 transition-all">Submit Quote</button>
+                  </div>
                 </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                <div>
-                   <p className="text-[7px] font-black text-slate-400 uppercase">Arrival</p>
-                   <p className="text-[9px] font-bold text-slate-900">{quoteDraft.checkIn}</p>
-                </div>
-                <div>
-                   <p className="text-[7px] font-black text-slate-400 uppercase">Departure</p>
-                   <p className="text-[9px] font-bold text-slate-900">{quoteDraft.checkOut}</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between pt-2">
-                <div className="space-y-1">
-                   <p className="text-[7px] font-black text-slate-400 uppercase">Proposed Price (USD)</p>
-                   <input 
-                      type="number" 
-                      value={quoteDraft.adjustedPrice} 
-                      onChange={(e) => setQuoteDraft({...quoteDraft, adjustedPrice: parseInt(e.target.value) || 0})}
-                      className="w-24 bg-slate-50 border-none rounded-lg px-2 py-1.5 text-[11px] font-black text-sky-600 focus:ring-1 focus:ring-sky-500"
-                   />
-                </div>
-                <button onClick={finalizeQuote} className="bg-slate-950 text-white px-5 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-sky-500 transition-all">Submit Quote</button>
-              </div>
-            </div>
-          )}
-
-          {!hasKey && (
-            <div className="py-6 text-center">
-              <button onClick={handleSelectKey} className="bg-sky-500 text-white px-6 py-3 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg">Authenticate Sara</button>
-            </div>
+              )}
+            </>
           )}
           
           {isTyping && (
@@ -343,7 +385,7 @@ const ChatBot: React.FC = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-              placeholder={hasKey ? "Inquire about the atolls..." : "Authentication required"}
+              placeholder={hasKey ? "Inquire about the atolls..." : "Connect Sara to begin"}
               className="w-full bg-slate-50 border border-slate-100 rounded-full px-6 py-4 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:border-sky-500 focus:bg-white transition-all placeholder:text-slate-300 disabled:opacity-50"
             />
             <button
