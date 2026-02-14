@@ -1,30 +1,31 @@
 
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import ScrollToTopButton from './components/ScrollToTopButton';
-import ChatBot from './components/ChatBot';
-import DarkModeToggle from './components/DarkModeToggle';
+import Navbar from './components/Navbar.tsx';
+import Footer from './components/Footer.tsx';
+import ScrollToTopButton from './components/ScrollToTopButton.tsx';
+import ChatBot from './components/ChatBot.tsx';
+import DarkModeToggle from './components/DarkModeToggle.tsx';
 
 // Pages
-import Home from './pages/Home';
-import SearchPage from './pages/SearchPage';
-import Stays from './pages/Stays';
-import ResortDetail from './pages/ResortDetail';
-// Using PascalCase filenames to resolve casing conflicts and standardize across the project.
-import Offers from './pages/Offers';
-import Experiences from './pages/Experiences';
-import Stories from './pages/Stories';
-import BlogPostDetail from './pages/BlogPostDetail';
-import PlanMyTrip from './pages/PlanMyTrip';
-import AboutUs from './pages/AboutUs';
-import Contact from './pages/Contact';
-import Terms from './pages/Terms';
-import Privacy from './pages/Privacy';
-import AdminSync from './pages/AdminSync';
-import AdminStories from './pages/AdminStories';
-import AdminFAQ from './pages/AdminFAQ';
+import Home from './pages/Home.tsx';
+import SearchPage from './pages/SearchPage.tsx';
+import Stays from './pages/Stays.tsx';
+import ResortDetail from './pages/ResortDetail.tsx';
+// Fix: Updated import casing to match file name 'Offers.tsx' to resolve case-sensitivity errors
+import Offers from './pages/Offers.tsx';
+// Fix: Updated import casing to match file name 'Experiences.tsx' to resolve case-sensitivity errors
+import Experiences from './pages/Experiences.tsx';
+import Stories from './pages/Stories.tsx';
+import BlogPostDetail from './pages/BlogPostDetail.tsx';
+import PlanMyTrip from './pages/PlanMyTrip.tsx';
+import AboutUs from './pages/AboutUs.tsx';
+import Contact from './pages/Contact.tsx';
+import Terms from './pages/Terms.tsx';
+import Privacy from './pages/Privacy.tsx';
+import AdminSync from './pages/AdminSync.tsx';
+import AdminStories from './pages/AdminStories.tsx';
+import AdminFAQ from './pages/AdminFAQ.tsx';
 
 const ScrollToTopOnRoute = () => {
   const { pathname } = useLocation();

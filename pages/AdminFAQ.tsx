@@ -19,7 +19,7 @@ const AdminFAQ: React.FC = () => {
   const [resorts, setResorts] = useState<any[]>([]);
   const [serviceRoleKey, setServiceRoleKey] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [hasApiKey, setHasApiKey] = useState<boolean>(false);
+  const [hasApiKey, setHasApiKey] = useState<boolean>(!!(process.env.API_KEY && process.env.API_KEY !== 'undefined'));
   const [results, setResults] = useState<FAQResult[]>([]);
   const [logs, setLogs] = useState<string[]>([]);
   const [progress, setProgress] = useState(0);
@@ -40,7 +40,7 @@ const AdminFAQ: React.FC = () => {
         const aiStudio = getAiStudio();
         if (aiStudio) {
           const selected = await aiStudio.hasSelectedApiKey();
-          setHasApiKey(selected);
+          if (selected) setHasApiKey(true);
         }
       } catch (e) {
         console.error("Key status check error:", e);
@@ -53,7 +53,7 @@ const AdminFAQ: React.FC = () => {
       if (data) setResorts(data);
     };
     fetchResorts();
-  }, []);
+  }, [hasApiKey]);
 
   const handleSelectKey = async () => {
     const aiStudio = getAiStudio();
@@ -65,15 +65,14 @@ const AdminFAQ: React.FC = () => {
         addLog("🔑 Key dialog triggered. State unlocked.");
       } catch (e: any) {
         addLog(`❌ Error opening key selector: ${e.message}`);
-        setHasApiKey(true); // Fallback
+        setHasApiKey(true); 
       }
     } else if (process.env.API_KEY && process.env.API_KEY !== 'undefined') {
       setHasApiKey(true);
       addLog("✅ Key detected from environment.");
     } else {
-      addLog("❌ window.aistudio is not available in this context.");
-      alert("Please ensure your API Key is correctly configured in your project settings.");
-      setHasApiKey(true);
+      addLog("❌ Authentication context unavailable. Check environment variables.");
+      setHasApiKey(true); // Fallback
     }
   };
 
@@ -81,10 +80,9 @@ const AdminFAQ: React.FC = () => {
     const apiKey = process.env.API_KEY;
     if (!apiKey || apiKey === 'undefined') {
       setHasApiKey(false);
-      throw new Error("API Key is missing. Please click 'Select Gemini API Key' and ensure your project is billing-enabled.");
+      throw new Error("API Key is missing from the environment.");
     }
 
-    // Always create a new instance right before the call
     const ai = new GoogleGenAI({ apiKey });
     
     const prompt = `
@@ -122,7 +120,7 @@ const AdminFAQ: React.FC = () => {
     } catch (err: any) {
       if (err.message?.includes("Requested entity was not found")) {
         setHasApiKey(false);
-        throw new Error("The selected API key or project was not found. Please re-authenticate via the selector.");
+        throw new Error("The API key was rejected. Verify your project settings.");
       }
       throw err;
     }
@@ -141,8 +139,7 @@ const AdminFAQ: React.FC = () => {
 
   const runAutomation = async () => {
     if (!process.env.API_KEY || process.env.API_KEY === 'undefined') {
-      addLog("❌ API_KEY not detected. Triggering selection...");
-      await handleSelectKey();
+      addLog("❌ API_KEY not detected. Please verify your environment variables.");
       return;
     }
 
@@ -177,7 +174,7 @@ const AdminFAQ: React.FC = () => {
       } catch (err: any) {
         result.error = err.message;
         addLog(`❌ Error at ${resort.name}: ${err.message}`);
-        if (err.message.includes("API Key") || err.message.includes("authenticate") || err.message.includes("entity")) {
+        if (err.message.includes("rejected") || err.message.includes("missing")) {
           setIsProcessing(false);
           setHasApiKey(false);
           return;
@@ -187,7 +184,6 @@ const AdminFAQ: React.FC = () => {
       tempResults.push(result);
       setResults([...tempResults]);
       setProgress(Math.round(((i + 1) / resorts.length) * 100));
-      // Small throttle to stay within rate limits for Gemini 3
       await new Promise(r => setTimeout(r, 600));
     }
 
@@ -213,19 +209,21 @@ const AdminFAQ: React.FC = () => {
             <span className="text-[10px] font-black text-sky-400 uppercase tracking-[1em] block">Admin Engine</span>
             <h1 className="text-4xl font-serif italic text-white mb-8">FAQ Hub.</h1>
             <div className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-xl space-y-6">
-              {!hasApiKey && (!process.env.API_KEY || process.env.API_KEY === 'undefined') ? (
-                <button onClick={handleSelectKey} className="w-full bg-sky-500 text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-sky-400 transition-all">Select Gemini API Key</button>
+              {!hasApiKey ? (
+                <button onClick={handleSelectKey} className="w-full bg-sky-500 text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-sky-400 transition-all">Connect Credentials</button>
               ) : (
-                <div className="bg-emerald-500/10 border border-emerald-500/20 px-6 py-4 rounded-2xl flex items-center justify-between gap-3">
+                <div className="bg-emerald-500/10 border border-emerald-500/20 px-6 py-4 rounded-2xl flex items-center justify-between gap-3 transition-all">
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                    <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest">Active Session</span>
+                    <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest">Secure Link Active</span>
                   </div>
-                  <button onClick={handleSelectKey} className="text-[7px] font-black uppercase text-slate-500 hover:text-white transition-colors">Switch Key</button>
+                  {(process.env.API_KEY === 'undefined' || !process.env.API_KEY) && (
+                    <button onClick={handleSelectKey} className="text-[7px] font-black uppercase text-slate-500 hover:text-white transition-colors">Switch</button>
+                  )}
                 </div>
               )}
               <input type="password" value={serviceRoleKey} onChange={(e) => setServiceRoleKey(e.target.value)} placeholder="Supabase Service Role Key" className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-xs font-mono text-sky-300 focus:ring-1 focus:ring-sky-500 outline-none" />
-              <button onClick={runAutomation} disabled={isProcessing || !serviceRoleKey} className={`w-full py-6 rounded-full font-black text-[10px] uppercase tracking-[0.4em] transition-all ${isProcessing || !serviceRoleKey ? 'bg-slate-800 text-slate-600' : 'bg-white text-slate-950 hover:bg-sky-400 hover:text-white'}`}>
+              <button onClick={runAutomation} disabled={isProcessing || !serviceRoleKey || !hasApiKey} className={`w-full py-6 rounded-full font-black text-[10px] uppercase tracking-[0.4em] transition-all ${isProcessing || !serviceRoleKey || !hasApiKey ? 'bg-slate-800 text-slate-600' : 'bg-white text-slate-950 hover:bg-sky-400 hover:text-white'}`}>
                 {isProcessing ? 'Synthesizing...' : 'Run Global Sync'}
               </button>
               {results.length > 0 && !isProcessing && (

@@ -22,7 +22,7 @@ interface QuoteDraft {
 const ChatBot: React.FC = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [hasKey, setHasKey] = useState<boolean>(false);
+  const [hasKey, setHasKey] = useState<boolean>(!!(process.env.API_KEY && process.env.API_KEY !== 'undefined'));
   const [messages, setMessages] = useState<Message[]>([
     { role: 'model', text: "I am Sara. Describe your Maldivian dream, and I shall manifest it." }
   ]);
@@ -72,18 +72,18 @@ const ChatBot: React.FC = () => {
 
   useEffect(() => {
     const checkAuthStatus = async () => {
-      // 1. Check if key is in env (common in many hosting environments)
-      if (process.env.API_KEY && process.env.API_KEY !== 'undefined') {
+      // 1. If key is already in state or env, we are good
+      if (hasKey || (process.env.API_KEY && process.env.API_KEY !== 'undefined')) {
         setHasKey(true);
         return;
       }
 
-      // 2. Check window.aistudio SDK helper
+      // 2. Fallback to window.aistudio SDK helper if env key is missing
       const aiStudio = (window as any).aistudio;
       if (aiStudio) {
         try {
           const selected = await aiStudio.hasSelectedApiKey();
-          setHasKey(selected);
+          if (selected) setHasKey(true);
         } catch (e) {
           console.error("Auth check failed:", e);
         }
@@ -99,7 +99,7 @@ const ChatBot: React.FC = () => {
       checkAuthStatus();
       fetchDB();
     }
-  }, [isOpen]);
+  }, [isOpen, hasKey]);
 
   const handleSelectKey = async () => {
     const aiStudio = (window as any).aistudio;
@@ -110,16 +110,15 @@ const ChatBot: React.FC = () => {
         setHasKey(true);
       } catch (e) {
         console.error("Key selection UI failed:", e);
-        setHasKey(true); // Attempt to unlock anyway
+        setHasKey(true); 
       }
     } else {
       // If window.aistudio is missing, check env again
-      if (process.env.API_KEY) {
+      if (process.env.API_KEY && process.env.API_KEY !== 'undefined') {
         setHasKey(true);
       } else {
-        alert("The Gemini Authentication suite is currently unavailable. Please ensure your API key is correctly configured in your project settings.");
-        // Try to unlock so the user can at least try to send a request if the key exists in env
-        setHasKey(true); 
+        alert("Please ensure your API key is correctly configured in your project environment variables.");
+        setHasKey(true); // Attempt to unlock anyway in case it's actually there
       }
     }
   };
@@ -155,10 +154,9 @@ const ChatBot: React.FC = () => {
       setMessages(prev => [...prev, { role: 'model', text: response.text || "I am reflecting on the tides. Ask again shortly." }]);
     } catch (error: any) {
       console.error("Sara Error:", error);
-      // Reset key state if the entity is not found (meaning key is invalid/expired)
       if (error.message?.includes("Requested entity was not found") || error.message?.includes("API_KEY")) {
         setHasKey(false);
-        setMessages(prev => [...prev, { role: 'model', text: "Your session requires re-authentication. Please click 'Connect' again to refresh your credentials." }]);
+        setMessages(prev => [...prev, { role: 'model', text: "Credential synchronization required. Please refresh or verify your API key." }]);
       } else {
         setMessages(prev => [...prev, { role: 'model', text: "The signal to the atolls is faint. Please try again or reach out to our specialists via WhatsApp." }]);
       }
