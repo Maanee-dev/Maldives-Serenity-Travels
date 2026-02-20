@@ -41,6 +41,7 @@ const ResortDetail: React.FC = () => {
   const [faqs, setFaqs] = useState<ResortFAQ[]>([]);
   const [openFaq, setOpenFaq] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   
   const [formStep, setFormStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -430,6 +431,82 @@ const ResortDetail: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Visual Journey Section */}
+      {resort.images && resort.images.length > 1 && (
+        <section className="py-24 md:py-48 px-6 lg:px-12 bg-white dark:bg-slate-950 transition-colors overflow-hidden">
+          <div className="max-w-[1440px] mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-end gap-10 mb-20 md:mb-32 reveal">
+              <div className="max-w-2xl">
+                <span className="text-[11px] font-black text-sky-500 uppercase tracking-[1em] mb-4 md:mb-8 block">Visual Journey</span>
+                <h3 className="text-4xl md:text-8xl font-serif font-bold text-slate-900 dark:text-white tracking-tighter italic leading-none transition-colors">The Gallery.</h3>
+              </div>
+              <p className="text-slate-400 dark:text-slate-600 text-[10px] font-black uppercase tracking-[0.4em] max-w-xs leading-loose">
+                A curated collection of moments captured across the sanctuary.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8">
+              {resort.images.slice(1).map((image, idx) => {
+                // Create a dynamic layout using grid spans
+                const isLarge = idx % 5 === 0;
+                const isTall = idx % 5 === 2;
+                const colSpan = isLarge ? 'md:col-span-8' : isTall ? 'md:col-span-4' : 'md:col-span-4';
+                const rowSpan = isTall ? 'md:row-span-2' : '';
+                const aspect = isTall ? 'aspect-[3/4]' : isLarge ? 'aspect-[16/9]' : 'aspect-square';
+
+                return (
+                  <div 
+                    key={idx} 
+                    onClick={() => setSelectedImage(image)}
+                    className={`reveal group relative overflow-hidden rounded-[2rem] md:rounded-[3.5rem] ${colSpan} ${rowSpan} ${aspect} bg-slate-100 dark:bg-slate-900 cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-700`}
+                    style={{ transitionDelay: `${idx * 100}ms` }}
+                  >
+                    <img 
+                      src={image} 
+                      alt={`${resort.name} gallery ${idx + 1}`} 
+                      className="w-full h-full object-cover transition-transform duration-[10s] ease-out group-hover:scale-110" 
+                    />
+                    <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-transparent transition-colors duration-700"></div>
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                      <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Lightbox Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 backdrop-blur-xl p-4 md:p-12 animate-in fade-in duration-500"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button 
+            className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors z-[110]"
+            onClick={() => setSelectedImage(null)}
+          >
+            <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div className="relative w-full h-full flex items-center justify-center">
+            <img 
+              src={selectedImage} 
+              alt="Fullscreen view" 
+              className="max-w-full max-h-full object-contain rounded-[1rem] md:rounded-[2rem] shadow-2xl animate-in zoom-in-95 duration-500"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
 
       {/* CURATED EXPERIENCES - Horizontal Scroller */}
       {experiences.length > 0 && (
